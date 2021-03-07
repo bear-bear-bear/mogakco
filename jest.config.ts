@@ -5,6 +5,9 @@ const config: Config.InitialOptions = {
   rootDir: './',
   testEnvironment: 'node',
   collectCoverageFrom: ['**/*.(t|j)s'],
+  transform: {
+    "^.+\\.(t|j)s$": "ts-jest",
+  }
 };
 
 export default config;
