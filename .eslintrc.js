@@ -61,5 +61,9 @@ module.exports = {
         endOfLine: 'auto',
       },
     ],
+    // 옵션 금지
+    'class-methods-use-this': 'off', // 클래스 메서드에 무조건 this 사용
+    'no-useless-constructor': 'off', // 생성자 선언 필드 무조건 사용
+    'import/no-unresolved': 'off', // import 에 상대경로 금지
   },
 };
