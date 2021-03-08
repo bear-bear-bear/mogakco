@@ -20,7 +20,7 @@ module.exports = {
     ecmaVersion: 12,
     sourceType: 'module',
   },
-  plugins: ['react', 'react-hooks', 'prettier'],
+  plugins: ['react', 'react-hooks', 'prettier', '@emotion'],
   settings: {
     react: {
       version: 'detect',
@@ -65,5 +65,7 @@ module.exports = {
     'class-methods-use-this': 'off', // 클래스 메서드에 무조건 this 사용
     'no-useless-constructor': 'off', // 생성자 선언 필드 무조건 사용
     'import/no-unresolved': 'off', // import 에 상대경로 금지
+    '@emotion/jsx-import': 'error',
+    '@emotion/pkg-renaming': 'error',
   },
 };
