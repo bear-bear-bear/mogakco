@@ -1,8 +1,8 @@
-import {Controller, Get, Post} from '@nestjs/common';
-import {AppService} from "../services/app.service";
+import { Controller, Get, Post } from '@nestjs/common';
+import AppService from '../services/app.service';
 
 @Controller('cats')
-export class AppController {
+class AppController {
   constructor(private readonly appService: AppService) {}
 
   @Post()
@@ -14,6 +14,7 @@ export class AppController {
   getHello(): string {
     return this.appService.getHello();
   }
+
   @Get()
   findAll(): string {
     return 'This action returns all cats';
@@ -24,3 +25,5 @@ export class AppController {
     return 'This route uses a wildcard';
   }
 }
+
+export default AppController;
