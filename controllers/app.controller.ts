@@ -1,5 +1,5 @@
 import { Controller, Get, Post } from '@nestjs/common';
-import { AppService } from '../services/app.service';
+import AppService from '../services/app.service';
 
 @Controller('cats')
 class AppController {
@@ -14,6 +14,7 @@ class AppController {
   getHello(): string {
     return this.appService.getHello();
   }
+
   @Get()
   findAll(): string {
     return 'This action returns all cats';
