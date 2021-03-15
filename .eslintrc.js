@@ -43,6 +43,7 @@ module.exports = {
       },
     },
   ],
+  ignorePatterns: ['dist/**/*'],
   rules: {
     'react/jsx-uses-react': 'error',
     'react/jsx-uses-vars': 'error',
@@ -53,7 +54,7 @@ module.exports = {
     // allow jsx syntax in js files (for next.js project)
     'react/jsx-filename-extension': [
       1,
-      { extensions: ['.js', '.jsx', '.tsx'] },
+      { extensions: ['.js', '.jsx', '.tsx', 'ts'] },
     ],
     'prettier/prettier': [
       'error',
@@ -66,5 +67,7 @@ module.exports = {
     'import/no-unresolved': 'off', // import 에 상대경로 금지
     '@emotion/jsx-import': 'error',
     '@emotion/pkg-renaming': 'error',
+    'import/extensions': ['off'],
+    'import/no-extraneous-dependencies': ['off'],
   },
 };
