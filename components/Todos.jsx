@@ -1,19 +1,62 @@
+import { createSelector } from 'reselect';
+import { useSelector, useDispatch } from 'react-redux';
 import TodoItem from './TodoItem';
+import { changeInput, insert, toggle, remove } from '../actions/todos';
 
-const Todos = ({
-  input,
-  todos,
-  onChangeInput,
-  onInsert,
-  onToggle,
-  onRemove,
-}) => {
+// const Todos = ({
+//   input,
+//   todos,
+//   onChangeInput,
+//   onInsert,
+//   onToggle,
+//   onRemove,
+// }) => {
+//   const onSubmit = e => {
+//     e.preventDefault();
+//     onInsert(input);
+//     onChangeInput('');
+//   };
+//   const onChange = e => onChangeInput(e.target.value);
+//   return (
+//     <div>
+//       <form onSubmit={onSubmit}>
+//         <input type="text" onChange={onChange} />
+//         <button type="submit">등록</button>
+//       </form>
+//       <div>
+//         {todos.map(todo => (
+//           <TodoItem
+//             todo={todo}
+//             key={todo.id}
+//             onToggle={onToggle}
+//             onRemove={onRemove}
+//           />
+//         ))}
+//       </div>
+//     </div>
+//   );
+// };
+
+const selectInput = createSelector(
+  state => state.todos.input,
+  input => input,
+);
+const selectAllTodos = createSelector(
+  state => state.todos.todos,
+  todos => todos,
+);
+
+const Todos = () => {
+  const dispatch = useDispatch();
+  const input = useSelector(selectInput);
+  const todos = useSelector(selectAllTodos);
+
   const onSubmit = e => {
     e.preventDefault();
-    onInsert(input);
-    onChangeInput('');
+    dispatch(insert(input));
+    dispatch(changeInput(''));
   };
-  const onChange = e => onChangeInput(e.target.value);
+  const onChange = e => dispatch(changeInput(e.target.value));
   return (
     <div>
       <form onSubmit={onSubmit}>
@@ -25,8 +68,8 @@ const Todos = ({
           <TodoItem
             todo={todo}
             key={todo.id}
-            onToggle={onToggle}
-            onRemove={onRemove}
+            onToggle={toggle}
+            onRemove={remove}
           />
         ))}
       </div>
