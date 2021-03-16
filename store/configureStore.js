@@ -9,12 +9,9 @@ const configureStore = () => {
     process.env.NODE_ENV === 'production'
       ? compose(applyMiddleware(...middlewares))
       : composeWithDevTools(applyMiddleware(...middlewares));
-  const store = createStore(rootReducer, enhancer);
-  return store;
+  return createStore(rootReducer, enhancer);
 };
 
-const wrapper = createWrapper(configureStore, {
+export default createWrapper(configureStore, {
   debug: process.env.NODE_ENV === 'development',
 });
-
-export default wrapper;
