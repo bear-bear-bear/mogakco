@@ -67,6 +67,7 @@ module.exports = {
     'import/no-unresolved': 'off', // import 에 상대경로 금지
     '@emotion/jsx-import': 'error',
     '@emotion/pkg-renaming': 'error',
+    'no-shadow': 'off',
     'import/extensions': ['off'],
     'import/no-extraneous-dependencies': ['off'],
   },
