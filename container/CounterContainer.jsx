@@ -5,24 +5,20 @@ import makeGetCounter from '../selectors/counter';
 
 const makeMapStateToProps = () => {
   const getCounter = makeGetCounter();
-  const mapStateToProps = state => {
-    return {
-      num: getCounter(state),
-    };
-  };
+  const mapStateToProps = state => ({
+    num: getCounter(state),
+  });
   return mapStateToProps;
 };
 
-const mapDispatchToProps = dispatch => {
-  return {
-    increase: () => {
-      dispatch(increase());
-    },
-    decrease: () => {
-      dispatch(decrease());
-    },
-  };
-};
+const mapDispatchToProps = dispatch => ({
+  increase: () => {
+    dispatch(increase());
+  },
+  decrease: () => {
+    dispatch(decrease());
+  },
+});
 
 const CounterContainer = ({ num, increase, decrease }) => {
   return <Counter num={num} onIncrease={increase} onDecrease={decrease} />;

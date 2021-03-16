@@ -26,12 +26,10 @@ const TodosContainer = ({
 const makeMapStateToProps = () => {
   const getTodos = makeGetTodos();
   const getInputText = makeGetInputText();
-  const mapStateToProps = (state, props) => {
-    return {
-      input: getInputText(state),
-      todos: getTodos(state, props),
-    };
-  };
+  const mapStateToProps = (state, props) => ({
+    input: getInputText(state),
+    todos: getTodos(state, props),
+  });
   return mapStateToProps;
 };
 
