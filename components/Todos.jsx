@@ -1,3 +1,4 @@
+import { useCallback } from 'react';
 import { createSelector } from 'reselect';
 import { useSelector, useDispatch } from 'react-redux';
 import TodoItem from './TodoItem';
@@ -51,12 +52,17 @@ const Todos = () => {
   const input = useSelector(selectInput);
   const todos = useSelector(selectAllTodos);
 
-  const onSubmit = e => {
-    e.preventDefault();
-    dispatch(insert(input));
-    dispatch(changeInput(''));
-  };
-  const onChange = e => dispatch(changeInput(e.target.value));
+  const onSubmit = useCallback(
+    e => {
+      e.preventDefault();
+      dispatch(insert(input));
+      dispatch(changeInput(''));
+    },
+    [dispatch, input],
+  );
+  const onChange = useCallback(e => dispatch(changeInput(e.target.value)), [
+    dispatch,
+  ]);
   return (
     <div>
       <form onSubmit={onSubmit}>
@@ -65,12 +71,7 @@ const Todos = () => {
       </form>
       <div>
         {todos.map(todo => (
-          <TodoItem
-            todo={todo}
-            key={todo.id}
-            onToggle={toggle}
-            onRemove={remove}
-          />
+          <TodoItem todo={todo} key={todo.id} toggle={toggle} remove={remove} />
         ))}
       </div>
     </div>

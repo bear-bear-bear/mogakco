@@ -12,6 +12,7 @@
 //   );
 // };
 
+import { useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { createSelector } from 'reselect';
 import { increase, decrease } from '../actions/counter';
@@ -24,24 +25,20 @@ const selectNum = createSelector(
 const Counter = () => {
   const dispatch = useDispatch();
   const num = useSelector(selectNum);
+  const onIncrease = useCallback(() => {
+    dispatch(increase());
+  }, [dispatch]);
+  const onDecrease = useCallback(() => {
+    dispatch(decrease());
+  }, [dispatch]);
 
   return (
     <div>
       <h1>{num}</h1>
-      <button
-        type="button"
-        onClick={() => {
-          dispatch(increase());
-        }}
-      >
+      <button type="button" onClick={onIncrease}>
         +1
       </button>
-      <button
-        type="button"
-        onClick={() => {
-          dispatch(decrease());
-        }}
-      >
+      <button type="button" onClick={onDecrease}>
         -1
       </button>
     </div>
