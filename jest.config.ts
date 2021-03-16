@@ -1,4 +1,4 @@
-import { Config } from "@jest/types";
+import { Config } from '@jest/types';
 
 const config: Config.InitialOptions = {
   moduleFileExtensions: ['ts', 'json', 'js'],
@@ -6,8 +6,8 @@ const config: Config.InitialOptions = {
   testEnvironment: 'node',
   collectCoverageFrom: ['**/*.(t|j)s'],
   transform: {
-    "^.+\\.(t|j)s$": "ts-jest",
-  }
+    '^.+\\.(t|j)s$': 'ts-jest',
+  },
 };
 
 export default config;
