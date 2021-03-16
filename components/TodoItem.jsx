@@ -1,18 +1,14 @@
 import { useCallback } from 'react';
-import { useDispatch } from 'react-redux';
 
 const TodoItem = ({ todo, toggle, remove }) => {
-  const dispatch = useDispatch();
-  const onToggle = useCallback(() => dispatch(toggle(todo.id)), [
-    dispatch,
-    toggle,
-    todo.id,
-  ]);
-  const onRemove = useCallback(() => dispatch(remove(todo.id)), [
-    dispatch,
-    remove,
-    todo.id,
-  ]);
+  const onToggle = useCallback(() => {
+    toggle(todo.id);
+  }, [todo.id, toggle]);
+
+  const onRemove = useCallback(() => {
+    remove(todo.id);
+  }, [todo.id, remove]);
+
   return (
     <div>
       <input type="checkbox" onClick={onToggle} checked={todo.done} readOnly />
@@ -20,6 +16,7 @@ const TodoItem = ({ todo, toggle, remove }) => {
         {todo.text}
       </span>
       <button type="button" onClick={onRemove}>
+        {' '}
         삭제
       </button>
     </div>

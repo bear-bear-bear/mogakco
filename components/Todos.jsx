@@ -1,8 +1,9 @@
 import { useCallback } from 'react';
 import { createSelector } from 'reselect';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import TodoItem from './TodoItem';
 import { changeInput, insert, toggle, remove } from '../actions/todos';
+import useActions from '../lib/useActions';
 
 // const Todos = ({
 //   input,
@@ -48,21 +49,27 @@ const selectAllTodos = createSelector(
 );
 
 const Todos = () => {
-  const dispatch = useDispatch();
   const input = useSelector(selectInput);
   const todos = useSelector(selectAllTodos);
+
+  const [onChangeInput, onInsert, onToggle, onRemove] = useActions(
+    [changeInput, insert, toggle, remove],
+    [],
+  );
 
   const onSubmit = useCallback(
     e => {
       e.preventDefault();
-      dispatch(insert(input));
-      dispatch(changeInput(''));
+      onInsert(input);
+      onChangeInput('');
     },
-    [dispatch, input],
+    [input, onInsert, onChangeInput],
   );
-  const onChange = useCallback(e => dispatch(changeInput(e.target.value)), [
-    dispatch,
+
+  const onChange = useCallback(e => onChangeInput(e.target.value), [
+    onChangeInput,
   ]);
+
   return (
     <div>
       <form onSubmit={onSubmit}>
@@ -71,7 +78,12 @@ const Todos = () => {
       </form>
       <div>
         {todos.map(todo => (
-          <TodoItem todo={todo} key={todo.id} toggle={toggle} remove={remove} />
+          <TodoItem
+            todo={todo}
+            key={todo.id}
+            toggle={onToggle}
+            remove={onRemove}
+          />
         ))}
       </div>
     </div>

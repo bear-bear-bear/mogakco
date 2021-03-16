@@ -12,10 +12,11 @@
 //   );
 // };
 
-import { useCallback } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+// import { useCallback } from 'react';
+import { useSelector } from 'react-redux';
 import { createSelector } from 'reselect';
 import { increase, decrease } from '../actions/counter';
+import useActions from '../lib/useActions';
 
 const selectNum = createSelector(
   state => state.counter.num,
@@ -23,14 +24,16 @@ const selectNum = createSelector(
 );
 
 const Counter = () => {
-  const dispatch = useDispatch();
+  const [onIncrease, onDecrease] = useActions([increase, decrease], []);
+
+  // const dispatch = useDispatch();
   const num = useSelector(selectNum);
-  const onIncrease = useCallback(() => {
-    dispatch(increase());
-  }, [dispatch]);
-  const onDecrease = useCallback(() => {
-    dispatch(decrease());
-  }, [dispatch]);
+  // const onIncrease = useCallback(() => {
+  //   dispatch(increase());
+  // }, [dispatch]);
+  // const onDecrease = useCallback(() => {
+  //   dispatch(decrease());
+  // }, [dispatch]);
 
   return (
     <div>
