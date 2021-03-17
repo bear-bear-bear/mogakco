@@ -10,8 +10,9 @@ class UserService {
     private userRepository: UserRepository,
   ) {}
 
-  public createUser(user: userDTO) {
-    return this.userRepository.create(user);
+  public async createUserOne(user: userDTO) {
+    const newUser = await this.userRepository.createUserOne(user);
+    return newUser;
   }
 
   public async getUserOne(id: number) {
