@@ -1,14 +1,11 @@
 /* eslint-disable prefer-const */
 /* eslint-disable no-plusplus */
 import { Test, TestingModule } from '@nestjs/testing';
+import { getRepositoryToken } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import UserService from '../../services/user.service';
 import userDTO from '../../models/dto/userDTO';
 import User from '../../models/entities/user';
-import UserController from '../../controllers/user.controller';
-import UserRepository from '../../models/repositories/user.repository';
-import UserModule from '../../modules/user.module';
-import { getRepositoryToken } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
 
 let id = 1;
 class UserMockRepository {
@@ -47,11 +44,11 @@ describe('유저 CRUD 유닛 테스트', () => {
         password: 'ihavegf',
         email: 'bear-bear-bear@god.com',
       };
-      id++;
-      const createdUser: User = await userService.createUserOne(user);
-      console.log(createdUser);
 
-      // expect(createdUser.id).toBe(1);
+      const createdUser: User = await userService.createUserOne(user);
+      id++;
+
+      expect(createdUser.id).toBe(1);
       expect(createdUser).toMatchObject({ username: 'eunjunjung123' });
       expect(createdUser).toMatchObject({ email: 'bear-bear-bear@god.com' });
     });
@@ -62,11 +59,12 @@ describe('유저 CRUD 유닛 테스트', () => {
         password: 'ihavegf',
         email: 'bear-bear-bear@kinggod.com',
       };
+
       const createdUser: User = await userService.createUserOne(user);
       expect(createdUser.id).toBe(2);
     });
   });
-  describe('유저 정보 조회', () => {});
-  describe('유저 정보 수정', () => {});
-  describe('유저 정보 삭제', () => {});
+  // describe('유저 정보 조회', () => {});
+  // describe('유저 정보 수정', () => {});
+  // describe('유저 정보 삭제', () => {});
 });
