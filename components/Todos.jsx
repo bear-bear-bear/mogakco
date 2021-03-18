@@ -52,10 +52,12 @@ const Todos = () => {
   const input = useSelector(selectInput);
   const todos = useSelector(selectAllTodos);
 
-  const [onChangeInput, onInsert, onToggle, onRemove] = useActions(
-    [changeInput, insert, toggle, remove],
-    [],
-  );
+  const [onChangeInput, onInsert, onToggle, onRemove] = useActions([
+    changeInput,
+    insert,
+    toggle,
+    remove,
+  ]);
 
   const onSubmit = useCallback(
     e => {
