@@ -24,7 +24,7 @@ const selectNum = createSelector(
 );
 
 const Counter = () => {
-  const [onIncrease, onDecrease] = useActions([increase, decrease], []);
+  const [onIncrease, onDecrease] = useActions([increase, decrease]);
 
   // const dispatch = useDispatch();
   const num = useSelector(selectNum);
