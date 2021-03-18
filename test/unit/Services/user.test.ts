@@ -3,11 +3,12 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { BadRequestException, NotFoundException } from '@nestjs/common';
+import { BadRequestException, HttpStatus, NotFoundException } from '@nestjs/common';
 import userDTO from '../../../models/dto/userDTO';
 import UserService from '../../../services/user.service';
 import User from '../../../models/entities/user';
 
+// Mocking System
 let userId = 1;
 class UserMockRepository {
   public createUserOne(user: userDTO) {
@@ -22,18 +23,34 @@ class UserMockRepository {
     };
   }
 
-  public findUserOne(id: number) {
+  public testReadAndDelete(id: number, flag: boolean) {
+    /*
+      true is read therefore false is delete
+      sorry for design fucking method.
+      please lead me more better things JY & JJ.
+    */
     if (id === 999) {
       throw new NotFoundException('존재하지 않는 요청입니다.');
     }
-    return {
-      id: userId,
-      username: 'eunjunjung123',
-      email: 'bear-bear-bear@god.com',
-    };
+    return flag
+      ? {
+          id: userId,
+          username: 'eunjunjung123',
+          email: 'bear-bear-bear@god.com',
+        }
+      : HttpStatus.ACCEPTED;
+  }
+
+  public findUserOne(id: number) {
+    return this.testReadAndDelete(id, true);
+  }
+
+  public deleteUser(id: number) {
+    return this.testReadAndDelete(id, false);
   }
 }
 
+// test
 describe('유저 CRUD 유닛 테스트', () => {
   let userService: UserService;
   let userRepository: Repository<User>;
@@ -112,5 +129,18 @@ describe('유저 CRUD 유닛 테스트', () => {
     });
   });
   // describe('유저 정보 수정', () => {});
-  // describe('유저 정보 삭제', () => {});
+  describe('유저 정보 삭제', () => {
+    test('id 1번 사용자 정보를 삭제한다.', () => {
+      expect(userService.deleteUser(1)).toBe(HttpStatus.ACCEPTED);
+    });
+
+    test('존재하지 않는 사용자를 삭제한다.', () => {
+      try {
+        userService.deleteUser(999);
+      } catch (e) {
+        expect(e).toBeInstanceOf(NotFoundException);
+        expect(e.message).toBe('존재하지 않는 요청입니다.');
+      }
+    });
+  });
 });
