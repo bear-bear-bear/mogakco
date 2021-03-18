@@ -15,9 +15,8 @@ class UserService {
     return newUser;
   }
 
-  public getUserOne(id: number) {
-    const user = this.userRepository.findOne(id);
-    return user;
+  public findUserOne(id: number) {
+    return this.userRepository.findUserOne(id);
   }
 }
 

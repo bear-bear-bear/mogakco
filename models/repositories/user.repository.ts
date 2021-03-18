@@ -14,6 +14,11 @@ class UserRepository extends Repository<User> {
     await this.save(newUser);
     return newUser;
   }
+
+  public async findUserOne(id: number) {
+    const findUser = await this.findOne(id);
+    return findUser;
+  }
 }
 
 export default UserRepository;
