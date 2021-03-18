@@ -18,6 +18,10 @@ class UserService {
   public findUserOne(id: number) {
     return this.userRepository.findUserOne(id);
   }
+
+  public deleteUser(id: number) {
+    return this.userRepository.deleteUser(id);
+  }
 }
 
 export default UserService;
