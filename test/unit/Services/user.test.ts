@@ -11,48 +11,8 @@ import {
 import userDTO from '../../../models/dto/userDTO';
 import UserService from '../../../services/user.service';
 import User from '../../../models/entities/user';
-
-// Mocking System
-let userId = 1;
-class UserMockRepository {
-  public createUserOne(user: userDTO) {
-    if (!user.email || !user.username || !user.password) {
-      throw new BadRequestException('올바른 요청이 아닙니다.');
-    }
-    return {
-      id: userId,
-      username: user.username,
-      password: user.password,
-      email: user.email,
-    };
-  }
-
-  public testReadAndDelete(id: number, flag: boolean) {
-    /*
-      true is read therefore false is delete
-      sorry for design fucking method.
-      please lead me more better things JY & JJ.
-    */
-    if (id === 999) {
-      throw new NotFoundException('존재하지 않는 요청입니다.');
-    }
-    return flag
-      ? {
-          id: userId,
-          username: 'eunjunjung123',
-          email: 'bear-bear-bear@god.com',
-        }
-      : HttpStatus.ACCEPTED;
-  }
-
-  public findUserOne(id: number) {
-    return this.testReadAndDelete(id, true);
-  }
-
-  public deleteUser(id: number) {
-    return this.testReadAndDelete(id, false);
-  }
-}
+import UserMockRepository from '../helper/userMockRepository';
+import updateUserRequest from './dto/updateUserRequest';
 
 // test
 describe('유저 CRUD 유닛 테스트', () => {
@@ -81,26 +41,22 @@ describe('유저 CRUD 유닛 테스트', () => {
         password: 'ihavegf',
         email: 'bear-bear-bear@god.com',
       };
-
       const createdUser: User = await userService.createUserOne(user);
-      userId++;
-
       expect(createdUser.id).toBe(1);
       expect(createdUser).toMatchObject({ username: 'eunjunjung123' });
       expect(createdUser).toMatchObject({ email: 'bear-bear-bear@god.com' });
     });
 
-    test('생성된 사용자의 id는 2번이다.', async () => {
-      const user: userDTO = {
-        username: 'eunjunjung456',
-        password: 'ihavegf',
-        email: 'bear-bear-bear@kinggod.com',
-      };
-
-      const createdUser: User = await userService.createUserOne(user);
-      expect(createdUser.id).toBe(2);
-      userId = 1;
-    });
+    // test('생성된 사용자의 id는 2번이다.', async () => {
+    //   const user: userDTO = {
+    //     username: 'eunjunjung456',
+    //     password: 'ihavegf',
+    //     email: 'bear-bear-bear@kinggod.com',
+    //   };
+    //
+    //   const createdUser: User = await userService.createUserOne(user);
+    //   expect(createdUser.id).toBe(2);
+    // });
 
     test('잘못된 사용자 생성은 수행되지 않는다.', async () => {
       try {
@@ -117,7 +73,7 @@ describe('유저 CRUD 유닛 테스트', () => {
   describe('유저 정보 조회', () => {
     test('id 1번 사용자 정보를 조회한다.', () => {
       expect(userService.findUserOne(1)).toMatchObject({
-        id: userId,
+        id: 1,
         username: 'eunjunjung123',
         email: 'bear-bear-bear@god.com',
       });
@@ -132,7 +88,36 @@ describe('유저 CRUD 유닛 테스트', () => {
       }
     });
   });
-  // describe('유저 정보 수정', () => {});
+
+  describe('유저 정보 수정', () => {
+    test('id 1번 사용자의 정보를 수정한다.', () => {
+      const user: updateUserRequest = {
+        username: 'galaxy4276',
+        email: 'galaxy4276@gmail.com',
+      };
+
+      const changed = userService.updateUserOne(user);
+      expect(changed).toMatchObject({
+        id: 1,
+        username: 'galaxy4276',
+        email: 'galaxy4276@gmail.com',
+      });
+    });
+
+    test('잘못된 사용자 수정을 수행한다.', () => {
+      try {
+        const wrongUser = {
+          username: 'erroruser',
+          sex: 'male',
+        };
+        userService.updateUserOne(wrongUser);
+      } catch (e) {
+        expect(e).toBeInstanceOf(BadRequestException);
+        expect(e.message).toBe('올바른 요청이 아닙니다.');
+      }
+    });
+  });
+
   describe('유저 정보 삭제', () => {
     test('id 1번 사용자 정보를 삭제한다.', () => {
       expect(userService.deleteUser(1)).toBe(HttpStatus.ACCEPTED);
