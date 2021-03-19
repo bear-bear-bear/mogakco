@@ -8,8 +8,8 @@ class UserController {
   constructor(private userService: UserService) {}
 
   @Post()
-  public async createUser(@Body() user: userDTO): Promise<User> {
-    return this.userService.createUser(user);
+  public createUser(@Body() user: userDTO): Promise<User> {
+    return this.userService.createUserOne(user);
   }
 }
 
