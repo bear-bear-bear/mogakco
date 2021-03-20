@@ -20,6 +20,13 @@ class UserRepository extends Repository<User> {
     return this.findOne(id);
   }
 
+  public findUserByName(username: string) {
+    return this.findOne({
+      where: { username },
+      select: ['id'],
+    });
+  }
+
   public updateUser(user: updateUserRequest): Promise<User> {
     return this.save(user);
   }
