@@ -23,7 +23,7 @@ class UserRepository extends Repository<User> {
   public findUserByName(username: string) {
     return this.findOne({
       where: { username },
-      select: ['id'],
+      select: ['id', 'username', 'password', 'email'],
     });
   }
 
