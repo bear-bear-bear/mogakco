@@ -35,7 +35,7 @@ module.exports = {
       rules: {
         'no-shadow': 'off',
         'no-use-before-define': 'off',
-        '@typescript-eslint/no-shadow': 'error',
+        '@typescript-eslint/no-shadow': 'off',
         '@typescript-eslint/no-explicit-any': 'off',
         '@typescript-eslint/explicit-module-boundary-types': 'off',
         'react/prop-types': 'off',
@@ -62,6 +62,7 @@ module.exports = {
         endOfLine: 'auto',
       },
     ],
+    'no-shadow-restricted-names': 'off',
     'class-methods-use-this': 'off', // 클래스 메서드에 무조건 this 사용
     'no-useless-constructor': 'off', // 생성자 선언 필드 무조건 사용
     'import/no-unresolved': 'off', // import 에 상대경로 금지
