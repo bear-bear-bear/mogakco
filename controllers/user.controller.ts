@@ -11,8 +11,8 @@ import {
   HttpCode,
 } from '@nestjs/common';
 import UserService from '../services/user.service';
-import userDTO from '../models/dto/userDTO';
-import updateUserRequest from '../test/unit/Services/dto/updateUserRequest';
+import createUserDTO from '../models/dto/create-user.dto';
+import updateUserRequestDto from '../test/unit/Services/dto/update-user-request.dto';
 import response from './dto/response';
 import LocalAuthGuard from '../services/passport/local-auth.guard';
 
@@ -34,7 +34,7 @@ class UserController {
   }
 
   @Post()
-  async join(@Body() user: userDTO): Promise<response> {
+  async join(@Body() user: createUserDTO): Promise<response> {
     const res = await this.userService.join(user);
     return res;
   }
@@ -58,7 +58,7 @@ class UserController {
   }
 
   @Patch(':id')
-  updateUserOne(@Body() user: updateUserRequest) {
+  updateUserOne(@Body() user: updateUserRequestDto) {
     const updateUser = this.userService.updateUserOne(user);
     return updateUser;
   }

@@ -8,11 +8,11 @@ import {
   HttpStatus,
   NotFoundException,
 } from '@nestjs/common';
-import userDTO from '../../../models/dto/userDTO';
+import createUserDTO from '../../../models/dto/create-user.dto';
 import UserService from '../../../services/user.service';
 import User from '../../../models/entities/user';
 import UserMockRepository from '../helper/userMockRepository';
-import updateUserRequest from './dto/updateUserRequest';
+import updateUserRequestDto from './dto/update-user-request.dto';
 
 // test
 describe('유저 CRUD 유닛 테스트', () => {
@@ -36,7 +36,7 @@ describe('유저 CRUD 유닛 테스트', () => {
 
   describe('유저 정보 생성', () => {
     test('사용자를 생성한다.', async () => {
-      const user: userDTO = {
+      const user: createUserDTO = {
         username: 'eunjunjung123',
         password: 'ihavegf',
         email: 'bear-bear-bear@god.com',
@@ -62,7 +62,7 @@ describe('유저 CRUD 유닛 테스트', () => {
       try {
         await userService.createUserOne({
           username: 'iloveyou',
-        } as userDTO);
+        } as createUserDTO);
       } catch (e) {
         expect(e).toBeInstanceOf(BadRequestException);
         expect(e.message).toBe('올바른 요청이 아닙니다.');
@@ -91,7 +91,7 @@ describe('유저 CRUD 유닛 테스트', () => {
 
   describe('유저 정보 수정', () => {
     test('id 1번 사용자의 정보를 수정한다.', () => {
-      const user: updateUserRequest = {
+      const user: updateUserRequestDto = {
         username: 'galaxy4276',
         email: 'galaxy4276@gmail.com',
       };

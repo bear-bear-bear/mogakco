@@ -1,13 +1,13 @@
 import { EntityRepository, Repository } from 'typeorm';
 import { Injectable } from '@nestjs/common';
 import User from '../entities/user';
-import userDTO from '../dto/userDTO';
-import updateUserRequest from '../../test/unit/Services/dto/updateUserRequest';
+import createUserDTO from '../dto/create-user.dto';
+import updateUserRequestDto from '../../test/unit/Services/dto/update-user-request.dto';
 
 @Injectable()
 @EntityRepository(User)
 class UserRepository extends Repository<User> {
-  public async createUserOne(user: userDTO): Promise<User> {
+  public async createUserOne(user: createUserDTO): Promise<User> {
     const newUser = new User();
     newUser.password = user.password;
     newUser.username = user.username;
@@ -27,7 +27,7 @@ class UserRepository extends Repository<User> {
     });
   }
 
-  public updateUser(user: updateUserRequest): Promise<User> {
+  public updateUser(user: updateUserRequestDto): Promise<User> {
     return this.save(user);
   }
 

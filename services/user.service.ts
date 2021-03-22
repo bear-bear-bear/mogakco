@@ -1,8 +1,8 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import UserRepository from '../models/repositories/user.repository';
-import userDTO from '../models/dto/userDTO';
-import updateUserRequest from '../test/unit/Services/dto/updateUserRequest';
+import createUserDTO from '../models/dto/create-user.dto';
+import updateUserRequestDto from '../test/unit/Services/dto/update-user-request.dto';
 import makeHash from '../test/unit/Services/helper/makeHash';
 
 @Injectable()
@@ -12,7 +12,7 @@ class UserService {
     private userRepository: UserRepository,
   ) {}
 
-  public createUserOne(user: userDTO) {
+  public createUserOne(user: createUserDTO) {
     return this.userRepository.createUserOne(user);
   }
 
@@ -24,7 +24,7 @@ class UserService {
     return this.userRepository.findUserByName(username);
   }
 
-  public updateUserOne(user: updateUserRequest) {
+  public updateUserOne(user: updateUserRequestDto) {
     return this.userRepository.updateUser(user);
   }
 
@@ -32,7 +32,7 @@ class UserService {
     return this.userRepository.deleteUser(id);
   }
 
-  public async join({ username, password, email }: userDTO) {
+  public async join({ username, password, email }: createUserDTO) {
     const currentUser = await this.userRepository.findUserByName(username);
     if (currentUser) {
       throw new HttpException(
