@@ -13,9 +13,9 @@ type GetUserType = {
 class AuthService {
   constructor(private userService: UserService) {}
 
-  public async validateUser(username: string, password: string): Promise<any> {
-    const user: GetUserType = (await this.userService.findUserByName(
-      username,
+  public async validateUser(email: string, password: string): Promise<any> {
+    const user: GetUserType = (await this.userService.findUserByEmail(
+      email,
     )) as GetUserType;
     const hash = await compare(password, user?.password);
 

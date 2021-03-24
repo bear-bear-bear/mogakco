@@ -24,6 +24,10 @@ class UserService {
     return this.userRepository.findUserByName(username);
   }
 
+  public findUserByEmail(email: string) {
+    return this.userRepository.findUserByEmail(email);
+  }
+
   public updateUserOne(user: updateUserRequestDto) {
     return this.userRepository.updateUser(user);
   }

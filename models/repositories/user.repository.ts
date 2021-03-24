@@ -27,6 +27,12 @@ class UserRepository extends Repository<User> {
     });
   }
 
+  public findUserByEmail(email: string) {
+    return this.findOne({
+      where: { email },
+    });
+  }
+
   public updateUser(user: updateUserRequestDto): Promise<User> {
     return this.save(user);
   }
