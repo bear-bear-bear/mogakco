@@ -8,8 +8,10 @@ import UserModule from './user.module';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
     TypeOrmModule.forRoot(dbConfig),
-    ConfigModule.forRoot(),
     UserModule,
   ],
   controllers: [AppController],
