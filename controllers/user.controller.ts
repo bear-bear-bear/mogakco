@@ -8,13 +8,14 @@ import {
   Controller,
   UseGuards,
   Request,
-  HttpCode,
+  UseFilters,
 } from '@nestjs/common';
 import UserService from '../services/user.service';
 import createUserDTO from '../models/dto/create-user.dto';
 import updateUserRequestDto from '../test/unit/Services/dto/update-user-request.dto';
 import response from './dto/response';
 import LocalAuthGuard from '../services/passport/local-auth.guard';
+import LoginBadRequestException from './exception/login.exception';
 
 @Controller('/user')
 class UserController {
@@ -26,9 +27,9 @@ class UserController {
     return '준재형 지용이형 열심히 힘내서 달립시다. 수익내야죠?';
   }
 
-  @UseGuards(LocalAuthGuard)
   @Post('/login')
-  @HttpCode(200)
+  @UseGuards(LocalAuthGuard)
+  @UseFilters(LoginBadRequestException)
   async login(@Request() req: any) {
     return req.user;
   }
