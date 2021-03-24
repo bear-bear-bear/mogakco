@@ -14,9 +14,8 @@ class LoginBadRequestException implements ExceptionFilter {
     const response = ctx.getResponse<Response>();
 
     response.json({
-      status: 400,
+      statusCode: 400,
       message: '아이디 또는 비밀번호가 잘못되었습니다.',
-      path: request.url,
     });
   }
 }

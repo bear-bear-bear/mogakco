@@ -16,8 +16,9 @@ import updateUserRequestDto from '../test/unit/Services/dto/update-user-request.
 import response from './dto/response';
 import LocalAuthGuard from '../services/passport/local-auth.guard';
 import LoginBadRequestException from './exception/login.exception';
+import LoginUserDTO from '../models/dto/login-user.dto';
 
-@Controller('/user')
+@Controller('user')
 class UserController {
   constructor(private userService: UserService) {}
 
@@ -30,7 +31,7 @@ class UserController {
   @Post('/login')
   @UseGuards(LocalAuthGuard)
   @UseFilters(LoginBadRequestException)
-  async login(@Request() req: any) {
+  async login(@Request() req: LoginUserDTO) {
     return req.user;
   }
 
