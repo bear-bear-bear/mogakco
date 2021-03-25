@@ -9,6 +9,7 @@ import {
   UseGuards,
   Request,
   UseFilters,
+  HttpCode,
 } from '@nestjs/common';
 import UserService from '../services/user.service';
 import createUserDTO from '../models/dto/create-user.dto';
@@ -24,8 +25,9 @@ class UserController {
 
   // test Get Controller
   @Get('/test')
+  @HttpCode(200)
   public getTest() {
-    return '준재형 지용이형 열심히 힘내서 달립시다. 수익내야죠?';
+    return '노원님 갓이세요.';
   }
 
   @Post('/login')
