@@ -3,9 +3,11 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import OauthUser from './oauth_users';
 
 @Entity({ name: 'users' })
 class User {
@@ -29,6 +31,9 @@ class User {
 
   @DeleteDateColumn({ name: 'deleted_at' })
   deletedAt?: Date;
+
+  @OneToMany(() => OauthUser, OauthUser => OauthUser.id)
+  user?: User;
 }
 
 export default User;
