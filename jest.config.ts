@@ -4,6 +4,7 @@ const config: Config.InitialOptions = {
   moduleFileExtensions: ['ts', 'json', 'js'],
   rootDir: './',
   testEnvironment: 'node',
+  testRegex: '.test.ts$',
   collectCoverageFrom: ['**/*.(t|j)s'],
   transform: {
     '^.+\\.(t|j)s$': 'ts-jest',
