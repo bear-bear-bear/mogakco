@@ -9,7 +9,12 @@ import {
   UseGuards,
   Request,
   UseFilters,
+  UnauthorizedException,
+  Req,
 } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
+import { JwtPayload } from 'services/passport/jwt.payload';
+import { AuthGuard } from '@nestjs/passport';
 import UserService from '../services/user.service';
 import createUserDTO from '../models/dto/create-user.dto';
 import updateUserRequestDto from '../test/unit/Services/dto/update-user-request.dto';
@@ -20,19 +25,31 @@ import LoginUserDTO from '../models/dto/login-user.dto';
 
 @Controller('user')
 class UserController {
-  constructor(private userService: UserService) {}
+  constructor(
+    private userService: UserService,
+    private jwtService: JwtService,
+  ) {}
 
   // test Get Controller
   @Get('/test')
   public getTest() {
-    return '준재형 지용이형 열심히 힘내서 달립시다. 수익내야죠?';
+    return encodeURIComponent(
+      '준재형 지용이형 열심히 힘내서 달립시다. 수익내야죠?',
+    );
   }
 
   @Post('/login')
-  @UseGuards(LocalAuthGuard)
+  // @UseGuards(LocalAuthGuard)
   @UseFilters(LoginBadRequestException)
   async login(@Request() req: LoginUserDTO) {
-    return req.user;
+    const user = await this.userService.findUserByEmail(req.email);
+    if (!user) {
+      throw new UnauthorizedException();
+    }
+    const payload: JwtPayload = { email: user.email };
+    const accessToken = await this.jwtService.signAsync(payload);
+    // return req.user;
+    return accessToken;
   }
 
   @Post()
@@ -63,6 +80,13 @@ class UserController {
   updateUserOne(@Body() user: updateUserRequestDto) {
     const updateUser = this.userService.updateUserOne(user);
     return updateUser;
+  }
+
+  @Post('/authenticate')
+  @UseGuards(AuthGuard())
+  testVerify(@Req() req: any) {
+    console.log(req);
+    return null;
   }
 }
 

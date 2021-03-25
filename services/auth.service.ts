@@ -1,5 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
 import { compare } from 'bcrypt';
+import UserRepository from 'models/repositories/user.repository';
 import UserService from './user.service';
 
 type GetUserType = {

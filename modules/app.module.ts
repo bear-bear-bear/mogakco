@@ -36,7 +36,6 @@ import AuthModule from './auth.module';
       logging: true,
       entities: [User],
     }),
-    UserModule,
     AuthModule,
   ],
   controllers: [AppController],

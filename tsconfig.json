@@ -13,11 +13,7 @@
     "outDir": "./dist",
     "baseUrl": "./",
     "incremental": true,
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ]
+    "lib": ["dom", "dom.iterable", "esnext"]
     //    "allowJs": true,
     //    "skipLibCheck": true,
     //    "forceConsistentCasingInFileNames": true,
@@ -34,5 +30,15 @@
     //    "**/*.tsx"
     //  ],
   },
-  "exclude": ["node_modules", "pages", "components", "container", "lib", "reducers", "selectors", "store", "styles"]
+  "exclude": [
+    "node_modules",
+    "pages",
+    "components",
+    "container",
+    "lib",
+    "reducers",
+    "selectors",
+    "store",
+    "styles"
+  ]
 }
