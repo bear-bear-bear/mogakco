@@ -1,7 +1,7 @@
 class response {
   message!: string;
 
-  status!: number;
+  statusCode!: number;
 }
 
 export default response;

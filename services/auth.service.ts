@@ -1,5 +1,9 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
+import {
+  BadRequestException,
+  HttpException,
+  HttpStatus,
+  Injectable,
+} from '@nestjs/common';
 import { compare } from 'bcrypt';
 import UserRepository from 'models/repositories/user.repository';
 import UserService from './user.service';
@@ -19,8 +23,9 @@ class AuthService {
     const user: GetUserType = (await this.userService.findUserByEmail(
       email,
     )) as GetUserType;
-    const hash = await compare(password, user?.password);
 
+    if (!user) throw new BadRequestException();
+    const hash = await compare(password, user?.password);
     if (!hash && !user) {
       return new HttpException(
         '아이디 또는 비밀번호가 틀렸습니다.',
