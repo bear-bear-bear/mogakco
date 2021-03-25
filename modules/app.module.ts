@@ -5,8 +5,10 @@ import * as Joi from 'joi';
 import AppController from '../controllers/app.controller';
 import AppService from '../services/app.service';
 import UserModule from './user.module';
-import User from '../models/entities/user';
+import User from '../models/entities/users';
 import AuthModule from './auth.module';
+import OauthUser from '../models/entities/oauth_users';
+import OauthModule from './oauth.module';
 
 @Module({
   imports: [
@@ -34,10 +36,11 @@ import AuthModule from './auth.module';
       database: process.env.DATABASE_NAME as string,
       synchronize: process.env.NODE_ENV === 'development',
       logging: true,
-      entities: [User],
+      entities: [User, OauthUser],
     }),
     UserModule,
     AuthModule,
+    OauthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
