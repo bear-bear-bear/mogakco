@@ -17,7 +17,7 @@
       "dom",
       "dom.iterable",
       "esnext"
-    ],
+    ]
     //    "allowJs": true,
     //    "skipLibCheck": true,
     //    "forceConsistentCasingInFileNames": true,
@@ -33,5 +33,6 @@
     //    "**/*.ts",
     //    "**/*.tsx"
     //  ],
-  }
+  },
+  "exclude": ["node_modules", "pages", "components", "container", "lib", "reducers", "selectors", "store", "styles"]
 }
