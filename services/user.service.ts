@@ -37,7 +37,7 @@ class UserService {
   }
 
   public async join({ username, password, email }: createUserDTO) {
-    const currentUser = await this.userRepository.findUserByName(username);
+    const currentUser = await this.userRepository.findUserByEmail(email);
     if (currentUser) {
       throw new HttpException(
         '이미 존재하는 유저입니다.',
@@ -53,7 +53,7 @@ class UserService {
       email,
     });
 
-    return { message: '유저가 생성되었습니다.', status: 201 };
+    return { message: '유저가 생성되었습니다.', statusCode: 201 };
   }
 }
 
