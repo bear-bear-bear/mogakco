@@ -10,7 +10,7 @@ import {
 } from '@nestjs/common';
 import createUserDTO from '../../../models/dto/create-user.dto';
 import UserService from '../../../services/user.service';
-import User from '../../../models/entities/user';
+import User from '../../../models/entities/users';
 import UserMockRepository from '../helper/userMockRepository';
 import updateUserRequestDto from './dto/update-user-request.dto';
 
