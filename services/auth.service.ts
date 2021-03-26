@@ -1,3 +1,7 @@
+// Notice Please.
+// Deprecated AuthService.
+// Use UserService Instead.
+
 import {
   BadRequestException,
   HttpException,
@@ -5,7 +9,6 @@ import {
   Injectable,
 } from '@nestjs/common';
 import { compare } from 'bcrypt';
-import UserRepository from 'models/repositories/user.repository';
 import UserService from './user.service';
 
 type GetUserType = {

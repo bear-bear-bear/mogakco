@@ -4,9 +4,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import * as Joi from 'joi';
 import AppController from '../controllers/app.controller';
 import AppService from '../services/app.service';
-import UserModule from './user.module';
 import User from '../models/entities/user';
-import AuthModule from './auth.module';
+import UserModule from './user.module';
 
 @Module({
   imports: [
@@ -36,7 +35,7 @@ import AuthModule from './auth.module';
       logging: true,
       entities: [User],
     }),
-    AuthModule,
+    UserModule,
   ],
   controllers: [AppController],
   providers: [AppService],

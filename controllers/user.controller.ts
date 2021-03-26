@@ -7,7 +7,6 @@ import {
   Body,
   Controller,
   UseGuards,
-  Request,
   UseFilters,
   UnauthorizedException,
   Req,
@@ -19,7 +18,6 @@ import UserService from '../services/user.service';
 import createUserDTO from '../models/dto/create-user.dto';
 import updateUserRequestDto from '../test/unit/Services/dto/update-user-request.dto';
 import response from './dto/response';
-import LocalAuthGuard from '../services/passport/local-auth.guard';
 import LoginBadRequestException from './exception/login.exception';
 import LoginUserDTO from '../models/dto/login-user.dto';
 
@@ -39,9 +37,8 @@ class UserController {
   }
 
   @Post('/login')
-  // @UseGuards(LocalAuthGuard)
   @UseFilters(LoginBadRequestException)
-  async login(@Request() req: LoginUserDTO) {
+  async login(@Body() req: LoginUserDTO) {
     const user = await this.userService.findUserByEmail(req.email);
     if (!user) {
       throw new UnauthorizedException();
@@ -84,9 +81,14 @@ class UserController {
 
   @Post('/authenticate')
   @UseGuards(AuthGuard())
-  testVerify(@Req() req: any) {
-    console.log(req);
-    return null;
+  public async validateUser(@Req() req: any): Promise<any> {
+    const { email } = req.body as LoginUserDTO;
+    const foundUser = await this.userService.findUserByEmail(email);
+    if (!foundUser) {
+      throw new UnauthorizedException();
+    }
+    const { password, ...props } = foundUser;
+    return props;
   }
 }
 
