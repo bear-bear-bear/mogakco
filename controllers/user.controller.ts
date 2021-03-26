@@ -27,7 +27,7 @@ class UserController {
   @Get('/test')
   @HttpCode(200)
   public getTest() {
-    return '노원님 갓이세요.';
+    return '할 수 있어';
   }
 
   @Post('/login')

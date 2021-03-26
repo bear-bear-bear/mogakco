@@ -28,6 +28,6 @@ describe('애플리케이션 실행 테스트', () => {
 
   test('라우팅이 정상적으로 동작한다.', async () => {
     const response = await request(app.getHttpServer()).get('/user/test');
-    expect(response.text).toBe('노원님 갓이세요.');
+    expect(response.text).toBe('할 수 있어');
   });
 });
