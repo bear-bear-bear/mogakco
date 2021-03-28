@@ -1,23 +1,26 @@
-// Deprecated Module
-// Use UserModule Instead.
+import { Module } from '@nestjs/common';
+import { JwtModule } from '@nestjs/jwt';
+import { PassportModule } from '@nestjs/passport';
+import JwtStrategy from 'services/passport/jwt.strategy';
+import AuthService from 'services/auth.service';
+import UserModule from './user.module';
+import AuthController from '../controllers/auth.controller';
 
-// import { forwardRef, Module } from '@nestjs/common';
-// import { TypeOrmModule } from '@nestjs/typeorm';
-// import { JwtService } from '@nestjs/jwt';
-// import UserRepository from '../models/repositories/user.repository';
-// import userController from '../controllers/user.controller';
-// import UserService from '../services/user.service';
-// import AuthModule from './auth.module';
+@Module({
+  imports: [
+    PassportModule.register({
+      defaultStrategy: 'jwt',
+    }),
+    JwtModule.register({
+      secret: 'secretKey',
+      signOptions: { expiresIn: 3600 },
+    }),
+    UserModule,
+  ],
+  controllers: [AuthController],
+  providers: [AuthService, JwtStrategy],
+  exports: [JwtStrategy, PassportModule],
+})
+class AuthModule {}
 
-// @Module({
-//   imports: [
-//     TypeOrmModule.forFeature([UserRepository]),
-//     forwardRef(() => AuthModule),
-//   ],
-//   controllers: [userController],
-//   providers: [UserService, JwtService],
-//   exports: [UserService],
-// })
-// class UserModule {}
-
-// export default UserModule;
+export default AuthModule;

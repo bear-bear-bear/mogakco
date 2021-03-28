@@ -8,7 +8,7 @@ import {
   HttpStatus,
   Injectable,
 } from '@nestjs/common';
-import { compare } from 'bcrypt';
+import * as bcrypt from 'bcrypt';
 import UserService from './user.service';
 
 type GetUserType = {
@@ -23,12 +23,10 @@ class AuthService {
   constructor(private userService: UserService) {}
 
   public async validateUser(email: string, password: string): Promise<any> {
-    const user: GetUserType = (await this.userService.findUserByEmail(
-      email,
-    )) as GetUserType;
+    const user = await this.userService.findUserByEmail(email);
 
     if (!user) throw new BadRequestException();
-    const hash = await compare(password, user?.password);
+    const hash = await bcrypt.compare(password, user?.password);
     if (!hash && !user) {
       return new HttpException(
         '아이디 또는 비밀번호가 틀렸습니다.',

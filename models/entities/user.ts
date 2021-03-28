@@ -1,4 +1,5 @@
 import {
+  BaseEntity,
   Column,
   CreateDateColumn,
   DeleteDateColumn,
@@ -7,8 +8,8 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-@Entity({ name: 'users' })
-class User {
+@Entity()
+class User extends BaseEntity {
   @PrimaryGeneratedColumn({ unsigned: true })
   id!: number;
 

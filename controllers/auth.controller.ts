@@ -10,9 +10,12 @@ import {
   UseFilters,
   UnauthorizedException,
   Req,
+  Res,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { JwtPayload } from 'services/passport/jwt.payload';
+import { Request, Response } from 'express';
+import JwtAuthGuard from 'services/passport/jwt-guard';
 import { AuthGuard } from '@nestjs/passport';
 import UserService from '../services/user.service';
 import createUserDTO from '../models/dto/create-user.dto';
@@ -22,7 +25,7 @@ import LoginBadRequestException from './exception/login.exception';
 import LoginUserDTO from '../models/dto/login-user.dto';
 
 @Controller('user')
-class UserController {
+class AuthController {
   constructor(
     private userService: UserService,
     private jwtService: JwtService,
@@ -38,7 +41,7 @@ class UserController {
 
   @Post('/login')
   @UseFilters(LoginBadRequestException)
-  async login(@Body() req: LoginUserDTO) {
+  async login(@Body() req: LoginUserDTO, @Res() res: Response) {
     const user = await this.userService.findUserByEmail(req.email);
     if (!user) {
       throw new UnauthorizedException();
@@ -46,7 +49,13 @@ class UserController {
     const payload: JwtPayload = { email: user.email };
     const accessToken = await this.jwtService.signAsync(payload);
     // return req.user;
-    return accessToken;
+    return res
+      .cookie('x-token', accessToken, {
+        httpOnly: true,
+      })
+      .json({
+        msg: 'token generated',
+      });
   }
 
   @Post()
@@ -79,10 +88,11 @@ class UserController {
     return updateUser;
   }
 
-  @Post('/authenticate')
-  @UseGuards(AuthGuard())
-  public async validateUser(@Req() req: any): Promise<any> {
-    const { email } = req.body as LoginUserDTO;
+  @UseGuards(JwtAuthGuard)
+  @Post('/account')
+  public async account(@Req() req: Request): Promise<any> {
+    const { email } = req.user as any;
+    console.log(req.user);
     const foundUser = await this.userService.findUserByEmail(email);
     if (!foundUser) {
       throw new UnauthorizedException();
@@ -90,6 +100,24 @@ class UserController {
     const { password, ...props } = foundUser;
     return props;
   }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('/logout')
+  public async logout(@Req() req: Request, @Res() res: Response) {
+    res.setHeader('Set-Cookie', `x-token=; HttpOnly; Path=/; Max-Age=0`);
+    return res.status(200).json({
+      msg: 'logout',
+    });
+  }
+
+  @Get('/me')
+  // ERROR Unknown column 'NaN' in 'where clause'
+  public async requestData(@Req() req: Request) {
+    console.log(req.user);
+    return {
+      msg: '1',
+    };
+  }
 }
 
-export default UserController;
+export default AuthController;

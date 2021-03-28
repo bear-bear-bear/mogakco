@@ -1,4 +1,5 @@
 import { EntityRepository, Repository } from 'typeorm';
+import { InternalServerErrorException } from '@nestjs/common';
 import User from '../entities/user';
 import createUserDTO from '../dto/create-user.dto';
 import updateUserRequestDto from '../../test/unit/Services/dto/update-user-request.dto';
@@ -15,25 +16,38 @@ class UserRepository extends Repository<User> {
   }
 
   public async findUserOne(id: number) {
-    return this.findOne(id);
+    const user = await this.findOne({ id });
+    if (!user) {
+      throw new InternalServerErrorException();
+    }
+    return user;
   }
 
   public async findUserByName(username: string) {
-    return this.findOne({
+    const user = await this.findOne({
       where: { username },
       select: ['id', 'username', 'password', 'email'],
     });
+    if (!user) {
+      throw new InternalServerErrorException();
+    }
+    return user;
   }
 
   public async findUserByEmail(email: string) {
-    const user = await this.findOne({
-      where: { email },
-    });
+    const user = await this.findOne({ email });
+    if (!user) {
+      throw new InternalServerErrorException();
+    }
     return user;
   }
 
   public async updateUser(user: updateUserRequestDto): Promise<User> {
-    return this.save(user);
+    const updatedUser = await this.save(user);
+    if (!updatedUser) {
+      throw new InternalServerErrorException();
+    }
+    return updatedUser;
   }
 
   public async deleteUser(id: number) {

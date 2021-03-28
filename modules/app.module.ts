@@ -6,6 +6,7 @@ import AppController from '../controllers/app.controller';
 import AppService from '../services/app.service';
 import User from '../models/entities/user';
 import UserModule from './user.module';
+import AuthModule from './auth.module';
 
 @Module({
   imports: [
@@ -32,9 +33,10 @@ import UserModule from './user.module';
       password: process.env.DATABASE_PASSWORD as string,
       database: process.env.DATABASE_NAME as string,
       synchronize: process.env.NODE_ENV === 'development',
-      logging: true,
+      // logging: true,
       entities: [User],
     }),
+    AuthModule,
     UserModule,
   ],
   controllers: [AppController],
