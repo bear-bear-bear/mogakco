@@ -33,6 +33,31 @@
     //    "**/*.ts",
     //    "**/*.tsx"
     //  ],
+    ,
+    "allowJs": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve"
   },
-  "exclude": ["node_modules", "pages", "components", "container", "lib", "reducers", "selectors", "store", "styles"]
+  "exclude": [
+    "node_modules",
+    "pages",
+    "components",
+    "container",
+    "lib",
+    "reducers",
+    "selectors",
+    "store",
+    "styles"
+  ],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx"
+  ]
 }

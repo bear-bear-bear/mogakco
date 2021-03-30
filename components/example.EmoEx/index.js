@@ -1,4 +1,4 @@
-import { Button, Container } from '../styles/EmoEx/EmoEx';
+import { Button, Container } from './style';
 
 const EmoEx = () => {
   return (
