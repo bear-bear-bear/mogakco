@@ -1,5 +1,5 @@
 import { handleActions } from 'redux-actions';
-import * as todos from '../actions/todos';
+import * as todos from '../actions/example.todos';
 
 // 리듀서
 const todosReducer = handleActions(
