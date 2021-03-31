@@ -1,9 +1,9 @@
 import React from 'react';
-import EmoEx from '../components/EmoEx';
-// import CounterContainer from '../container/CounterContainer';
-import Counter from '../components/Counter';
-// import TodosContainer from '../container/TodosContainer';
-import Todos from '../components/Todos';
+import EmoEx from '~/components/example.EmoEx';
+// import CounterContainer from '../container/example.CounterContainer';
+import Counter from '~/components/example.Counter';
+// import TodosContainer from '../container/example.TodosContainer';
+import Todos from '~/components/example.Todos';
 
 const App = () => {
   return (
