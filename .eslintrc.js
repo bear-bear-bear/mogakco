@@ -43,7 +43,7 @@ module.exports = {
       },
     },
   ],
-  ignorePatterns: ['dist/**/*'],
+  ignorePatterns: ['dist/**/*', 'jest-e2e.json'],
   rules: {
     'react/jsx-uses-react': 'error',
     'react/jsx-uses-vars': 'error',
