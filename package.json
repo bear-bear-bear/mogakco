@@ -15,7 +15,7 @@
     "start:next-dev": "next",
     "lint": "eslint .",
     "lint:backend": "eslint controllers/**/*  models/**/* modules/**/* services/**/*",
-    "lint:frontend": "eslint actions/**/* components/**/* container/**/* lib/**/* pages/**/* reducers/**/* selectors/**/* store/**/*",
+    "lint:frontend": "eslint --ext .js,.jsx actions/**/* components/**/* containers/**/* lib/**/* pages/**/* reducers/**/* selectors/**/* store/**/*",
     "lint:test-backend": "eslint test/**/*.ts",
     "test": "jest",
     "test:watch": "jest --watch",
