@@ -1,13 +1,8 @@
 import { useCallback } from 'react';
 import { createSelector } from 'reselect';
 import { useSelector } from 'react-redux';
-import TodoItem from '../example.TodoItem';
-import {
-  changeInput,
-  insert,
-  toggle,
-  remove,
-} from '~/actions/example.todos';
+import TodoItem from '../TodoItem';
+import { changeInput, insert, toggle, remove } from '~/actions/example/todos';
 import useActions from '~/lib/useActions';
 
 // const Todos = ({
