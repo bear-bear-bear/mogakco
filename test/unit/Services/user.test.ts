@@ -2,7 +2,6 @@
 /* eslint-disable no-plusplus */
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
 import {
   BadRequestException,
   HttpStatus,
@@ -17,7 +16,6 @@ import updateUserRequestDto from './dto/update-user-request.dto';
 // test
 describe('유저 CRUD 유닛 테스트', () => {
   let userService: UserService;
-  let userRepository: Repository<User>;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -31,7 +29,6 @@ describe('유저 CRUD 유닛 테스트', () => {
     }).compile();
 
     userService = module.get(UserService);
-    userRepository = module.get(getRepositoryToken(User));
   });
 
   describe('유저 정보 생성', () => {
