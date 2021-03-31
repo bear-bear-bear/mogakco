@@ -15,7 +15,7 @@
 // import { useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import { createSelector } from 'reselect';
-import { increase, decrease } from '~/actions/example.counter';
+import { increase, decrease } from '~/actions/example/counter';
 import useActions from '~/lib/useActions';
 
 const selectNum = createSelector(
