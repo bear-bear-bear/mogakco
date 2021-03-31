@@ -7,8 +7,8 @@ import {
   insert,
   toggle,
   remove,
-} from '../../actions/example.todos';
-import useActions from '../../lib/useActions';
+} from '~/actions/example.todos';
+import useActions from '~/lib/useActions';
 
 // const Todos = ({
 //   input,

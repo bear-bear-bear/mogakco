@@ -1,5 +1,5 @@
 import { handleActions } from 'redux-actions';
-import * as counter from '../actions/example.counter';
+import * as counter from '~/actions/example.counter';
 
 // 리듀서
 const counterReducer = handleActions(
