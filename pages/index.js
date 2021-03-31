@@ -4,6 +4,7 @@ import EmoEx from '~/components/example/EmoEx';
 import Counter from '~/components/example/Counter';
 // import TodosContainer from '../container/example/TodosContainer';
 import Todos from '~/components/example/Todos';
+import CommonExContainer from '~/containers/common/CommonExContainer';
 
 const App = () => {
   return (
@@ -15,6 +16,8 @@ const App = () => {
       <hr />
       <Todos />
       {/* <TodosContainer /> */}
+      <hr />
+      <CommonExContainer />
     </div>
   );
 };
