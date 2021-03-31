@@ -71,5 +71,6 @@ module.exports = {
     'no-shadow': 'off',
     'import/extensions': ['off'],
     'import/no-extraneous-dependencies': ['off'],
+    'no-param-reassign': ['error', { props: false }],
   },
 };
