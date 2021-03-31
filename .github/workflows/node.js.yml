@@ -25,15 +25,15 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
-    - name: 패키지 의존성 업데이트..
+    - name: install packages & dependencies..
     - run: npm ci
-    - name: 백엔드 유닛 테스트 수행..
+    - name: testing backend unit..
     - run: npm run test
-    - name: 백엔드 문법 오류 검사 수행..
+    - name: eslint backend directories..
     - run: npm run lint:backend
-    - name: 프런트엔드 문법 오류 검사 수행..
+    - name: eslint frontend directories..
     - run: npm run lint:frontend
-    - name: 스타일 문법 오류 검사 수행..
+    - name: eslint style directories..
     - run: npm run stylelint
-    - name: 백엔드 테스트 문법 오류 검사 수행..
+    - name: eslint test backend directories..
     - run: npm run lint:test-backend
