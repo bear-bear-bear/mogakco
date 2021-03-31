@@ -38,8 +38,5 @@ jobs:
     - name: 프런트엔드 문법 오류 검사 수행..
       run: npm run lint:frontend
 
-    - name: 스타일 문법 오류 검사 수행..
-      run: npm run stylelint
-
     - name: 백엔드 테스트 문법 오류 검사 수행..
       run: npm run lint:test-backend
