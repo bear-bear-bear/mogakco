@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
-import Counter from '../components/Counter';
-import { increase, decrease } from '../actions/counter';
-import makeGetCounter from '../selectors/counter';
+import Counter from '~/components/Counter';
+import { increase, decrease } from '~/actions/counter';
+import makeGetCounter from '~/selectors/counter';
 
 const makeMapStateToProps = () => {
   const getCounter = makeGetCounter();
