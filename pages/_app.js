@@ -1,4 +1,4 @@
-import '~/components/global.css';
+import '~/components/common/globalStyle.css';
 import wrapper from '~/store/configureStore';
 
 const App = ({ Component, pageProps }) => {
