@@ -17,10 +17,14 @@ import response from './dto/response';
 import LocalAuthGuard from '../services/passport/local-auth.guard';
 import LoginBadRequestException from './exception/login.exception';
 import LoginUserDTO from '../models/dto/login-user.dto';
+import UserVerrifyService from '../services/userVerrify.service';
 
 @Controller('user')
 class UserController {
-  constructor(private userService: UserService) {}
+  constructor(
+    private userService: UserService,
+    private userVerifyService: UserVerrifyService,
+  ) {}
 
   // test Get Controller
   @Get('/test')
