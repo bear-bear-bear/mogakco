@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common';
 import createUserDTO from '../../../models/dto/create-user.dto';
 import UserService from '../../../services/user.service';
-import User from '../../../models/entities/user';
+import Users from '../../../models/entities/users';
 import UserMockRepository from '../helper/userMockRepository';
 import updateUserRequestDto from './dto/update-user-request.dto';
 
@@ -22,7 +22,7 @@ describe('유저 CRUD 유닛 테스트', () => {
       providers: [
         UserService,
         {
-          provide: getRepositoryToken(User),
+          provide: getRepositoryToken(Users),
           useClass: UserMockRepository,
         },
       ],
@@ -38,7 +38,7 @@ describe('유저 CRUD 유닛 테스트', () => {
         password: 'ihavegf',
         email: 'bear-bear-bear@god.com',
       };
-      const createdUser: User = await userService.createUserOne(user);
+      const createdUser: Users = await userService.createUserOne(user);
       expect(createdUser.id).toBe(1);
       expect(createdUser).toMatchObject({ username: 'eunjunjung123' });
       expect(createdUser).toMatchObject({ email: 'bear-bear-bear@god.com' });
@@ -51,7 +51,7 @@ describe('유저 CRUD 유닛 테스트', () => {
     //     email: 'bear-bear-bear@kinggod.com',
     //   };
     //
-    //   const createdUser: User = await userService.createUserOne(user);
+    //   const createdUser: Users = await userService.createUserOne(user);
     //   expect(createdUser.id).toBe(2);
     // });
 
