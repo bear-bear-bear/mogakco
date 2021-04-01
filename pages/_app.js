@@ -1,11 +1,11 @@
-import GlobalStyle from '~/components/globalStyle';
+import GlobalStyle from '~/components/globalStyles';
 import wrapper from '~/store/configureStore';
 
 const App = ({ Component, pageProps }) => {
   return (
     <>
       <GlobalStyle />
-      <Component {...pageProps} />;
+      <Component {...pageProps} />
     </>
   );
 };
