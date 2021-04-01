@@ -15,6 +15,9 @@ class UserVerifies {
 
   @CreateDateColumn({ name: 'created_at' })
   createdAt!: Date;
+
+  @Column({ nullable: false, name: 'expired_at', length: 40 })
+  expiredAt!: Date;
 }
 
 export default UserVerifies;
