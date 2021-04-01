@@ -8,7 +8,7 @@ import {
 } from 'typeorm';
 
 @Entity({ name: 'users' })
-class User {
+class Users {
   @PrimaryGeneratedColumn({ unsigned: true })
   id!: number;
 
@@ -31,4 +31,4 @@ class User {
   deletedAt?: Date;
 }
 
-export default User;
+export default Users;
