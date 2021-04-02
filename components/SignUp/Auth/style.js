@@ -4,50 +4,6 @@ import styled from '@emotion/styled';
 const bgColors = ['#ffffff', '#000000'];
 const fontColors = ['#A07575', '#ffffff'];
 
-export const authWrapperStyles = css`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  margin-top: 4.875rem;
-`;
-
-export const titleStyles = css`
-  font-size: 2.25rem;
-  margin-bottom: 5rem;
-`;
-
-export const formStyles = css`
-  position: relative;
-  display: flex;
-  width: 54rem;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 3.25rem;
-`;
-
-export const inputStyles = css`
-  width: 40rem;
-  padding: 0.5rem;
-  font-size: 1.5rem;
-  outline: 0;
-`;
-
-export const submitBtnStyles = css`
-  width: 11.25rem;
-  height: 3.75rem;
-  background-color: #003f88;
-  color: #fff;
-  font-size: 1.25rem;
-  border: none;
-  border-radius: 0.625rem;
-  outline: 0;
-  margin-top: 2.625rem;
-  align-self: flex-end;
-  cursor: pointer;
-`;
-
 export const descriptionStyles = css`
   font-size: 1.25rem;
 `;
@@ -80,6 +36,6 @@ const socialBtnStyles = ({ service }) => css`
   cursor: pointer;
 `;
 
-export const SocialComponent = styled('a')`
+export const Social = styled('a')`
   ${socialBtnStyles}
 `;
