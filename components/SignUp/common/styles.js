@@ -1,6 +1,12 @@
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 
+export const linkStyles = css`
+  text-decoration: 0;
+  color: inherit;
+  cursor: pointer;
+`;
+
 export const contentWrapperStyles = css`
   display: flex;
   flex-direction: column;
