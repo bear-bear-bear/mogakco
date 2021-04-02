@@ -4,7 +4,7 @@ import {
   contentWrapperStyles,
   titleStyles,
   inputDivStyles,
-  submitBtnStyles,
+  SubmitButton,
   formStyles,
   labelStyles,
   Input,
@@ -33,9 +33,9 @@ const index = () => {
           </label>
           <Input type="password" id="passwordConfirm" page="info" required />
         </div>
-        <button type="submit" css={submitBtnStyles}>
+        <SubmitButton type="submit" complete={false}>
           계속
-        </button>
+        </SubmitButton>
       </form>
     </div>
   );

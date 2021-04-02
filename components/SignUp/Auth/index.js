@@ -5,7 +5,7 @@ import { descriptionStyles, socialWrapper, Social } from './style';
 import {
   contentWrapperStyles,
   titleStyles,
-  submitBtnStyles,
+  SubmitButton,
   formStyles,
   Input,
 } from '../common/styles';
@@ -15,9 +15,9 @@ const index = () => (
     <h1 css={titleStyles}>이메일을 입력하세요</h1>
     <form action="" css={formStyles}>
       <Input type="email" placeholder="example@gmail.com" page="auth" />
-      <button type="submit" css={submitBtnStyles}>
+      <SubmitButton type="submit" complete={false}>
         인증메일 발송
-      </button>
+      </SubmitButton>
     </form>
     <p css={descriptionStyles}>
       이메일 인증을 성공하면 회원가입을 계속 진행할 수 있습니다.

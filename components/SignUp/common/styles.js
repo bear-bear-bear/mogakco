@@ -24,8 +24,8 @@ export const titleStyles = css`
   margin-bottom: 5rem;
 `;
 
-export const submitBtnStyles = css`
-  width: 11.25rem;
+export const submitBtnStyles = ({ complete }) => css`
+  width: ${!complete ? '11.25rem' : '17rem'};
   height: 3.75rem;
   background-color: #003f88;
   color: #fff;
@@ -34,7 +34,7 @@ export const submitBtnStyles = css`
   border-radius: 0.625rem;
   outline: 0;
   margin-top: 2.625rem;
-  align-self: flex-end;
+  align-self: ${!complete ? 'flex-end' : 'none'};
   cursor: pointer;
 `;
 
@@ -74,4 +74,8 @@ export const inputDivStyles = css`
 // styled-components
 export const Input = styled('input')`
   ${inputStyles}
+`;
+
+export const SubmitButton = styled('button')`
+  ${submitBtnStyles}
 `;
