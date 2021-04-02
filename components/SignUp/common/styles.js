@@ -44,7 +44,7 @@ export const subjectStyles = css`
 
 export const labelStyles = css`
   display: block;
-  width: 100px;
+  width: 100%;
   height: 100%;
   text-align: center;
   line-height: 48px;
