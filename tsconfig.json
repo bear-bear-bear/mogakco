@@ -39,6 +39,7 @@
     "reducers",
     "selectors",
     "store",
-    "styles"
+    "styles",
+    "dist"
   ]
 }
