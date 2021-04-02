@@ -1,21 +1,20 @@
 import GoogleLogo from 'assets/svg/btn_google_light_normal_ios.svg';
 
+import { descriptionStyles, socialWrapper, Social } from './style';
+
 import {
-  authWrapperStyles,
+  contentWrapperStyles,
   titleStyles,
-  formStyles,
-  inputStyles,
-  descriptionStyles,
   submitBtnStyles,
-  socialWrapper,
-  SocialComponent,
-} from './style';
+  formStyles,
+  Input,
+} from '../common/styles';
 
 const index = () => (
-  <div css={authWrapperStyles}>
+  <div css={contentWrapperStyles}>
     <h1 css={titleStyles}>이메일을 입력하세요</h1>
     <form action="" css={formStyles}>
-      <input type="email" css={inputStyles} placeholder="example@gmail.com" />
+      <Input type="email" placeholder="example@gmail.com" page="auth" />
       <button type="submit" css={submitBtnStyles}>
         인증메일 발송
       </button>
@@ -28,11 +27,11 @@ const index = () => (
       이미 계정이 있으신가요? 여기를 눌러 로그인하세요.
     </p>
     <div css={socialWrapper}>
-      <SocialComponent service="google">
+      <Social service="google">
         <GoogleLogo />
         <span>Sign up with Google</span>
-      </SocialComponent>
-      <SocialComponent service="github">
+      </Social>
+      <Social service="github">
         <div
           style={{
             width: '46px',
@@ -48,7 +47,7 @@ const index = () => (
           />
         </div>
         <span>Sign up with Github</span>
-      </SocialComponent>
+      </Social>
     </div>
   </div>
 );
