@@ -1,5 +1,6 @@
 import { EntityRepository, Repository } from 'typeorm';
 import { InternalServerErrorException } from '@nestjs/common';
+import * as bcrypt from 'bcrypt';
 import User from '../entities/user';
 import createUserDTO from '../dto/create-user.dto';
 import updateUserRequestDto from '../../test/unit/Services/dto/update-user-request.dto';
@@ -37,7 +38,7 @@ class UserRepository extends Repository<User> {
   public async findUserByEmail(email: string) {
     const user = await this.findOne({ email });
     if (!user) {
-      throw new InternalServerErrorException();
+      return null;
     }
     return user;
   }

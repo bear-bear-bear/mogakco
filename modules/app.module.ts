@@ -2,10 +2,10 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import * as Joi from 'joi';
+import UserVerify from 'models/entities/user.verify';
 import AppController from '../controllers/app.controller';
 import AppService from '../services/app.service';
 import User from '../models/entities/user';
-import UserModule from './user.module';
 import AuthModule from './auth.module';
 
 @Module({
@@ -34,10 +34,9 @@ import AuthModule from './auth.module';
       database: process.env.DATABASE_NAME as string,
       synchronize: process.env.NODE_ENV === 'development',
       // logging: true,
-      entities: [User],
+      entities: [User, UserVerify],
     }),
     AuthModule,
-    UserModule,
   ],
   controllers: [AppController],
   providers: [AppService],

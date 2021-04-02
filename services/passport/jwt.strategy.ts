@@ -14,7 +14,7 @@ class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
           return request?.cookies['x-token'];
         },
       ]),
-      secretOrKey: 'secretKey',
+      secretOrKey: 'ACCESS_TOKEN_!@#',
     });
   }
 
