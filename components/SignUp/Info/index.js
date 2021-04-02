@@ -33,6 +33,18 @@ const index = () => {
           </label>
           <Input type="password" id="passwordConfirm" page="info" required />
         </div>
+        <div css={inputDivStyles} style={{ 'justify-content': 'center' }}>
+          <Input
+            type="checkbox"
+            id="policy"
+            page="info"
+            required
+            style={{ width: '10px' }}
+          />
+          <label htmlFor="policy" css={labelStyles} style={{ width: '330px' }}>
+            (필수)개인정보 수집 및 이용에 동의하겠습니다.
+          </label>
+        </div>
         <SubmitButton type="submit" complete={false}>
           계속
         </SubmitButton>
