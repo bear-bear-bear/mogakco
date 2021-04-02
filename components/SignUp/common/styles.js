@@ -8,6 +8,7 @@ export const linkStyles = css`
 `;
 
 export const contentWrapperStyles = css`
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -57,9 +58,9 @@ export const labelStyles = css`
 `;
 
 const inputStyles = ({ page }) => css`
-  width: ${page === 'auth' ? '40rem' : '25.625rem'};
+  width: ${page === 'auth' ? '40rem' : '100%'};
   padding: 0.5rem;
-  font-size: 1.5rem;
+  font-size: 1rem;
   outline: 0;
 `;
 
