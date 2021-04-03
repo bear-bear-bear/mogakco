@@ -1,10 +1,10 @@
 import React from 'react';
-import SignUp from '~/components/SignUp';
+import SignUpContainer from '~/containers/SignUp/SignUpContainer';
 
 const signup = () => {
   return (
     <div>
-      <SignUp />
+      <SignUpContainer />
     </div>
   );
 };
