@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import * as Joi from 'joi';
+import Joi from 'joi';
 import UserVerify from 'models/entities/user.verify';
 import AppController from '../controllers/app.controller';
 import AppService from '../services/app.service';

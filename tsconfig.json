@@ -13,7 +13,11 @@
     "outDir": "./dist",
     "baseUrl": "./",
     "incremental": true,
-    "lib": ["dom", "dom.iterable", "esnext"]
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ]
     //    "allowJs": true,
     //    "skipLibCheck": true,
     //    "forceConsistentCasingInFileNames": true,
@@ -29,6 +33,16 @@
     //    "**/*.ts",
     //    "**/*.tsx"
     //  ],
+    ,
+    "allowJs": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve"
   },
   "exclude": [
     "node_modules",

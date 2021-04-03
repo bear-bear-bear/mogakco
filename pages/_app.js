@@ -1,8 +1,13 @@
-import '../styles/global.css';
-import wrapper from '../store/configureStore';
+import GlobalStyle from '~/components/globalStyles';
+import wrapper from '~/store/configureStore';
 
 const App = ({ Component, pageProps }) => {
-  return <Component {...pageProps} />;
+  return (
+    <>
+      <GlobalStyle />
+      <Component {...pageProps} />
+    </>
+  );
 };
 
 export default wrapper.withRedux(App);

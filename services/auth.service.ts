@@ -1,7 +1,3 @@
-// Notice Please.
-// Deprecated AuthService.
-// Use UserService Instead.
-
 import {
   BadRequestException,
   HttpException,
