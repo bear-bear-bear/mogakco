@@ -24,10 +24,10 @@ import AuthService from 'services/auth.service';
 import User from 'models/entities/user';
 import UserService from '../services/user.service';
 import createUserDTO from '../models/dto/create-user.dto';
-import updateUserRequestDto from '../test/unit/Services/dto/update-user-request.dto';
 import response from './dto/response';
 import LoginBadRequestException from './exception/login.exception';
 import LoginUserDTO from '../models/dto/login-user.dto';
+import updateUserRequestDto from "../test/unit/services/dto/update-user-request.dto";
 
 @Controller('user')
 @UseInterceptors(ClassSerializerInterceptor)
@@ -66,7 +66,7 @@ class AuthController {
     await this.userService.hashRefreshToken(token, user.email);
     res.setHeader('Set-Cookie', [accessTokenCookie, refreshTokenCookie]);
     return {
-      msg: 'Token Generated',
+      message: 'Token Generated',
       user: props,
     };
   }
@@ -94,11 +94,11 @@ class AuthController {
     );
     if (!flag) {
       return {
-        msg: 'Not Verified. 이메일을 다시 보냈습니다.',
+        message: 'Not Verified. 이메일을 다시 보냈습니다.',
       };
     }
     return {
-      msg: 'Vetified',
+      message: 'Vetified',
     };
   }
 
@@ -118,12 +118,12 @@ class AuthController {
     }
     if (user.verifiedAt) {
       return {
-        msg: '이미 겅증되어있습니다.',
+        message: '이미 겅증되어있습니다.',
       };
     }
     await this.userService.resendEmail(user);
     return {
-      msg: '이메일을 다시 발송합니다.',
+      message: '이메일을 다시 발송합니다.',
     };
   }
 
@@ -161,7 +161,7 @@ class AuthController {
     }
     const { password, hashedRefreshToken, ...props } = user;
     return {
-      msg: 'Authenticated',
+      message: 'Authenticated',
       user: props,
     };
   }
@@ -179,7 +179,7 @@ class AuthController {
     const { password, hashedRefreshToken, ...props } = req.user as User;
     res.setHeader('Set-Cookie', accessTokenCookie);
     return {
-      msg: 'Authenticated & Refreshed',
+      message: 'Authenticated & Refreshed',
       user: props,
     };
   }
@@ -189,7 +189,7 @@ class AuthController {
   public async logout(@Req() req: Request, @Res() res: Response) {
     res.setHeader('Set-Cookie', `x-token=; HttpOnly; Path=/; Max-Age=0`);
     return res.status(200).json({
-      msg: 'logout',
+      message: 'logout',
     });
   }
 
@@ -198,7 +198,7 @@ class AuthController {
   public async requestData(@Req() req: Request) {
     console.log(req.user);
     return {
-      msg: '1',
+      message: '1',
     };
   }
 }
