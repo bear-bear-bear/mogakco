@@ -1,12 +1,12 @@
 import React from 'react';
 import SignUpContainer from '~/containers/SignUp/SignUpContainer';
 
-const signup = () => {
+const Signup = () => {
   return (
-    <div>
+    <>
       <SignUpContainer />
-    </div>
+    </>
   );
 };
 
-export default signup;
+export default Signup;

@@ -1,13 +1,13 @@
 import { css } from '@emotion/react';
-import styled from '@emotion/styled';
+import generateStyled from '~/lib/generateStyled';
 
-export const linkStyles = css`
+export const LinkStyles = css`
   text-decoration: 0;
   color: inherit;
   cursor: pointer;
 `;
 
-export const contentWrapperStyles = css`
+const ContainerStyles = css`
   position: relative;
   display: flex;
   flex-direction: column;
@@ -16,7 +16,7 @@ export const contentWrapperStyles = css`
   margin-top: 4.875rem;
 `;
 
-export const formStyles = css`
+const FormStyles = css`
   position: relative;
   display: flex;
   width: 54rem;
@@ -26,12 +26,12 @@ export const formStyles = css`
   margin-bottom: 3.25rem;
 `;
 
-export const titleStyles = css`
+const TitleStyles = css`
   font-size: 2.25rem;
   margin-bottom: 5rem;
 `;
 
-export const submitBtnStyles = ({ complete }) => css`
+const SubmitBtnStyles = ({ complete }) => css`
   width: ${!complete ? '11.25rem' : '17rem'};
   height: 3.75rem;
   background-color: #003f88;
@@ -45,30 +45,26 @@ export const submitBtnStyles = ({ complete }) => css`
   cursor: pointer;
 `;
 
-export const subjectStyles = css`
-  font-size: 1.5rem;
-`;
-
-export const labelStyles = css`
+const LabelStyles = ({ page }) => css`
   display: block;
-  width: 100%;
+  width: ${page !== 'info' ? '100%' : '20.625rem'};
   height: 100%;
   text-align: center;
-  line-height: 48px;
+  line-height: 3rem;
 `;
 
-const inputStyles = ({ page }) => css`
-  width: ${page === 'auth' ? '40rem' : '100%'};
+const InputStyles = ({ page }) => css`
+  width: ${page !== 'auth' ? '100%' : '40rem'};
   padding: 0.5rem;
   font-size: 1rem;
   outline: 0;
 `;
 
-export const inputDivStyles = css`
+const InputWrapperStyles = ({ page }) => css`
   width: 100%;
-  height: 48px;
+  height: 3rem;
   display: flex;
-  justify-content: space-between;
+  justify-content: ${page !== 'info' ? 'space-between' : 'center'};
   align-items: center;
   padding: 0 10rem;
   margin-bottom: 2.5rem;
@@ -78,11 +74,20 @@ export const inputDivStyles = css`
   }
 `;
 
-// styled-components
-export const Input = styled('input')`
-  ${inputStyles}
+const SignUpPageContainerStyles = css`
+  padding: 0 calc(200 / 1000 * 100%);
 `;
 
-export const SubmitButton = styled('button')`
-  ${submitBtnStyles}
-`;
+// styled-components
+export const Text = generateStyled('span');
+export const Container = generateStyled('div', ContainerStyles);
+export const Title = generateStyled('h1', TitleStyles);
+export const InputWrapper = generateStyled('div', InputWrapperStyles);
+export const Input = generateStyled('input', InputStyles);
+export const Label = generateStyled('label', LabelStyles);
+export const Form = generateStyled('form', FormStyles);
+export const SubmitButton = generateStyled('button', SubmitBtnStyles);
+export const SignUpPageContainer = generateStyled(
+  'div',
+  SignUpPageContainerStyles,
+);

@@ -1,16 +1,18 @@
+import { useMemo } from 'react';
 import Link from 'next/link';
-import signUpHeader from './style';
+import SignUpHeader from './style';
 import Logo from '~/public/assets/svg/logo.svg';
-import { linkStyles } from '../common/styles';
+import { LinkStyles } from '../common/styles';
 
-const index = () => {
+const Index = () => {
+  const pointer = useMemo(() => ({ cursor: 'pointer' }), []);
   return (
-    <div css={signUpHeader}>
-      <Link href="/" css={linkStyles}>
-        <Logo style={{ cursor: 'pointer' }} />
+    <SignUpHeader>
+      <Link href="/" css={LinkStyles}>
+        <Logo style={pointer} />
       </Link>
-    </div>
+    </SignUpHeader>
   );
 };
 
-export default index;
+export default Index;
