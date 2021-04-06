@@ -53,12 +53,24 @@ const LabelStyles = ({ page }) => css`
   line-height: 3rem;
 `;
 
-const InputStyles = ({ page }) => css`
-  width: ${page !== 'auth' ? '100%' : '40rem'};
+// Input width를 정하기 위한 헬퍼 함수
+const selectWidth = (page, id) => {
+  if (page !== 'auth') {
+    if (id !== 'policy') {
+      return '100%';
+    }
+    return '0.66rem';
+  }
+  return '40rem';
+};
+
+const InputStyles = ({ page, id }) => css`
+  width: ${selectWidth(page, id)};
   padding: 0.5rem;
   font-size: 1rem;
   outline: 0;
 `;
+
 
 const InputWrapperStyles = ({ page }) => css`
   width: 100%;

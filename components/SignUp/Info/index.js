@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 
 import {
   Container,
@@ -11,11 +11,6 @@ import {
 } from '../common/styles';
 
 const Index = () => {
-  const checkBoxStyle = useMemo(() => {
-    return {
-      width: '10px',
-    };
-  }, []);
   return (
     <Container>
       <Title>이름과 비밀번호를 입력하세요</Title>
@@ -33,13 +28,7 @@ const Index = () => {
           <Input type="password" id="passwordConfirm" page="info" required />
         </InputWrapper>
         <InputWrapper page="info">
-          <Input
-            type="checkbox"
-            id="policy"
-            page="info"
-            required
-            style={checkBoxStyle}
-          />
+          <Input type="checkbox" id="policy" page="info" required width="" />
           <Label htmlFor="policy" page="info">
             (필수)개인정보 수집 및 이용에 동의하겠습니다.
           </Label>
