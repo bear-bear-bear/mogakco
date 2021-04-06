@@ -71,7 +71,6 @@ const InputStyles = ({ page, id }) => css`
   outline: 0;
 `;
 
-
 const InputWrapperStyles = ({ page }) => css`
   width: 100%;
   height: 3rem;
