@@ -26,6 +26,7 @@
     "stylelint-check": "stylelint-config-prettier-check"
   },
   "dependencies": {
+    "@emotion/babel-plugin": "^11.2.0",
     "@emotion/babel-preset-css-prop": "^11.2.0",
     "@emotion/core": "^11.0.0",
     "@emotion/react": "^11.1.5",
@@ -58,16 +59,17 @@
     "reselect": "^4.0.0",
     "rimraf": "^3.0.2",
     "rxjs": "^6.6.6",
-    "uuid": "^8.3.2"
+    "uuid": "^8.3.2",
+    "universal-cookie": "^4.0.4"
   },
   "devDependencies": {
-    "@emotion/babel-plugin": "^11.2.0",
     "@emotion/eslint-plugin": "^11.2.0",
     "@nestjs/cli": "^7.5.6",
     "@nestjs/config": "^0.6.3",
     "@nestjs/schematics": "^7.2.7",
     "@nestjs/testing": "^7.6.13",
     "@nestjs/typeorm": "^7.1.5",
+    "@svgr/webpack": "^5.5.0",
     "@types/bcrypt": "^3.0.0",
     "@types/express": "^4.17.11",
     "@types/jest": "^26.0.20",
