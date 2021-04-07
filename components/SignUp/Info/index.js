@@ -1,56 +1,44 @@
 import React from 'react';
 
 import {
-  contentWrapperStyles,
-  titleStyles,
-  inputDivStyles,
-  SubmitButton,
-  formStyles,
-  labelStyles,
+  Container,
+  Title,
+  Form,
+  InputWrapper,
+  Label,
   Input,
+  SubmitButton,
 } from '../common/styles';
 
-const index = () => {
+const Index = () => {
   return (
-    <div css={contentWrapperStyles}>
-      <h1 css={titleStyles}>이름과 비밀번호를 입력하세요</h1>
-      <form action="" css={formStyles}>
-        <div css={inputDivStyles}>
-          <label htmlFor="name" css={labelStyles}>
-            이름
-          </label>
+    <Container>
+      <Title>이름과 비밀번호를 입력하세요</Title>
+      <Form action="">
+        <InputWrapper>
+          <Label htmlFor="name">이름</Label>
           <Input type="text" id="name" page="info" required />
-        </div>
-        <div css={inputDivStyles}>
-          <label htmlFor="password" css={labelStyles}>
-            비밀번호
-          </label>
+        </InputWrapper>
+        <InputWrapper>
+          <Label htmlFor="password">비밀번호</Label>
           <Input type="password" id="password" page="info" required />
-        </div>
-        <div css={inputDivStyles}>
-          <label htmlFor="passwordConfirm" css={labelStyles}>
-            비밀번호 확인
-          </label>
+        </InputWrapper>
+        <InputWrapper>
+          <Label htmlFor="passwordConfirm">비밀번호 확인</Label>
           <Input type="password" id="passwordConfirm" page="info" required />
-        </div>
-        <div css={inputDivStyles} style={{ 'justify-content': 'center' }}>
-          <Input
-            type="checkbox"
-            id="policy"
-            page="info"
-            required
-            style={{ width: '10px' }}
-          />
-          <label htmlFor="policy" css={labelStyles} style={{ width: '330px' }}>
+        </InputWrapper>
+        <InputWrapper page="info">
+          <Input type="checkbox" id="policy" page="info" required width="" />
+          <Label htmlFor="policy" page="info">
             (필수)개인정보 수집 및 이용에 동의하겠습니다.
-          </label>
-        </div>
+          </Label>
+        </InputWrapper>
         <SubmitButton type="submit" complete={false}>
           계속
         </SubmitButton>
-      </form>
-    </div>
+      </Form>
+    </Container>
   );
 };
 
-export default index;
+export default Index;

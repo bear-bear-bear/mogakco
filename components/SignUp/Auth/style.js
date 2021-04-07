@@ -1,14 +1,14 @@
 import { css } from '@emotion/react';
-import styled from '@emotion/styled';
+import generateStyled from '~/lib/generateStyled';
 
 const bgColors = ['#ffffff', '#000000'];
 const fontColors = ['#A07575', '#ffffff'];
 
-export const descriptionStyles = css`
+export const DescriptionStyles = css`
   font-size: 1.25rem;
 `;
 
-export const socialWrapper = css`
+const SocialLoginWrapperStyles = css`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -20,11 +20,11 @@ export const socialWrapper = css`
   }
 `;
 
-const socialBtnStyles = ({ service }) => css`
+const SocialAnchorStyles = ({ service }) => css`
   display: flex;
-  padding: 8px;
+  padding: 0.5rem;
   width: 15rem;
-  height: 40px;
+  height: 2.5rem;
   text-decoration: none;
   align-items: center;
   justify-content: flex-start;
@@ -36,6 +36,17 @@ const socialBtnStyles = ({ service }) => css`
   cursor: pointer;
 `;
 
-export const Social = styled('a')`
-  ${socialBtnStyles}
+const GithubImageStyles = css`
+  width: 1.75rem;
+  height: 1.75rem;
+  margin: 0 0.625rem;
 `;
+
+// styled-components
+export const Description = generateStyled('p', DescriptionStyles);
+export const SocialLoginWrapper = generateStyled(
+  'div',
+  SocialLoginWrapperStyles,
+);
+export const SocialAnchor = generateStyled('a', SocialAnchorStyles);
+export const GithubImg = generateStyled('img', GithubImageStyles);

@@ -1,12 +1,12 @@
 import React from 'react';
-import { wrapperStyles, fillerStyles } from './style';
+import { ProgressBarWrapper, ProgressBarFiller } from './style';
 
-const index = () => {
+const Index = () => {
   return (
-    <div css={wrapperStyles}>
-      <div css={fillerStyles} />
-    </div>
+    <ProgressBarWrapper>
+      <ProgressBarFiller />
+    </ProgressBarWrapper>
   );
 };
 
-export default index;
+export default Index;

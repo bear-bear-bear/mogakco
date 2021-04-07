@@ -1,55 +1,48 @@
 import GoogleLogo from 'assets/svg/btn_google_light_normal_ios.svg';
-
-import { descriptionStyles, socialWrapper, Social } from './style';
+import {
+  Description,
+  SocialLoginWrapper,
+  SocialAnchor,
+  GithubImg,
+} from './style';
 
 import {
-  contentWrapperStyles,
-  titleStyles,
+  Container,
+  Title,
   SubmitButton,
-  formStyles,
+  Form,
   Input,
+  Text,
 } from '../common/styles';
 
-const index = () => (
-  <div css={contentWrapperStyles}>
-    <h1 css={titleStyles}>이메일을 입력하세요</h1>
-    <form action="" css={formStyles}>
+const Index = () => (
+  <Container>
+    <Title>이메일을 입력하세요</Title>
+    <Form action="">
       <Input type="email" placeholder="example@gmail.com" page="auth" />
       <SubmitButton type="submit" complete={false}>
         인증메일 발송
       </SubmitButton>
-    </form>
-    <p css={descriptionStyles}>
+    </Form>
+    <Description>
       이메일 인증을 성공하면 회원가입을 계속 진행할 수 있습니다.
-    </p>
+    </Description>
     <br />
-    <p css={descriptionStyles}>
-      이미 계정이 있으신가요? 여기를 눌러 로그인하세요.
-    </p>
-    <div css={socialWrapper}>
-      <Social service="google">
+    <Description>이미 계정이 있으신가요? 여기를 눌러 로그인하세요.</Description>
+    <SocialLoginWrapper>
+      <SocialAnchor service="google" href="#">
         <GoogleLogo />
-        <span>Sign up with Google</span>
-      </Social>
-      <Social service="github">
-        <div
-          style={{
-            width: '46px',
-            height: '46px',
-            display: 'flex',
-            alignItems: 'center',
-          }}
-        >
-          <img
-            src="assets/images/GitHub-Mark-Light-32px.png"
-            alt=""
-            style={{ margin: '0 4px' }}
-          />
-        </div>
-        <span>Sign up with Github</span>
-      </Social>
-    </div>
-  </div>
+        <Text>Sign up with Google</Text>
+      </SocialAnchor>
+      <SocialAnchor service="github" href="##">
+        <GithubImg
+          src="assets/images/GitHub-Mark-Light-32px.png"
+          alt="github-social-login"
+        />
+        <Text>Sign up with Github</Text>
+      </SocialAnchor>
+    </SocialLoginWrapper>
+  </Container>
 );
 
-export default index;
+export default Index;
