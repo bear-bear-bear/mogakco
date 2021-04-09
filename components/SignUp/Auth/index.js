@@ -17,7 +17,10 @@ import {
   Text,
 } from '../common/styles';
 
-import { verifyEmailRequest } from '~/redux/actions/signup/auth';
+import {
+  verifyEmailRequest,
+  verifySocialRequest,
+} from '~/redux/actions/signup/auth';
 import useInput from '~/hooks/useInput';
 
 const Index = () => {
@@ -32,6 +35,10 @@ const Index = () => {
     },
     [dispatch, email, setEmail],
   );
+
+  const onClickSocial = useCallback(() => {
+    dispatch(verifySocialRequest());
+  }, []);
 
   return (
     <Container>
@@ -56,11 +63,11 @@ const Index = () => {
         이미 계정이 있으신가요? 여기를 눌러 로그인하세요.
       </Description>
       <SocialLoginWrapper>
-        <SocialAnchor service="google" href="#">
+        <SocialAnchor service="google" href="#" onClick={onClickSocial}>
           <GoogleLogo />
           <Text>Sign up with Google</Text>
         </SocialAnchor>
-        <SocialAnchor service="github" href="##">
+        <SocialAnchor service="github" href="##" onClick={onClickSocial}>
           <GithubImg
             src="assets/images/GitHub-Mark-Light-32px.png"
             alt="github-social-login"

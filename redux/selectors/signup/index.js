@@ -1,12 +1,12 @@
 import { createSelector } from 'reselect';
 
-const selectVerifyEmailDone = state => state.signupReducer.verifyEmailDone;
+const selectVerifyAuthDone = state => state.signupReducer.verifyAuthDone;
 const selectVerifyInfoDone = state => state.signupReducer.verifyInfoDone;
 const selectVerifyInterestDone = state =>
   state.signupReducer.verifyInterestDone;
 
-export const getVerifyEmailDone = createSelector(
-  selectVerifyEmailDone,
+export const getVerifyAuthDone = createSelector(
+  selectVerifyAuthDone,
   value => value,
 );
 

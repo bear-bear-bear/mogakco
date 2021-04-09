@@ -4,6 +4,9 @@ import {
   VERIFY_EMAIL_REQUEST,
   VERIFY_EMAIL_SUCCESS,
   VERIFY_EMAIL_FAILURE,
+  VERIFY_SOCIAL_REQUEST,
+  VERIFY_SOCIAL_SUCCESS,
+  VERIFY_SOCIAL_FAILURE,
 } from '~/redux/actions/signup/auth';
 
 import {
@@ -19,9 +22,9 @@ import {
 } from '~/redux/actions/signup/interest';
 
 const initialState = {
-  verifyEmailLoading: false,
-  verifyEmailDone: false,
-  verifyEmailError: null,
+  verifyAuthLoading: false,
+  verifyAuthDone: false,
+  verifyAuthError: null,
   verifyInfoLoading: false,
   verifyInfoDone: false,
   verifyInfoError: null,
@@ -34,19 +37,36 @@ const signupReducer = handleActions(
   {
     [VERIFY_EMAIL_REQUEST]: state =>
       produce(state, draft => {
-        draft.verifyEmailLoading = true;
-        draft.verifyEmailDone = false;
-        draft.verifyEmailError = null;
+        draft.verifyAuthLoading = true;
+        draft.verifyAuthDone = false;
+        draft.verifyAuthError = null;
       }),
     [VERIFY_EMAIL_SUCCESS]: state =>
       produce(state, draft => {
-        draft.verifyEmailLoading = false;
-        draft.verifyEmailDone = true;
+        draft.verifyAuthLoading = false;
+        draft.verifyAuthDone = true;
       }),
     [VERIFY_EMAIL_FAILURE]: (state, action) =>
       produce(state, draft => {
-        draft.verifyEmailLoading = false;
-        draft.verifyEmailError = action.error;
+        draft.verifyAuthLoading = false;
+        draft.verifyAuthError = action.error;
+      }),
+    [VERIFY_SOCIAL_REQUEST]: state =>
+      produce(state, draft => {
+        draft.verifyAuthLoading = true;
+        draft.verifyAuthDone = false;
+        draft.verifyAuthError = null;
+      }),
+    [VERIFY_SOCIAL_SUCCESS]: state =>
+      produce(state, draft => {
+        draft.verifyAuthLoading = false;
+        draft.verifyAuthDone = true;
+        draft.verifyInfoDone = true;
+      }),
+    [VERIFY_SOCIAL_FAILURE]: (state, action) =>
+      produce(state, draft => {
+        draft.verifyAuthLoading = false;
+        draft.verifyAuthError = action.error;
       }),
     [VERIFY_INFO_REQUEST]: state =>
       produce(state, draft => {

@@ -8,13 +8,13 @@ import Interest from '~/components/signup/interest';
 import Complete from '~/components/signup/complete';
 import { SignUpPageContainer } from '../components/signup/common/styles';
 import {
-  getVerifyEmailDone,
+  getVerifyAuthDone,
   getVerifyInfoDone,
   getVerifyInterestDone,
 } from '~/redux/selectors/signup';
 
 const Signup = () => {
-  const verifyEmailDone = useSelector(getVerifyEmailDone);
+  const verifyAuthDone = useSelector(getVerifyAuthDone);
   const verifyInfoDone = useSelector(getVerifyInfoDone);
   const verifyInterestDone = useSelector(getVerifyInterestDone);
 
@@ -22,8 +22,8 @@ const Signup = () => {
     <SignUpPageContainer>
       <Header />
       <ProgressBar />
-      {!verifyEmailDone && <Auth />}
-      {verifyEmailDone && !verifyInfoDone && <Info />}
+      {!verifyAuthDone && <Auth />}
+      {verifyAuthDone && !verifyInfoDone && <Info />}
       {verifyInfoDone && !verifyInterestDone && <Interest />}
       {verifyInterestDone && <Complete />}
     </SignUpPageContainer>
