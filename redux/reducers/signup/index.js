@@ -12,6 +12,12 @@ import {
   VERIFY_INFO_FAILURE,
 } from '~/redux/actions/signup/info';
 
+import {
+  VERIFY_INTEREST_REQUEST,
+  VERIFY_INTEREST_SUCCESS,
+  VERIFY_INTEREST_FAILURE,
+} from '~/redux/actions/signup/interest';
+
 const initialState = {
   verifyEmailLoading: false,
   verifyEmailDone: false,
@@ -19,6 +25,9 @@ const initialState = {
   verifyInfoLoading: false,
   verifyInfoDone: false,
   verifyInfoError: null,
+  verifyInterestLoading: false,
+  verifyInterestDone: false,
+  verifyInterestError: null,
 };
 
 const signupReducer = handleActions(
@@ -54,6 +63,22 @@ const signupReducer = handleActions(
       produce(state, draft => {
         draft.verifyInfoLoading = false;
         draft.verifyInfoError = action.error;
+      }),
+    [VERIFY_INTEREST_REQUEST]: state =>
+      produce(state, draft => {
+        draft.verifyInterestLoading = true;
+        draft.verifyIntrestDone = false;
+        draft.verifyIntrestError = null;
+      }),
+    [VERIFY_INTEREST_SUCCESS]: state =>
+      produce(state, draft => {
+        draft.verifyInterestLoading = false;
+        draft.verifyInterestDone = true;
+      }),
+    [VERIFY_INTEREST_FAILURE]: (state, action) =>
+      produce(state, draft => {
+        draft.verifyInterestLoading = false;
+        draft.verifyInterestError = action.error;
       }),
   },
   initialState,
