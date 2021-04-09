@@ -9,7 +9,7 @@ const ProgressBarWrapperStyles = css`
   margin-top: 3.75rem;
 `;
 
-const ProgressBarfillerStyles = css`
+const ProgressBarFillerStyles = css`
   height: 100%;
   width: 0%;
   background-color: #6a1b9a;
@@ -23,4 +23,4 @@ export const ProgressBarWrapper = generateStyled(
   ProgressBarWrapperStyles,
 );
 
-export const ProgressBarFiller = generateStyled('div', ProgressBarfillerStyles);
+export const ProgressBarFiller = generateStyled('div', ProgressBarFillerStyles);
