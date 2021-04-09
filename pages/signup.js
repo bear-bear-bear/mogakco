@@ -7,17 +7,21 @@ import Info from '~/components/signup/info';
 import Interest from '~/components/signup/interest';
 import Complete from '~/components/signup/complete';
 import { SignUpPageContainer } from '../components/signup/common/styles';
-import { getVerifyEmailDone } from '~/redux/selectors/signup';
+import {
+  getVerifyEmailDone,
+  getVerifyInfoDone,
+} from '~/redux/selectors/signup';
 
 const Signup = () => {
   const verifyEmailDone = useSelector(getVerifyEmailDone);
+  const verifyInfoDone = useSelector(getVerifyInfoDone);
 
   return (
     <SignUpPageContainer>
       <Header />
       <ProgressBar />
       {!verifyEmailDone && <Auth />}
-      <Info />
+      {verifyEmailDone && !verifyInfoDone && <Info />}
       <Interest />
       <Complete />
     </SignUpPageContainer>
