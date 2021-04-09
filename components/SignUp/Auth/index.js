@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback } from 'react';
 import GoogleLogo from 'assets/svg/btn_google_light_normal_ios.svg';
 import { useDispatch } from 'react-redux';
 import {
