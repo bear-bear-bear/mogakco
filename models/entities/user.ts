@@ -1,4 +1,5 @@
 import {
+  BaseEntity,
   Column,
   CreateDateColumn,
   DeleteDateColumn,
@@ -6,9 +7,10 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Exclude } from 'class-transformer';
 
-@Entity({ name: 'users' })
-class User {
+@Entity()
+class User extends BaseEntity {
   @PrimaryGeneratedColumn({ unsigned: true })
   id!: number;
 
@@ -29,6 +31,13 @@ class User {
 
   @DeleteDateColumn({ name: 'deleted_at' })
   deletedAt?: Date;
+
+  @Column({ name: 'verified_at', nullable: true })
+  verifiedAt?: Date;
+
+  @Column({ nullable: true, name: 'refresh_token' })
+  @Exclude()
+  hashedRefreshToken?: string;
 }
 
 export default User;

@@ -53,11 +53,7 @@
     "reducers",
     "selectors",
     "store",
-    "styles"
-  ],
-  "include": [
-    "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx"
+    "styles",
+    "dist"
   ]
 }
