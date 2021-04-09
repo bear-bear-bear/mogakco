@@ -42,6 +42,13 @@ const GithubImageStyles = css`
   margin: 0 0.625rem;
 `;
 
+const WarningTextStyles = css`
+  display: block;
+  color: #f23f31;
+  margin: 0 auto;
+  margin-top: 1.875rem;
+`;
+
 // styled-components
 export const Description = generateStyled('p', DescriptionStyles);
 export const SocialLoginWrapper = generateStyled(
@@ -50,3 +57,4 @@ export const SocialLoginWrapper = generateStyled(
 );
 export const SocialAnchor = generateStyled('a', SocialAnchorStyles);
 export const GithubImg = generateStyled('img', GithubImageStyles);
+export const WarningText = generateStyled('span', WarningTextStyles);

@@ -6,6 +6,7 @@ import {
   SocialLoginWrapper,
   SocialAnchor,
   GithubImg,
+  WarningText,
 } from './style';
 
 import {
@@ -23,34 +24,40 @@ import {
 } from '~/redux/actions/signup/auth';
 import useInput from '~/hooks/useInput';
 
+const emailRule = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
+
 const Index = () => {
-  const [email, onChangeEmail, setEmail] = useInput('');
+  const [email, onChangeEmail, setEmail] = useInput(' ');
   const dispatch = useDispatch();
 
   const onSubmit = useCallback(
     e => {
       e.preventDefault();
+      if (!emailRule.test(email)) {
+        setEmail('');
+        return;
+      }
       dispatch(verifyEmailRequest(email));
-      setEmail('');
     },
     [dispatch, email, setEmail],
   );
 
   const onClickSocial = useCallback(() => {
     dispatch(verifySocialRequest());
-  }, []);
+  }, [dispatch]);
 
   return (
     <Container>
       <Title>이메일을 입력하세요</Title>
       <Form action="" onSubmit={onSubmit}>
         <Input
-          type="email"
+          type="text"
           placeholder="example@gmail.com"
           value={email}
           page="auth"
           onChange={onChangeEmail}
         />
+        {!email && <WarningText>정확한 이메일을 입력해주세요!</WarningText>}
         <SubmitButton type="submit" complete={false}>
           인증메일 발송
         </SubmitButton>
