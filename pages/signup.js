@@ -17,11 +17,12 @@ const Signup = () => {
   const verifyAuthDone = useSelector(getVerifyAuthDone);
   const verifyInfoDone = useSelector(getVerifyInfoDone);
   const verifyInterestDone = useSelector(getVerifyInterestDone);
+  const fill = [verifyAuthDone, verifyInfoDone, verifyInterestDone];
 
   return (
     <SignUpPageContainer>
       <Header />
-      <ProgressBar />
+      <ProgressBar fill={fill} />
       {!verifyAuthDone && <Auth />}
       {verifyAuthDone && !verifyInfoDone && <Info />}
       {verifyInfoDone && !verifyInterestDone && <Interest />}

@@ -9,9 +9,22 @@ const ProgressBarWrapperStyles = css`
   margin-top: 3.75rem;
 `;
 
-const ProgressBarFillerStyles = css`
+const detectProgress = progress => {
+  if (progress[2]) {
+    return 100;
+  }
+  if (progress[1]) {
+    return 60;
+  }
+  if (progress[0]) {
+    return 20;
+  }
+  return 0;
+};
+
+const ProgressBarFillerStyles = ({ fill }) => css`
   height: 100%;
-  width: 0%;
+  width: ${detectProgress(fill)}%;
   background-color: #6a1b9a;
   border-radius: inherit;
   transition: 1s width ease-in-out;
