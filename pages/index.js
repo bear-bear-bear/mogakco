@@ -4,7 +4,9 @@ import Container from '~/components/Landing/Container';
 // import Header from '~/components/Landing/Header';
 import ContentBlock from '~/components/Landing/ContentBlock';
 import MiddleBlock from '~/components/Landing/MiddleBlock';
-// import Footer from '~/components/Landing/Footer';
+import Footer from '~/components/Landing/Footer';
+
+import 'antd/dist/antd.css';
 
 const Landing = () => {
   return (
