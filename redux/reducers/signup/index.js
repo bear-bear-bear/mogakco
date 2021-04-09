@@ -6,10 +6,19 @@ import {
   VERIFY_EMAIL_FAILURE,
 } from '~/redux/actions/signup/auth';
 
+import {
+  VERIFY_INFO_REQUEST,
+  VERIFY_INFO_SUCCESS,
+  VERIFY_INFO_FAILURE,
+} from '~/redux/actions/signup/info';
+
 const initialState = {
   verifyEmailLoading: false,
   verifyEmailDone: false,
   verifyEmailError: null,
+  verifyInfoLoading: false,
+  verifyInfoDone: false,
+  verifyInfoError: null,
 };
 
 const signupReducer = handleActions(
@@ -29,6 +38,22 @@ const signupReducer = handleActions(
       produce(state, draft => {
         draft.verifyEmailLoading = false;
         draft.verifyEmailError = action.error;
+      }),
+    [VERIFY_INFO_REQUEST]: state =>
+      produce(state, draft => {
+        draft.verifyInfoLoading = true;
+        draft.verifyInfoDone = false;
+        draft.verifyInfoError = null;
+      }),
+    [VERIFY_INFO_SUCCESS]: state =>
+      produce(state, draft => {
+        draft.verifyInfoLoading = false;
+        draft.verifyInfoDone = true;
+      }),
+    [VERIFY_INFO_FAILURE]: (state, action) =>
+      produce(state, draft => {
+        draft.verifyInfoLoading = false;
+        draft.verifyInfoError = action.error;
       }),
   },
   initialState,
