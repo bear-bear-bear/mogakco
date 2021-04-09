@@ -55,10 +55,12 @@ const Index = () => {
       e.preventDefault();
       setInitSubmit(true);
       if (password !== passwordConfirm) {
-        return setPasswordMatchError(true);
+        setPasswordMatchError(true);
+        return;
       }
       if (!term) {
-        return setTermError(true);
+        setTermError(true);
+        return;
       }
       dispatch(verifyInfoRequest(username, password));
       setuserName('');
