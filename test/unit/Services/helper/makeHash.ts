@@ -1,8 +1,10 @@
 import * as bcrypt from 'bcrypt';
 import { HttpException, HttpStatus } from '@nestjs/common';
 
+export type resolve = (e: string) => void;
+
 export default async (plain: string) =>
-  new Promise((resolve, reject) => {
+  new Promise((resolve: resolve, reject) => {
     bcrypt.genSalt(12, (err, salt) => {
       if (err)
         reject(
