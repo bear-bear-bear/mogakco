@@ -19,6 +19,6 @@ function* verifyEmail() {
   }
 }
 
-export function* watchAuth() {
+export default function* watchAuth() {
   yield takeLatest(VERIFY_EMAIL_REQUEST, verifyEmail);
 }
