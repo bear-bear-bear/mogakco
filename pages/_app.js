@@ -1,5 +1,5 @@
+import wrapper from '~/redux/store/configureStore';
 import GlobalStyle from '~/components/globalStyles';
-import wrapper from '~/store/configureStore';
 
 const App = ({ Component, pageProps }) => {
   return (
