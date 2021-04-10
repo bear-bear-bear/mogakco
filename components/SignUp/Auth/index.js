@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import GoogleLogo from 'assets/svg/btn_google_light_normal_ios.svg';
 import { useDispatch } from 'react-redux';
 import {
@@ -27,19 +27,20 @@ import useInput from '~/hooks/useInput';
 const emailRule = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
 
 const Index = () => {
-  const [email, onChangeEmail, setEmail] = useInput(' ');
+  const [email, onChangeEmail] = useInput(' ');
+  const [emailTestError, setEmailTestError] = useState(false);
   const dispatch = useDispatch();
 
   const onSubmit = useCallback(
     e => {
       e.preventDefault();
       if (!emailRule.test(email)) {
-        setEmail('');
+        setEmailTestError(true);
         return;
       }
       dispatch(verifyEmailRequest(email));
     },
-    [dispatch, email, setEmail],
+    [dispatch, email],
   );
 
   const onClickSocial = useCallback(() => {
@@ -57,7 +58,9 @@ const Index = () => {
           page="auth"
           onChange={onChangeEmail}
         />
-        {!email && <WarningText>정확한 이메일을 입력해주세요!</WarningText>}
+        {emailTestError && (
+          <WarningText>정확한 이메일을 입력해주세요!</WarningText>
+        )}
         <SubmitButton type="submit" complete={false}>
           인증메일 발송
         </SubmitButton>

@@ -16,18 +16,17 @@ import { WarningText } from './style';
 import useInput from '~/hooks/useInput';
 import { verifyInfoRequest } from '~/redux/actions/signup/info';
 
+const passwordRule = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,}$/;
+
 const Index = () => {
   const dispatch = useDispatch();
-  const [username, onChangeUserName, setuserName] = useInput('');
-  const [password, onChangePassword, setPassword] = useInput('');
-  const [
-    passwordConfirm,
-    onChangePasswordConfirm,
-    setPasswordConfirm,
-  ] = useInput('');
+  const [username, onChangeUserName] = useInput('');
+  const [password, onChangePassword] = useInput('');
+  const [passwordConfirm, onChangePasswordConfirm] = useInput('');
   const [initSubmit, setInitSubmit] = useState(false);
   const [term, setTerm] = useState(false);
   const [passwordMatchError, setPasswordMatchError] = useState(false);
+  const [passwordTestError, setPasswordTestError] = useState(false);
   const [termError, setTermError] = useState(false);
 
   useEffect(() => {
@@ -37,6 +36,11 @@ const Index = () => {
         setTermError(true);
       } else {
         setTermError(false);
+      }
+      if (!passwordRule.test(password)) {
+        setPasswordTestError(true);
+      } else {
+        setPasswordTestError(false);
       }
       if (password !== passwordConfirm) {
         setPasswordMatchError(true);
@@ -54,6 +58,10 @@ const Index = () => {
     e => {
       e.preventDefault();
       setInitSubmit(true);
+      if (!passwordRule.test(password)) {
+        setPasswordTestError(true);
+        return;
+      }
       if (password !== passwordConfirm) {
         setPasswordMatchError(true);
         return;
@@ -63,20 +71,8 @@ const Index = () => {
         return;
       }
       dispatch(verifyInfoRequest(username, password));
-      setuserName('');
-      setPassword('');
-      setPasswordConfirm('');
     },
-    [
-      dispatch,
-      username,
-      password,
-      passwordConfirm,
-      term,
-      setuserName,
-      setPassword,
-      setPasswordConfirm,
-    ],
+    [dispatch, username, password, passwordConfirm, term],
   );
 
   return (
@@ -116,7 +112,13 @@ const Index = () => {
             required
           />
         </InputWrapper>
-        <WarningText>※ 비밀번호는 8자리 이상 입력하셔야 합니다</WarningText>
+        <WarningText>
+          ※ 비밀번호는 8자리 이상의 대소문자와 숫자, 특수문자를 각 1개 이상을
+          입력하셔야 합니다
+        </WarningText>
+        {passwordTestError && (
+          <WarningText>형식에 맞는 비밀번호를 입력하세요!</WarningText>
+        )}
         {passwordMatchError && (
           <WarningText>비밀번호가 일치하지 않습니다!</WarningText>
         )}
