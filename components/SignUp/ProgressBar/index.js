@@ -13,5 +13,5 @@ const Index = ({ fill }) => {
 export default Index;
 
 Index.propTypes = {
-  fill: PropTypes.arrayOf('boolean').isRequired,
+  fill: PropTypes.arrayOf(PropTypes.bool).isRequired,
 };
