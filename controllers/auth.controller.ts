@@ -27,7 +27,7 @@ import createUserDTO from '../models/dto/create-user.dto';
 import response from './dto/response';
 import LoginBadRequestException from './exception/login.exception';
 import LoginUserDTO from '../models/dto/login-user.dto';
-import updateUserRequestDto from "../test/unit/services/dto/update-user-request.dto";
+import updateUserRequestDto from '../test/unit/services/dto/update-user-request.dto';
 
 @Controller('user')
 @UseInterceptors(ClassSerializerInterceptor)
