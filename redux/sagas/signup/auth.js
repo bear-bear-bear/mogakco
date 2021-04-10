@@ -10,7 +10,7 @@ import {
 
 function* verifyEmail() {
   try {
-    yield delay(1000);
+    yield delay(5000);
     yield put({
       type: VERIFY_EMAIL_SUCCESS,
     });

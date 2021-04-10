@@ -22,9 +22,12 @@ import {
 } from '~/redux/actions/signup/interest';
 
 const initialState = {
-  verifyAuthLoading: false,
-  verifyAuthDone: false,
-  verifyAuthError: null,
+  verifyEmailLoading: false,
+  verifyEmailDone: false,
+  verifyEmailError: null,
+  verifySocialLoading: false,
+  verifySocialDone: false,
+  verifySocialError: null,
   verifyInfoLoading: false,
   verifyInfoDone: false,
   verifyInfoError: null,
@@ -37,36 +40,38 @@ const signupReducer = handleActions(
   {
     [VERIFY_EMAIL_REQUEST]: state =>
       produce(state, draft => {
-        draft.verifyAuthLoading = true;
-        draft.verifyAuthDone = false;
-        draft.verifyAuthError = null;
+        draft.verifyEmailLoading = true;
+        draft.verifyEmailDone = false;
+        draft.verifyEmailError = null;
       }),
     [VERIFY_EMAIL_SUCCESS]: state =>
       produce(state, draft => {
-        draft.verifyAuthLoading = false;
-        draft.verifyAuthDone = true;
+        draft.verifyEmailLoading = false;
+        draft.verifyEmailDone = true;
+        draft.verifySocialDone = true;
       }),
     [VERIFY_EMAIL_FAILURE]: (state, action) =>
       produce(state, draft => {
-        draft.verifyAuthLoading = false;
-        draft.verifyAuthError = action.error;
+        draft.verifyEmailLoading = false;
+        draft.verifyEmailError = action.error;
       }),
     [VERIFY_SOCIAL_REQUEST]: state =>
       produce(state, draft => {
-        draft.verifyAuthLoading = true;
-        draft.verifyAuthDone = false;
-        draft.verifyAuthError = null;
+        draft.verifySocialLoading = true;
+        draft.verifySocialDone = false;
+        draft.verifySocialError = null;
       }),
     [VERIFY_SOCIAL_SUCCESS]: state =>
       produce(state, draft => {
-        draft.verifyAuthLoading = false;
-        draft.verifyAuthDone = true;
+        draft.verifySocialLoading = false;
+        draft.verifySocialDone = true;
+        draft.verifyEmailDone = true;
         draft.verifyInfoDone = true;
       }),
     [VERIFY_SOCIAL_FAILURE]: (state, action) =>
       produce(state, draft => {
-        draft.verifyAuthLoading = false;
-        draft.verifyAuthError = action.error;
+        draft.verifySocialLoading = false;
+        draft.verifySocialError = action.error;
       }),
     [VERIFY_INFO_REQUEST]: state =>
       produce(state, draft => {
