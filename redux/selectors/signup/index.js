@@ -1,12 +1,32 @@
 import { createSelector } from 'reselect';
 
-const selectVerifyAuthDone = state => state.signupReducer.verifyAuthDone;
+const selectVerifyEmailLoading = state =>
+  state.signupReducer.verifyEmailLoading;
+const selectVerifyEmailDone = state => state.signupReducer.verifyEmailDone;
+const selectVerifySocialLoading = state =>
+  state.signupReducer.verifyEmailLoading;
+const selectVerifySocialDone = state => state.signupReducer.verifySocialDone;
 const selectVerifyInfoDone = state => state.signupReducer.verifyInfoDone;
 const selectVerifyInterestDone = state =>
   state.signupReducer.verifyInterestDone;
 
-export const getVerifyAuthDone = createSelector(
-  selectVerifyAuthDone,
+export const getVerifyEmailLoading = createSelector(
+  selectVerifyEmailLoading,
+  value => value,
+);
+
+export const getVerifyEmailDone = createSelector(
+  selectVerifyEmailDone,
+  value => value,
+);
+
+export const getVerifySocialLoading = createSelector(
+  selectVerifySocialLoading,
+  value => value,
+);
+
+export const getVerifySocialDone = createSelector(
+  selectVerifySocialDone,
   value => value,
 );
 
