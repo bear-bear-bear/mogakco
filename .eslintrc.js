@@ -43,7 +43,7 @@ module.exports = {
       },
     },
   ],
-  ignorePatterns: ['dist/**/*'],
+  ignorePatterns: ['dist/**/*', 'jest-e2e.json', '*.css'],
   rules: {
     'react/jsx-uses-react': 'error',
     'react/jsx-uses-vars': 'error',
@@ -66,10 +66,35 @@ module.exports = {
     'class-methods-use-this': 'off', // 클래스 메서드에 무조건 this 사용
     'no-useless-constructor': 'off', // 생성자 선언 필드 무조건 사용
     'import/no-unresolved': 'off', // import 에 상대경로 금지
-    '@emotion/jsx-import': 'error',
     '@emotion/pkg-renaming': 'error',
     'no-shadow': 'off',
     'import/extensions': ['off'],
     'import/no-extraneous-dependencies': ['off'],
+    'no-param-reassign': ['error', { props: false }],
+    'jsx-a11y/label-has-associated-control': [
+      'error',
+      {
+        required: {
+          some: ['nesting', 'id'],
+        },
+      },
+    ],
+    'jsx-a11y/label-has-for': [
+      'error',
+      {
+        required: {
+          some: ['nesting', 'id'],
+        },
+      },
+    ],
+    'jsx-a11y/anchor-is-valid': [
+      'error',
+      {
+        components: ['Link'],
+        specialLink: ['hrefLeft', 'hrefRight'],
+        aspects: ['invalidHref', 'preferButton'],
+      },
+    ],
+    'import/prefer-default-export': 'off',
   },
 };
