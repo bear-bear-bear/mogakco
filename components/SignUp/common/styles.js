@@ -2,7 +2,7 @@ import { css } from '@emotion/react';
 import generateStyled from '~/lib/generateStyled';
 
 export const LinkStyles = css`
-  text-decoration: 0;
+  text-decoration: none;
   color: inherit;
   cursor: pointer;
 `;
