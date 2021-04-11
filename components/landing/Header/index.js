@@ -2,6 +2,8 @@ import React from 'react';
 import Link from 'next/link';
 import { Row, Col } from 'antd';
 
+import Button from '~/components/common/Button';
+
 import * as S from './style';
 
 // TODO: S.ButtonsWrapper 컴포넌트로 분리 (Btns)
@@ -17,13 +19,17 @@ const Header = ({ isLoggedIn }) => {
         <Col flex="auto">
           {isLoggedIn ? (
             <S.ButtonsWrapper>
-              <S.StartButton>시작하기</S.StartButton>
+              <Button color="blue">시작하기</Button>
             </S.ButtonsWrapper>
           ) : (
             <S.ButtonsWrapper>
-              <S.AuthButton>로그인</S.AuthButton>
+              <Button color="black" underline>
+                로그인
+              </Button>
               <Link href="/signup">
-                <S.AuthButton>회원가입</S.AuthButton>
+                <Button color="black" underline>
+                  회원가입
+                </Button>
               </Link>
             </S.ButtonsWrapper>
           )}
