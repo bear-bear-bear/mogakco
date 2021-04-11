@@ -7,6 +7,7 @@ import AppController from '../controllers/app.controller';
 import AppService from '../services/app.service';
 import User from '../models/entities/user';
 import AuthModule from './auth.module';
+import MailModule from './mail.module';
 
 @Module({
   imports: [
@@ -37,6 +38,7 @@ import AuthModule from './auth.module';
       entities: [User, UserVerify],
     }),
     AuthModule,
+    MailModule,
   ],
   controllers: [AppController],
   providers: [AppService],
