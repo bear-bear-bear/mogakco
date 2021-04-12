@@ -19,10 +19,16 @@ const Landing = () => {
     <Container>
       <CustomHead {...pageProps} />
       <Header isLoggedIn={false} />
-      <ContentBlock type="left" />
+      <ContentBlock
+        type="left"
+        title="혼자 하는 코딩은 쓰니까."
+        subtitle="같이 코딩할까요, 지금 그 자리에서."
+        imgName="landing_sleep"
+        isFirstBlock
+      />
       <MiddleBlock />
       <ContentBlock type="right" />
-      <ContentBlock type="left" />
+      {/* <ContentBlock type="left" /> */}
       <ContentBlock type="right" />
       <Footer />
     </Container>
