@@ -5,7 +5,7 @@ import Auth from '~/components/signup/auth';
 import Info from '~/components/signup/info';
 import Interest from '~/components/signup/interest';
 import Complete from '~/components/signup/complete';
-import { SignUpPageContainer } from '../components/signup/common/styles';
+import { SignUpPageContainer } from '../components/SignUp/common/styles';
 
 const Signup = () => {
   return (
