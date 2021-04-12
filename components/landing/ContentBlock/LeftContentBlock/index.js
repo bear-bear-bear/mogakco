@@ -46,7 +46,10 @@ LeftContentBlock.propTypes = {
   title: Proptypes.string.isRequired,
   subtitle: Proptypes.string.isRequired,
   imgName: Proptypes.string.isRequired,
-  isFirstBlock: Proptypes.bool.isRequired,
+  isFirstBlock: Proptypes.bool,
+};
+LeftContentBlock.defaultProps = {
+  isFirstBlock: false,
 };
 
 export default LeftContentBlock;
