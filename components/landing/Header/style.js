@@ -3,7 +3,6 @@ import styled from '@emotion/styled';
 import Logo from 'assets/svg/logo.svg';
 
 export const LandingHeader = styled.header`
-  border: 1px solid royalblue;
   padding: 1rem;
 `;
 
@@ -13,6 +12,7 @@ export const ButtonsWrapper = styled.div`
   display: flex;
   justify-content: flex-end;
   align-items: flex-end;
+  padding-right: 1.66rem;
 `;
 
 export const MainLogo = styled(Logo)`
