@@ -6,7 +6,7 @@ import SvgImage from '~/components/common/SvgImage';
 
 import * as S from './style';
 
-const LeftContentBlock = ({ title, subtitle, imgName, isFirstBlock }) => {
+const LeftContentBlock = ({ title, subtitle, imgName, firstBlock }) => {
   // 임시로 작성한 state와 function
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const onSubmit = useCallback(() => {
@@ -15,12 +15,12 @@ const LeftContentBlock = ({ title, subtitle, imgName, isFirstBlock }) => {
 
   return (
     <S.LeftBlockContainer>
-      <Row justify="space-between" align="middle">
-        <Col xs={24} sm={12}>
-          <S.ContentWrapper isFirstBlock={isFirstBlock}>
+      <Row align="middle">
+        <Col xs={{ span: 24, order: 1 }} lg={{ span: 12, order: 0 }}>
+          <S.ContentWrapper firstBlock>
             <h1>{title}</h1>
             <h3>{subtitle}</h3>
-            {isFirstBlock && isLoggedIn ? (
+            {firstBlock && !isLoggedIn ? (
               <S.StartButton color="blue" fullWidth>
                 시작하기
               </S.StartButton>
@@ -34,7 +34,7 @@ const LeftContentBlock = ({ title, subtitle, imgName, isFirstBlock }) => {
             )}
           </S.ContentWrapper>
         </Col>
-        <Col xs={24} sm={12}>
+        <Col xs={{ span: 24, order: 0 }} lg={{ span: 12, order: 1 }}>
           <SvgImage name={imgName} width="100%" heigth="100%" />
         </Col>
       </Row>
@@ -46,10 +46,10 @@ LeftContentBlock.propTypes = {
   title: PropTypes.string.isRequired,
   subtitle: PropTypes.string.isRequired,
   imgName: PropTypes.string.isRequired,
-  isFirstBlock: PropTypes.bool,
+  firstBlock: PropTypes.bool,
 };
 LeftContentBlock.defaultProps = {
-  isFirstBlock: false,
+  firstBlock: false,
 };
 
 export default LeftContentBlock;
