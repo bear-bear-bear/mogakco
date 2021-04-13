@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import Proptypes from 'prop-types';
+import PropTypes from 'prop-types';
 import { Row, Col } from 'antd';
 
 import SvgImage from '~/components/common/SvgImage';
@@ -42,11 +42,11 @@ const LeftContentBlock = ({ title, subtitle, imgName, isFirstBlock }) => {
   );
 };
 
-LeftContentBlock.propTypes = {
-  title: Proptypes.string.isRequired,
-  subtitle: Proptypes.string.isRequired,
-  imgName: Proptypes.string.isRequired,
-  isFirstBlock: Proptypes.bool,
+LeftContentBlock.PropTypes = {
+  title: PropTypes.string.isRequired,
+  subtitle: PropTypes.string.isRequired,
+  imgName: PropTypes.string.isRequired,
+  isFirstBlock: PropTypes.bool,
 };
 LeftContentBlock.defaultProps = {
   isFirstBlock: false,

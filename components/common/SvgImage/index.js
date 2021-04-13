@@ -1,4 +1,4 @@
-import Proptypes from 'prop-types';
+import PropTypes from 'prop-types';
 
 const SvgImage = ({ name, width, height }) => {
   return (
@@ -11,10 +11,10 @@ const SvgImage = ({ name, width, height }) => {
   );
 };
 
-SvgImage.propTypes = {
-  name: Proptypes.string.isRequired,
-  width: Proptypes.string,
-  height: Proptypes.string,
+SvgImage.PropTypes = {
+  name: PropTypes.string.isRequired,
+  width: PropTypes.string,
+  height: PropTypes.string,
 };
 SvgImage.defaultProps = {
   width: '100%',

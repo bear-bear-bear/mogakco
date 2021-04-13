@@ -1,6 +1,6 @@
 import React from 'react';
 import { ThemeProvider } from '@emotion/react';
-import Proptypes from 'prop-types';
+import PropTypes from 'prop-types';
 
 import * as S from './style';
 
@@ -34,13 +34,13 @@ const Button = React.forwardRef(
 );
 
 Button.displayName = 'Button';
-Button.Proptypes = {
-  children: Proptypes.node.isRequired,
-  color: Proptypes.string.isRequired,
-  size: Proptypes.string,
-  fullWidth: Proptypes.bool,
-  outline: Proptypes.bool,
-  underline: Proptypes.bool,
+Button.PropTypes = {
+  children: PropTypes.node.isRequired,
+  color: PropTypes.string.isRequired,
+  size: PropTypes.string,
+  fullWidth: PropTypes.bool,
+  outline: PropTypes.bool,
+  underline: PropTypes.bool,
 };
 Button.defaultProps = {
   color: 'blue',

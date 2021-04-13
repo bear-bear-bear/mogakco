@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import Proptypes from 'prop-types';
+import PropTypes from 'prop-types';
 
 const CustomHead = ({ title, description, url, locale }) => {
   // TODO: favicon 제작하여 추가하기
@@ -32,11 +32,11 @@ const CustomHead = ({ title, description, url, locale }) => {
   );
 };
 
-CustomHead.propTypes = {
-  title: Proptypes.string.isRequired,
-  description: Proptypes.string.isRequired,
-  url: Proptypes.string.isRequired,
-  locale: Proptypes.string.isRequired,
+CustomHead.PropTypes = {
+  title: PropTypes.string.isRequired,
+  description: PropTypes.string.isRequired,
+  url: PropTypes.string.isRequired,
+  locale: PropTypes.string.isRequired,
 };
 CustomHead.defalutProps = {
   title: '모여서 각자 코딩 - Mogakco',
