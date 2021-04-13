@@ -11,7 +11,7 @@ const SvgImage = ({ name, width, height }) => {
   );
 };
 
-SvgImage.PropTypes = {
+SvgImage.propTypes = {
   name: PropTypes.string.isRequired,
   width: PropTypes.string,
   height: PropTypes.string,

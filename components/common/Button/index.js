@@ -34,7 +34,7 @@ const Button = React.forwardRef(
 );
 
 Button.displayName = 'Button';
-Button.PropTypes = {
+Button.propTypes = {
   children: PropTypes.node.isRequired,
   color: PropTypes.string.isRequired,
   size: PropTypes.string,

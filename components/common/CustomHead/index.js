@@ -32,7 +32,7 @@ const CustomHead = ({ title, description, url, locale }) => {
   );
 };
 
-CustomHead.PropTypes = {
+CustomHead.propTypes = {
   title: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
   url: PropTypes.string.isRequired,

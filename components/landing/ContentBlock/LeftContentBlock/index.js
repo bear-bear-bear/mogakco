@@ -42,7 +42,7 @@ const LeftContentBlock = ({ title, subtitle, imgName, isFirstBlock }) => {
   );
 };
 
-LeftContentBlock.PropTypes = {
+LeftContentBlock.propTypes = {
   title: PropTypes.string.isRequired,
   subtitle: PropTypes.string.isRequired,
   imgName: PropTypes.string.isRequired,
