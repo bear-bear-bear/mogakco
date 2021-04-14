@@ -12,6 +12,70 @@ export const LeftBlockContainer = styled.article`
   }
 `;
 
+export const FirstBlockForm = styled.form`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 2rem;
+  width: 100%;
+  height: 3rem;
+
+  ${media.sm} {
+    flex-direction: row;
+    justify-content: center;
+    max-width: 35rem;
+  }
+
+  ${media.lg} {
+    max-width: 28rem;
+  }
+`;
+
+export const FirstBlockInput = styled.input`
+  width: 100%;
+  height: 100%;
+  padding: 0.66rem 0.33rem;
+
+  ${media.sm} {
+    width: initial;
+    flex: 1;
+  }
+`;
+
+export const FirstBlockJoinButton = styled(Button)`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 0.33rem;
+  padding: 1.33rem 1.66rem;
+
+  ${media.sm} {
+    width: initial;
+    margin-top: initial;
+    margin-left: 0.66rem;
+  }
+`;
+
+export const FirstBlockStartButton = styled(Button)`
+  max-width: 30rem;
+  margin-top: 2rem;
+  padding: 1.5rem 0;
+  font-size: 1.2rem;
+
+  ${media.md} {
+    max-width: 33rem;
+    padding: 1.66rem 0;
+    font-size: 1.5rem;
+  }
+
+  ${media.lg} {
+    max-width: 30rem;
+    padding: 1.5rem 0;
+    font-size: 1.2rem;
+  }
+`;
+
 const firstBlockFontStyles = () => {
   const fontSizes = {
     xs: {
@@ -108,68 +172,4 @@ export const ContentWrapper = styled.section`
   }
 
   ${({ firstBlock }) => firstBlock && firstBlockFontStyles}
-`;
-
-export const FirstBlockForm = styled.form`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-top: 2rem;
-  width: 100%;
-  height: 3rem;
-
-  ${media.sm} {
-    flex-direction: row;
-    justify-content: center;
-    max-width: 35rem;
-  }
-
-  ${media.lg} {
-    max-width: 28rem;
-  }
-`;
-
-export const FirstBlockInput = styled.input`
-  width: 100%;
-  height: 100%;
-  padding: 0.66rem 0.33rem;
-
-  ${media.sm} {
-    width: initial;
-    flex: 1;
-  }
-`;
-
-export const FirstBlockJoinButton = styled(Button)`
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  margin-top: 0.33rem;
-  padding: 1.33rem 1.66rem;
-
-  ${media.sm} {
-    width: initial;
-    margin-top: initial;
-    margin-left: 0.66rem;
-  }
-`;
-
-export const FirstBlockStartButton = styled(Button)`
-  max-width: 30rem;
-  margin-top: 2rem;
-  padding: 1.5rem 0;
-  font-size: 1.2rem;
-
-  ${media.md} {
-    max-width: 33rem;
-    padding: 1.66rem 0;
-    font-size: 1.5rem;
-  }
-
-  ${media.lg} {
-    max-width: 30rem;
-    padding: 1.5rem 0;
-    font-size: 1.2rem;
-  }
 `;
