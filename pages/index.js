@@ -28,7 +28,12 @@ const Landing = () => {
       />
       <MiddleBlock />
       <ContentBlock type="right" />
-      {/* <ContentBlock type="left" /> */}
+      <ContentBlock
+        type="left"
+        title="랭킹 시스템"
+        subtitle="같은 분야의 개발자들과 비교한 자신의 공부시간 순위를 알 수 있습니다."
+        imgName="landing_run"
+      />
       <ContentBlock type="right" />
       <Footer />
     </Container>

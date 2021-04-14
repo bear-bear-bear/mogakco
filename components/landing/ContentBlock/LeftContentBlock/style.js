@@ -12,11 +12,13 @@ export const LeftBlockContainer = styled.article`
 
   [class~='ant-row'] {
     // 💥 antd Row 컴포넌트에 대한 스타일 변경
+    // 아래 ContentWrapper의 글자 flex 배치를 결정합니다.
     display: flex;
     justify-content: center;
 
     ${media.lg} {
-      justify-content: initial;
+      justify-content: ${({ firstBlock }) =>
+        firstBlock ? 'center' : 'initial'};
       padding-top: initial;
     }
   }
@@ -33,8 +35,8 @@ const firstBlockFontStyles = () => {
       h3: '1.66rem',
     },
     md: {
-      h1: '4rem',
-      h3: '2rem',
+      h1: '3.6rem',
+      h3: '1.8rem',
     },
     lg: {
       h1: '3rem',
@@ -54,14 +56,22 @@ const firstBlockFontStyles = () => {
     `.trim();
 
   return css`
-    h3 {
-      margin-top: 1.33rem;
-    }
-    ${media.sm} {
-      h1 {
+    h1 {
+      text-align: initial;
+      ${media.sm} {
         white-space: nowrap;
       }
     }
+    h3 {
+      margin-top: 1.33rem;
+      text-align: initial;
+      padding: initial;
+    }
+
+    ${media.lg} {
+      padding-right: initial;
+    }
+
     ${mediaFontSizes('xs')}
     ${mediaFontSizes('sm')}
     ${mediaFontSizes('md')}
@@ -75,19 +85,36 @@ export const ContentWrapper = styled.section`
   align-items: center;
   margin-top: 1rem;
 
-  ${media.lg} {
-    display: block;
-    margin-top: initial;
-  }
-
   h1 {
     font-weight: 700;
-    font-size: 2rem;
+    font-size: 2.1rem;
+    text-align: center;
   }
   h3 {
     margin-top: 1rem;
     font-weight: 400;
     font-size: 1.33rem;
+    text-align: center;
+    word-break: keep-all;
+    padding: 0 1rem;
+
+    ${media.sm} {
+      padding: 0 1.2rem;
+    }
+    ${media.md} {
+      padding: 0 3rem;
+    }
+    ${media.lg} {
+      padding: 0 1.2rem;
+    }
+    ${media.xl} {
+      padding: 0 3rem;
+    }
+  }
+  ${media.lg} {
+    display: block;
+    margin-top: initial;
+    padding-right: 4.5rem;
   }
 
   ${({ firstBlock }) => firstBlock && firstBlockFontStyles}
