@@ -7,6 +7,7 @@ import media from '~/components/globalStyles/media';
 export const LandingHeader = styled.header`
   ${media.sm} {
     padding: 1rem;
+    padding-right: 0;
   }
 `;
 

@@ -4,13 +4,13 @@ import styled from '@emotion/styled';
 import Button from '~/components/common/Button';
 import media from '~/components/globalStyles/media';
 
-export const LeftBlockContainer = styled.article`
-  padding-top: ${({ firstBlock }) => (firstBlock ? 'initial' : '9rem')};
+export const LeftBlockContainer = styled.article(({ firstBlock }) => ({
+  paddingTop: firstBlock ? '3rem' : '9rem',
 
-  ${media.lg} {
-    padding-left: 1.5rem;
-  }
-`;
+  [media.lg]: {
+    paddingLeft: firstBlock ? '2.8rem' : '1.5rem',
+  },
+}));
 
 export const FirstBlockForm = styled.form`
   display: flex;
