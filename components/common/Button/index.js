@@ -36,8 +36,8 @@ const Button = React.forwardRef(
 Button.displayName = 'Button';
 Button.propTypes = {
   children: PropTypes.node.isRequired,
-  color: PropTypes.string.isRequired,
-  size: PropTypes.string,
+  color: PropTypes.oneOf(['blue', 'yellow', 'white', 'black']),
+  size: PropTypes.oneOf(['small', 'medium', 'large']),
   fullWidth: PropTypes.bool,
   outline: PropTypes.bool,
   underline: PropTypes.bool,
@@ -45,6 +45,9 @@ Button.propTypes = {
 Button.defaultProps = {
   color: 'blue',
   size: 'medium',
+  fullWidth: false,
+  outline: false,
+  underline: false,
 };
 
 export default Button;
