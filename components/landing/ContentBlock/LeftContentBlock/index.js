@@ -14,24 +14,24 @@ const LeftContentBlock = ({ title, subtitle, imgName, firstBlock }) => {
   }, []);
 
   return (
-    <S.LeftBlockContainer>
+    <S.LeftBlockContainer firstBlock={firstBlock}>
       <Row justify="center" align="middle" gutter={20}>
         <Col xs={{ span: 24, order: 1 }} lg={{ span: 12, order: 0 }}>
           <S.ContentWrapper firstBlock={firstBlock}>
             <h1>{title}</h1>
             <h3>{subtitle}</h3>
             {firstBlock &&
-              (!isLoggedIn ? (
-                <S.StartButton color="blue" fullWidth>
+              (isLoggedIn ? (
+                <S.FirstBlockStartButton color="blue" fullWidth>
                   시작하기
-                </S.StartButton>
+                </S.FirstBlockStartButton>
               ) : (
-                <S.Form onSubmit={onSubmit}>
-                  <S.Input placeholder="이메일 입력" required />
-                  <S.JoinButton color="blue" type="submit">
+                <S.FirstBlockForm onSubmit={onSubmit}>
+                  <S.FirstBlockInput placeholder="이메일 입력" required />
+                  <S.FirstBlockJoinButton color="blue" type="submit">
                     회원가입
-                  </S.JoinButton>
-                </S.Form>
+                  </S.FirstBlockJoinButton>
+                </S.FirstBlockForm>
               ))}
           </S.ContentWrapper>
         </Col>

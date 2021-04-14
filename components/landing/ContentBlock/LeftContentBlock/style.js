@@ -5,22 +5,10 @@ import Button from '~/components/common/Button';
 import media from '~/components/globalStyles/media';
 
 export const LeftBlockContainer = styled.article`
+  padding-top: ${({ firstBlock }) => (firstBlock ? 'initial' : '9rem')};
+
   ${media.lg} {
-    padding-top: 2rem;
     padding-left: 1.5rem;
-  }
-
-  [class~='ant-row'] {
-    // 💥 antd Row 컴포넌트에 대한 스타일 변경
-    // 아래 ContentWrapper의 글자 flex 배치를 결정합니다.
-    display: flex;
-    justify-content: center;
-
-    ${media.lg} {
-      justify-content: ${({ firstBlock }) =>
-        firstBlock ? 'center' : 'initial'};
-      padding-top: initial;
-    }
   }
 `;
 
@@ -56,6 +44,8 @@ const firstBlockFontStyles = () => {
     `.trim();
 
   return css`
+    align-items: initial;
+
     h1 {
       text-align: initial;
       ${media.sm} {
@@ -93,9 +83,10 @@ export const ContentWrapper = styled.section`
   h3 {
     margin-top: 1rem;
     font-weight: 400;
-    font-size: 1.33rem;
+    font-size: 1.3rem;
     text-align: center;
     word-break: keep-all;
+    line-height: 1.4;
     padding: 0 1rem;
 
     ${media.sm} {
@@ -112,7 +103,6 @@ export const ContentWrapper = styled.section`
     }
   }
   ${media.lg} {
-    display: block;
     margin-top: initial;
     padding-right: 4.5rem;
   }
@@ -120,7 +110,7 @@ export const ContentWrapper = styled.section`
   ${({ firstBlock }) => firstBlock && firstBlockFontStyles}
 `;
 
-export const Form = styled.form`
+export const FirstBlockForm = styled.form`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -139,7 +129,7 @@ export const Form = styled.form`
   }
 `;
 
-export const Input = styled.input`
+export const FirstBlockInput = styled.input`
   width: 100%;
   height: 100%;
   padding: 0.66rem 0.33rem;
@@ -150,7 +140,7 @@ export const Input = styled.input`
   }
 `;
 
-export const JoinButton = styled(Button)`
+export const FirstBlockJoinButton = styled(Button)`
   width: 100%;
   height: 100%;
   display: flex;
@@ -165,7 +155,7 @@ export const JoinButton = styled(Button)`
   }
 `;
 
-export const StartButton = styled(Button)`
+export const FirstBlockStartButton = styled(Button)`
   max-width: 30rem;
   margin-top: 2rem;
   padding: 1.5rem 0;
