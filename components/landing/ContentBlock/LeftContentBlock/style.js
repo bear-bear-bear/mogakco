@@ -99,12 +99,12 @@ export const Form = styled.form`
   align-items: center;
   margin-top: 2rem;
   width: 100%;
-  max-width: 35rem;
   height: 3rem;
 
   ${media.sm} {
     flex-direction: row;
     justify-content: center;
+    max-width: 35rem;
   }
 
   ${media.lg} {
