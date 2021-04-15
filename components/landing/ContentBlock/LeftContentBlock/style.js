@@ -80,19 +80,19 @@ const firstBlockFontStyles = () => {
   const fontSizes = {
     xs: {
       h1: '2.1rem',
-      h3: '1.33rem',
+      p: '1.33rem',
     },
     sm: {
       h1: '3.2rem',
-      h3: '1.66rem',
+      p: '1.66rem',
     },
     md: {
       h1: '3.6rem',
-      h3: '1.8rem',
+      p: '1.8rem',
     },
     lg: {
       h1: '3rem',
-      h3: '1.6rem',
+      p: '1.6rem',
     },
   };
   const mediaFontSizes = screenSize =>
@@ -101,8 +101,8 @@ const firstBlockFontStyles = () => {
         h1 {
           font-size: ${fontSizes[screenSize].h1};
         }
-        h3 {
-          font-size: ${fontSizes[screenSize].h3};
+        p {
+          font-size: ${fontSizes[screenSize].p};
         }
       }
     `.trim();
@@ -116,7 +116,7 @@ const firstBlockFontStyles = () => {
         white-space: nowrap;
       }
     }
-    h3 {
+    p {
       margin-top: 1.33rem;
       text-align: initial;
       padding: initial;
@@ -144,7 +144,7 @@ export const ContentWrapper = styled.section`
     font-size: 2.1rem;
     text-align: center;
   }
-  h3 {
+  p {
     margin-top: 1rem;
     font-weight: 400;
     font-size: 1.3rem;

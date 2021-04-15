@@ -18,7 +18,7 @@ export const ContentWrapper = styled.section`
     font-size: 2.1rem;
     text-align: center;
   }
-  h3 {
+  p {
     margin-top: 1rem;
     font-weight: 400;
     font-size: 1.3rem;

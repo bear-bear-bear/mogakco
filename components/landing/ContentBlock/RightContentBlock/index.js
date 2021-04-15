@@ -15,7 +15,7 @@ const RightContentBlock = ({ title, content, imgName }) => {
         <Col xs={{ span: 24 }} lg={{ span: 12 }}>
           <S.ContentWrapper>
             <h1>{title}</h1>
-            <h3>{content}</h3>
+            <p>{content}</p>
           </S.ContentWrapper>
         </Col>
       </Row>

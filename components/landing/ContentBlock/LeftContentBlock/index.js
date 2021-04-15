@@ -19,7 +19,7 @@ const LeftContentBlock = ({ title, content, imgName, firstBlock }) => {
         <Col xs={{ span: 24, order: 1 }} lg={{ span: 12, order: 0 }}>
           <S.ContentWrapper firstBlock={firstBlock}>
             <h1>{title}</h1>
-            <h3>{content}</h3>
+            <p>{content}</p>
             {firstBlock &&
               (isLoggedIn ? (
                 <S.FirstBlockStartButton color="blue" fullWidth>
