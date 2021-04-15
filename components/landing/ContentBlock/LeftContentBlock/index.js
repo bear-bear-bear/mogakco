@@ -6,7 +6,7 @@ import SvgImage from '~/components/common/SvgImage';
 
 import * as S from './style';
 
-const LeftContentBlock = ({ title, subtitle, imgName, firstBlock }) => {
+const LeftContentBlock = ({ title, content, imgName, firstBlock }) => {
   // 임시로 작성한 state와 function
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const onSubmit = useCallback(() => {
@@ -19,7 +19,7 @@ const LeftContentBlock = ({ title, subtitle, imgName, firstBlock }) => {
         <Col xs={{ span: 24, order: 1 }} lg={{ span: 12, order: 0 }}>
           <S.ContentWrapper firstBlock={firstBlock}>
             <h1>{title}</h1>
-            <h3>{subtitle}</h3>
+            <h3>{content}</h3>
             {firstBlock &&
               (isLoggedIn ? (
                 <S.FirstBlockStartButton color="blue" fullWidth>
@@ -45,7 +45,7 @@ const LeftContentBlock = ({ title, subtitle, imgName, firstBlock }) => {
 
 LeftContentBlock.propTypes = {
   title: PropTypes.string.isRequired,
-  subtitle: PropTypes.string.isRequired,
+  content: PropTypes.string.isRequired,
   imgName: PropTypes.string.isRequired,
   firstBlock: PropTypes.bool,
 };

@@ -5,7 +5,7 @@ import SvgImage from '~/components/common/SvgImage';
 
 import * as S from './style';
 
-const RightContentBlock = ({ title, subtitle, imgName }) => {
+const RightContentBlock = ({ title, content, imgName }) => {
   return (
     <S.RightContentBlock>
       <Row justify="center" align="middle" gutter={20}>
@@ -15,7 +15,7 @@ const RightContentBlock = ({ title, subtitle, imgName }) => {
         <Col xs={{ span: 24 }} lg={{ span: 12 }}>
           <S.ContentWrapper>
             <h1>{title}</h1>
-            <h3>{subtitle}</h3>
+            <h3>{content}</h3>
           </S.ContentWrapper>
         </Col>
       </Row>
@@ -25,7 +25,7 @@ const RightContentBlock = ({ title, subtitle, imgName }) => {
 
 // RightContentBlock.propTypes = {
 //   title: PropTypes.string.isRequired,
-//   subtitle: PropTypes.string.isRequired,
+//   content: PropTypes.string.isRequired,
 //   imgName: PropTypes.string.isRequired,
 // };
 
