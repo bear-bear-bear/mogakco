@@ -13,12 +13,13 @@ export const LeftBlockContainer = styled.article(({ firstBlock }) => ({
 }));
 
 export const FirstBlockForm = styled.form`
+  width: 100%;
+  max-width: 30rem;
+  height: 3rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   margin-top: 2rem;
-  width: 100%;
-  height: 3rem;
 
   ${media.sm} {
     flex-direction: row;
@@ -79,8 +80,8 @@ export const FirstBlockStartButton = styled(Button)`
 const firstBlockFontStyles = () => {
   const fontSizes = {
     xs: {
-      h1: '2.1rem',
-      p: '1.33rem',
+      h1: '2.3rem',
+      p: '1.5rem',
     },
     sm: {
       h1: '3.2rem',
@@ -108,22 +109,30 @@ const firstBlockFontStyles = () => {
     `.trim();
 
   return css`
-    align-items: initial;
+    p {
+      margin-top: 1rem;
+      padding: initial;
+    }
 
-    h1 {
-      text-align: initial;
-      ${media.sm} {
+    ${media.sm} {
+      h1 {
         white-space: nowrap;
       }
-    }
-    p {
-      margin-top: 1.33rem;
-      text-align: initial;
-      padding: initial;
+      p {
+        margin-top: 1.33rem;
+      }
     }
 
     ${media.lg} {
       padding-right: initial;
+      align-items: initial;
+
+      h1 {
+        text-align: initial;
+      }
+      p {
+        text-align: initial;
+      }
     }
 
     ${mediaFontSizes('xs')}
@@ -143,6 +152,7 @@ export const ContentWrapper = styled.section`
     font-weight: 700;
     font-size: 2.1rem;
     text-align: center;
+    word-break: keep-all;
   }
   p {
     margin-top: 1rem;
@@ -151,19 +161,20 @@ export const ContentWrapper = styled.section`
     text-align: center;
     word-break: keep-all;
     line-height: 1.4;
-    padding: 0 1rem;
+    padding: 0 3rem;
 
     ${media.sm} {
-      padding: 0 1.2rem;
+      margin-top: 1rem;
+      padding: 0 2.2rem;
     }
     ${media.md} {
-      padding: 0 3rem;
+      padding: 0 4rem;
     }
     ${media.lg} {
-      padding: 0 1.2rem;
+      padding: 0 2.2rem;
     }
     ${media.xl} {
-      padding: 0 3rem;
+      padding: 0 4rem;
     }
   }
   ${media.lg} {
