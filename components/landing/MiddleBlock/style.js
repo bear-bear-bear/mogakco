@@ -53,7 +53,7 @@ export const ContentWrapper = styled.section`
 `;
 
 export const StartButton = styled(Button)`
-  width: 100%;
+  max-width: 50%;
   height: 3rem;
   display: flex;
   justify-content: center;
