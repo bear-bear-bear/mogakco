@@ -4,7 +4,7 @@ import { RiUser3Line } from 'react-icons/ri';
 import Logo from 'assets/svg/logo.svg';
 import media from '~/components/globalStyles/media';
 
-export const LandingHeader = styled.header`
+export const HeaderContainer = styled.header`
   ${media.sm} {
     padding: 1rem;
     padding-right: 0;

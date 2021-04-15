@@ -16,7 +16,7 @@ const Header = () => {
   }, []);
 
   return (
-    <S.LandingHeader>
+    <S.HeaderContainer>
       <Row justify="space-between">
         <Col flex="fit-content">
           <S.MainLogo />
@@ -42,7 +42,7 @@ const Header = () => {
           )}
         </Col>
       </Row>
-    </S.LandingHeader>
+    </S.HeaderContainer>
   );
 };
 
