@@ -1,4 +1,5 @@
-// import PropTypes from 'prop-types';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { Row, Col } from 'antd';
 import Fade from 'react-reveal/Fade';
 
@@ -26,10 +27,10 @@ const RightContentBlock = ({ title, content, imgName }) => {
   );
 };
 
-// RightContentBlock.propTypes = {
-//   title: PropTypes.string.isRequired,
-//   content: PropTypes.string.isRequired,
-//   imgName: PropTypes.string.isRequired,
-// };
+RightContentBlock.propTypes = {
+  title: PropTypes.string.isRequired,
+  content: PropTypes.string.isRequired,
+  imgName: PropTypes.string.isRequired,
+};
 
 export default RightContentBlock;
