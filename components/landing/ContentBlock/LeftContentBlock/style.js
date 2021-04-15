@@ -5,7 +5,7 @@ import Button from '~/components/common/Button';
 import media from '~/components/globalStyles/media';
 
 export const LeftBlockContainer = styled.article(({ firstBlock }) => ({
-  paddingTop: firstBlock ? '3rem' : '9rem',
+  paddingTop: firstBlock ? '5rem' : '9rem',
 
   [media.lg]: {
     paddingLeft: firstBlock ? '2.8rem' : '1.5rem',

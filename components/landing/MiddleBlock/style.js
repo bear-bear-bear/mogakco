@@ -4,7 +4,7 @@ import Button from '~/components/common/Button';
 import media from '~/components/globalStyles/media';
 
 export const MiddleBlockContainer = styled.article`
-  padding-top: 9rem;
+  padding-top: 12rem;
 `;
 
 export const ContentWrapper = styled.section`
