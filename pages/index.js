@@ -26,7 +26,11 @@ const Landing = () => {
         imgName="landing_sleep"
         firstBlock
       />
-      <MiddleBlock />
+      <MiddleBlock
+        subtitle="모여서 각자 코딩"
+        title="모각코는, 개발자들을 위한 무료 화상채팅 서비스입니다"
+        content="다른 개발자들과 소통하고 경쟁하며, 더 나은 자신을 향해 나아갈 동기를 얻어보세요!"
+      />
       <ContentBlock
         type="right"
         title="일정을 계획"
