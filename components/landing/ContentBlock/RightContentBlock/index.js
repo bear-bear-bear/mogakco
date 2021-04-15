@@ -7,7 +7,7 @@ import * as S from './style';
 
 const RightContentBlock = ({ title, content, imgName }) => {
   return (
-    <S.RightContentBlock>
+    <S.RightBlockContainer>
       <Row justify="center" align="middle" gutter={20}>
         <Col xs={{ span: 16 }} lg={{ span: 12 }}>
           <SvgImage name={imgName} width="100%" heigth="100%" />
@@ -19,7 +19,7 @@ const RightContentBlock = ({ title, content, imgName }) => {
           </S.ContentWrapper>
         </Col>
       </Row>
-    </S.RightContentBlock>
+    </S.RightBlockContainer>
   );
 };
 
