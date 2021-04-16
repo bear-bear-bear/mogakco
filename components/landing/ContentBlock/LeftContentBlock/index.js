@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Row, Col } from 'antd';
 import Fade from 'react-reveal/Fade';
 
-import SvgImage from '~/components/common/SvgImage';
+import Image from '~/components/common/Image';
 
 import * as S from './style';
 
@@ -38,7 +38,7 @@ const LeftContentBlock = ({ title, content, imgName, firstBlock }) => {
             </S.ContentWrapper>
           </Col>
           <Col xs={{ span: 16, order: 0 }} lg={{ span: 12, order: 1 }}>
-            <SvgImage name={imgName} width="100%" heigth="100%" />
+            <Image name={imgName} width="100%" heigth="100%" />
           </Col>
         </Row>
       </Fade>
