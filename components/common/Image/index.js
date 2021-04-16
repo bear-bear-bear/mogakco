@@ -1,9 +1,10 @@
 import PropTypes from 'prop-types';
 
-const SvgImage = ({ name, width, height }) => {
+const Image = ({ name, width, height }) => {
+  const ext = name?.match(/(?<=\.)([a-zA-Z]+)$/)[0];
   return (
     <img
-      src={`/assets/svg/${name}.svg`}
+      src={`/assets/${ext}/${name}`}
       alt={name}
       width={width}
       height={height}
@@ -11,14 +12,14 @@ const SvgImage = ({ name, width, height }) => {
   );
 };
 
-SvgImage.propTypes = {
+Image.propTypes = {
   name: PropTypes.string.isRequired,
   width: PropTypes.string,
   height: PropTypes.string,
 };
-SvgImage.defaultProps = {
+Image.defaultProps = {
   width: '100%',
   height: '100%',
 };
 
-export default SvgImage;
+export default Image;

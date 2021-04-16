@@ -2,9 +2,16 @@ import styled from '@emotion/styled';
 import { RiUser3Line } from 'react-icons/ri';
 
 import Logo from 'assets/svg/logo.svg';
+import media from '~/components/globalStyles/media';
 
-export const LandingHeader = styled.header`
-  padding: 1rem;
+export const HeaderContainer = styled.header`
+  max-width: 1280px;
+  margin: 0 auto;
+
+  ${media.sm} {
+    padding: 1rem;
+    padding-right: 0;
+  }
 `;
 
 export const ButtonsWrapper = styled.div`
@@ -13,7 +20,6 @@ export const ButtonsWrapper = styled.div`
   display: flex;
   justify-content: flex-end;
   align-items: flex-end;
-  padding-right: 1.66rem;
 `;
 
 export const MainLogo = styled(Logo)`
@@ -22,6 +28,8 @@ export const MainLogo = styled(Logo)`
 `;
 
 export const UserIcon = styled(RiUser3Line)`
+  position: relative;
+  top: -0.9rem;
   font-size: 2rem;
   cursor: pointer;
 `;
