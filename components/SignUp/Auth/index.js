@@ -21,9 +21,9 @@ import {
 import {
   verifyEmailRequest,
   verifySocialRequest,
-} from '~/redux/actions/signup/auth';
+} from '~/redux/actions/SignUp/auth';
 import useInput from '~/hooks/useInput';
-import { getVerifyEmailLoading } from '~/redux/selectors/signup';
+import { getVerifyEmailLoading } from '~/redux/selectors/SignUp';
 
 const emailRule = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
 

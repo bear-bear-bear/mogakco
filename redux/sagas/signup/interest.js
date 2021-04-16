@@ -3,7 +3,7 @@ import {
   VERIFY_INTEREST_REQUEST,
   VERIFY_INTEREST_SUCCESS,
   VERIFY_INTEREST_FAILURE,
-} from '~/redux/actions/signup/interest';
+} from '~/redux/actions/SignUp/interest';
 
 function* verifyInterest() {
   try {

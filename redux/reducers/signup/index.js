@@ -7,19 +7,19 @@ import {
   VERIFY_SOCIAL_REQUEST,
   VERIFY_SOCIAL_SUCCESS,
   VERIFY_SOCIAL_FAILURE,
-} from '~/redux/actions/signup/auth';
+} from '~/redux/actions/SignUp/auth';
 
 import {
   VERIFY_INFO_REQUEST,
   VERIFY_INFO_SUCCESS,
   VERIFY_INFO_FAILURE,
-} from '~/redux/actions/signup/info';
+} from '~/redux/actions/SignUp/info';
 
 import {
   VERIFY_INTEREST_REQUEST,
   VERIFY_INTEREST_SUCCESS,
   VERIFY_INTEREST_FAILURE,
-} from '~/redux/actions/signup/interest';
+} from '~/redux/actions/SignUp/interest';
 
 const initialState = {
   verifyEmailLoading: false,

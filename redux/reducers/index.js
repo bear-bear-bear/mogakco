@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import signupReducer from './signup';
+import signupReducer from './SignUp';
 
 const rootReducer = combineReducers({ signupReducer });
 

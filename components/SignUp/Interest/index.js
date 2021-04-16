@@ -12,7 +12,7 @@ import {
 
 import { Select, Option, WarningText } from './style';
 
-import { verifyInterestRequest } from '~/redux/actions/signup/interest';
+import { verifyInterestRequest } from '~/redux/actions/SignUp/interest';
 
 const Index = () => {
   const dispatch = useDispatch();

@@ -14,9 +14,9 @@ import {
 import { WarningText } from './style';
 
 import useInput from '~/hooks/useInput';
-import { verifyInfoRequest } from '~/redux/actions/signup/info';
+import { verifyInfoRequest } from '~/redux/actions/SignUp/info';
 
-const passwordRule = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,}$/;
+const passwordRule = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@!%*#?&])[A-Za-z\d$@!%*#?&]{8,}$/;
 
 const Index = () => {
   const dispatch = useDispatch();
