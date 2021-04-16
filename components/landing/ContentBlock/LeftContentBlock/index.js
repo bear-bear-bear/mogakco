@@ -16,9 +16,9 @@ const LeftContentBlock = ({ title, content, imgName, firstBlock }) => {
 
   return (
     <S.LeftBlockContainer firstBlock={firstBlock}>
-      <Fade bottom>
-        <Row justify="center" align="middle" gutter={20}>
-          <Col xs={{ span: 24, order: 1 }} lg={{ span: 12, order: 0 }}>
+      <Row justify="center" align="middle" gutter={20}>
+        <Col xs={{ span: 24, order: 1 }} lg={{ span: 12, order: 0 }}>
+          <Fade left>
             <S.ContentWrapper firstBlock={firstBlock}>
               <h1>{title}</h1>
               <p>{content}</p>
@@ -36,12 +36,14 @@ const LeftContentBlock = ({ title, content, imgName, firstBlock }) => {
                   </S.FirstBlockForm>
                 ))}
             </S.ContentWrapper>
-          </Col>
-          <Col xs={{ span: 16, order: 0 }} lg={{ span: 12, order: 1 }}>
+          </Fade>
+        </Col>
+        <Col xs={{ span: 16, order: 0 }} lg={{ span: 12, order: 1 }}>
+          <Fade right>
             <Image name={imgName} width="100%" heigth="100%" />
-          </Col>
-        </Row>
-      </Fade>
+          </Fade>
+        </Col>
+      </Row>
     </S.LeftBlockContainer>
   );
 };
