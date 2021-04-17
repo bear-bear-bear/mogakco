@@ -32,14 +32,24 @@ class UserService {
    * 토큰을 받아서 이메일을 보낸다.
    * 이메일 라이브러리를 뭘 쓸지, 구조를 어떻게 잡을지 생각 중입니다.
    */
-  public async createUserOne(user: createUserDTO) {
-    const newUser = await this.userRepository.createUserOne(user);
-    const {
-      userVerify: { id, token, userId },
-      verifyToken,
-    } = await this.userVerifyRepository.createOne(newUser);
-    console.log(id, token, verifyToken, userId);
-    return newUser;
+  // public async createUserOne(user: createUserDTO) {
+  //   const newUser = await this.userRepository.createUserOne(user);
+  //   const {
+  //     userVerify: { id, token, userId },
+  //     verifyToken,
+  //   } = await this.userVerifyRepository.createOne(newUser);
+  //   console.log(id, token, verifyToken, userId);
+  //   return newUser;
+  // }
+
+  /**
+   *
+   * @param id
+   */
+  public async prepareJoin(userEmail: string) {
+    const newVerify = await this.userVerifyRepository.createOne(userEmail);
+    const { email, token } = newVerify;
+    return [token, email];
   }
 
   public async findUserOne(id: number) {
@@ -71,7 +81,7 @@ class UserService {
       );
     }
     const hashedPassword = await makeHash(password);
-    await this.createUserOne({
+    await this.userRepository.createUserOne({
       username,
       password: hashedPassword,
       email,
@@ -119,7 +129,6 @@ class UserService {
    * 그렇지 않을 경우 검증 토큰을 다시 생성 및 이메일 전송
    */
   public async verifyUserWithToken(id: number, verifyToken: string) {
-    console.log(id, verifyToken);
     const userVerify = await this.userVerifyRepository.findOne({ id });
     if (!userVerify) {
       throw new InternalServerErrorException();
@@ -131,7 +140,7 @@ class UserService {
     if (userVerify.expiredAt < new Date()) {
       throw new UnauthorizedException('The verify token was expired.');
     }
-    const [userId, uuid] = verifyToken.split('|');
+    const [userId] = verifyToken.split('|');
     const user = await this.findUserOne(parseInt(userId, 10));
     if (!user && typeof user === 'boolean') {
       await this.userVerifyRepository.createOne(user);
@@ -143,11 +152,12 @@ class UserService {
   }
 
   public async resendEmail(user: User) {
-    const {
-      userVerify,
-      verifyToken,
-    } = await this.userVerifyRepository.createOne(user);
-    console.log(userVerify, verifyToken);
+    // const {
+    //   userVerify,
+    //   verifyToken,
+    // } = await this.userVerifyRepository.createOne(user);
+    // console.log(userVerify, verifyToken);
+    console.log('test');
   }
 }
 
