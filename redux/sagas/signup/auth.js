@@ -8,11 +8,12 @@ import {
   VERIFY_SOCIAL_FAILURE,
 } from '~/redux/actions/SignUp/auth';
 
-function* verifyEmail() {
+function* verifyEmail(action) {
   try {
-    yield delay(5000);
+    yield delay(1000);
     yield put({
       type: VERIFY_EMAIL_SUCCESS,
+      email: action.payload,
     });
   } catch (err) {
     yield put({

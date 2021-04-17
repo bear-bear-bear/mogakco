@@ -1,14 +1,17 @@
-import { takeLatest, delay, put } from 'redux-saga/effects';
+import { takeLatest, put } from 'redux-saga/effects';
 import {
   VERIFY_INFO_REQUEST,
   VERIFY_INFO_SUCCESS,
   VERIFY_INFO_FAILURE,
 } from '~/redux/actions/SignUp/info';
 
-function* verifyInfo() {
+function* verifyInfo({ payload }) {
   try {
-    yield delay(1000);
-    yield put({ type: VERIFY_INFO_SUCCESS });
+    yield put({
+      type: VERIFY_INFO_SUCCESS,
+      nickname: payload.nickname,
+      password: payload.password,
+    });
   } catch (err) {
     yield put({ type: VERIFY_INFO_FAILURE, error: err.response.data });
   }

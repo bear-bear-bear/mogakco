@@ -12,6 +12,7 @@ import {
   getVerifySocialDone,
   getVerifyInfoDone,
   getVerifyInterestDone,
+  getSignUpDone,
 } from '~/redux/selectors/SignUp';
 
 const Signup = () => {
@@ -19,7 +20,8 @@ const Signup = () => {
   const verifySocialDone = useSelector(getVerifySocialDone);
   const verifyInfoDone = useSelector(getVerifyInfoDone);
   const verifyInterestDone = useSelector(getVerifyInterestDone);
-  const fill = [verifyEmailDone, verifyInfoDone, verifyInterestDone];
+  const verifySignUpDone = useSelector(getSignUpDone);
+  const fill = [verifyEmailDone, verifyInfoDone, verifySignUpDone];
 
   return (
     <SignUpPageContainer>
@@ -27,8 +29,8 @@ const Signup = () => {
       <ProgressBar fill={fill} />
       {(!verifyEmailDone || !verifySocialDone) && <Auth />}
       {verifyEmailDone && !verifyInfoDone && <Info />}
-      {verifyInfoDone && !verifyInterestDone && <Interest />}
-      {verifyInterestDone && <Complete />}
+      {verifyInfoDone && !verifySignUpDone && <Interest />}
+      {verifyInterestDone && verifySignUpDone && <Complete />}
     </SignUpPageContainer>
   );
 };

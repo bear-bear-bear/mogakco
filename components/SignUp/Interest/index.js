@@ -28,7 +28,7 @@ const Index = () => {
       if (!job) {
         setJob(null);
       }
-      dispatch(verifyInterestRequest(field, job));
+      dispatch(verifyInterestRequest({ field, job }));
     },
     [dispatch, field, job],
   );

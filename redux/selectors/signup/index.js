@@ -1,5 +1,6 @@
 import { createSelector } from 'reselect';
 
+const selectExEmail = state => state.signupReducer.email;
 const selectVerifyEmailLoading = state =>
   state.signupReducer.verifyEmailLoading;
 const selectVerifyEmailDone = state => state.signupReducer.verifyEmailDone;
@@ -9,6 +10,9 @@ const selectVerifySocialDone = state => state.signupReducer.verifySocialDone;
 const selectVerifyInfoDone = state => state.signupReducer.verifyInfoDone;
 const selectVerifyInterestDone = state =>
   state.signupReducer.verifyInterestDone;
+const selectSignUptDone = state => state.signupReducer.signUpDone;
+
+export const getExEmail = createSelector(selectExEmail, value => value);
 
 export const getVerifyEmailLoading = createSelector(
   selectVerifyEmailLoading,
@@ -39,3 +43,5 @@ export const getVerifyInterestDone = createSelector(
   selectVerifyInterestDone,
   value => value,
 );
+
+export const getSignUpDone = createSelector(selectSignUptDone, value => value);

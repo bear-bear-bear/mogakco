@@ -12,7 +12,7 @@ const passwordRule = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@!%*#?&])[A-Za-z\d$@!%*#?&]{
 
 const Index = () => {
   const dispatch = useDispatch();
-  const [username, onChangeUserName] = useInput('');
+  const [nickname, onChangeNickname] = useInput('');
   const [password, onChangePassword] = useInput('');
   const [passwordConfirm, onChangePasswordConfirm] = useInput('');
   const [initSubmit, setInitSubmit] = useState(false);
@@ -62,9 +62,9 @@ const Index = () => {
         setTermError(true);
         return;
       }
-      dispatch(verifyInfoRequest(username, password));
+      dispatch(verifyInfoRequest({ nickname, password }));
     },
-    [dispatch, username, password, passwordConfirm, term],
+    [dispatch, nickname, password, passwordConfirm, term],
   );
 
   return (
@@ -72,12 +72,12 @@ const Index = () => {
       <CS.Title>별명과 비밀번호를 입력하세요</CS.Title>
       <CS.Form action="" onSubmit={onSubmit}>
         <CS.InputWrapper>
-          <CS.Label htmlFor="username">별명</CS.Label>
+          <CS.Label htmlFor="nickname">별명</CS.Label>
           <CS.Input
             type="text"
-            id="username"
-            value={username}
-            onChange={onChangeUserName}
+            id="nickname"
+            value={nickname}
+            onChange={onChangeNickname}
             page="info"
             required
           />
