@@ -5,6 +5,7 @@ import AppModule from './modules/app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
   app.use(cookieParser());
   app.setGlobalPrefix('api');
   app.useGlobalPipes(
@@ -14,6 +15,7 @@ async function bootstrap() {
       transform: true,
     }),
   );
+
   await app.listen(parseInt(process.env.SERVER_PORT as string, 10) || 8001);
 }
 

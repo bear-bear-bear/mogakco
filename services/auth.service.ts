@@ -11,13 +11,6 @@ import LoginUserDTO from 'models/dto/login-user.dto';
 import { JwtPayload } from './passport/jwt.payload';
 import UserService from './user.service';
 
-type GetUserType = {
-  id: number;
-  username: string;
-  password: string;
-  email: string;
-};
-
 @Injectable()
 class AuthService {
   constructor(
@@ -37,6 +30,7 @@ class AuthService {
       );
     }
     if (user && hash) {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { password, ...result } = user;
       return result;
     }

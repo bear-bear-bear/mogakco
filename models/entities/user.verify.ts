@@ -3,19 +3,18 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  JoinColumn,
-  OneToOne,
-  PrimaryColumn,
   PrimaryGeneratedColumn,
   Unique,
 } from 'typeorm';
-import User from './user';
 
 @Entity()
-@Unique(['id'])
+@Unique(['id', 'email'])
 class UserVerify extends BaseEntity {
   @PrimaryGeneratedColumn()
   public id!: number;
+
+  @Column({ length: 50 })
+  public email!: string;
 
   @Column()
   public token!: string;
@@ -26,9 +25,9 @@ class UserVerify extends BaseEntity {
   @Column({ name: 'expired_at' })
   public expiredAt!: Date;
 
-  @OneToOne(() => User)
-  @JoinColumn({ name: 'user_id' })
-  public userId!: number;
+  // @OneToOne(() => User)
+  // @JoinColumn({ name: 'user_id' })
+  // public userId!: number;
 }
 
 export default UserVerify;
