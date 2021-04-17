@@ -2,6 +2,7 @@
   "collection": "@nestjs/schematics",
   "sourceRoot": ".",
   "compilerOptions": {
-    "assets": ["**/*.pug"]
+    "assets": ["**/*.pug"],
+    "tsConfigPath": "tsconfig.build.json"
   }
 }

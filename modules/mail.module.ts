@@ -24,6 +24,6 @@ import { join } from 'path';
     }),
   ],
   providers: [],
-  exports: [MailModule],
+  exports: [],
 })
 export default class MailModule {}

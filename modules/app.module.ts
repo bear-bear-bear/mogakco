@@ -3,7 +3,6 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import Joi from 'joi';
 import UserVerify from 'models/entities/user.verify';
-import AppService from '../services/app.service';
 import User from '../models/entities/user';
 import AuthModule from './auth.module';
 import MailModule from './mail.module';
@@ -40,6 +39,6 @@ import MailModule from './mail.module';
     MailModule,
   ],
   controllers: [],
-  providers: [AppService],
+  providers: [],
 })
 export default class AppModule {}

@@ -8,11 +8,12 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcrypt';
 import User from 'models/entities/user';
+import { v4 as uuid } from 'uuid';
 import UserRepository from '../models/repositories/user.repository';
 import UserVerifyRepository from '../models/repositories/user.verify.repository';
 import createUserDTO from '../models/dto/create-user.dto';
 import updateUserRequestDto from '../test/unit/Services/dto/update-user-request.dto';
-import makeHash from '../test/unit/Services/helper/makeHash';
+import makeHash from '../lib/backend/makeHash';
 
 @Injectable()
 class UserService {
@@ -47,9 +48,20 @@ class UserService {
    * @param id
    */
   public async prepareJoin(userEmail: string) {
-    const newVerify = await this.userVerifyRepository.createOne(userEmail);
-    const { email, token } = newVerify;
-    return [token, email];
+    const currentUserVerify = await this.userVerifyRepository.findOne({
+      email: userEmail,
+    });
+    if (currentUserVerify) {
+      return [currentUserVerify.token, userEmail];
+    }
+
+    const verifyToken = await makeHash(`${userEmail}|${uuid()}`);
+    const newVerify = await this.userVerifyRepository.createOne(
+      userEmail,
+      verifyToken,
+    );
+
+    return [newVerify.token, userEmail];
   }
 
   public async findUserOne(id: number) {
@@ -143,7 +155,7 @@ class UserService {
     const [userId] = verifyToken.split('|');
     const user = await this.findUserOne(parseInt(userId, 10));
     if (!user && typeof user === 'boolean') {
-      await this.userVerifyRepository.createOne(user);
+      // await this.userVerifyRepository.createOne(user);
       return false;
     }
     user.verifiedAt = new Date();
