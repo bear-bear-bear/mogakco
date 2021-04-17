@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { ProgressBarWrapper, ProgressBarFiller } from './style';
+import * as S from './style';
 
 const Index = ({ fill }) => {
   return (
-    <ProgressBarWrapper>
-      <ProgressBarFiller fill={fill} />
-    </ProgressBarWrapper>
+    <S.ProgressBarWrapper>
+      <S.ProgressBarFiller fill={fill} />
+    </S.ProgressBarWrapper>
   );
 };
 

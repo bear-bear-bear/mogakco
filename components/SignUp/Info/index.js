@@ -1,15 +1,7 @@
 import React, { useCallback, useState, useEffect } from 'react';
 
 import { useDispatch } from 'react-redux';
-import {
-  Container,
-  Title,
-  Form,
-  InputWrapper,
-  Label,
-  Input,
-  SubmitButton,
-} from '../common/styles';
+import * as CS from '../common/styles';
 
 import WarningText from './style';
 
@@ -76,12 +68,12 @@ const Index = () => {
   );
 
   return (
-    <Container>
-      <Title>별명과 비밀번호를 입력하세요</Title>
-      <Form action="" onSubmit={onSubmit}>
-        <InputWrapper>
-          <Label htmlFor="username">별명</Label>
-          <Input
+    <CS.Container>
+      <CS.Title>별명과 비밀번호를 입력하세요</CS.Title>
+      <CS.Form action="" onSubmit={onSubmit}>
+        <CS.InputWrapper>
+          <CS.Label htmlFor="username">별명</CS.Label>
+          <CS.Input
             type="text"
             id="username"
             value={username}
@@ -89,10 +81,10 @@ const Index = () => {
             page="info"
             required
           />
-        </InputWrapper>
-        <InputWrapper>
-          <Label htmlFor="password">비밀번호</Label>
-          <Input
+        </CS.InputWrapper>
+        <CS.InputWrapper>
+          <CS.Label htmlFor="password">비밀번호</CS.Label>
+          <CS.Input
             type="password"
             id="password"
             value={password}
@@ -100,10 +92,10 @@ const Index = () => {
             page="info"
             required
           />
-        </InputWrapper>
-        <InputWrapper>
-          <Label htmlFor="passwordConfirm">비밀번호 확인</Label>
-          <Input
+        </CS.InputWrapper>
+        <CS.InputWrapper>
+          <CS.Label htmlFor="passwordConfirm">비밀번호 확인</CS.Label>
+          <CS.Input
             type="password"
             id="passwordConfirm"
             value={passwordConfirm}
@@ -111,7 +103,7 @@ const Index = () => {
             page="info"
             required
           />
-        </InputWrapper>
+        </CS.InputWrapper>
         <WarningText>
           ※ 비밀번호는 8자리 이상의 대소문자와 숫자, 특수문자를 각 1개 이상을
           입력하셔야 합니다
@@ -122,24 +114,24 @@ const Index = () => {
         {passwordMatchError && (
           <WarningText>비밀번호가 일치하지 않습니다!</WarningText>
         )}
-        <InputWrapper page="info">
-          <Input
+        <CS.InputWrapper page="info">
+          <CS.Input
             type="checkbox"
             id="policy"
             page="info"
             value={term}
             onChange={onChangeTerm}
           />
-          <Label htmlFor="policy" page="info">
+          <CS.Label htmlFor="policy" page="info">
             (필수)개인정보 수집 및 이용에 동의하겠습니다.
-          </Label>
-        </InputWrapper>
+          </CS.Label>
+        </CS.InputWrapper>
         {termError && <WarningText>약관에 동의하셔야 합니다!</WarningText>}
-        <SubmitButton type="submit" complete={false}>
+        <CS.SubmitButton type="submit" complete={false}>
           계속
-        </SubmitButton>
-      </Form>
-    </Container>
+        </CS.SubmitButton>
+      </CS.Form>
+    </CS.Container>
   );
 };
 

@@ -1,16 +1,8 @@
 import React, { useCallback, useState } from 'react';
 
 import { useDispatch } from 'react-redux';
-import {
-  Container,
-  InputWrapper,
-  SubmitButton,
-  Label,
-  Title,
-  Form,
-} from '../common/styles';
-
-import { Select, Option, WarningText } from './style';
+import * as CS from '../common/styles';
+import * as S from './style';
 
 import { verifyInterestRequest } from '~/redux/actions/SignUp/interest';
 
@@ -42,36 +34,36 @@ const Index = () => {
   );
 
   return (
-    <Container>
-      <Title>관심 분야를 입력하세요</Title>
-      <WarningText>
+    <CS.Container>
+      <CS.Title>관심 분야를 입력하세요</CS.Title>
+      <S.WarningText>
         ! 선택 사항입니다. 입력 시 분야별 랭킹에 이름을 올릴 수 있습니다!
-      </WarningText>
-      <Form action="" onSubmit={onSubmit}>
-        <InputWrapper>
-          <Label htmlFor="field">개발 분야</Label>
-          <Select id="field" page="interest" onChange={onChangeField}>
-            <Option value="">개발 분야를 선택해주세요</Option>
-            <Option value="frontend">프론트엔드</Option>
-            <Option value="backend">백엔드</Option>
-            <Option value="ai">인공지능</Option>
-            <Option value="embedded">임베디드</Option>
-            <Option value="datascience">데이터과학</Option>
-          </Select>
-        </InputWrapper>
-        <InputWrapper>
-          <Label htmlFor="job">직업</Label>
-          <Select id="job" page="interest" onChange={onChangeJob}>
-            <Option value="">직업을 선택해주세요</Option>
-            <Option value="worker">직장인</Option>
-            <Option value="student">학생</Option>
-          </Select>
-        </InputWrapper>
-        <SubmitButton type="submit" complete={false}>
+      </S.WarningText>
+      <CS.Form action="" onSubmit={onSubmit}>
+        <CS.InputWrapper>
+          <CS.Label htmlFor="field">개발 분야</CS.Label>
+          <S.Select id="field" page="interest" onChange={onChangeField}>
+            <S.Option value="">개발 분야를 선택해주세요</S.Option>
+            <S.Option value="frontend">프론트엔드</S.Option>
+            <S.Option value="backend">백엔드</S.Option>
+            <S.Option value="ai">인공지능</S.Option>
+            <S.Option value="embedded">임베디드</S.Option>
+            <S.Option value="datascience">데이터과학</S.Option>
+          </S.Select>
+        </CS.InputWrapper>
+        <CS.InputWrapper>
+          <CS.Label htmlFor="job">직업</CS.Label>
+          <S.Select id="job" page="interest" onChange={onChangeJob}>
+            <S.Option value="">직업을 선택해주세요</S.Option>
+            <S.Option value="worker">직장인</S.Option>
+            <S.Option value="student">학생</S.Option>
+          </S.Select>
+        </CS.InputWrapper>
+        <CS.SubmitButton type="submit" complete={false}>
           완료
-        </SubmitButton>
-      </Form>
-    </Container>
+        </CS.SubmitButton>
+      </CS.Form>
+    </CS.Container>
   );
 };
 

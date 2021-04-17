@@ -1,22 +1,8 @@
 import React, { useCallback, useState } from 'react';
 import GoogleLogo from 'assets/svg/btn_google_light_normal_ios.svg';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  Description,
-  SocialLoginWrapper,
-  SocialAnchor,
-  GithubImg,
-  WarningText,
-} from './style';
-
-import {
-  Container,
-  Title,
-  SubmitButton,
-  Form,
-  Input,
-  Text,
-} from '../common/styles';
+import * as S from './style';
+import * as CS from '../common/styles';
 
 import {
   verifyEmailRequest,
@@ -50,15 +36,15 @@ const Index = () => {
   }, [dispatch]);
 
   return (
-    <Container>
+    <CS.Container>
       {!verifyEmailLoading ? (
-        <Title>이메일을 입력하세요</Title>
+        <CS.Title>이메일을 입력하세요</CS.Title>
       ) : (
-        <Title>메일함을 확인하세요</Title>
+        <CS.Title>메일함을 확인하세요</CS.Title>
       )}
       {!verifyEmailLoading && (
-        <Form action="" onSubmit={onSubmit}>
-          <Input
+        <CS.Form action="" onSubmit={onSubmit}>
+          <CS.Input
             type="text"
             placeholder="example@gmail.com"
             value={email}
@@ -66,42 +52,42 @@ const Index = () => {
             onChange={onChangeEmail}
           />
           {emailTestError && (
-            <WarningText>정확한 이메일을 입력해주세요!</WarningText>
+            <S.WarningText>정확한 이메일을 입력해주세요!</S.WarningText>
           )}
-          <SubmitButton type="submit" complete={false}>
+          <CS.SubmitButton type="submit" complete={false}>
             인증메일 발송
-          </SubmitButton>
-        </Form>
+          </CS.SubmitButton>
+        </CS.Form>
       )}
       {verifyEmailLoading && (
-        <Description>
+        <S.Description>
           {email}로 인증메일이 전송되었습니다. 메일함을 확인해주세요.
-        </Description>
+        </S.Description>
       )}
       <br />
-      <Description>
+      <S.Description>
         이메일 인증을 성공하면 회원가입을 계속 진행할 수 있습니다.
-      </Description>
+      </S.Description>
       <br />
-      <Description>
+      <S.Description>
         이미 계정이 있으신가요? 여기를 눌러 로그인하세요.
-      </Description>
+      </S.Description>
       {!verifyEmailLoading && (
-        <SocialLoginWrapper>
-          <SocialAnchor service="google" href="#" onClick={onClickSocial}>
+        <S.SocialLoginWrapper>
+          <S.SocialAnchor service="google" href="#" onClick={onClickSocial}>
             <GoogleLogo />
-            <Text>Sign up with Google</Text>
-          </SocialAnchor>
-          <SocialAnchor service="github" href="##" onClick={onClickSocial}>
-            <GithubImg
+            <CS.Text>Sign up with Google</CS.Text>
+          </S.SocialAnchor>
+          <S.SocialAnchor service="github" href="##" onClick={onClickSocial}>
+            <S.GithubImg
               src="assets/images/GitHub-Mark-Light-32px.png"
               alt="github-social-login"
             />
-            <Text>Sign up with Github</Text>
-          </SocialAnchor>
-        </SocialLoginWrapper>
+            <CS.Text>Sign up with Github</CS.Text>
+          </S.SocialAnchor>
+        </S.SocialLoginWrapper>
       )}
-    </Container>
+    </CS.Container>
   );
 };
 
