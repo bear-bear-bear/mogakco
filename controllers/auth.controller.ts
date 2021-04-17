@@ -27,7 +27,6 @@ import createUserDTO from '../models/dto/create-user.dto';
 import response from './dto/response';
 import LoginBadRequestException from './exception/login.exception';
 import LoginUserDTO from '../models/dto/login-user.dto';
-import updateUserRequestDto from "../test/unit/services/dto/update-user-request.dto";
 
 @Controller('user')
 @UseInterceptors(ClassSerializerInterceptor)
@@ -146,7 +145,7 @@ class AuthController {
   }
 
   @Patch(':id')
-  updateUserOne(@Body() user: updateUserRequestDto) {
+  updateUserOne(@Body() user: any) {
     const updateUser = this.userService.updateUserOne(user);
     return updateUser;
   }
