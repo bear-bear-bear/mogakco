@@ -1,3 +1,5 @@
 html
   body
-    p #{username} 당신에게 해당 토큰을 전달합니다. #{hash};
+    if isDev
+      h3 인증을 완료하기 위해 해당 링크를 클릭해주세요.
+      p http://localhost:#{port}/api/user/verify-email?token=#{verifyToken}
