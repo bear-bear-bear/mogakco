@@ -12,7 +12,8 @@ import {
   UseInterceptors,
   ClassSerializerInterceptor,
   ValidationPipe,
-  Query, HttpStatus,
+  Query,
+  HttpStatus,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import JwtAuthGuard from 'services/passport/jwt.guard';

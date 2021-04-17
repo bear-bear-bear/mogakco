@@ -6,6 +6,7 @@ import AuthService from 'services/auth.service';
 import JwtStrategyWithRefresh from 'services/passport/jwt.refresh.strategy';
 import UserModule from './user.module';
 import AuthController from '../controllers/auth.controller';
+import EmailService from '../services/email.service';
 
 @Module({
   imports: [
@@ -16,7 +17,7 @@ import AuthController from '../controllers/auth.controller';
     UserModule,
   ],
   controllers: [AuthController],
-  providers: [AuthService, JwtStrategy, JwtStrategyWithRefresh],
+  providers: [AuthService, JwtStrategy, JwtStrategyWithRefresh, EmailService],
   exports: [JwtStrategy, JwtStrategyWithRefresh, PassportModule],
 })
 class AuthModule {}
