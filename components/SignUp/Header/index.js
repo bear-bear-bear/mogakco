@@ -10,8 +10,8 @@ const Index = () => {
   }, []);
 
   return (
-    <SignUpHeader css={LinkStyles}>
-      <Logo onClick={onClickLogo} />
+    <SignUpHeader>
+      <Logo css={LinkStyles} onClick={onClickLogo} />
     </SignUpHeader>
   );
 };

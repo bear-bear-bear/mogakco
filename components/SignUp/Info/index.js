@@ -11,7 +11,7 @@ import {
   SubmitButton,
 } from '../common/styles';
 
-import { WarningText } from './style';
+import WarningText from './style';
 
 import useInput from '~/hooks/useInput';
 import { verifyInfoRequest } from '~/redux/actions/SignUp/info';

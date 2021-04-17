@@ -1,11 +1,10 @@
-import { css } from '@emotion/react';
-import generateStyled from '~/lib/generateStyled';
+import styled from '@emotion/styled';
 
-const WarningTextStyles = css`
+const WarningText = styled.span`
   display: block;
   color: #f23f31;
   margin: 0 auto;
   margin-bottom: 1.875rem;
 `;
 
-export const WarningText = generateStyled('span', WarningTextStyles);
+export default WarningText;
