@@ -1,7 +1,9 @@
 import { Global, css } from '@emotion/react';
+
 import Resets from './_Resets';
 import FontFace from './_FontFace';
 import Variables from './_Variables';
+import media from './media';
 
 const GlobalStyles = props => (
   <>
@@ -23,6 +25,25 @@ const GlobalStyles = props => (
           -webkit-text-size-adjust: 100%;
           -webkit-font-smoothing: antialiased;
           text-rendering: optimizeLegibility;
+
+          ${media.xs} {
+            font-size: 14.5px;
+          }
+          ${media.sm} {
+            font-size: 15px;
+          }
+          ${media.md} {
+            font-size: 15px;
+          }
+          ${media.lg} {
+            font-size: 15.5px;
+          }
+          ${media.xl} {
+            font-size: 16px;
+          }
+          ${media.xxl} {
+            font-size: 16px;
+          }
         }
 
         body {

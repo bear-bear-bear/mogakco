@@ -1,6 +1,5 @@
 import { EntityRepository, Repository } from 'typeorm';
 import { InternalServerErrorException } from '@nestjs/common';
-import * as bcrypt from 'bcrypt';
 import User from '../entities/user';
 import createUserDTO from '../dto/create-user.dto';
 import updateUserRequestDto from '../../test/unit/Services/dto/update-user-request.dto';

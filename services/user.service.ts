@@ -8,11 +8,12 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcrypt';
 import User from 'models/entities/user';
+import { v4 as uuid } from 'uuid';
 import UserRepository from '../models/repositories/user.repository';
 import UserVerifyRepository from '../models/repositories/user.verify.repository';
 import createUserDTO from '../models/dto/create-user.dto';
 import updateUserRequestDto from '../test/unit/Services/dto/update-user-request.dto';
-import makeHash from '../test/unit/Services/helper/makeHash';
+import makeHash from '../lib/backend/makeHash';
 
 @Injectable()
 class UserService {
@@ -32,14 +33,35 @@ class UserService {
    * 토큰을 받아서 이메일을 보낸다.
    * 이메일 라이브러리를 뭘 쓸지, 구조를 어떻게 잡을지 생각 중입니다.
    */
-  public async createUserOne(user: createUserDTO) {
-    const newUser = await this.userRepository.createUserOne(user);
-    const {
-      userVerify: { id, token, userId },
+  // public async createUserOne(user: createUserDTO) {
+  //   const newUser = await this.userRepository.createUserOne(user);
+  //   const {
+  //     userVerify: { id, token, userId },
+  //     verifyToken,
+  //   } = await this.userVerifyRepository.createOne(newUser);
+  //   console.log(id, token, verifyToken, userId);
+  //   return newUser;
+  // }
+
+  /**
+   *
+   * @param id
+   */
+  public async prepareJoin(userEmail: string) {
+    const currentUserVerify = await this.userVerifyRepository.findOne({
+      email: userEmail,
+    });
+    if (currentUserVerify) {
+      return [currentUserVerify.token, userEmail];
+    }
+
+    const verifyToken = await makeHash(`${userEmail}|${uuid()}`);
+    const newVerify = await this.userVerifyRepository.createOne(
+      userEmail,
       verifyToken,
-    } = await this.userVerifyRepository.createOne(newUser);
-    console.log(id, token, verifyToken, userId);
-    return newUser;
+    );
+
+    return [newVerify.token, userEmail];
   }
 
   public async findUserOne(id: number) {
@@ -71,7 +93,7 @@ class UserService {
       );
     }
     const hashedPassword = await makeHash(password);
-    await this.createUserOne({
+    await this.userRepository.createUserOne({
       username,
       password: hashedPassword,
       email,
@@ -119,7 +141,6 @@ class UserService {
    * 그렇지 않을 경우 검증 토큰을 다시 생성 및 이메일 전송
    */
   public async verifyUserWithToken(id: number, verifyToken: string) {
-    console.log(id, verifyToken);
     const userVerify = await this.userVerifyRepository.findOne({ id });
     if (!userVerify) {
       throw new InternalServerErrorException();
@@ -131,10 +152,10 @@ class UserService {
     if (userVerify.expiredAt < new Date()) {
       throw new UnauthorizedException('The verify token was expired.');
     }
-    const [userId, uuid] = verifyToken.split('|');
+    const [userId] = verifyToken.split('|');
     const user = await this.findUserOne(parseInt(userId, 10));
     if (!user && typeof user === 'boolean') {
-      await this.userVerifyRepository.createOne(user);
+      // await this.userVerifyRepository.createOne(user);
       return false;
     }
     user.verifiedAt = new Date();
@@ -143,11 +164,12 @@ class UserService {
   }
 
   public async resendEmail(user: User) {
-    const {
-      userVerify,
-      verifyToken,
-    } = await this.userVerifyRepository.createOne(user);
-    console.log(userVerify, verifyToken);
+    // const {
+    //   userVerify,
+    //   verifyToken,
+    // } = await this.userVerifyRepository.createOne(user);
+    // console.log(userVerify, verifyToken);
+    console.log('test');
   }
 }
 
