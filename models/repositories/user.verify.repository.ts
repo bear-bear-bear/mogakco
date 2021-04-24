@@ -17,6 +17,12 @@ class UserVerifyRepository extends Repository<UserVerify> {
     await userVerify.save();
     return userVerify;
   }
+
+  public async findOneByEmail(id: number, email: string) {
+    const userVerify = await this.findOne({ id, email });
+    if (!userVerify) throw new Error('');
+    return userVerify;
+  }
 }
 
 export default UserVerifyRepository;

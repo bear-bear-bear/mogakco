@@ -100,26 +100,31 @@ class AuthController {
 
   /**
    *
-   * @param req 쿼리스트링의 토큰 아이디와 토큰이 주어집니다.
+   * @param req 쿼리스트링의 토큰 이메일와 평문 토큰이 주어집니다.
    * @returns
-   * 아이디와 토큰을 보내서 토큰이 일치하면 토큰을 분해
-   * 사용자 아이디를 얻어서 verified_at만 갱신
-   * 시간이 너무 지나 실패하면 false 반환, 이메일 다시 보냅니다.
+   * 이메일과 토큰을 보내서 토큰이 일치하면 불리언 값 반환
+   * 시간이 너무 지나 실패하면 false 반환, 이 경우에는 다시 이메일 검증 페이지로 가서 백엔드에 요청해야 합니다.
+   * 이메일이 중복되는 토큰 값이 있을 수 있기 때문에, 레코드의 ID 값까지 입력받습니다.
    */
   @Get('/verify-email')
-  async verify(@Query() req: { id: string; verify: string }) {
-    const { id, verify } = req;
-    const flag = await this.userService.verifyUserWithToken(
-      parseInt(id, 10),
-      verify,
+  async verify(
+    @Query() req: { id: string; email: string; verifyToken: string },
+  ) {
+    const { id, email, verifyToken } = req;
+    const isVerified = await this.userService.verifyEmail(
+      id,
+      email,
+      verifyToken,
     );
-    if (!flag) {
+    if (!isVerified) {
       return {
-        message: 'Not Verified. 이메일을 다시 보냈습니다.',
+        message: '토큰이 잘못되었거나, 요청 시간이 지났습니다.',
+        isVerified,
       };
     }
     return {
-      message: 'Vetified',
+      message: '이메일 확인에 성공했습니다.',
+      isVerified,
     };
   }
 
@@ -129,26 +134,26 @@ class AuthController {
    * 가입은 되어있지만 이메일 인증이 안되어있을 때 Post 요청으로 다시 이메일 전송
    * JWT 토큰을 통해 사용자 이메일 얻을 수 있음.
    */
-  @Post('/resend-email')
-  @UseGuards(JwtAuthGuard)
-  async reVerify(@Req() req: Request) {
-    const { email } = req.user as any;
-    const user = await this.userService.findUserByEmail(email);
-    if (!user) {
-      throw new UnauthorizedException();
-    }
-    if (user.verifiedAt) {
-      return {
-        statusCode: HttpStatus.OK,
-        message: '이미 겅증되어있습니다.',
-      };
-    }
-    await this.userService.resendEmail(user);
-    return {
-      status: HttpStatus.OK,
-      message: '이메일을 다시 발송합니다.',
-    };
-  }
+  // @Post('/resend-email')
+  // @UseGuards(JwtAuthGuard)
+  // async reVerify(@Req() req: Request) {
+  //   const { email } = req.user as any;
+  //   const user = await this.userService.findUserByEmail(email);
+  //   if (!user) {
+  //     throw new UnauthorizedException();
+  //   }
+  //   if (user.verifiedAt) {
+  //     return {
+  //       statusCode: HttpStatus.OK,
+  //       message: '이미 겅증되어있습니다.',
+  //     };
+  //   }
+  //   await this.userService.resendEmail(user);
+  //   return {
+  //     status: HttpStatus.OK,
+  //     message: '이메일을 다시 발송합니다.',
+  //   };
+  // }
 
   @Get('/:id')
   findUserOne(@Param('id') id: number) {
