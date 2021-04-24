@@ -1,8 +1,6 @@
 import {
   Get,
   Post,
-  Delete,
-  Patch,
   Param,
   Body,
   Controller,
@@ -15,7 +13,7 @@ import {
   ClassSerializerInterceptor,
   ValidationPipe,
   Query,
-  ParseIntPipe,
+  HttpStatus,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import JwtAuthGuard from 'services/passport/jwt.guard';
@@ -27,6 +25,8 @@ import createUserDTO from '../models/dto/create-user.dto';
 import response from './dto/response';
 import LoginBadRequestException from './exception/login.exception';
 import LoginUserDTO from '../models/dto/login-user.dto';
+import EmailService from '../services/email.service';
+import { prepareFailure } from '../lib/backend/log';
 
 @Controller('user')
 @UseInterceptors(ClassSerializerInterceptor)
@@ -34,6 +34,7 @@ class AuthController {
   constructor(
     private userService: UserService,
     private authService: AuthService,
+    private emailService: EmailService,
   ) {}
 
   // test Get Controller
@@ -54,6 +55,7 @@ class AuthController {
     if (!user) {
       throw new UnauthorizedException();
     }
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { password, hashedRefreshToken, ...props } = user;
     const {
       cookie: accessTokenCookie,
@@ -74,6 +76,26 @@ class AuthController {
   async join(@Body() user: createUserDTO): Promise<response> {
     const res = await this.userService.join(user);
     return res;
+  }
+
+  /**
+   * @description 사용자가 회원가입 전에, 인증 메일을 거쳐가는 단계 입니다.
+   */
+  @Post('/prepare')
+  async prepareJoin(@Body('email') email: string) {
+    try {
+      const [verifyToken, to] = await this.userService.prepareJoin(email);
+      this.emailService.userVerify({
+        to,
+        verifyToken,
+      });
+    } catch (e) {
+      prepareFailure(e);
+    }
+    return {
+      statusCode: HttpStatus.OK,
+      message: `이메일 전송 성공`,
+    };
   }
 
   /**
@@ -117,11 +139,13 @@ class AuthController {
     }
     if (user.verifiedAt) {
       return {
+        statusCode: HttpStatus.OK,
         message: '이미 겅증되어있습니다.',
       };
     }
     await this.userService.resendEmail(user);
     return {
+      status: HttpStatus.OK,
       message: '이메일을 다시 발송합니다.',
     };
   }
@@ -136,18 +160,6 @@ class AuthController {
   async findUserByName(@Param('username') username: string) {
     const findUser = await this.userService.findUserByName(username);
     return findUser;
-  }
-
-  @Delete(':id')
-  deleteUserOne(@Param('id') id: number) {
-    const deleteUser = this.userService.deleteUser(id);
-    return deleteUser;
-  }
-
-  @Patch(':id')
-  updateUserOne(@Body() user: any) {
-    const updateUser = this.userService.updateUserOne(user);
-    return updateUser;
   }
 
   @Post('/account')

@@ -36,7 +36,7 @@ const Index = () => (
       </SocialAnchor>
       <SocialAnchor service="github" href="##">
         <GithubImg
-          src="assets/images/GitHub-Mark-Light-32px.png"
+          src="assets/png/GitHub-Mark-Light-32px.png"
           alt="github-social-login"
         />
         <Text>Sign up with Github</Text>
