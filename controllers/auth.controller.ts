@@ -119,11 +119,13 @@ class AuthController {
     if (!isVerified) {
       return {
         message: '토큰이 잘못되었거나, 요청 시간이 지났습니다.',
+        statusCode: HttpStatus.FORBIDDEN,
         isVerified,
       };
     }
     return {
       message: '이메일 확인에 성공했습니다.',
+      statusCode: HttpStatus.OK,
       isVerified,
     };
   }
@@ -178,6 +180,7 @@ class AuthController {
     const { password, hashedRefreshToken, ...props } = user;
     return {
       message: 'Authenticated',
+      statusCode: HttpStatus.OK,
       user: props,
     };
   }
@@ -196,6 +199,7 @@ class AuthController {
     res.setHeader('Set-Cookie', accessTokenCookie);
     return {
       message: 'Authenticated & Refreshed',
+      statusCode: HttpStatus.OK,
       user: props,
     };
   }
@@ -206,6 +210,7 @@ class AuthController {
     res.setHeader('Set-Cookie', `x-token=; HttpOnly; Path=/; Max-Age=0`);
     return res.status(200).json({
       message: 'logout',
+      statusCode: HttpStatus.OK,
     });
   }
 
@@ -215,6 +220,7 @@ class AuthController {
     console.log(req.user);
     return {
       message: '1',
+      statusCode: HttpStatus.OK,
     };
   }
 }
