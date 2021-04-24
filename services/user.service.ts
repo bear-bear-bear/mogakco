@@ -3,6 +3,7 @@ import {
   HttpStatus,
   Injectable,
   InternalServerErrorException,
+  NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -45,13 +46,17 @@ class UserService {
 
   /**
    *
-   * @param id
+   * @param email
+   * 이메일을 입력받습니다.
+   * 이메일을 통해 이미 레코드가 있는지 보고, 레코드의 만료 날짜가 지났는지 검증합니다.
+   * 만료 날짜가 아직 지나지 않았다면 기존에 생성된 레코드를 그대로 리턴할 것입니다.
+   * 그렇지 않다면 새로운 레코드를 만들어서 프론트에 제공합니다.
    */
   public async prepareJoin(userEmail: string) {
     const currentUserVerify = await this.userVerifyRepository.findOne({
       email: userEmail,
     });
-    if (currentUserVerify) {
+    if (currentUserVerify && currentUserVerify.expiredAt > new Date()) {
       return [currentUserVerify.token, userEmail];
     }
 
@@ -62,6 +67,22 @@ class UserService {
     );
 
     return [newVerify.token, userEmail];
+  }
+
+  /**
+   *
+   * @param _id 컨트롤러에서 ID 값을 받습니다.
+   * @param email 컨트롤러에서 이메일 값을 받습니다.
+   * @param token 컨트롤러에서 토큰 값을 받습니다.
+   * @returns boolean
+   * id, 이메일 토큰 값으로 해당 테이블에 일치하는 레코드가 있는지 확인합니다.
+   */
+  public async verifyEmail(_id: string, email: string, token: string) {
+    const id = parseInt(_id, 10);
+    if (!id) throw new NotFoundException();
+    const record = await this.userVerifyRepository.findOneByEmail(id, email);
+    const isEqual = await bcrypt.compare(token, record.token);
+    return isEqual;
   }
 
   public async findUserOne(id: number) {
