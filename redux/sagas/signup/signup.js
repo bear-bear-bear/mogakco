@@ -1,18 +1,18 @@
-import { takeLatest, put, select, delay } from 'redux-saga/effects';
-import axios from 'axios';
+import { takeLatest, put, delay } from 'redux-saga/effects';
+// import axios from 'axios';
 import {
   SIGN_UP_REQUEST,
   SIGN_UP_SUCCESS,
   SIGN_UP_FAILURE,
 } from '~/redux/actions/SignUp/signup';
 
-const infoForSignUp = ({ signupReducer }) => ({
-  email: signupReducer.email,
-  nickname: signupReducer.nickname,
-  password: signupReducer.password,
-  field: signupReducer.field,
-  job: signupReducer.job,
-});
+// const infoForSignUp = ({ signupReducer }) => ({
+//   email: signupReducer.email,
+//   nickname: signupReducer.nickname,
+//   password: signupReducer.password,
+//   field: signupReducer.field,
+//   job: signupReducer.job,
+// });
 
 // const signUpApi = data => axios.post('/api/user', data);
 
