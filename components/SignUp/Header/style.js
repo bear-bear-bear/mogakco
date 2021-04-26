@@ -1,13 +1,10 @@
-import { css } from '@emotion/react';
-import generateStyled from '~/lib/generateStyled';
+import styled from '@emotion/styled';
 
-const SignUpHeaderStyles = css`
+const SignUpHeader = styled.header`
   display: flex;
   align-items: center;
   width: 100%;
   height: 6.6875rem;
 `;
-
-const SignUpHeader = generateStyled('header', SignUpHeaderStyles);
 
 export default SignUpHeader;
