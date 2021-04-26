@@ -3,16 +3,18 @@ import {
   HttpStatus,
   Injectable,
   InternalServerErrorException,
+  NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcrypt';
 import User from 'models/entities/user';
+import { v4 as uuid } from 'uuid';
 import UserRepository from '../models/repositories/user.repository';
 import UserVerifyRepository from '../models/repositories/user.verify.repository';
 import createUserDTO from '../models/dto/create-user.dto';
 import updateUserRequestDto from '../test/unit/Services/dto/update-user-request.dto';
-import makeHash from '../test/unit/Services/helper/makeHash';
+import makeHash from '../lib/backend/makeHash';
 
 @Injectable()
 class UserService {
@@ -32,14 +34,55 @@ class UserService {
    * 토큰을 받아서 이메일을 보낸다.
    * 이메일 라이브러리를 뭘 쓸지, 구조를 어떻게 잡을지 생각 중입니다.
    */
-  public async createUserOne(user: createUserDTO) {
-    const newUser = await this.userRepository.createUserOne(user);
-    const {
-      userVerify: { id, token, userId },
+  // public async createUserOne(user: createUserDTO) {
+  //   const newUser = await this.userRepository.createUserOne(user);
+  //   const {
+  //     userVerify: { id, token, userId },
+  //     verifyToken,
+  //   } = await this.userVerifyRepository.createOne(newUser);
+  //   console.log(id, token, verifyToken, userId);
+  //   return newUser;
+  // }
+
+  /**
+   *
+   * @param email
+   * 이메일을 입력받습니다.
+   * 이메일을 통해 이미 레코드가 있는지 보고, 레코드의 만료 날짜가 지났는지 검증합니다.
+   * 만료 날짜가 아직 지나지 않았다면 기존에 생성된 레코드를 그대로 리턴할 것입니다.
+   * 그렇지 않다면 새로운 레코드를 만들어서 프론트에 제공합니다.
+   */
+  public async prepareJoin(userEmail: string) {
+    const currentUserVerify = await this.userVerifyRepository.findOne({
+      email: userEmail,
+    });
+    if (currentUserVerify && currentUserVerify.expiredAt > new Date()) {
+      return [currentUserVerify.token, userEmail];
+    }
+
+    const verifyToken = await makeHash(`${userEmail}|${uuid()}`);
+    const newVerify = await this.userVerifyRepository.createOne(
+      userEmail,
       verifyToken,
-    } = await this.userVerifyRepository.createOne(newUser);
-    console.log(id, token, verifyToken, userId);
-    return newUser;
+    );
+
+    return [newVerify.token, userEmail];
+  }
+
+  /**
+   *
+   * @param _id 컨트롤러에서 ID 값을 받습니다.
+   * @param email 컨트롤러에서 이메일 값을 받습니다.
+   * @param token 컨트롤러에서 토큰 값을 받습니다.
+   * @returns boolean
+   * id, 이메일 토큰 값으로 해당 테이블에 일치하는 레코드가 있는지 확인합니다.
+   */
+  public async verifyEmail(_id: string, email: string, token: string) {
+    const id = parseInt(_id, 10);
+    if (!id) throw new NotFoundException();
+    const record = await this.userVerifyRepository.findOneByEmail(id, email);
+    const isEqual = await bcrypt.compare(token, record.token);
+    return isEqual;
   }
 
   public async findUserOne(id: number) {
@@ -71,7 +114,7 @@ class UserService {
       );
     }
     const hashedPassword = await makeHash(password);
-    await this.createUserOne({
+    await this.userRepository.createUserOne({
       username,
       password: hashedPassword,
       email,
@@ -119,7 +162,6 @@ class UserService {
    * 그렇지 않을 경우 검증 토큰을 다시 생성 및 이메일 전송
    */
   public async verifyUserWithToken(id: number, verifyToken: string) {
-    console.log(id, verifyToken);
     const userVerify = await this.userVerifyRepository.findOne({ id });
     if (!userVerify) {
       throw new InternalServerErrorException();
@@ -131,10 +173,10 @@ class UserService {
     if (userVerify.expiredAt < new Date()) {
       throw new UnauthorizedException('The verify token was expired.');
     }
-    const [userId, uuid] = verifyToken.split('|');
+    const [userId] = verifyToken.split('|');
     const user = await this.findUserOne(parseInt(userId, 10));
     if (!user && typeof user === 'boolean') {
-      await this.userVerifyRepository.createOne(user);
+      // await this.userVerifyRepository.createOne(user);
       return false;
     }
     user.verifiedAt = new Date();
@@ -143,11 +185,12 @@ class UserService {
   }
 
   public async resendEmail(user: User) {
-    const {
-      userVerify,
-      verifyToken,
-    } = await this.userVerifyRepository.createOne(user);
-    console.log(userVerify, verifyToken);
+    // const {
+    //   userVerify,
+    //   verifyToken,
+    // } = await this.userVerifyRepository.createOne(user);
+    // console.log(userVerify, verifyToken);
+    console.log('test');
   }
 }
 

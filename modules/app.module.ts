@@ -3,10 +3,9 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import Joi from 'joi';
 import UserVerify from 'models/entities/user.verify';
-import AppController from '../controllers/app.controller';
-import AppService from '../services/app.service';
 import User from '../models/entities/user';
 import AuthModule from './auth.module';
+import MailModule from './mail.module';
 
 @Module({
   imports: [
@@ -33,12 +32,13 @@ import AuthModule from './auth.module';
       password: process.env.DATABASE_PASSWORD as string,
       database: process.env.DATABASE_NAME as string,
       synchronize: process.env.NODE_ENV === 'development',
-      // logging: true,
+      logging: process.env.NODE_ENV === 'development',
       entities: [User, UserVerify],
     }),
     AuthModule,
+    MailModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [],
+  providers: [],
 })
 export default class AppModule {}
