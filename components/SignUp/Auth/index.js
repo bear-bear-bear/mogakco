@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import GoogleLogo from 'assets/svg/btn_google_light_normal_ios.svg';
 import { useDispatch, useSelector } from 'react-redux';
 import * as S from './style';
@@ -9,7 +9,7 @@ import {
   verifySocialRequest,
 } from '~/redux/actions/SignUp/auth';
 import useInput from '~/hooks/useInput';
-import { getVerifyEmailLoading, getExEmail } from '~/redux/selectors/SignUp';
+import { getVerifyEmailLoading } from '~/redux/selectors/SignUp';
 
 const emailRule = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
 
