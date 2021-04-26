@@ -1,4 +1,4 @@
-import { takeLatest, put, select, call, delay } from 'redux-saga/effects';
+import { takeLatest, put, select, delay } from 'redux-saga/effects';
 import axios from 'axios';
 import {
   SIGN_UP_REQUEST,
@@ -14,11 +14,11 @@ const infoForSignUp = ({ signupReducer }) => ({
   job: signupReducer.job,
 });
 
-const signUpApi = data => axios.post('/api/user', data);
+// const signUpApi = data => axios.post('/api/user', data);
 
 function* verifySignUp() {
   try {
-    const user = yield select(infoForSignUp);
+    // const user = yield select(infoForSignUp);
     // const result = yield call(signUpApi(user));
     yield delay(3000);
     yield put({ type: SIGN_UP_SUCCESS });

@@ -1,4 +1,4 @@
-import { takeLatest, put, select, call } from 'redux-saga/effects';
+import { takeLatest, put } from 'redux-saga/effects';
 import {
   VERIFY_INTEREST_REQUEST,
   VERIFY_INTEREST_SUCCESS,
