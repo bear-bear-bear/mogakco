@@ -1,4 +1,4 @@
-import wrapper from 'redux/store/configureStore';
+import wrapper from '~/redux/store/configureStore';
 import GlobalStyle from '~/components/globalStyles';
 
 const App = ({ Component, pageProps }) => {

@@ -1,25 +1,19 @@
-import { css } from '@emotion/react';
-import generateStyled from '~/lib/generateStyled';
+import styled from '@emotion/styled';
 
-const SelectStyles = css`
+export const Select = styled.select`
   width: 100%;
   font-size: 1rem;
   padding: 0.5rem;
   outline: 0;
 `;
 
-const OptionsStyles = css`
+export const Option = styled.option`
   outline: 0;
   padding: 0.5rem;
 `;
 
-const WarningTextStyles = css`
+export const WarningText = styled.span`
   position: absolute;
   top: 65px;
   color: #f13f31;
 `;
-
-// styled-components
-export const Select = generateStyled('select', SelectStyles);
-export const Option = generateStyled('option', OptionsStyles);
-export const WarningText = generateStyled('span', WarningTextStyles);

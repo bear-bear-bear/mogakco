@@ -1,12 +1,17 @@
 import React from 'react';
-import { ProgressBarWrapper, ProgressBarFiller } from './style';
+import PropTypes from 'prop-types';
+import * as S from './style';
 
-const Index = () => {
+const Index = ({ fill }) => {
   return (
-    <ProgressBarWrapper>
-      <ProgressBarFiller />
-    </ProgressBarWrapper>
+    <S.ProgressBarWrapper>
+      <S.ProgressBarFiller fill={fill} />
+    </S.ProgressBarWrapper>
   );
 };
 
 export default Index;
+
+Index.propTypes = {
+  fill: PropTypes.arrayOf(PropTypes.bool).isRequired,
+};
