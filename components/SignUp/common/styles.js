@@ -74,7 +74,7 @@ export const Input = styled.input(({ page, id }) => ({
   outline: 0,
 }));
 
-export const InputWrapper = styled.div(({ page }) => ({
+export const InputWrapper = styled.div(() => ({
   width: '100%',
   height: '3rem',
   display: 'flex',
