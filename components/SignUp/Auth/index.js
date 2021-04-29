@@ -86,7 +86,7 @@ const Index = () => {
           </S.SocialAnchor>
           <S.SocialAnchor service="github" href="##" onClick={onClickSocial}>
             <S.GithubImg
-              src="assets/images/GitHub-Mark-Light-32px.png"
+              src="assets/png/GitHub-Mark-Light-32px.png"
               alt="github-social-login"
             />
             <CS.Text>Sign up with Github</CS.Text>

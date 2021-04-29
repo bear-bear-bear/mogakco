@@ -5,7 +5,7 @@ export const ProgressBarWrapper = styled.div`
   width: 100%;
   background-color: #e0e0de;
   border-radius: 0.3125rem;
-  margin-top: 3.75rem;
+  margin-top: 2rem;
 `;
 
 const detectProgress = progress => {

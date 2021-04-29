@@ -15,7 +15,7 @@ export const Container = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin-top: 4.875rem;
+  margin-top: 2.5rem;
 `;
 
 export const Form = styled.form`
@@ -29,16 +29,16 @@ export const Form = styled.form`
 `;
 
 export const Title = styled.h1`
-  font-size: 2.25rem;
-  margin-bottom: 5rem;
+  font-size: 2rem;
+  margin-bottom: 2.5rem;
 `;
 
 export const SubmitButton = styled.button(({ complete }) => ({
-  width: !complete ? '11.25rem' : '17rem',
+  width: !complete ? '10rem' : '17rem',
   height: '3.75rem',
   backgroundColor: '#003f88',
   color: '#fff',
-  fontSize: '1.25rem',
+  fontSize: '1rem',
   border: 'none',
   borderRadius: '0.625rem',
   outline: 0,
@@ -47,19 +47,20 @@ export const SubmitButton = styled.button(({ complete }) => ({
   cursor: 'pointer',
 }));
 
-export const Label = styled.label(({ page }) => ({
+export const Label = styled.label(({ htmlFor }) => ({
   display: 'block',
-  width: page !== 'info' ? '100%' : '20.625rem',
+  width: htmlFor !== 'policy' ? '6rem' : 'fit-content',
   height: '100%',
-  textAlign: 'center',
+  textAlign: 'right',
   lineHeight: '3rem',
+  marginRight: '0.8rem',
 }));
 
 // Input width를 정하기 위한 헬퍼 함수
 const selectWidth = (page, id) => {
   if (page !== 'auth') {
     if (id !== 'policy') {
-      return '100%';
+      return '20rem';
     }
     return '0.66rem';
   }
@@ -77,10 +78,11 @@ export const InputWrapper = styled.div(({ page }) => ({
   width: '100%',
   height: '3rem',
   display: 'flex',
-  justifyContent: page !== 'info' ? 'space-between' : 'center',
+  // justifyContent: page !== 'info' ? 'space-between' : 'center',
+  justifyContent: 'center',
   alignItems: 'center',
   padding: '0 10rem',
-  marginBottom: '2.5rem',
+  marginBottom: '1rem',
 
   '&:nth-last-of-type(1)': {
     marginBottom: 0,

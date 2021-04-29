@@ -4,7 +4,7 @@ const bgColors = ['#ffffff', '#000000'];
 const fontColors = ['#A07575', '#ffffff'];
 
 export const Description = styled.div`
-  font-size: 1.25rem;
+  font-size: 1.125rem;
 `;
 
 export const SocialLoginWrapper = styled.div`
