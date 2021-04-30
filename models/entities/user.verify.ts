@@ -8,7 +8,7 @@ import {
 } from 'typeorm';
 
 @Entity()
-@Unique(['id', 'email'])
+@Unique(['id'])
 class UserVerify extends BaseEntity {
   @PrimaryGeneratedColumn()
   public id!: number;
