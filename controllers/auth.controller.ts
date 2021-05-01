@@ -37,7 +37,11 @@ class AuthController {
     private emailService: EmailService,
   ) {}
 
-  // test Get Controller
+  /**
+   * @desc 테스트 전용 컨트롤러 입니다.
+   * jest 에서 서버가 원활하게 작동하는 지 수행합니다.
+   * @author galaxy4276
+   */
   @Get('/test')
   public getTest() {
     return encodeURIComponent(
@@ -45,6 +49,10 @@ class AuthController {
     );
   }
 
+  /**
+   * @returns 로그인을 수행하고 로그인 정보를 반환합니다.
+   * @author quavious
+   */
   @Post('/login')
   @UseFilters(LoginBadRequestException)
   async login(
@@ -72,6 +80,12 @@ class AuthController {
     };
   }
 
+  /**
+   * @param 회원가입을 위한 유저 객체
+   * @desc 회원가입 컨트롤러 입니다.
+   * @returns 성공적으로 회원가입 된 사용자 객체
+   * @author galaxy4276
+   */
   @Post()
   async join(@Body() user: createUserDTO): Promise<response> {
     const res = await this.userService.join(user);
@@ -79,7 +93,9 @@ class AuthController {
   }
 
   /**
-   * @description 사용자가 회원가입 전에, 인증 메일을 거쳐가는 단계 입니다.
+   * @desc 사용자가 회원가입 전에, 인증 메일을 거쳐가는 단계 입니다.
+   * @author galaxy4276
+   * @param email required. ex ) galaxyhi4276@gmail.com
    */
   @Post('/prepare')
   async prepareJoin(@Body('email') email: string) {
@@ -99,12 +115,12 @@ class AuthController {
   }
 
   /**
-   *
    * @param req 쿼리스트링의 토큰 이메일와 평문 토큰이 주어집니다.
    * @returns
-   * 이메일과 토큰을 보내서 토큰이 일치하면 불리언 값 반환
+   * @desc 이메일과 토큰을 보내서 토큰이 일치하면 불리언 값 반환
    * 시간이 너무 지나 실패하면 false 반환, 이 경우에는 다시 이메일 검증 페이지로 가서 백엔드에 요청해야 합니다.
    * 이메일이 중복되는 토큰 값이 있을 수 있기 때문에, 레코드의 ID 값까지 입력받습니다.
+   * @author quavious
    */
   @Get('/verify-email')
   async verify(
@@ -133,8 +149,9 @@ class AuthController {
   /**
    *
    * @param req
-   * 가입은 되어있지만 이메일 인증이 안되어있을 때 Post 요청으로 다시 이메일 전송
+   * @desc 가입은 되어있지만 이메일 인증이 안되어있을 때 Post 요청으로 다시 이메일 전송
    * JWT 토큰을 통해 사용자 이메일 얻을 수 있음.
+   * @author quavious
    */
   // @Post('/resend-email')
   // @UseGuards(JwtAuthGuard)
@@ -157,18 +174,30 @@ class AuthController {
   //   };
   // }
 
+  /**
+   * @deprecated will be remove
+   * @author galaxy4276
+   */
   @Get('/:id')
   findUserOne(@Param('id') id: number) {
     const findUser = this.userService.findUserOne(id);
     return findUser;
   }
 
+  /**
+   * @deprecated will be remove
+   * @author galaxy4276
+   */
   @Get('/:username')
   async findUserByName(@Param('username') username: string) {
     const findUser = await this.userService.findUserByName(username);
     return findUser;
   }
 
+  /**
+   * @desc 사용자 정보를 반환합니다.
+   * @author quavious
+   */
   @Post('/account')
   @UseGuards(JwtAuthGuard)
   public async account(@Req() req: Request) {
@@ -185,6 +214,10 @@ class AuthController {
     };
   }
 
+  /**
+   * @desc refresh-token 을 갱신하여 반환합니다.
+   * @author quavious
+   */
   @Post('/refresh-token')
   @UseGuards(JwtAuthGuardWithRefresh)
   public async refresh(
