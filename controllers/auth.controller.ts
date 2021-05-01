@@ -80,8 +80,6 @@ class AuthController {
     };
   }
 
-  /**
-   * @param 회원가입을 위한 유저 객체
    * @desc 회원가입 컨트롤러 입니다.
    * @returns 성공적으로 회원가입 된 사용자 객체
    * @author galaxy4276
@@ -99,6 +97,9 @@ class AuthController {
    */
   @Post('/prepare')
   async prepareJoin(@Body('email') email: string) {
+    if (!email) throw Error('이메일 정보가 존재하지 않습니다.');
+
+    console.log({ email });
     try {
       const [verifyToken, to] = await this.userService.prepareJoin(email);
       this.emailService.userVerify({
