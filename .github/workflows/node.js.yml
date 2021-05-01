@@ -25,18 +25,32 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
+    - uses: getong/mariadb-action@v1.1
+      with:
+        host port: 3306
+        container port: 3306
+        character set server: 'utf8'
+        collation server: 'utf8_general_ci'
+        mariadb version: '10.4.10'
+        mysql database: 'mogakco'
+        mysql root password: 'mogatest'
+        mysql user: 'mogauser'
+        mysql password: 'mogatest'
 
-    - name: 패키지 의존성 업데이트..
+    - name: copy .env.example..
+      run: cp .env.example .env
+
+    - name: insall npm package dependencies...
       run: npm ci
 
-    - name: 백엔드 유닛 테스트 수행..
+    - name: NestJS Unit Test...
       run: npm run test
 
-    - name: 백엔드 문법 오류 검사 수행..
+    - name: NestJS eslint...
       run: npm run lint:backend
 
-    - name: 프런트엔드 문법 오류 검사 수행..
+    - name: NextJS eslint...
       run: npm run lint:frontend
 
-    - name: 백엔드 테스트 문법 오류 검사 수행..
+    - name: Server Test eslint...
       run: npm run lint:test-backend
