@@ -1,9 +1,10 @@
 import CustomHead from '~/components/common/CustomHead';
-import Container from '~/components/Landing/Container';
-import Header from '~/components/Landing/Header';
-import ContentBlock from '~/components/Landing/ContentBlock';
-import MiddleBlock from '~/components/Landing/MiddleBlock';
-import Footer from '~/components/Landing/Footer';
+import Container from '~/components/landing/Container';
+import Header from '~/components/landing/Header';
+import ContentBlock from '~/components/landing/ContentBlock';
+import MiddleBlock from '~/components/landing/MiddleBlock';
+import Footer from '~/components/landing/Footer';
+import ScrollTop from '~/components/common/ScrollTop';
 
 import 'antd/dist/antd.css';
 
@@ -20,6 +21,7 @@ const Landing = () => {
       <CustomHead {...pageProps} />
       <Header isLoggedIn={false} />
       <Container>
+        <ScrollTop verticalAlign="bottom" horizonAlign="right" />
         <ContentBlock
           type="left"
           title="혼자 하는 코딩은 쓰니까."
