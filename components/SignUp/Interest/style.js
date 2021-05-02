@@ -13,6 +13,6 @@ export const Option = styled.option`
 `;
 
 export const WarningText = styled.span`
-  color: #f13f31;
+  color: var(--color-red-1);
   margin-bottom: 2rem;
 `;

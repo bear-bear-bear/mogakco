@@ -1,9 +1,8 @@
 import React, { useCallback, useState } from 'react';
-import GoogleLogo from 'assets/svg/btn_google_light_normal_ios.svg';
 import { useDispatch, useSelector } from 'react-redux';
-import * as S from './style';
-import * as CS from '../common/styles';
 
+import GoogleLogo from 'assets/svg/btn_google_light_normal_ios.svg';
+import { emailRule } from '~/lib/regex';
 import {
   verifyEmailRequest,
   verifySocialRequest,
@@ -11,7 +10,8 @@ import {
 import useInput from '~/hooks/useInput';
 import { getVerifyEmailLoading } from '~/redux/selectors/SignUp';
 
-const emailRule = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
+import * as CS from '../common/styles';
+import * as S from './style';
 
 const Index = () => {
   const [email, onChangeEmail] = useInput('');
@@ -97,4 +97,4 @@ const Index = () => {
   );
 };
 
-export default React.memo(Index);
+export default Index;

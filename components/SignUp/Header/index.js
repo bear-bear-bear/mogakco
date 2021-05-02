@@ -1,7 +1,9 @@
 import React, { useCallback } from 'react';
 import Router from 'next/router';
-import SignUpHeader from './style';
+
 import Logo from '~/public/assets/svg/logo.svg';
+import SignUpHeader from './style';
+
 import { LinkStyles } from '../common/styles';
 
 const Index = () => {

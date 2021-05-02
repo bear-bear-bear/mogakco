@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+
 import * as S from './style';
 
 const Index = ({ fill }) => {
@@ -10,8 +11,8 @@ const Index = ({ fill }) => {
   );
 };
 
-export default Index;
-
 Index.propTypes = {
   fill: PropTypes.arrayOf(PropTypes.bool).isRequired,
 };
+
+export default Index;

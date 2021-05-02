@@ -6,12 +6,12 @@ import {
   SIGN_UP_FAILURE,
 } from '~/redux/actions/SignUp/signup';
 
-// const infoForSignUp = ({ signupReducer }) => ({
-//   email: signupReducer.email,
-//   nickname: signupReducer.nickname,
-//   password: signupReducer.password,
-//   field: signupReducer.field,
-//   job: signupReducer.job,
+// const infoForSignUp = ({ signUpReducer }) => ({
+//   email: signUpReducer.email,
+//   nickname: signUpReducer.nickname,
+//   password: signUpReducer.password,
+//   field: signUpReducer.field,
+//   job: signUpReducer.job,
 // });
 
 // const signUpApi = data => axios.post('/api/user', data);

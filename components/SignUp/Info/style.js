@@ -1,10 +1,8 @@
 import styled from '@emotion/styled';
 
-const WarningText = styled.span`
+export const WarningText = styled.span`
   display: block;
-  color: #f23f31;
+  color: var(--color-red-1);
   margin: 0 auto;
   margin-bottom: 1.875rem;
 `;
-
-export default WarningText;

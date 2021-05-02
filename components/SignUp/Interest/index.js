@@ -1,10 +1,10 @@
 import React, { useCallback, useState } from 'react';
-
 import { useDispatch } from 'react-redux';
-import * as CS from '../common/styles';
-import * as S from './style';
 
 import { verifyInterestRequest } from '~/redux/actions/SignUp/interest';
+
+import * as CS from '../common/styles';
+import * as S from './style';
 
 const Index = () => {
   const dispatch = useDispatch();
@@ -67,4 +67,4 @@ const Index = () => {
   );
 };
 
-export default React.memo(Index);
+export default Index;

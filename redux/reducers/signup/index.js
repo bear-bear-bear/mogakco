@@ -50,7 +50,7 @@ const initialState = {
   signUpError: null,
 };
 
-const signupReducer = handleActions(
+const signUpReducer = handleActions(
   {
     [VERIFY_EMAIL_REQUEST]: (state, action) =>
       produce(state, draft => {
@@ -147,4 +147,4 @@ const signupReducer = handleActions(
   initialState,
 );
 
-export default signupReducer;
+export default signUpReducer;

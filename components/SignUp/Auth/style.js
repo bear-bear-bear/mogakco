@@ -1,8 +1,5 @@
 import styled from '@emotion/styled';
 
-const bgColors = ['#ffffff', '#000000'];
-const fontColors = ['#A07575', '#ffffff'];
-
 export const Description = styled.div`
   font-size: 1.125rem;
 `;
@@ -19,21 +16,32 @@ export const SocialLoginWrapper = styled.div`
   }
 `;
 
-export const SocialAnchor = styled.a(({ service }) => ({
-  display: 'flex',
-  padding: '0.5rem',
-  width: '15rem',
-  height: '2.5rem',
-  textDecoration: 'none',
-  alignItems: 'center',
-  justifyContent: 'flex-start',
-  color: service === 'google' ? fontColors[0] : fontColors[1],
-  backgroundColor: service === 'google' ? bgColors[0] : bgColors[1],
-  borderRadius: '0.4rem',
-  fontSize: '1.125rem',
-  boxShadow: '0 3px 3px rgba(0, 0, 0, 0.5)',
-  cursor: 'pointer',
-}));
+export const SocialAnchor = styled.a`
+  display: flex;
+  padding: 0.5rem;
+  width: 15rem;
+  height: 3rem;
+  text-decoration: none;
+  align-items: center;
+  justify-content: flex-start;
+  color: ${props =>
+    props.service === 'google' ? 'var(--color-red-0)' : 'var(--color-white)'};
+  background-color: ${props =>
+    props.service === 'google'
+      ? 'var(--color-white-real)'
+      : 'var(--color-black)'};
+  border-radius: 0.4rem;
+  font-size: 1.125rem;
+  box-shadow: 0 3px 3px rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+
+  &:hover {
+    background-color: ${props =>
+      props.service === 'google'
+        ? 'var(--color-gray-0)'
+        : 'var(--color-gray-6)'};
+  }
+`;
 
 export const GithubImg = styled.img`
   width: 1.75rem;
@@ -43,7 +51,7 @@ export const GithubImg = styled.img`
 
 export const WarningText = styled.span`
   display: block;
-  color: #f23f31;
+  color: var(--color-red-1);
   margin: 0 auto;
   margin-top: 1.875rem;
 `;

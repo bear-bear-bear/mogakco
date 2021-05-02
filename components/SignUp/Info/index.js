@@ -1,14 +1,12 @@
 import React, { useCallback, useState, useEffect } from 'react';
-
 import { useDispatch } from 'react-redux';
-import * as CS from '../common/styles';
-
-import WarningText from './style';
 
 import useInput from '~/hooks/useInput';
 import { verifyInfoRequest } from '~/redux/actions/SignUp/info';
+import { passwordRule } from '~/lib/regex';
 
-const passwordRule = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@!%*#?&])[A-Za-z\d$@!%*#?&]{8,}$/;
+import * as CS from '../common/styles';
+import * as S from './style';
 
 const Index = () => {
   const dispatch = useDispatch();
@@ -21,50 +19,41 @@ const Index = () => {
   const [passwordTestError, setPasswordTestError] = useState(false);
   const [termError, setTermError] = useState(false);
 
+  const verifyInputs = useCallback(() => {
+    // input 모두 검증 후 전체 테스트 통과여부 반환
+    const isTermError = term === false;
+    setTermError(isTermError);
+
+    const isPasswordTestError = passwordRule.test(password) === false;
+    setPasswordTestError(isPasswordTestError);
+
+    const isPasswordMatchError = password !== passwordConfirm;
+    setPasswordMatchError(isPasswordMatchError);
+
+    return [isTermError, isPasswordTestError, isPasswordMatchError].every(
+      isError => isError === false,
+    );
+  }, [term, password, passwordConfirm]);
+
   useEffect(() => {
     // 처음 화면이 렌더링 됐을 땐 오류를 표시하지 않음
-    if (initSubmit) {
-      if (!term) {
-        setTermError(true);
-      } else {
-        setTermError(false);
-      }
-      if (!passwordRule.test(password)) {
-        setPasswordTestError(true);
-      } else {
-        setPasswordTestError(false);
-      }
-      if (password !== passwordConfirm) {
-        setPasswordMatchError(true);
-      } else {
-        setPasswordMatchError(false);
-      }
-    }
-  }, [password, passwordConfirm, term, initSubmit]);
+    if (!initSubmit) return;
+    verifyInputs();
+  }, [verifyInputs, initSubmit]);
 
   const onChangeTerm = useCallback(() => {
-    setTerm(!term);
-  }, [term]);
+    setTerm(prev => !prev);
+  }, []);
 
   const onSubmit = useCallback(
     e => {
       e.preventDefault();
       setInitSubmit(true);
-      if (!passwordRule.test(password)) {
-        setPasswordTestError(true);
-        return;
-      }
-      if (password !== passwordConfirm) {
-        setPasswordMatchError(true);
-        return;
-      }
-      if (!term) {
-        setTermError(true);
-        return;
-      }
+      const isAllPass = verifyInputs();
+      if (!isAllPass) return;
       dispatch(verifyInfoRequest({ nickname, password }));
     },
-    [dispatch, nickname, password, passwordConfirm, term],
+    [dispatch, verifyInputs, nickname, password],
   );
 
   return (
@@ -104,15 +93,15 @@ const Index = () => {
             required
           />
         </CS.InputWrapper>
-        <WarningText>
+        <S.WarningText>
           ※ 비밀번호는 8자리 이상의 대소문자와 숫자, 특수문자를 각 1개 이상을
           입력하셔야 합니다
-        </WarningText>
+        </S.WarningText>
         {passwordTestError && (
-          <WarningText>형식에 맞는 비밀번호를 입력하세요!</WarningText>
+          <S.WarningText>형식에 맞는 비밀번호를 입력하세요!</S.WarningText>
         )}
         {passwordMatchError && (
-          <WarningText>비밀번호가 일치하지 않습니다!</WarningText>
+          <S.WarningText>비밀번호가 일치하지 않습니다!</S.WarningText>
         )}
         <CS.InputWrapper page="info">
           <CS.Input
@@ -126,7 +115,7 @@ const Index = () => {
             (필수)개인정보 수집 및 이용에 동의하겠습니다.
           </CS.Label>
         </CS.InputWrapper>
-        {termError && <WarningText>약관에 동의하셔야 합니다!</WarningText>}
+        {termError && <S.WarningText>약관에 동의하셔야 합니다!</S.WarningText>}
         <CS.SubmitButton type="submit" complete={false}>
           계속
         </CS.SubmitButton>
@@ -135,4 +124,4 @@ const Index = () => {
   );
 };
 
-export default React.memo(Index);
+export default Index;

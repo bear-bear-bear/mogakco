@@ -33,19 +33,23 @@ export const Title = styled.h1`
   margin-bottom: 2.5rem;
 `;
 
-export const SubmitButton = styled.button(({ complete }) => ({
-  width: !complete ? '10rem' : '17rem',
-  height: '3.75rem',
-  backgroundColor: '#003f88',
-  color: '#fff',
-  fontSize: '1rem',
-  border: 'none',
-  borderRadius: '0.625rem',
-  outline: 0,
-  marginTop: '2.625rem',
-  alignSelf: !complete ? 'flex-end' : 'none',
-  cursor: 'pointer',
-}));
+export const SubmitButton = styled.button`
+  width: ${props => (!props.complete ? '10rem' : '17rem')};
+  height: 3.75rem;
+  background-color: var(--color-blue-0);
+  color: var(--color-white-real);
+  font-size: 1rem;
+  border: none;
+  border-radius: 0.625rem;
+  outline: 0;
+  margin-top: 2.625rem;
+  align-self: ${props => (!props.complete ? 'flex-end' : 'none')};
+  cursor: pointer;
+
+  &:hover {
+    background-color: var(--color-blue-1);
+  }
+`;
 
 export const Label = styled.label(({ htmlFor }) => ({
   display: 'block',
@@ -78,7 +82,6 @@ export const InputWrapper = styled.div(() => ({
   width: '100%',
   height: '3rem',
   display: 'flex',
-  // justifyContent: page !== 'info' ? 'space-between' : 'center',
   justifyContent: 'center',
   alignItems: 'center',
   padding: '0 10rem',

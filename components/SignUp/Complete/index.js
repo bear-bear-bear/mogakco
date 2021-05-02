@@ -1,5 +1,6 @@
 import React, { useCallback } from 'react';
 import Router from 'next/router';
+
 import * as CS from '../common/styles';
 
 const Index = () => {
