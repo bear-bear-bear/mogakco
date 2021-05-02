@@ -55,6 +55,7 @@ const Index = () => {
             placeholder="example@gmail.com"
             value={email}
             page="auth"
+            spellCheck="false"
             onChange={onChangeEmail}
           />
           {emailTestError && (
