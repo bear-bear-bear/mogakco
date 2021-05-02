@@ -1,12 +1,14 @@
 import { Config } from '@jest/types';
 
 const config: Config.InitialOptions = {
-  moduleFileExtensions: ['ts', 'json', 'js'],
+  transformIgnorePatterns: ['<rootDir>/node_modules/'],
+  moduleFileExtensions: ['ts', 'json', 'js', 'jsx'],
   rootDir: './',
   testEnvironment: 'node',
   collectCoverageFrom: ['**/*.(t|j)s'],
   transform: {
     '^.+\\.(t|j)s$': 'ts-jest',
+    '^.+\\.svg$': '<rootDir>/lib/svgTransform.js',
   },
 };
 
