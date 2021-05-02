@@ -15,7 +15,7 @@ export const ScrollTop = styled.div`
   align-items: center;
   border-radius: 50%;
   cursor: pointer;
-  transition: opacity 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
 
   opacity: 0;
   visibility: none;
@@ -23,6 +23,11 @@ export const ScrollTop = styled.div`
   ${media.lg} {
     opacity: initial;
     visibility: initial;
+  }
+
+  &:hover,
+  &:focus {
+    transform: scale(1.3);
   }
 `;
 
