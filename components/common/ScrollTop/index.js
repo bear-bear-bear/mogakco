@@ -1,11 +1,11 @@
 import React from 'react';
 
-import toScrollTop from '~/lib/toScrollTop';
+import scrollToTop from '~/lib/scrollToTop';
 
 import * as S from './style';
 
 const ScrollTop = () => (
-  <S.ScrollTop onClick={() => toScrollTop()}>
+  <S.ScrollTop onClick={() => scrollToTop()}>
     <S.ChevronUp />
   </S.ScrollTop>
 );
