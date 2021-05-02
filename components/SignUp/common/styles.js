@@ -1,5 +1,7 @@
 import { css } from '@emotion/react';
-import generateStyled from '~/lib/generateStyled';
+import styled from '@emotion/styled';
+
+export const Text = styled.span``;
 
 export const LinkStyles = css`
   text-decoration: none;
@@ -7,16 +9,16 @@ export const LinkStyles = css`
   cursor: pointer;
 `;
 
-const ContainerStyles = css`
+export const Container = styled.div`
   position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin-top: 4.875rem;
+  margin-top: 2.5rem;
 `;
 
-const FormStyles = css`
+export const Form = styled.form`
   position: relative;
   display: flex;
   width: 54rem;
@@ -26,79 +28,70 @@ const FormStyles = css`
   margin-bottom: 3.25rem;
 `;
 
-const TitleStyles = css`
-  font-size: 2.25rem;
-  margin-bottom: 5rem;
+export const Title = styled.h1`
+  font-size: 2rem;
+  margin-bottom: 2.5rem;
 `;
 
-const SubmitBtnStyles = ({ complete }) => css`
-  width: ${!complete ? '11.25rem' : '17rem'};
+export const SubmitButton = styled.button`
+  width: ${props => (!props.complete ? '10rem' : '17rem')};
   height: 3.75rem;
-  background-color: #003f88;
-  color: #fff;
-  font-size: 1.25rem;
+  background-color: var(--color-blue-0);
+  color: var(--color-white-real);
+  font-size: 1rem;
   border: none;
   border-radius: 0.625rem;
   outline: 0;
   margin-top: 2.625rem;
-  align-self: ${!complete ? 'flex-end' : 'none'};
+  align-self: ${props => (!props.complete ? 'flex-end' : 'none')};
   cursor: pointer;
+
+  &:hover {
+    background-color: var(--color-blue-1);
+  }
 `;
 
-const LabelStyles = ({ page }) => css`
-  display: block;
-  width: ${page !== 'info' ? '100%' : '20.625rem'};
-  height: 100%;
-  text-align: center;
-  line-height: 3rem;
-`;
+export const Label = styled.label(({ htmlFor }) => ({
+  display: 'block',
+  width: htmlFor !== 'policy' ? '6rem' : 'fit-content',
+  height: '100%',
+  textAlign: 'right',
+  lineHeight: '3rem',
+  marginRight: '0.8rem',
+}));
 
 // Input width를 정하기 위한 헬퍼 함수
 const selectWidth = (page, id) => {
   if (page !== 'auth') {
     if (id !== 'policy') {
-      return '100%';
+      return '20rem';
     }
     return '0.66rem';
   }
   return '40rem';
 };
 
-const InputStyles = ({ page, id }) => css`
-  width: ${selectWidth(page, id)};
-  padding: 0.5rem;
-  font-size: 1rem;
-  outline: 0;
-`;
+export const Input = styled.input(({ page, id }) => ({
+  width: selectWidth(page, id),
+  padding: '0.5rem',
+  fontSize: '1rem',
+  outline: 0,
+}));
 
-const InputWrapperStyles = ({ page }) => css`
-  width: 100%;
-  height: 3rem;
-  display: flex;
-  justify-content: ${page !== 'info' ? 'space-between' : 'center'};
-  align-items: center;
-  padding: 0 10rem;
-  margin-bottom: 2.5rem;
+export const InputWrapper = styled.div(() => ({
+  width: '100%',
+  height: '3rem',
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  padding: '0 10rem',
+  marginBottom: '1rem',
 
-  &:nth-last-of-type(1) {
-    margin-bottom: 0;
-  }
-`;
+  '&:nth-last-of-type(1)': {
+    marginBottom: 0,
+  },
+}));
 
-const SignUpPageContainerStyles = css`
+export const SignUpPageContainer = styled.div`
   padding: 0 calc(200 / 1000 * 100%);
 `;
-
-// styled-components
-export const Text = generateStyled('span');
-export const Container = generateStyled('div', ContainerStyles);
-export const Title = generateStyled('h1', TitleStyles);
-export const InputWrapper = generateStyled('div', InputWrapperStyles);
-export const Input = generateStyled('input', InputStyles);
-export const Label = generateStyled('label', LabelStyles);
-export const Form = generateStyled('form', FormStyles);
-export const SubmitButton = generateStyled('button', SubmitBtnStyles);
-export const SignUpPageContainer = generateStyled(
-  'div',
-  SignUpPageContainerStyles,
-);

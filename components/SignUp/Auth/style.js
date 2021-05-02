@@ -1,14 +1,10 @@
-import { css } from '@emotion/react';
-import generateStyled from '~/lib/generateStyled';
+import styled from '@emotion/styled';
 
-const bgColors = ['#ffffff', '#000000'];
-const fontColors = ['#A07575', '#ffffff'];
-
-export const DescriptionStyles = css`
-  font-size: 1.25rem;
+export const Description = styled.div`
+  font-size: 1.125rem;
 `;
 
-const SocialLoginWrapperStyles = css`
+export const SocialLoginWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -20,33 +16,42 @@ const SocialLoginWrapperStyles = css`
   }
 `;
 
-const SocialAnchorStyles = ({ service }) => css`
+export const SocialAnchor = styled.a`
   display: flex;
   padding: 0.5rem;
   width: 15rem;
-  height: 2.5rem;
+  height: 3rem;
   text-decoration: none;
   align-items: center;
   justify-content: flex-start;
-  color: ${service === 'google' ? fontColors[0] : fontColors[1]};
-  background-color: ${service === 'google' ? bgColors[0] : bgColors[1]};
+  color: ${props =>
+    props.service === 'google' ? 'var(--color-red-0)' : 'var(--color-white)'};
+  background-color: ${props =>
+    props.service === 'google'
+      ? 'var(--color-white-real)'
+      : 'var(--color-black)'};
   border-radius: 0.4rem;
   font-size: 1.125rem;
   box-shadow: 0 3px 3px rgba(0, 0, 0, 0.5);
   cursor: pointer;
+
+  &:hover {
+    background-color: ${props =>
+      props.service === 'google'
+        ? 'var(--color-gray-0)'
+        : 'var(--color-gray-6)'};
+  }
 `;
 
-const GithubImageStyles = css`
+export const GithubImg = styled.img`
   width: 1.75rem;
   height: 1.75rem;
   margin: 0 0.625rem;
 `;
 
-// styled-components
-export const Description = generateStyled('p', DescriptionStyles);
-export const SocialLoginWrapper = generateStyled(
-  'div',
-  SocialLoginWrapperStyles,
-);
-export const SocialAnchor = generateStyled('a', SocialAnchorStyles);
-export const GithubImg = generateStyled('img', GithubImageStyles);
+export const WarningText = styled.span`
+  display: block;
+  color: var(--color-red-1);
+  margin: 0 auto;
+  margin-top: 1.875rem;
+`;
