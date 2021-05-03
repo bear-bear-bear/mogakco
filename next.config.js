@@ -1,7 +1,7 @@
 const path = require('path');
 
 module.exports = {
-  webpack: config => {
+  webpack: (config) => {
     config.resolve.alias['~'] = path.resolve(__dirname);
     config.resolve.alias.assets = path.resolve('public/assets');
     config.module.rules.push({

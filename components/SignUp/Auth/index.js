@@ -26,7 +26,7 @@ const Index = () => {
   // }, [exEmail]);
 
   const onSubmit = useCallback(
-    e => {
+    (e) => {
       e.preventDefault();
       if (!emailRule.test(email)) {
         setEmailTestError(true);
@@ -55,6 +55,7 @@ const Index = () => {
             placeholder="example@gmail.com"
             value={email}
             page="auth"
+            spellCheck="false"
             onChange={onChangeEmail}
           />
           {emailTestError && (

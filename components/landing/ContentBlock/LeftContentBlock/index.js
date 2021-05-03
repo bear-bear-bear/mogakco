@@ -34,8 +34,13 @@ const LeftContentBlock = ({ title, content, imgName, firstBlock }) => {
                     시작하기
                   </S.FirstBlockStartButton>
                 ) : (
-                  <S.FirstBlockForm onSubmit={onSubmit}>
-                    <S.FirstBlockInput placeholder="이메일 입력" required />
+                  <S.FirstBlockForm onSubmit={onSubmit} spellcheck="false">
+                    <S.FirstBlockInput
+                      type="email"
+                      placeholder="이메일 입력"
+                      spellCheck="false"
+                      required
+                    />
                     <S.FirstBlockJoinButton color="blue" type="submit">
                       회원가입
                     </S.FirstBlockJoinButton>

@@ -14,7 +14,7 @@ import {
 //   job: signUpReducer.job,
 // });
 
-// const signUpApi = data => axios.post('/api/user', data);
+// const signUpApi = (data) => axios.post('/api/user', data);
 
 function* verifySignUp() {
   try {

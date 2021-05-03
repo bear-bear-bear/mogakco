@@ -24,9 +24,9 @@ export const SocialAnchor = styled.a`
   text-decoration: none;
   align-items: center;
   justify-content: flex-start;
-  color: ${props =>
+  color: ${(props) =>
     props.service === 'google' ? 'var(--color-red-0)' : 'var(--color-white)'};
-  background-color: ${props =>
+  background-color: ${(props) =>
     props.service === 'google'
       ? 'var(--color-white-real)'
       : 'var(--color-black)'};
@@ -36,7 +36,7 @@ export const SocialAnchor = styled.a`
   cursor: pointer;
 
   &:hover {
-    background-color: ${props =>
+    background-color: ${(props) =>
       props.service === 'google'
         ? 'var(--color-gray-0)'
         : 'var(--color-gray-6)'};
