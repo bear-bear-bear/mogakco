@@ -1,18 +1,24 @@
-import React, { useState, useCallback } from 'react';
+import React from 'react';
+import { useSelector } from 'react-redux';
+import Router from 'next/router';
 import PropTypes from 'prop-types';
 import { Row, Col } from 'antd';
 import Fade from 'react-reveal/Fade';
 
+import { meSelector } from '~/redux/selectors/common/user';
 import Image from '~/components/common/Image';
 
 import * as S from './style';
 
 const LeftContentBlock = ({ title, content, imgName, firstBlock }) => {
   // 임시로 작성한 state와 function
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const onSubmit = useCallback(() => {
-    setIsLoggedIn(true);
-  }, []);
+  const me = useSelector(meSelector);
+
+  const toSignUp = (e) => {
+    // TODO: 현재 이메일 입력 값을 회원가입 첫 페이지 이메일 입력창으로 전달
+    e.preventDefault();
+    Router.push('/signup');
+  };
 
   return (
     <S.LeftBlockContainer firstBlock={firstBlock}>
@@ -23,12 +29,12 @@ const LeftContentBlock = ({ title, content, imgName, firstBlock }) => {
               <h1>{title}</h1>
               <p>{content}</p>
               {firstBlock &&
-                (isLoggedIn ? (
+                (me ? (
                   <S.FirstBlockStartButton color="blue" fullWidth>
                     시작하기
                   </S.FirstBlockStartButton>
                 ) : (
-                  <S.FirstBlockForm onSubmit={onSubmit} spellcheck="false">
+                  <S.FirstBlockForm onSubmit={toSignUp} spellcheck="false">
                     <S.FirstBlockInput
                       type="email"
                       placeholder="이메일 입력"
