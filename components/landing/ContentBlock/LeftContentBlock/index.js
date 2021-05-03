@@ -14,7 +14,7 @@ const LeftContentBlock = ({ title, content, imgName, firstBlock }) => {
   // 임시로 작성한 state와 function
   const me = useSelector(meSelector);
 
-  const onSubmit = useCallback(e => {
+  const onSubmit = useCallback((e) => {
     // TODO: 현재 이메일 입력 값을 회원가입 첫 페이지 이메일 입력창으로 전달
     e.preventDefault();
     Router.push('/signup');

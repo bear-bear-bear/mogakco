@@ -30,39 +30,39 @@ const dummyUser = {
 
 const user = handleActions(
   {
-    [LOGIN_REQUEST]: state =>
-      produce(state, draft => {
+    [LOGIN_REQUEST]: (state) =>
+      produce(state, (draft) => {
         draft.logInLoading = true;
         draft.logInDone = false;
         draft.logInError = null;
       }),
     // eslint-disable-next-line no-unused-vars
     [LOGIN_SUCCESS]: (state, { payload: me }) =>
-      produce(state, draft => {
+      produce(state, (draft) => {
         draft.logInLoading = false;
         draft.logInDone = true;
         // draft.me = me;
         draft.me = dummyUser;
       }),
     [LOGIN_FAILURE]: (state, { payload: error }) =>
-      produce(state, draft => {
+      produce(state, (draft) => {
         draft.logInLoading = false;
         draft.logInError = error;
       }),
-    [LOGOUT_REQUEST]: state =>
-      produce(state, draft => {
+    [LOGOUT_REQUEST]: (state) =>
+      produce(state, (draft) => {
         draft.logOutLoading = true;
         draft.logOutDone = false;
         draft.logOutError = null;
       }),
-    [LOGOUT_SUCCESS]: state =>
-      produce(state, draft => {
+    [LOGOUT_SUCCESS]: (state) =>
+      produce(state, (draft) => {
         draft.logOutLoading = false;
         draft.logOutDone = true;
         draft.me = null;
       }),
     [LOGOUT_FAILURE]: (state, { payload: error }) =>
-      produce(state, draft => {
+      produce(state, (draft) => {
         draft.logOutLoading = false;
         draft.logOutError = error;
       }),
