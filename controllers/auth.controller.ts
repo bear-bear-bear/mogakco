@@ -80,6 +80,7 @@ class AuthController {
     };
   }
 
+  /**
    * @desc 회원가입 컨트롤러 입니다.
    * @returns 성공적으로 회원가입 된 사용자 객체
    * @author galaxy4276

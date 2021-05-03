@@ -34,7 +34,7 @@ export const Title = styled.h1`
 `;
 
 export const SubmitButton = styled.button`
-  width: ${props => (!props.complete ? '10rem' : '17rem')};
+  width: ${(props) => (!props.complete ? '10rem' : '17rem')};
   height: 3.75rem;
   background-color: var(--color-blue-0);
   color: var(--color-white-real);
@@ -43,7 +43,7 @@ export const SubmitButton = styled.button`
   border-radius: 0.625rem;
   outline: 0;
   margin-top: 2.625rem;
-  align-self: ${props => (!props.complete ? 'flex-end' : 'none')};
+  align-self: ${(props) => (!props.complete ? 'flex-end' : 'none')};
   cursor: pointer;
 
   &:hover {

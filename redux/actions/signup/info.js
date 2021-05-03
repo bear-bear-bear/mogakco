@@ -8,5 +8,5 @@ export const VERIFY_INFO_FAILURE = 'info/VERIFY_INFO_FAILURE';
 // 액션 크리에이터
 export const verifyInfoRequest = createAction(
   VERIFY_INFO_REQUEST,
-  info => info,
+  (info) => info,
 );

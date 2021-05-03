@@ -5,7 +5,7 @@ import FontFace from './_FontFace';
 import Variables from './_Variables';
 import media from './media';
 
-const GlobalStyles = props => (
+const GlobalStyles = (props) => (
   <>
     <Global styles={Resets} />
     <Global styles={Variables} />
