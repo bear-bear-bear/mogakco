@@ -8,7 +8,7 @@ export const ProgressBarWrapper = styled.div`
   margin-top: 2rem;
 `;
 
-const detectProgress = progress => {
+const detectProgress = (progress) => {
   if (progress[2]) {
     return 100;
   }

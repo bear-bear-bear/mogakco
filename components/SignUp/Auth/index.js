@@ -26,7 +26,7 @@ const Index = () => {
   // }, [exEmail]);
 
   const onSubmit = useCallback(
-    e => {
+    (e) => {
       e.preventDefault();
       if (!emailRule.test(email)) {
         setEmailTestError(true);
