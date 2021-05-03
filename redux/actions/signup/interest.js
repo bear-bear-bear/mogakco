@@ -8,5 +8,5 @@ export const VERIFY_INTEREST_FAILURE = 'intersest/VERIFY_INTEREST_FAILURE';
 // 액션 크리에이터
 export const verifyInterestRequest = createAction(
   VERIFY_INTEREST_REQUEST,
-  interest => interest,
+  (interest) => interest,
 );

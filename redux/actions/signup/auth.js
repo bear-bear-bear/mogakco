@@ -11,10 +11,10 @@ export const VERIFY_SOCIAL_FAILURE = 'auth/VERIFY_SOCIAL_FAILURE';
 // 액션 크리에이터
 export const verifyEmailRequest = createAction(
   VERIFY_EMAIL_REQUEST,
-  input => input,
+  (input) => input,
 );
 
 export const verifySocialRequest = createAction(
   VERIFY_SOCIAL_REQUEST,
-  input => input,
+  (input) => input,
 );

@@ -96,7 +96,7 @@ const firstBlockFontStyles = () => {
       p: '1.6rem',
     },
   };
-  const mediaFontSizes = screenSize =>
+  const mediaFontSizes = (screenSize) =>
     `
       ${media[screenSize]} {
         h1 {
