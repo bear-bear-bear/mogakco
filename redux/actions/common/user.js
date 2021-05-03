@@ -1,7 +1,7 @@
-export const LOGIN_REQUEST = 'common/LOGIN_REQUEST';
-export const LOGIN_SUCCESS = 'common/LOGIN_SUCCESS';
-export const LOGIN_FAILURE = 'common/LOGIN_FAILURE';
+import makeActions from '~/lib/makeActions';
 
-export const LOGOUT_REQUEST = 'common/LOGOUT_REQUEST';
-export const LOGOUT_SUCCESS = 'common/LOGOUT_SUCCESS';
-export const LOGOUT_FAILURE = 'common/LOGOUT_FAILURE';
+const moduleName = 'common';
+const actionNames = ['LOGIN', 'LOGOUT'];
+const actions = makeActions(moduleName, actionNames);
+
+export default actions;

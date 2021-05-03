@@ -1,14 +1,9 @@
 import produce from 'immer';
 import { handleActions } from 'redux-actions';
 
-import {
-  LOGIN_REQUEST,
-  LOGIN_SUCCESS,
-  LOGIN_FAILURE,
-  LOGOUT_REQUEST,
-  LOGOUT_SUCCESS,
-  LOGOUT_FAILURE,
-} from '~/redux/actions/common/user';
+import userActions from '~/redux/actions/common/user';
+
+const { LOGIN, LOGOUT } = userActions;
 
 const initialState = {
   me: null,
@@ -30,38 +25,38 @@ const dummyUser = {
 
 const user = handleActions(
   {
-    [LOGIN_REQUEST]: (state) =>
+    [LOGIN.REQUEST]: (state) =>
       produce(state, (draft) => {
         draft.logInLoading = true;
         draft.logInDone = false;
         draft.logInError = null;
       }),
     // eslint-disable-next-line no-unused-vars
-    [LOGIN_SUCCESS]: (state, { payload: me }) =>
+    [LOGIN.SUCCESS]: (state, { payload: me }) =>
       produce(state, (draft) => {
         draft.logInLoading = false;
         draft.logInDone = true;
         // draft.me = me;
         draft.me = dummyUser;
       }),
-    [LOGIN_FAILURE]: (state, { payload: error }) =>
+    [LOGIN.FAILURE]: (state, { payload: error }) =>
       produce(state, (draft) => {
         draft.logInLoading = false;
         draft.logInError = error;
       }),
-    [LOGOUT_REQUEST]: (state) =>
+    [LOGOUT.REQUEST]: (state) =>
       produce(state, (draft) => {
         draft.logOutLoading = true;
         draft.logOutDone = false;
         draft.logOutError = null;
       }),
-    [LOGOUT_SUCCESS]: (state) =>
+    [LOGOUT.SUCCESS]: (state) =>
       produce(state, (draft) => {
         draft.logOutLoading = false;
         draft.logOutDone = true;
         draft.me = null;
       }),
-    [LOGOUT_FAILURE]: (state, { payload: error }) =>
+    [LOGOUT.FAILURE]: (state, { payload: error }) =>
       produce(state, (draft) => {
         draft.logOutLoading = false;
         draft.logOutError = error;
