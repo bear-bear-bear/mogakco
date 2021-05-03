@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import { useSelector } from 'react-redux';
 import Router from 'next/router';
 import PropTypes from 'prop-types';
@@ -14,11 +14,11 @@ const LeftContentBlock = ({ title, content, imgName, firstBlock }) => {
   // 임시로 작성한 state와 function
   const me = useSelector(meSelector);
 
-  const onSubmit = useCallback((e) => {
+  const toSignUp = (e) => {
     // TODO: 현재 이메일 입력 값을 회원가입 첫 페이지 이메일 입력창으로 전달
     e.preventDefault();
     Router.push('/signup');
-  }, []);
+  };
 
   return (
     <S.LeftBlockContainer firstBlock={firstBlock}>
@@ -34,7 +34,7 @@ const LeftContentBlock = ({ title, content, imgName, firstBlock }) => {
                     시작하기
                   </S.FirstBlockStartButton>
                 ) : (
-                  <S.FirstBlockForm onSubmit={onSubmit} spellcheck="false">
+                  <S.FirstBlockForm onSubmit={toSignUp} spellcheck="false">
                     <S.FirstBlockInput
                       type="email"
                       placeholder="이메일 입력"
