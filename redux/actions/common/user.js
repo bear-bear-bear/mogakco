@@ -1,7 +1,7 @@
-import makeActions from '~/lib/makeActions';
+import makeActionTypes from '~/lib/makeActionTypes';
 
 const moduleName = 'common';
 const actionNames = ['LOGIN', 'LOGOUT'];
-const actions = makeActions(moduleName, actionNames);
+const actionTypes = makeActionTypes(moduleName, actionNames);
 
-export default actions;
+export default actionTypes;

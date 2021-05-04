@@ -1,9 +1,9 @@
 import produce from 'immer';
 import { handleActions } from 'redux-actions';
 
-import userActions from '~/redux/actions/common/user';
+import userActionTypes from '~/redux/actions/common/user';
 
-const { LOGIN, LOGOUT } = userActions;
+const { LOGIN, LOGOUT } = userActionTypes;
 
 const initialState = {
   me: null,
