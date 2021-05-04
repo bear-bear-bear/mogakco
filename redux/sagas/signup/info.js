@@ -3,7 +3,7 @@ import {
   VERIFY_INFO_REQUEST,
   VERIFY_INFO_SUCCESS,
   VERIFY_INFO_FAILURE,
-} from '~/redux/actions/SignUp/info';
+} from '~/redux/reducers/signup';
 
 function* verifyInfo({ payload }) {
   try {

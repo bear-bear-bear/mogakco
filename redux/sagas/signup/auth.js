@@ -6,7 +6,7 @@ import {
   VERIFY_SOCIAL_REQUEST,
   VERIFY_SOCIAL_SUCCESS,
   VERIFY_SOCIAL_FAILURE,
-} from '~/redux/actions/SignUp/auth';
+} from '~/redux/reducers/signup';
 
 function* verifyEmail(action) {
   try {

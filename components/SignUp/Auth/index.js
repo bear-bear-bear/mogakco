@@ -6,7 +6,7 @@ import { emailRule } from '~/lib/regex';
 import {
   verifyEmailRequest,
   verifySocialRequest,
-} from '~/redux/actions/SignUp/auth';
+} from '~/redux/reducers/signup';
 import useInput from '~/hooks/useInput';
 import { getVerifyEmailLoading } from '~/redux/selectors/SignUp';
 

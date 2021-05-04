@@ -3,9 +3,8 @@ import {
   VERIFY_INTEREST_REQUEST,
   VERIFY_INTEREST_SUCCESS,
   VERIFY_INTEREST_FAILURE,
-} from '~/redux/actions/SignUp/interest';
-
-import { SIGN_UP_REQUEST } from '~/redux/actions/SignUp/signup';
+  SIGN_UP_REQUEST,
+} from '~/redux/reducers/signup';
 
 function* verifyInterest({ payload }) {
   try {
