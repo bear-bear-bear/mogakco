@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import actionTypesFrom from '~/lib/actionTypesFrom';
+import fromActionTypes from '~/lib/fromActionTypes';
 
 const initialState = {
   email: '',
@@ -124,7 +124,7 @@ export const {
   SIGN_UP_REQUEST,
   SIGN_UP_SUCCESS,
   SIGN_UP_FAILURE,
-} = actionTypesFrom(signupSlice.actions);
+} = fromActionTypes(signupSlice.actions);
 
 // 액션 크리에이터
 export const {

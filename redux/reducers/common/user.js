@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import actionTypesFrom from '~/lib/actionTypesFrom';
+import fromActionTypes from '~/lib/fromActionTypes';
 
 const initialState = {
   me: null,
@@ -62,6 +62,6 @@ export const {
   LOGOUT_REQUEST,
   LOGOUT_SUCCESS,
   LOGOUT_FAILURE,
-} = actionTypesFrom(userSlice.actions);
+} = fromActionTypes(userSlice.actions);
 
 export default userSlice.reducer;
