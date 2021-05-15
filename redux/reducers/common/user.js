@@ -1,14 +1,5 @@
-import produce from 'immer';
-import { handleActions } from 'redux-actions';
-
-import {
-  LOGIN_REQUEST,
-  LOGIN_SUCCESS,
-  LOGIN_FAILURE,
-  LOGOUT_REQUEST,
-  LOGOUT_SUCCESS,
-  LOGOUT_FAILURE,
-} from '~/redux/actions/common/user';
+import { createSlice } from '@reduxjs/toolkit';
+import fromActionTypes from '~/lib/fromActionTypes';
 
 const initialState = {
   me: null,
@@ -28,46 +19,49 @@ const dummyUser = {
   job: '',
 };
 
-const user = handleActions(
-  {
-    [LOGIN_REQUEST]: (state) =>
-      produce(state, (draft) => {
-        draft.logInLoading = true;
-        draft.logInDone = false;
-        draft.logInError = null;
-      }),
-    // eslint-disable-next-line no-unused-vars
-    [LOGIN_SUCCESS]: (state, { payload: me }) =>
-      produce(state, (draft) => {
-        draft.logInLoading = false;
-        draft.logInDone = true;
-        // draft.me = me;
-        draft.me = dummyUser;
-      }),
-    [LOGIN_FAILURE]: (state, { payload: error }) =>
-      produce(state, (draft) => {
-        draft.logInLoading = false;
-        draft.logInError = error;
-      }),
-    [LOGOUT_REQUEST]: (state) =>
-      produce(state, (draft) => {
-        draft.logOutLoading = true;
-        draft.logOutDone = false;
-        draft.logOutError = null;
-      }),
-    [LOGOUT_SUCCESS]: (state) =>
-      produce(state, (draft) => {
-        draft.logOutLoading = false;
-        draft.logOutDone = true;
-        draft.me = null;
-      }),
-    [LOGOUT_FAILURE]: (state, { payload: error }) =>
-      produce(state, (draft) => {
-        draft.logOutLoading = false;
-        draft.logOutError = error;
-      }),
-  },
+const userSlice = createSlice({
+  name: 'user',
   initialState,
-);
+  reducers: {
+    LOGIN_REQUEST: (state) => {
+      state.logInLoading = true;
+      state.logInDone = false;
+      state.logInError = null;
+    },
+    LOGIN_SUCCESS: (state) => {
+      state.logInLoading = false;
+      state.logInDone = true;
+      state.me = dummyUser; // TODO:  state.me = action.payload
+    },
+    LOGIN_FAILURE: (state, { payload: error }) => {
+      state.logInLoading = false;
+      state.logInError = error;
+    },
+    LOGOUT_REQUEST: (state) => {
+      state.logOutLoading = true;
+      state.logOutDone = false;
+      state.logOutError = null;
+    },
+    LOGOUT_SUCCESS: (state) => {
+      state.logOutLoading = false;
+      state.logOutDone = true;
+      state.me = null;
+    },
+    LOGOUT_FAILURE: (state, { payload: error }) => {
+      state.logOutLoading = false;
+      state.logOutError = error;
+    },
+  },
+});
 
-export default user;
+// 액션 타입
+export const {
+  LOGIN_REQUEST,
+  LOGIN_SUCCESS,
+  LOGIN_FAILURE,
+  LOGOUT_REQUEST,
+  LOGOUT_SUCCESS,
+  LOGOUT_FAILURE,
+} = fromActionTypes(userSlice.actions);
+
+export default userSlice.reducer;

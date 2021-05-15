@@ -2,7 +2,7 @@ import React, { useCallback, useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 
 import useInput from '~/hooks/useInput';
-import { verifyInfoRequest } from '~/redux/actions/SignUp/info';
+import { verifyInfoRequest } from '~/redux/reducers/signup';
 import { passwordRule } from '~/lib/regex';
 
 import * as CS from '../common/styles';

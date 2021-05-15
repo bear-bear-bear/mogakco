@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { verifyInterestRequest } from '~/redux/actions/SignUp/interest';
+import { verifyInterestRequest } from '~/redux/reducers/signup';
 
 import * as CS from '../common/styles';
 import * as S from './style';
