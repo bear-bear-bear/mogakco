@@ -4,7 +4,7 @@ import {
   SIGN_UP_REQUEST,
   SIGN_UP_SUCCESS,
   SIGN_UP_FAILURE,
-} from '~/redux/actions/SignUp/signup';
+} from '~/redux/reducers/signup';
 
 // const infoForSignUp = ({ signUpReducer }) => ({
 //   email: signUpReducer.email,
@@ -14,7 +14,7 @@ import {
 //   job: signUpReducer.job,
 // });
 
-// const signUpApi = data => axios.post('/api/user', data);
+// const signUpApi = (data) => axios.post('/api/user', data);
 
 function* verifySignUp() {
   try {

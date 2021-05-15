@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { verifyInterestRequest } from '~/redux/actions/SignUp/interest';
+import { verifyInterestRequest } from '~/redux/reducers/signup';
 
 import * as CS from '../common/styles';
 import * as S from './style';
@@ -11,16 +11,16 @@ const Index = () => {
   const [field, setField] = useState(null);
   const [job, setJob] = useState(null);
 
-  const onChangeField = useCallback(e => {
+  const onChangeField = useCallback((e) => {
     setField(e.target.value);
   }, []);
 
-  const onChangeJob = useCallback(e => {
+  const onChangeJob = useCallback((e) => {
     setJob(e.target.value);
   }, []);
 
   const onSubmit = useCallback(
-    e => {
+    (e) => {
       e.preventDefault();
       if (!field) {
         setField(null);

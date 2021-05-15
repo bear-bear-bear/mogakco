@@ -1,7 +1,9 @@
-import React, { useState, useCallback } from 'react';
+import React from 'react';
+import { useSelector } from 'react-redux';
 import Link from 'next/link';
 import { Row, Col } from 'antd';
 
+import { meSelector } from '~/redux/selectors/common/user';
 import Button from '~/components/common/Button';
 
 import * as S from './style';
@@ -9,11 +11,7 @@ import * as S from './style';
 // TODO: 로그인/로그아웃 컴포넌트 작은 모니터에서 버거로 변경
 
 const Header = () => {
-  // 임시로 작성한 state와 function
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const onClick = useCallback(() => {
-    setIsLoggedIn(true);
-  }, []);
+  const me = useSelector(meSelector);
 
   return (
     <S.HeaderContainer>
@@ -22,7 +20,7 @@ const Header = () => {
           <S.MainLogo />
         </Col>
         <Col flex="auto">
-          {isLoggedIn ? (
+          {me ? (
             <S.ButtonsWrapper>
               <Link href="/">
                 <S.UserIcon />
@@ -30,9 +28,11 @@ const Header = () => {
             </S.ButtonsWrapper>
           ) : (
             <S.ButtonsWrapper>
-              <Button color="black" underline onClick={onClick}>
-                로그인
-              </Button>
+              <Link href="/login">
+                <Button color="black" underline>
+                  로그인
+                </Button>
+              </Link>
               <Link href="/signup">
                 <Button color="black" underline>
                   회원가입

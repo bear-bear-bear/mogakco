@@ -2,7 +2,7 @@ import React, { useCallback, useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 
 import useInput from '~/hooks/useInput';
-import { verifyInfoRequest } from '~/redux/actions/SignUp/info';
+import { verifyInfoRequest } from '~/redux/reducers/signup';
 import { passwordRule } from '~/lib/regex';
 
 import * as CS from '../common/styles';
@@ -31,7 +31,7 @@ const Index = () => {
     setPasswordMatchError(isPasswordMatchError);
 
     return [isTermError, isPasswordTestError, isPasswordMatchError].every(
-      isError => isError === false,
+      (isError) => isError === false,
     );
   }, [term, password, passwordConfirm]);
 
@@ -42,11 +42,11 @@ const Index = () => {
   }, [verifyInputs, initSubmit]);
 
   const onChangeTerm = useCallback(() => {
-    setTerm(prev => !prev);
+    setTerm((prev) => !prev);
   }, []);
 
   const onSubmit = useCallback(
-    e => {
+    (e) => {
       e.preventDefault();
       setInitSubmit(true);
       const isAllPass = verifyInputs();

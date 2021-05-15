@@ -6,7 +6,7 @@ import { emailRule } from '~/lib/regex';
 import {
   verifyEmailRequest,
   verifySocialRequest,
-} from '~/redux/actions/SignUp/auth';
+} from '~/redux/reducers/signup';
 import useInput from '~/hooks/useInput';
 import { getVerifyEmailLoading } from '~/redux/selectors/SignUp';
 
@@ -26,7 +26,7 @@ const Index = () => {
   // }, [exEmail]);
 
   const onSubmit = useCallback(
-    e => {
+    (e) => {
       e.preventDefault();
       if (!emailRule.test(email)) {
         setEmailTestError(true);
