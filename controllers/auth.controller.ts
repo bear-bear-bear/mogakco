@@ -44,9 +44,7 @@ class AuthController {
    */
   @Get('/test')
   public getTest() {
-    return encodeURIComponent(
-      '준재형 지용이형 열심히 힘내서 달립시다. 수익내야죠?',
-    );
+    return '준재형 지용이형 열심히 힘내서 달립시다. 수익내야죠?';
   }
 
   /**
@@ -87,6 +85,7 @@ class AuthController {
    */
   @Post()
   async join(@Body() user: createUserDTO): Promise<response> {
+    console.log({ user });
     const res = await this.userService.join(user);
     return res;
   }
@@ -98,9 +97,12 @@ class AuthController {
    */
   @Post('/prepare')
   async prepareJoin(@Body('email') email: string) {
-    if (!email) throw Error('이메일 정보가 존재하지 않습니다.');
+    if (!email)
+      return {
+        statusCode: HttpStatus.BAD_REQUEST,
+        message: '이메일 필드가 존재하지 않습니다.',
+      };
 
-    console.log({ email });
     try {
       const [verifyToken, to] = await this.userService.prepareJoin(email);
       this.emailService.userVerify({
