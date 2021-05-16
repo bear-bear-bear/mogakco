@@ -29,7 +29,7 @@ import { ConfigModule } from '@nestjs/config';
           },
         },
         template: {
-          dir: join(__dirname, '../services/email/'),
+          dir: join(__dirname, '../services/email'),
           adapter: new PugAdapter(),
         },
       }),
