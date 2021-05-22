@@ -1,12 +1,12 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import Header from '~/components/SignUp/header';
-import ProgressBar from '~/components/SignUp/progressBar';
-import Auth from '~/components/SignUp/auth';
-import Info from '~/components/SignUp/info';
-import Interest from '~/components/SignUp/interest';
-import Complete from '~/components/SignUp/complete';
-import { SignUpPageContainer } from '../components/SignUp/common/styles';
+import Header from '~/components/signup/header';
+import ProgressBar from '~/components/signup/progressBar';
+import Auth from '~/components/signup/auth';
+import Info from '~/components/signup/info';
+import Interest from '~/components/signup/interest';
+import Complete from '~/components/signup/complete';
+import { SignUpPageContainer } from '../components/signup/common/styles';
 import {
   getVerifyEmailDone,
   getVerifySocialDone,
@@ -15,7 +15,7 @@ import {
   getSignUpDone,
 } from '~/redux/selectors/SignUp';
 
-const Signup = () => {
+const SignUp = () => {
   const verifyEmailDone = useSelector(getVerifyEmailDone);
   const verifySocialDone = useSelector(getVerifySocialDone);
   const verifyInfoDone = useSelector(getVerifyInfoDone);
@@ -35,4 +35,4 @@ const Signup = () => {
   );
 };
 
-export default Signup;
+export default SignUp;
