@@ -1,14 +1,15 @@
+import axios from 'axios';
 import { all, fork } from 'redux-saga/effects';
-import watchAuth from './SignUp/auth';
-import watchInfo from './SignUp/info';
-import watchInterest from './SignUp/interest';
-import watchSignUp from './SignUp/signup';
+
+import userSaga from './common/user';
+import signUpSaga from './signup';
+
+axios.defaults.baseURL = `http://localhost:8001/api`; // 로컬서버
 
 export default function* rootSaga() {
   yield all([
-    fork(watchAuth),
-    fork(watchInfo),
-    fork(watchInterest),
-    fork(watchSignUp),
+    //
+    fork(userSaga),
+    fork(signUpSaga),
   ]);
 }
