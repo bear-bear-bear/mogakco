@@ -1,12 +1,12 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import Header from '~/components/signup/header';
-import ProgressBar from '~/components/signup/progressBar';
-import Auth from '~/components/signup/auth';
-import Info from '~/components/signup/info';
-import Interest from '~/components/signup/interest';
-import Complete from '~/components/signup/complete';
-import { SignUpPageContainer } from '../components/signup/common/styles';
+import Header from '~/components/signUp/header';
+import ProgressBar from '~/components/signUp/progressBar';
+import Auth from '~/components/signUp/auth';
+import Info from '~/components/signUp/info';
+import Interest from '~/components/signUp/interest';
+import Complete from '~/components/signUp/complete';
+import { SignUpPageContainer } from '../components/signUp/common/styles';
 import {
   getVerifyEmailDone,
   getVerifySocialDone,

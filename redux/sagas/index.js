@@ -2,7 +2,7 @@ import axios from 'axios';
 import { all, fork } from 'redux-saga/effects';
 
 import userSaga from './common/user';
-import signUpSaga from './signup';
+import signUpSaga from './signUp';
 
 axios.defaults.baseURL = `http://localhost:8001/api`; // 로컬서버
 

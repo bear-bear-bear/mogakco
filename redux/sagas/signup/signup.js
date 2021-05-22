@@ -4,7 +4,7 @@ import {
   SIGN_UP_REQUEST,
   SIGN_UP_SUCCESS,
   SIGN_UP_FAILURE,
-} from '~/redux/reducers/signup';
+} from '~/redux/reducers/signUp';
 
 // const infoForSignUp = ({ signUpReducer }) => ({
 //   email: signUpReducer.email,

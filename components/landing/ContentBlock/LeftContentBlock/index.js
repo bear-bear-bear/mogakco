@@ -17,7 +17,7 @@ const LeftContentBlock = ({ title, content, imgName, firstBlock }) => {
   const toSignUp = (e) => {
     // TODO: 현재 이메일 입력 값을 회원가입 첫 페이지 이메일 입력창으로 전달
     e.preventDefault();
-    Router.push('/signup');
+    Router.push('/signUp');
   };
 
   return (

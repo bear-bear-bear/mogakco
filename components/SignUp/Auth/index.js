@@ -8,7 +8,7 @@ import {
   verifySocialRequest,
 } from '~/redux/reducers/signup';
 import useInput from '~/hooks/useInput';
-import { getVerifyEmailLoading } from '~/redux/selectors/signup';
+import { getVerifyEmailLoading } from '~/redux/selectors/signUp';
 
 import * as CS from '../common/styles';
 import * as S from './style';
