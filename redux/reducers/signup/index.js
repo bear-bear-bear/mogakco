@@ -24,8 +24,8 @@ const initialState = {
   signUpError: null,
 };
 
-const signupSlice = createSlice({
-  name: 'signup',
+const signUpSlice = createSlice({
+  name: 'signUp',
   initialState,
   reducers: {
     VERIFY_EMAIL_REQUEST: (state, action) => {
@@ -124,7 +124,7 @@ export const {
   SIGN_UP_REQUEST,
   SIGN_UP_SUCCESS,
   SIGN_UP_FAILURE,
-} = fromActionTypes(signupSlice.actions);
+} = fromActionTypes(signUpSlice.actions);
 
 // 액션 크리에이터
 export const {
@@ -132,6 +132,6 @@ export const {
   VERIFY_SOCIAL_REQUEST: verifySocialRequest,
   VERIFY_INFO_REQUEST: verifyInfoRequest,
   VERIFY_INTEREST_REQUEST: verifyInterestRequest,
-} = signupSlice.actions;
+} = signUpSlice.actions;
 
-export default signupSlice.reducer;
+export default signUpSlice.reducer;

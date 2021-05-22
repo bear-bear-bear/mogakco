@@ -4,7 +4,7 @@ import {
   VERIFY_INTEREST_SUCCESS,
   VERIFY_INTEREST_FAILURE,
   SIGN_UP_REQUEST,
-} from '~/redux/reducers/signup';
+} from '~/redux/reducers/signUp';
 
 function* verifyInterest({ payload }) {
   try {

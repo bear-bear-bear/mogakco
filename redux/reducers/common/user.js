@@ -23,31 +23,31 @@ const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    LOGIN_REQUEST: (state) => {
+    LOG_IN_REQUEST: (state) => {
       state.logInLoading = true;
       state.logInDone = false;
       state.logInError = null;
     },
-    LOGIN_SUCCESS: (state) => {
+    LOG_IN_SUCCESS: (state) => {
       state.logInLoading = false;
       state.logInDone = true;
       state.me = dummyUser; // TODO:  state.me = action.payload
     },
-    LOGIN_FAILURE: (state, { payload: error }) => {
+    LOG_IN_FAILURE: (state, { payload: error }) => {
       state.logInLoading = false;
       state.logInError = error;
     },
-    LOGOUT_REQUEST: (state) => {
+    LOG_OUT_REQUEST: (state) => {
       state.logOutLoading = true;
       state.logOutDone = false;
       state.logOutError = null;
     },
-    LOGOUT_SUCCESS: (state) => {
+    LOG_OUT_SUCCESS: (state) => {
       state.logOutLoading = false;
       state.logOutDone = true;
       state.me = null;
     },
-    LOGOUT_FAILURE: (state, { payload: error }) => {
+    LOG_OUT_FAILURE: (state, { payload: error }) => {
       state.logOutLoading = false;
       state.logOutError = error;
     },
@@ -56,12 +56,12 @@ const userSlice = createSlice({
 
 // 액션 타입
 export const {
-  LOGIN_REQUEST,
-  LOGIN_SUCCESS,
-  LOGIN_FAILURE,
-  LOGOUT_REQUEST,
-  LOGOUT_SUCCESS,
-  LOGOUT_FAILURE,
+  LOG_IN_REQUEST,
+  LOG_IN_SUCCESS,
+  LOG_IN_FAILURE,
+  LOG_OUT_REQUEST,
+  LOG_OUT_SUCCESS,
+  LOG_OUT_FAILURE,
 } = fromActionTypes(userSlice.actions);
 
 export default userSlice.reducer;
