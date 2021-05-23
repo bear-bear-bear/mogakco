@@ -2,11 +2,11 @@ import { createSlice } from '@reduxjs/toolkit';
 import fromActionTypes from '~/lib/fromActionTypes';
 
 const initialState = {
-  email: '',
-  nickname: '',
-  password: '',
-  field: '',
-  job: '',
+  email: null,
+  nickname: null,
+  password: null,
+  field: null,
+  job: null,
   verifyEmailLoading: false,
   verifyEmailDone: false,
   verifyEmailError: null,

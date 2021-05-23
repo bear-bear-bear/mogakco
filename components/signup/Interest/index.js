@@ -1,33 +1,20 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { verifyInterestRequest } from '~/redux/reducers/signup';
+import useInput from '~/hooks/useInput';
 
 import * as CS from '../common/styles';
 import * as S from './style';
 
 const Index = () => {
   const dispatch = useDispatch();
-  const [field, setField] = useState(null);
-  const [job, setJob] = useState(null);
-
-  const onChangeField = useCallback((e) => {
-    setField(e.target.value);
-  }, []);
-
-  const onChangeJob = useCallback((e) => {
-    setJob(e.target.value);
-  }, []);
+  const [field, onChangeField] = useInput(null);
+  const [job, onChangeJob] = useInput(null);
 
   const onSubmit = useCallback(
-    (e) => {
+    async (e) => {
       e.preventDefault();
-      if (!field) {
-        setField(null);
-      }
-      if (!job) {
-        setJob(null);
-      }
       dispatch(verifyInterestRequest({ field, job }));
     },
     [dispatch, field, job],
