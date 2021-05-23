@@ -1,22 +1,26 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import Router from 'next/router';
 import PropTypes from 'prop-types';
 import { Row, Col } from 'antd';
 import Fade from 'react-reveal/Fade';
 
+import useInput from '~/hooks/useInput';
+import { saveEmail } from '~/redux/reducers/landing';
 import { meSelector } from '~/redux/selectors/common/user';
 import Image from '~/components/common/Image';
 
 import * as S from './style';
 
 const LeftContentBlock = ({ title, content, imgName, firstBlock }) => {
-  // 임시로 작성한 state와 function
+  const dispatch = useDispatch();
   const me = useSelector(meSelector);
+  const [email, onChangeEmail] = useInput('');
 
   const toSignUp = (e) => {
     // TODO: 현재 이메일 입력 값을 회원가입 첫 페이지 이메일 입력창으로 전달
     e.preventDefault();
+    dispatch(saveEmail(email));
     Router.push('/signup');
   };
 
@@ -37,6 +41,8 @@ const LeftContentBlock = ({ title, content, imgName, firstBlock }) => {
                   <S.FirstBlockForm onSubmit={toSignUp} spellcheck="false">
                     <S.FirstBlockInput
                       type="email"
+                      value={email}
+                      onChange={onChangeEmail}
                       placeholder="이메일 입력"
                       spellCheck="false"
                       required

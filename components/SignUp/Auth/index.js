@@ -1,23 +1,33 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import GoogleLogo from 'assets/svg/btn_google_light_normal_ios.svg';
 import { emailRule } from '~/lib/regex';
+import useInput from '~/hooks/useInput';
+import { getVerifyEmailLoading } from '~/redux/selectors/signup';
+import { landingEmailSelector } from '~/redux/selectors/landing';
 import {
   verifyEmailRequest,
   verifySocialRequest,
 } from '~/redux/reducers/signup';
-import useInput from '~/hooks/useInput';
-import { getVerifyEmailLoading } from '~/redux/selectors/signup';
+import { saveEmail as saveLandingEmail } from '~/redux/reducers/landing';
 
 import * as CS from '../common/styles';
 import * as S from './style';
 
 const Index = () => {
-  const [email, onChangeEmail] = useInput('');
-  const [emailTestError, setEmailTestError] = useState(false);
   const dispatch = useDispatch();
+  const [email, onChangeEmail, setEmail] = useInput('');
+  const [emailTestError, setEmailTestError] = useState(false);
   const verifyEmailLoading = useSelector(getVerifyEmailLoading);
+  const landingEmail = useSelector(landingEmailSelector);
+
+  useEffect(() => {
+    if (landingEmail === null) return;
+
+    setEmail(landingEmail);
+    dispatch(saveLandingEmail(null));
+  }, [landingEmail, setEmail, dispatch]);
 
   // useEffect(() => {
   //   if (localStorage.getItem('email') === ) {
