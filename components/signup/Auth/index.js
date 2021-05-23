@@ -49,8 +49,9 @@ const Index = () => {
   );
 
   const onClickSocial = useCallback(() => {
-    dispatch(verifySocialRequest());
-  }, [dispatch]);
+    alert('미구현 기능입니다');
+    // dispatch(verifySocialRequest());
+  }, []);
 
   return (
     <CS.Container>
