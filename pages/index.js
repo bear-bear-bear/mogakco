@@ -1,3 +1,5 @@
+import { useRef } from 'react';
+
 import CustomHead from '~/components/common/CustomHead';
 import Container from '~/components/landing/Container';
 import Header from '~/components/landing/Header';
@@ -9,6 +11,8 @@ import ScrollTop from '~/components/common/ScrollTop';
 import 'antd/dist/antd.css';
 
 const Landing = () => {
+  const emailEl = useRef(null);
+
   const pageProps = {
     title: '모여서 각자 코딩 - Mogakco',
     description: 'Free online video chat for developers',
@@ -28,11 +32,13 @@ const Landing = () => {
           content="같이 코딩할까요, 지금 그 자리에서."
           imgName="landing_sleep.svg"
           firstBlock
+          emailEl={emailEl}
         />
         <MiddleBlock
           subtitle="모여서 각자 코딩"
           title="모각코는, 개발자들을 위한 무료 화상채팅 서비스입니다"
           content="다른 개발자들과 소통하고 경쟁하며, 더 나은 자신을 향해 나아갈 동기를 얻어보세요!"
+          onClickButton={() => emailEl.current.focus()}
         />
         <ContentBlock
           type="right"

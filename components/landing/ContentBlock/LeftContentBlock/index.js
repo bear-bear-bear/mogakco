@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import Router from 'next/router';
 import PropTypes from 'prop-types';
@@ -12,13 +12,17 @@ import Image from '~/components/common/Image';
 
 import * as S from './style';
 
-const LeftContentBlock = ({ title, content, imgName, firstBlock }) => {
+const LeftContentBlock = ({ title, content, imgName, firstBlock, emailEl }) => {
   const dispatch = useDispatch();
   const me = useSelector(meSelector);
   const [email, onChangeEmail] = useInput('');
 
+  useEffect(() => {
+    if (!firstBlock) return;
+    emailEl.current.focus();
+  }, [emailEl, firstBlock]);
+
   const toSignUp = (e) => {
-    // TODO: 현재 이메일 입력 값을 회원가입 첫 페이지 이메일 입력창으로 전달
     e.preventDefault();
     dispatch(saveEmail(email));
     Router.push('/signup');
@@ -40,6 +44,7 @@ const LeftContentBlock = ({ title, content, imgName, firstBlock }) => {
                 ) : (
                   <S.FirstBlockForm onSubmit={toSignUp} spellcheck="false">
                     <S.FirstBlockInput
+                      ref={emailEl}
                       type="email"
                       value={email}
                       onChange={onChangeEmail}
@@ -70,9 +75,14 @@ LeftContentBlock.propTypes = {
   content: PropTypes.string.isRequired,
   imgName: PropTypes.string.isRequired,
   firstBlock: PropTypes.bool,
+  emailEl: PropTypes.oneOfType([
+    PropTypes.func,
+    PropTypes.shape({ current: PropTypes.elementType }),
+  ]), // emailEl = React.useRef()
 };
 LeftContentBlock.defaultProps = {
   firstBlock: false,
+  emailEl: null,
 };
 
 export default LeftContentBlock;

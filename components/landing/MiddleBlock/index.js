@@ -5,7 +5,7 @@ import Fade from 'react-reveal/Fade';
 
 import * as S from './style';
 
-const MiddleBlock = ({ subtitle, title, content }) => {
+const MiddleBlock = ({ subtitle, title, content, onClickButton }) => {
   return (
     <S.MiddleBlockContainer>
       <Row justify="center" align="middle">
@@ -15,7 +15,9 @@ const MiddleBlock = ({ subtitle, title, content }) => {
               <h3>[ {subtitle} ]</h3>
               <h1>{title}</h1>
               <p>{content}</p>
-              <S.StartButton color="blue">시작하기</S.StartButton>
+              <S.StartButton color="blue" onClick={onClickButton}>
+                시작하기
+              </S.StartButton>
             </S.ContentWrapper>
           </Fade>
         </Col>
@@ -28,6 +30,7 @@ MiddleBlock.propTypes = {
   subtitle: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
   content: PropTypes.string.isRequired,
+  onClickButton: PropTypes.func.isRequired,
 };
 
 export default MiddleBlock;
