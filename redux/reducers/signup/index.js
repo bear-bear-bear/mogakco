@@ -104,6 +104,7 @@ const signUpSlice = createSlice({
       state.signUpLoading = false;
       state.signUpError = action.error;
     },
+    RESET_SIGN_UP: () => initialState,
   },
 });
 
@@ -132,6 +133,7 @@ export const {
   VERIFY_SOCIAL_REQUEST: verifySocialRequest,
   VERIFY_INFO_REQUEST: verifyInfoRequest,
   VERIFY_INTEREST_REQUEST: verifyInterestRequest,
+  RESET_SIGN_UP: resetSignUp,
 } = signUpSlice.actions;
 
 export default signUpSlice.reducer;

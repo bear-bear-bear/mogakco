@@ -23,6 +23,7 @@ const Index = () => {
   const landingEmail = useSelector(landingEmailSelector);
 
   useEffect(() => {
+    // 랜딩에서 이메일 입력 후 버튼을 눌렀다면, 해당 이메일을 자동 입력
     if (landingEmail === null) return;
 
     setEmail(landingEmail);
