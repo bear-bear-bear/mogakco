@@ -1,0 +1,20 @@
+{
+  "moduleFileExtensions": ["js", "jsx", "json"],
+  "rootDir": "../../../",
+  "testRegex": ".spec.jsx$",
+  "testEnvironment": "jsdom",
+  "transform": {
+    "\\.[jt]sx?$": [
+      "babel-jest",
+      {
+        "presets": [["@babel/preset-env", { "targets": { "node": "current" } }]]
+      }
+    ],
+    "^.+\\.svg$": "<rootDir>/lib/svgTransform.js"
+  },
+  "moduleNameMapper": {
+    "^~(.*)$": "<rootDir>$1",
+    "^.+\\.svg$": "<rootDir>/lib/svgTransform.js"
+  },
+  "transformIgnorePatterns": ["<rootDir>/node_modules"]
+}

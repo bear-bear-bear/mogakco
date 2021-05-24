@@ -44,13 +44,16 @@ jobs:
       run: npm ci
 
     - name: NestJS Unit Test...
-      run: npm run test
+      run: npm run test:unit-nest
+
+    - name: NextJS Unit Test ...
+      run: npm run test:next
 
     - name: NestJS eslint...
-      run: npm run lint:backend
+      run: npm run lint:nest
 
     - name: NextJS eslint...
-      run: npm run lint:frontend
+      run: npm run lint:next
 
-    - name: Server Test eslint...
-      run: npm run lint:test-backend
+    - name: NextJS Unit Test eslint...
+      run: npm run lint:test-nest
