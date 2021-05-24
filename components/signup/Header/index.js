@@ -1,10 +1,8 @@
 import React, { useCallback } from 'react';
 import Router from 'next/router';
 
-import Logo from '~/public/assets/svg/logo.svg';
-import SignUpHeader from './style';
-
-import { LinkStyles } from '../common/styles';
+import Image from '~/components/common/Image';
+import * as S from './style';
 
 const Index = () => {
   const onClickLogo = useCallback(() => {
@@ -12,9 +10,11 @@ const Index = () => {
   }, []);
 
   return (
-    <SignUpHeader>
-      <Logo css={LinkStyles} onClick={onClickLogo} />
-    </SignUpHeader>
+    <S.SignUpHeader>
+      <S.LogoWrapper onClick={onClickLogo}>
+        <Image name="logo.svg" />
+      </S.LogoWrapper>
+    </S.SignUpHeader>
   );
 };
 

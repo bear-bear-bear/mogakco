@@ -1,97 +1,160 @@
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 
-export const Text = styled.span``;
+import Button from '../../common/Button';
+import media from '../../globalStyles/media';
 
-export const LinkStyles = css`
-  text-decoration: none;
-  color: inherit;
-  cursor: pointer;
+export const WarningText = styled.p`
+  width: 100%;
+  color: var(--color-red-1);
+  text-align: right;
+
+  &::before {
+    content: '※ ';
+  }
+
+  &:first-child {
+    margin-top: 0.66rem;
+  }
+
+  & + & {
+    margin-top: 0.33rem;
+  }
 `;
 
 export const Container = styled.div`
+  width: 100%;
   position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin-top: 2.5rem;
+  margin-top: 2rem;
+  padding-right: 1rem;
+  padding-left: 1rem;
 `;
 
 export const Form = styled.form`
   position: relative;
   display: flex;
-  width: 54rem;
+  width: 100%;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin-bottom: 3.25rem;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
 `;
 
 export const Title = styled.h1`
-  font-size: 2rem;
-  margin-bottom: 2.5rem;
+  font-size: 1.66rem;
+  letter-spacing: 0.05rem;
+  margin-bottom: 1.33rem;
 `;
 
-export const SubmitButton = styled.button`
-  width: ${(props) => (!props.complete ? '10rem' : '17rem')};
-  height: 3.75rem;
-  background-color: var(--color-blue-0);
-  color: var(--color-white-real);
-  font-size: 1rem;
-  border: none;
-  border-radius: 0.625rem;
-  outline: 0;
-  margin-top: 2.625rem;
-  align-self: ${(props) => (!props.complete ? 'flex-end' : 'none')};
-  cursor: pointer;
-
-  &:hover {
-    background-color: var(--color-blue-1);
-  }
+export const SubTitle = styled.p`
+  font-size: 1.1rem;
 `;
 
-export const Label = styled.label(({ htmlFor }) => ({
-  display: 'block',
-  width: htmlFor !== 'policy' ? '6rem' : 'fit-content',
-  height: '100%',
-  textAlign: 'right',
-  lineHeight: '3rem',
-  marginRight: '0.8rem',
-}));
+const descSizeStyles = ({ size = 'medium' }) => {
+  const sizes = {
+    small: css`
+      font-size: 0.95rem;
+      line-height: 1.2;
 
-// Input width를 정하기 위한 헬퍼 함수
-const selectWidth = (page, id) => {
-  if (page !== 'auth') {
-    if (id !== 'policy') {
-      return '20rem';
-    }
-    return '0.66rem';
-  }
-  return '40rem';
+      & + & {
+        margin-top: 0.8rem;
+      }
+    `,
+    medium: css`
+      font-size: 1.05rem;
+      line-height: 1.5;
+
+      & + & {
+        margin-top: 1rem;
+      }
+    `,
+  };
+
+  return sizes[size];
 };
 
-export const Input = styled.input(({ page, id }) => ({
-  width: selectWidth(page, id),
-  padding: '0.5rem',
-  fontSize: '1rem',
-  outline: 0,
-}));
+export const Description = styled.p`
+  color: var(--color-gray-4);
 
-export const InputWrapper = styled.div(() => ({
-  width: '100%',
-  height: '3rem',
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
-  padding: '0 10rem',
-  marginBottom: '1rem',
+  // size style
+  ${descSizeStyles}
+`;
 
-  '&:nth-last-of-type(1)': {
-    marginBottom: 0,
-  },
-}));
+export const SubmitButton = styled(Button)`
+  margin-top: 2rem;
+  align-self: ${({ complete }) => (complete ? 'none' : 'flex-end')};
+
+  padding: 1.5rem 1.66rem;
+`;
+
+export const InputWrapper = styled.div`
+  width: 100%;
+
+  & + & {
+    margin-top: 1rem;
+  }
+`;
+
+const inputSizeStyles = ({ size = 'medium' }) => {
+  const sizes = {
+    small: css`
+      padding: 0.5rem 0.4rem;
+      font-size: 1rem;
+    `,
+    medium: css`
+      padding: 0.75rem 0.66rem;
+      font-size: 1.1rem;
+    `,
+  };
+
+  return sizes[size];
+};
+
+export const Input = styled.input`
+  width: 100%;
+
+  ${inputSizeStyles}
+`;
+
+export const CheckBox = styled.input`
+  &[type='checkbox'] {
+    margin-right: 0.66rem;
+    transform: scale(1.5);
+  }
+`;
+
+export const Label = styled.label`
+  display: block;
+  margin-bottom: 0.33rem;
+  font-size: 1.05rem;
+  line-height: 1.3;
+`;
 
 export const SignUpPageContainer = styled.div`
-  padding: 0 calc(200 / 1000 * 100%);
+  position: absolute;
+  top: 50%;
+  transform: translate(0, -50%);
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0 1rem;
+  align-items: center;
+
+  ${media.lg} {
+    max-width: 33rem;
+    min-height: 20rem;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 2rem;
+    border: 1px solid var(--color-gray-1);
+    border-radius: 5px;
+  }
 `;

@@ -23,9 +23,9 @@ const Index = () => {
   return (
     <CS.Container>
       <CS.Title>관심 분야를 입력하세요</CS.Title>
-      <S.WarningText>
-        ! 선택 사항입니다. 입력 시 분야별 랭킹에 이름을 올릴 수 있습니다!
-      </S.WarningText>
+      <CS.Description>
+        선택 사항입니다. 입력 시 분야별 랭킹에 이름을 올릴 수 있어요.
+      </CS.Description>
       <CS.Form action="" onSubmit={onSubmit}>
         <CS.InputWrapper>
           <CS.Label htmlFor="field">개발 분야</CS.Label>

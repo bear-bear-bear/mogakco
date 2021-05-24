@@ -1,10 +1,14 @@
 import styled from '@emotion/styled';
 
-const SignUpHeader = styled.header`
+export const SignUpHeader = styled.header`
   display: flex;
   align-items: center;
   width: 100%;
-  height: 6.6875rem;
+  padding-top: 0.33rem;
+  padding-bottom: 0.33rem;
 `;
 
-export default SignUpHeader;
+export const LogoWrapper = styled.div`
+  width: 9rem;
+  cursor: pointer;
+`;
