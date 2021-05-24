@@ -4,7 +4,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import createUserDTO from '../../../models/dto/create-user.dto';
-import updateUserRequestDto from '../Services/dto/update-user-request.dto';
+import updateUserRequestDto from '../services/dto/update-user-request.dto';
 
 class UserMockRepository {
   public createUserOne(user: createUserDTO) {
