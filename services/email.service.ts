@@ -1,12 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { MailerService } from '@nestjs-modules/mailer';
 import { ConfigService } from '@nestjs/config';
-import { emailFailure, emailSuccess } from '../lib/backend/log';
 import { join } from 'path';
+import { emailFailure, emailSuccess } from '../lib/backend/log';
 
 interface UserVerifyEmailDTO {
-  to: string;
-  verifyToken: string;
+  email: string;
+  token: string;
+  id: number;
 }
 
 @Injectable()
@@ -16,17 +17,18 @@ export default class EmailService {
     private readonly configService: ConfigService,
   ) {}
 
-  public userVerify({ to, verifyToken }: UserVerifyEmailDTO): void {
+  public userVerify({ email, token, id }: UserVerifyEmailDTO): void {
     this.mailerService
       .sendMail({
-        to,
+        to: email,
         from: this.configService.get('EMAIL_ADMIN'),
         subject: 'Mogakco forwards Autentication to your email 🥰',
         encoding: 'utf8',
         template: join(__dirname, '/email', 'user-verify'),
         context: {
-          to,
-          verifyToken,
+          id,
+          to: email,
+          verifyToken: token,
           isDev: this.configService.get('NODE_ENV') === 'development',
           port: this.configService.get('SERVER_PORT'),
         },
