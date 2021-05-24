@@ -1,7 +1,7 @@
 {
   "moduleFileExtensions": ["js", "jsx", "json"],
   "rootDir": ".",
-  "testRegex": ".test.jsx$",
+  "testRegex": ".spec.jsx$",
   "testEnvironment": "jsdom",
   "transform": {
     "\\.[jt]sx?$": [
