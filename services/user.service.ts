@@ -43,6 +43,12 @@ class UserService {
   //   return newUser;
   // }
 
+  async verifyTokenBeforeRegister(email: string) {
+    const currentVerification = await this.userVerifyRepository.findOne({
+      email,
+    });
+  }
+
   /**
    *
    * @param email
@@ -60,7 +66,11 @@ class UserService {
       await this.userVerifyRepository.delete(currentVerification.id);
     }
     if (currentVerification && currentVerification.expiredAt > now) {
-      return { token: currentVerification.token, email };
+      return {
+        token: currentVerification.token,
+        email,
+        id: currentVerification.id,
+      };
     }
 
     const newVerificationToken = await makeHash(`${email}|${uuid()}`);
@@ -69,7 +79,7 @@ class UserService {
       newVerificationToken,
     );
 
-    return { token: newVerification.token, email };
+    return { token: newVerification.token, email, id: newVerification.id };
   }
 
   /**
@@ -80,12 +90,32 @@ class UserService {
    * @returns boolean
    * id, 이메일 토큰 값으로 해당 테이블에 일치하는 레코드가 있는지 확인합니다.
    */
-  public async verifyEmail(_id: string, email: string, token: string) {
-    const id = parseInt(_id, 10);
-    if (!id) throw new NotFoundException();
-    const record = await this.userVerifyRepository.findOneByEmail(id, email);
-    const isEqual = await bcrypt.compare(token, record.token);
-    return isEqual;
+  public async verifyEmail(id: string, token: string) {
+    const record = await this.userVerifyRepository.findOne(id);
+    console.log({ record });
+    if (!record) {
+      throw new HttpException(
+        '인증 url 이 잘못되었습니다.',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+
+    if (record.expiredAt < new Date()) {
+      return false;
+    }
+
+    const isEqual = token === record.token;
+    if (isEqual) {
+      record.isVerified = true;
+    }
+
+    if (!isEqual) {
+      record.isVerified = false;
+    }
+    console.log('before save:', record.isVerified);
+    await record.save();
+
+    return false;
   }
 
   public async findUserOne(id: number) {

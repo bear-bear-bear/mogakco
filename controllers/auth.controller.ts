@@ -14,6 +14,8 @@ import {
   Query,
   HttpStatus,
   HttpException,
+  Redirect,
+  Param,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import JwtAuthGuard from 'services/passport/jwt.guard';
@@ -107,10 +109,12 @@ class AuthController {
       const {
         token,
         email: destinatedEmail,
+        id,
       } = await this.userService.prepareJoin(email);
       this.emailService.userVerify({
         email: destinatedEmail,
         token,
+        id,
       });
     } catch (e) {
       prepareFailure(e);
@@ -121,36 +125,13 @@ class AuthController {
     };
   }
 
-  /**
-   * @param req 쿼리스트링의 토큰 이메일와 평문 토큰이 주어집니다.
-   * @returns
-   * @desc 이메일과 토큰을 보내서 토큰이 일치하면 불리언 값 반환
-   * 시간이 너무 지나 실패하면 false 반환, 이 경우에는 다시 이메일 검증 페이지로 가서 백엔드에 요청해야 합니다.
-   * 이메일이 중복되는 토큰 값이 있을 수 있기 때문에, 레코드의 ID 값까지 입력받습니다.
-   * @author quavious
-   */
   @Get('/verify-email')
+  @Redirect('http://localhost:3000/signup')
   async verify(
-    @Query() req: { id: string; email: string; verifyToken: string },
+    @Query()
+    { id, token }: { id: string; token: string },
   ) {
-    const { id, email, verifyToken } = req;
-    const isVerified = await this.userService.verifyEmail(
-      id,
-      email,
-      verifyToken,
-    );
-    if (!isVerified) {
-      return {
-        message: '토큰이 잘못되었거나, 요청 시간이 지났습니다.',
-        statusCode: HttpStatus.FORBIDDEN,
-        isVerified,
-      };
-    }
-    return {
-      message: '이메일 확인에 성공했습니다.',
-      statusCode: HttpStatus.OK,
-      isVerified,
-    };
+    await this.userService.verifyEmail(id, token);
   }
 
   /**
