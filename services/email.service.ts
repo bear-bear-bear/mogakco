@@ -7,6 +7,7 @@ import { emailFailure, emailSuccess } from '../lib/backend/log';
 interface UserVerifyEmailDTO {
   email: string;
   token: string;
+  id: number;
 }
 
 @Injectable()
@@ -16,7 +17,7 @@ export default class EmailService {
     private readonly configService: ConfigService,
   ) {}
 
-  public userVerify({ email, token }: UserVerifyEmailDTO): void {
+  public userVerify({ email, token, id }: UserVerifyEmailDTO): void {
     this.mailerService
       .sendMail({
         to: email,
@@ -25,6 +26,7 @@ export default class EmailService {
         encoding: 'utf8',
         template: join(__dirname, '/email', 'user-verify'),
         context: {
+          id,
           to: email,
           verifyToken: token,
           isDev: this.configService.get('NODE_ENV') === 'development',
