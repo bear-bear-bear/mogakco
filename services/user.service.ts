@@ -13,7 +13,7 @@ import { v4 as uuid } from 'uuid';
 import UserRepository from '../models/repositories/user.repository';
 import UserVerifyRepository from '../models/repositories/user.verify.repository';
 import createUserDTO from '../models/dto/create-user.dto';
-import updateUserRequestDto from '../test/unit/Services/dto/update-user-request.dto';
+import updateUserRequestDto from '../test/unit/services/dto/update-user-request.dto';
 import makeHash from '../lib/backend/makeHash';
 
 @Injectable()
