@@ -15,9 +15,6 @@ const errWrapConsole = (message: string, err: Error) => {
   return null;
 };
 
-/**
- * @deprecated
- */
 export const emailSuccess = ({ envelope: { to } }: EmailSucProps) => {
   if (process.env.NODE_ENV === 'development') {
     console.log(`${to[0]} 으로 이메일이 성공적으로 전송되었습니다.`);
