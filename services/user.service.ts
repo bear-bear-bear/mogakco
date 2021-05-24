@@ -13,7 +13,6 @@ import { v4 as uuid } from 'uuid';
 import UserRepository from '../models/repositories/user.repository';
 import UserVerifyRepository from '../models/repositories/user.verify.repository';
 import createUserDTO from '../models/dto/create-user.dto';
-import updateUserRequestDto from '../test/unit/services/dto/update-user-request.dto';
 import makeHash from '../lib/backend/makeHash';
 
 @Injectable()
@@ -52,21 +51,25 @@ class UserService {
    * 만료 날짜가 아직 지나지 않았다면 기존에 생성된 레코드를 그대로 리턴할 것입니다.
    * 그렇지 않다면 새로운 레코드를 만들어서 프론트에 제공합니다.
    */
-  public async prepareJoin(userEmail: string) {
-    const currentUserVerify = await this.userVerifyRepository.findOne({
-      email: userEmail,
+  public async prepareJoin(email: string) {
+    const now = new Date();
+    const currentVerification = await this.userVerifyRepository.findOne({
+      email,
     });
-    if (currentUserVerify && currentUserVerify.expiredAt > new Date()) {
-      return [currentUserVerify.token, userEmail];
+    if (currentVerification && currentVerification.expiredAt < now) {
+      await this.userVerifyRepository.delete(currentVerification.id);
+    }
+    if (currentVerification && currentVerification.expiredAt > now) {
+      return { token: currentVerification.token, email };
     }
 
-    const verifyToken = await makeHash(`${userEmail}|${uuid()}`);
-    const newVerify = await this.userVerifyRepository.createOne(
-      userEmail,
-      verifyToken,
+    const newVerificationToken = await makeHash(`${email}|${uuid()}`);
+    const newVerification = await this.userVerifyRepository.createOne(
+      email,
+      newVerificationToken,
     );
 
-    return [newVerify.token, userEmail];
+    return { token: newVerification.token, email };
   }
 
   /**
@@ -97,7 +100,7 @@ class UserService {
     return this.userRepository.findUserByEmail(email);
   }
 
-  public async updateUserOne(user: updateUserRequestDto) {
+  public async updateUserOne(user: any) {
     return this.userRepository.updateUser(user);
   }
 
@@ -182,15 +185,6 @@ class UserService {
     user.verifiedAt = new Date();
     await user.save();
     return true;
-  }
-
-  public async resendEmail(user: User) {
-    // const {
-    //   userVerify,
-    //   verifyToken,
-    // } = await this.userVerifyRepository.createOne(user);
-    // console.log(userVerify, verifyToken);
-    console.log('test');
   }
 }
 
