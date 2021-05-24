@@ -1,6 +1,6 @@
 {
   "moduleFileExtensions": ["js", "jsx", "json"],
-  "rootDir": ".",
+  "rootDir": "../../../",
   "testRegex": ".spec.jsx$",
   "testEnvironment": "jsdom",
   "transform": {
