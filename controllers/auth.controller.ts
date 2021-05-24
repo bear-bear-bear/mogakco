@@ -1,7 +1,6 @@
 import {
   Get,
   Post,
-  Param,
   Body,
   Controller,
   UseGuards,
@@ -14,6 +13,7 @@ import {
   ValidationPipe,
   Query,
   HttpStatus,
+  HttpException,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import JwtAuthGuard from 'services/passport/jwt.guard';
@@ -85,9 +85,8 @@ class AuthController {
    */
   @Post()
   async join(@Body() user: createUserDTO): Promise<response> {
-    console.log({ user });
-    const res = await this.userService.join(user);
-    return res;
+    const message = await this.userService.join(user);
+    return message;
   }
 
   /**
@@ -95,19 +94,23 @@ class AuthController {
    * @author galaxy4276
    * @param email required. ex ) galaxyhi4276@gmail.com
    */
-  @Post('/prepare')
-  async prepareJoin(@Body('email') email: string) {
-    if (!email)
-      return {
-        statusCode: HttpStatus.BAD_REQUEST,
-        message: '이메일 필드가 존재하지 않습니다.',
-      };
+  @Post('/send-token/before-register')
+  async sendTokenBeforeRegister(@Body('email') email: string) {
+    if (!email) {
+      throw new HttpException(
+        '이메일 필드가 존재하지 않습니다.',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
 
     try {
-      const [verifyToken, to] = await this.userService.prepareJoin(email);
+      const {
+        token,
+        email: destinatedEmail,
+      } = await this.userService.prepareJoin(email);
       this.emailService.userVerify({
-        to,
-        verifyToken,
+        email: destinatedEmail,
+        token,
       });
     } catch (e) {
       prepareFailure(e);
@@ -148,54 +151,6 @@ class AuthController {
       statusCode: HttpStatus.OK,
       isVerified,
     };
-  }
-
-  /**
-   *
-   * @param req
-   * @desc 가입은 되어있지만 이메일 인증이 안되어있을 때 Post 요청으로 다시 이메일 전송
-   * JWT 토큰을 통해 사용자 이메일 얻을 수 있음.
-   * @author quavious
-   */
-  // @Post('/resend-email')
-  // @UseGuards(JwtAuthGuard)
-  // async reVerify(@Req() req: Request) {
-  //   const { email } = req.user as any;
-  //   const user = await this.userService.findUserByEmail(email);
-  //   if (!user) {
-  //     throw new UnauthorizedException();
-  //   }
-  //   if (user.verifiedAt) {
-  //     return {
-  //       statusCode: HttpStatus.OK,
-  //       message: '이미 겅증되어있습니다.',
-  //     };
-  //   }
-  //   await this.userService.resendEmail(user);
-  //   return {
-  //     status: HttpStatus.OK,
-  //     message: '이메일을 다시 발송합니다.',
-  //   };
-  // }
-
-  /**
-   * @deprecated will be remove
-   * @author galaxy4276
-   */
-  @Get('/:id')
-  findUserOne(@Param('id') id: number) {
-    const findUser = this.userService.findUserOne(id);
-    return findUser;
-  }
-
-  /**
-   * @deprecated will be remove
-   * @author galaxy4276
-   */
-  @Get('/:username')
-  async findUserByName(@Param('username') username: string) {
-    const findUser = await this.userService.findUserByName(username);
-    return findUser;
   }
 
   /**
