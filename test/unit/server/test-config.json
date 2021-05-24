@@ -1,5 +1,5 @@
 {
-  "moduleFileExtensions": ["ts", "json"],
+  "moduleFileExtensions": ["ts", "js", "json"],
   "rootDir": ".",
   "testRegex": ".test.ts$",
   "testEnvironment": "jsdom",
