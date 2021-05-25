@@ -13,7 +13,6 @@ import { v4 as uuid } from 'uuid';
 import UserRepository from '../models/repositories/user.repository';
 import UserVerifyRepository from '../models/repositories/user.verify.repository';
 import createUserDTO from '../models/dto/create-user.dto';
-import updateUserRequestDto from '../test/unit/services/dto/update-user-request.dto';
 import makeHash from '../lib/backend/makeHash';
 
 @Injectable()
@@ -44,6 +43,12 @@ class UserService {
   //   return newUser;
   // }
 
+  async verifyTokenBeforeRegister(email: string) {
+    const currentVerification = await this.userVerifyRepository.findOne({
+      email,
+    });
+  }
+
   /**
    *
    * @param email
@@ -52,21 +57,29 @@ class UserService {
    * 만료 날짜가 아직 지나지 않았다면 기존에 생성된 레코드를 그대로 리턴할 것입니다.
    * 그렇지 않다면 새로운 레코드를 만들어서 프론트에 제공합니다.
    */
-  public async prepareJoin(userEmail: string) {
-    const currentUserVerify = await this.userVerifyRepository.findOne({
-      email: userEmail,
+  public async prepareJoin(email: string) {
+    const now = new Date();
+    const currentVerification = await this.userVerifyRepository.findOne({
+      email,
     });
-    if (currentUserVerify && currentUserVerify.expiredAt > new Date()) {
-      return [currentUserVerify.token, userEmail];
+    if (currentVerification && currentVerification.expiredAt < now) {
+      await this.userVerifyRepository.delete(currentVerification.id);
+    }
+    if (currentVerification && currentVerification.expiredAt > now) {
+      return {
+        token: currentVerification.token,
+        email,
+        id: currentVerification.id,
+      };
     }
 
-    const verifyToken = await makeHash(`${userEmail}|${uuid()}`);
-    const newVerify = await this.userVerifyRepository.createOne(
-      userEmail,
-      verifyToken,
+    const newVerificationToken = await makeHash(`${email}|${uuid()}`);
+    const newVerification = await this.userVerifyRepository.createOne(
+      email,
+      newVerificationToken,
     );
 
-    return [newVerify.token, userEmail];
+    return { token: newVerification.token, email, id: newVerification.id };
   }
 
   /**
@@ -77,12 +90,32 @@ class UserService {
    * @returns boolean
    * id, 이메일 토큰 값으로 해당 테이블에 일치하는 레코드가 있는지 확인합니다.
    */
-  public async verifyEmail(_id: string, email: string, token: string) {
-    const id = parseInt(_id, 10);
-    if (!id) throw new NotFoundException();
-    const record = await this.userVerifyRepository.findOneByEmail(id, email);
-    const isEqual = await bcrypt.compare(token, record.token);
-    return isEqual;
+  public async verifyEmail(id: string, token: string) {
+    const record = await this.userVerifyRepository.findOne(id);
+    console.log({ record });
+    if (!record) {
+      throw new HttpException(
+        '인증 url 이 잘못되었습니다.',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+
+    if (record.expiredAt < new Date()) {
+      return false;
+    }
+
+    const isEqual = token === record.token;
+    if (isEqual) {
+      record.isVerified = true;
+    }
+
+    if (!isEqual) {
+      record.isVerified = false;
+    }
+    console.log('before save:', record.isVerified);
+    await record.save();
+
+    return false;
   }
 
   public async findUserOne(id: number) {
@@ -97,7 +130,7 @@ class UserService {
     return this.userRepository.findUserByEmail(email);
   }
 
-  public async updateUserOne(user: updateUserRequestDto) {
+  public async updateUserOne(user: any) {
     return this.userRepository.updateUser(user);
   }
 
@@ -182,15 +215,6 @@ class UserService {
     user.verifiedAt = new Date();
     await user.save();
     return true;
-  }
-
-  public async resendEmail(user: User) {
-    // const {
-    //   userVerify,
-    //   verifyToken,
-    // } = await this.userVerifyRepository.createOne(user);
-    // console.log(userVerify, verifyToken);
-    console.log('test');
   }
 }
 

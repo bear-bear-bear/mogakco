@@ -1,7 +1,6 @@
 import {
   Get,
   Post,
-  Param,
   Body,
   Controller,
   UseGuards,
@@ -14,6 +13,9 @@ import {
   ValidationPipe,
   Query,
   HttpStatus,
+  HttpException,
+  Redirect,
+  Param,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import JwtAuthGuard from 'services/passport/jwt.guard';
@@ -85,9 +87,8 @@ class AuthController {
    */
   @Post()
   async join(@Body() user: createUserDTO): Promise<response> {
-    console.log({ user });
-    const res = await this.userService.join(user);
-    return res;
+    const message = await this.userService.join(user);
+    return message;
   }
 
   /**
@@ -95,19 +96,25 @@ class AuthController {
    * @author galaxy4276
    * @param email required. ex ) galaxyhi4276@gmail.com
    */
-  @Post('/prepare')
-  async prepareJoin(@Body('email') email: string) {
-    if (!email)
-      return {
-        statusCode: HttpStatus.BAD_REQUEST,
-        message: '이메일 필드가 존재하지 않습니다.',
-      };
+  @Post('/send-token/before-register')
+  async sendTokenBeforeRegister(@Body('email') email: string) {
+    if (!email) {
+      throw new HttpException(
+        '이메일 필드가 존재하지 않습니다.',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
 
     try {
-      const [verifyToken, to] = await this.userService.prepareJoin(email);
+      const {
+        token,
+        email: destinatedEmail,
+        id,
+      } = await this.userService.prepareJoin(email);
       this.emailService.userVerify({
-        to,
-        verifyToken,
+        email: destinatedEmail,
+        token,
+        id,
       });
     } catch (e) {
       prepareFailure(e);
@@ -118,84 +125,13 @@ class AuthController {
     };
   }
 
-  /**
-   * @param req 쿼리스트링의 토큰 이메일와 평문 토큰이 주어집니다.
-   * @returns
-   * @desc 이메일과 토큰을 보내서 토큰이 일치하면 불리언 값 반환
-   * 시간이 너무 지나 실패하면 false 반환, 이 경우에는 다시 이메일 검증 페이지로 가서 백엔드에 요청해야 합니다.
-   * 이메일이 중복되는 토큰 값이 있을 수 있기 때문에, 레코드의 ID 값까지 입력받습니다.
-   * @author quavious
-   */
   @Get('/verify-email')
+  @Redirect('http://localhost:3000/signup')
   async verify(
-    @Query() req: { id: string; email: string; verifyToken: string },
+    @Query()
+    { id, token }: { id: string; token: string },
   ) {
-    const { id, email, verifyToken } = req;
-    const isVerified = await this.userService.verifyEmail(
-      id,
-      email,
-      verifyToken,
-    );
-    if (!isVerified) {
-      return {
-        message: '토큰이 잘못되었거나, 요청 시간이 지났습니다.',
-        statusCode: HttpStatus.FORBIDDEN,
-        isVerified,
-      };
-    }
-    return {
-      message: '이메일 확인에 성공했습니다.',
-      statusCode: HttpStatus.OK,
-      isVerified,
-    };
-  }
-
-  /**
-   *
-   * @param req
-   * @desc 가입은 되어있지만 이메일 인증이 안되어있을 때 Post 요청으로 다시 이메일 전송
-   * JWT 토큰을 통해 사용자 이메일 얻을 수 있음.
-   * @author quavious
-   */
-  // @Post('/resend-email')
-  // @UseGuards(JwtAuthGuard)
-  // async reVerify(@Req() req: Request) {
-  //   const { email } = req.user as any;
-  //   const user = await this.userService.findUserByEmail(email);
-  //   if (!user) {
-  //     throw new UnauthorizedException();
-  //   }
-  //   if (user.verifiedAt) {
-  //     return {
-  //       statusCode: HttpStatus.OK,
-  //       message: '이미 겅증되어있습니다.',
-  //     };
-  //   }
-  //   await this.userService.resendEmail(user);
-  //   return {
-  //     status: HttpStatus.OK,
-  //     message: '이메일을 다시 발송합니다.',
-  //   };
-  // }
-
-  /**
-   * @deprecated will be remove
-   * @author galaxy4276
-   */
-  @Get('/:id')
-  findUserOne(@Param('id') id: number) {
-    const findUser = this.userService.findUserOne(id);
-    return findUser;
-  }
-
-  /**
-   * @deprecated will be remove
-   * @author galaxy4276
-   */
-  @Get('/:username')
-  async findUserByName(@Param('username') username: string) {
-    const findUser = await this.userService.findUserByName(username);
-    return findUser;
+    await this.userService.verifyEmail(id, token);
   }
 
   /**

@@ -25,9 +25,8 @@ class UserVerify extends BaseEntity {
   @Column({ name: 'expired_at' })
   public expiredAt!: Date;
 
-  // @OneToOne(() => User)
-  // @JoinColumn({ name: 'user_id' })
-  // public userId!: number;
+  @Column({ name: 'is_verified', default: false })
+  public isVerified!: boolean;
 }
 
 export default UserVerify;
