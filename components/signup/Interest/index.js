@@ -13,7 +13,7 @@ const Index = () => {
   const [job, onChangeJob] = useInput(null);
 
   const onSubmit = useCallback(
-    async (e) => {
+    (e) => {
       e.preventDefault();
       dispatch(verifyInterestRequest({ field, job }));
     },
