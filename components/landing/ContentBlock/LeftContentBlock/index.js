@@ -5,7 +5,6 @@ import PropTypes from 'prop-types';
 import { Row, Col } from 'antd';
 import Fade from 'react-reveal/Fade';
 
-import useInput from '~/hooks/useInput';
 import { saveEmail } from '~/redux/reducers/landing';
 import { meSelector } from '~/redux/selectors/common/user';
 import Image from '~/components/common/Image';
@@ -15,7 +14,6 @@ import * as S from './style';
 const LeftContentBlock = ({ title, content, imgName, firstBlock, emailEl }) => {
   const dispatch = useDispatch();
   const me = useSelector(meSelector);
-  const [email, onChangeEmail] = useInput('');
 
   useEffect(() => {
     if (!firstBlock) return;
@@ -24,7 +22,7 @@ const LeftContentBlock = ({ title, content, imgName, firstBlock, emailEl }) => {
 
   const toSignUp = (e) => {
     e.preventDefault();
-    dispatch(saveEmail(email));
+    dispatch(saveEmail(emailEl.current.value));
     Router.push('/signup');
   };
 
@@ -46,8 +44,6 @@ const LeftContentBlock = ({ title, content, imgName, firstBlock, emailEl }) => {
                     <S.FirstBlockInput
                       ref={emailEl}
                       type="email"
-                      value={email}
-                      onChange={onChangeEmail}
                       placeholder="이메일 입력"
                       spellCheck="false"
                       required

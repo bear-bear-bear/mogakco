@@ -1,24 +1,22 @@
-import React, { useCallback } from 'react';
+import React, { useRef } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { verifyInterestRequest } from '~/redux/reducers/signup';
-import useInput from '~/hooks/useInput';
 
 import * as CS from '../common/styles';
 import * as S from './style';
 
 const Index = () => {
   const dispatch = useDispatch();
-  const [field, onChangeField] = useInput(null);
-  const [job, onChangeJob] = useInput(null);
+  const fieldEl = useRef(null);
+  const jobEl = useRef(null);
 
-  const onSubmit = useCallback(
-    (e) => {
-      e.preventDefault();
-      dispatch(verifyInterestRequest({ field, job }));
-    },
-    [dispatch, field, job],
-  );
+  const onSubmit = (e) => {
+    e.preventDefault();
+    const field = fieldEl.current.value || null;
+    const job = jobEl.current.value || null;
+    dispatch(verifyInterestRequest({ field, job }));
+  };
 
   return (
     <CS.Container>
@@ -29,7 +27,7 @@ const Index = () => {
       <CS.Form action="" onSubmit={onSubmit}>
         <CS.InputWrapper>
           <CS.Label htmlFor="field">개발 분야</CS.Label>
-          <S.Select id="field" page="interest" onChange={onChangeField}>
+          <S.Select id="field" ref={fieldEl}>
             <S.Option value="">개발 분야를 선택해주세요</S.Option>
             <S.Option value="frontend">프론트엔드</S.Option>
             <S.Option value="backend">백엔드</S.Option>
@@ -40,7 +38,7 @@ const Index = () => {
         </CS.InputWrapper>
         <CS.InputWrapper>
           <CS.Label htmlFor="job">직업</CS.Label>
-          <S.Select id="job" page="interest" onChange={onChangeJob}>
+          <S.Select id="job" ref={jobEl}>
             <S.Option value="">직업을 선택해주세요</S.Option>
             <S.Option value="worker">직장인</S.Option>
             <S.Option value="student">학생</S.Option>

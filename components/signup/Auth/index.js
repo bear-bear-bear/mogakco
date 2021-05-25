@@ -4,7 +4,6 @@ import Link from 'next/link';
 
 import GoogleLogo from 'assets/svg/btn_google_light_normal_ios.svg';
 import { emailRule } from '~/lib/regex';
-import useInput from '~/hooks/useInput';
 import { getVerifyEmailLoading } from '~/redux/selectors/signup';
 import { landingEmailSelector } from '~/redux/selectors/landing';
 import { verifyEmailRequest } from '~/redux/reducers/signup';
@@ -15,23 +14,23 @@ import * as S from './style';
 
 const Index = () => {
   const dispatch = useDispatch();
-  const submitEmailButtonRef = useRef(null);
-  const [email, onChangeEmail, setEmail] = useInput('');
   const [emailTestError, setEmailTestError] = useState(false);
   const verifyEmailLoading = useSelector(getVerifyEmailLoading);
   const landingEmail = useSelector(landingEmailSelector);
+  const emailEl = useRef(null);
+  const submitButtonEl = useRef(null);
 
   useEffect(() => {
-    submitEmailButtonRef.current.focus();
+    submitButtonEl.current.focus();
   }, []);
 
   useEffect(() => {
     // 랜딩에서 이메일 입력 후 버튼을 눌렀다면, 해당 이메일을 자동 입력
     if (landingEmail === null) return;
 
-    setEmail(landingEmail);
+    emailEl.current.value = landingEmail;
     dispatch(saveLandingEmail(null));
-  }, [landingEmail, setEmail, dispatch]);
+  }, [landingEmail, dispatch]);
 
   // useEffect(() => {
   //   if (localStorage.getItem('email') === ) {
@@ -39,22 +38,23 @@ const Index = () => {
   //   }
   // }, [exEmail]);
 
-  const onSubmit = useCallback(
+  const onSubmitEmail = useCallback(
     (e) => {
       e.preventDefault();
+      const email = emailEl.current.value;
       if (!emailRule.test(email)) {
         setEmailTestError(true);
         return;
       }
       dispatch(verifyEmailRequest(email));
     },
-    [dispatch, email],
+    [dispatch],
   );
 
-  const onClickSocial = useCallback(() => {
+  const onClickSocial = () => {
     alert('미구현 기능입니다');
     // dispatch(verifySocialRequest());
-  }, []);
+  };
 
   return (
     <CS.Container>
@@ -67,23 +67,18 @@ const Index = () => {
         <CS.Title>메일함을 확인하세요</CS.Title>
       )}
       {!verifyEmailLoading && (
-        <CS.Form action="" onSubmit={onSubmit}>
+        <CS.Form action="" onSubmit={onSubmitEmail}>
           <CS.Input
             type="text"
             placeholder="이메일 입력"
-            value={email}
-            onChange={onChangeEmail}
+            ref={emailEl}
             size="medium"
             spellCheck="false"
           />
           {emailTestError && (
             <CS.WarningText>정확한 이메일을 입력해주세요!</CS.WarningText>
           )}
-          <CS.SubmitButton
-            ref={submitEmailButtonRef}
-            type="submit"
-            complete={false}
-          >
+          <CS.SubmitButton ref={submitButtonEl} type="submit" complete={false}>
             인증메일 발송
           </CS.SubmitButton>
         </CS.Form>
@@ -91,7 +86,8 @@ const Index = () => {
       {verifyEmailLoading && (
         <>
           <CS.Description>
-            <b>{email}</b>로 인증 링크가 전송되었습니다. 메일함을 확인해주세요.
+            <b>{emailEl.current.value}</b>로 인증 링크가 전송되었습니다.
+            메일함을 확인해주세요.
           </CS.Description>
         </>
       )}

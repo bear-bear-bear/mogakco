@@ -13,7 +13,7 @@ export const WarningText = styled.p`
     content: '※ ';
   }
 
-  &:first-child {
+  &:first-of-type {
     margin-top: 0.66rem;
   }
 

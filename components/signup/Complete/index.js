@@ -5,6 +5,7 @@ import * as CS from '../common/styles';
 
 const Index = () => {
   const buttonEl = useRef(null);
+
   useEffect(() => {
     buttonEl.current.focus();
   }, []);

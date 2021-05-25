@@ -10,7 +10,6 @@ import * as S from './style';
 
 const Index = () => {
   const dispatch = useDispatch();
-  const [nickname, onChangeNickname] = useInput('');
   const [password, onChangePassword] = useInput('');
   const [passwordConfirm, onChangePasswordConfirm] = useInput('');
   const [initSubmitDone, setInitSubmitDone] = useState(false);
@@ -18,12 +17,13 @@ const Index = () => {
   const [passwordMatchError, setPasswordMatchError] = useState(false);
   const [passwordTestError, setPasswordTestError] = useState(false);
   const [termError, setTermError] = useState(false);
-  const firstInputEl = useRef(null);
+  const [isTypingPassword, setIsTypingPassword] = useState(false);
+  const nicknameEl = useRef(null);
   const passwordInputEl = useRef(null);
   const passwordConfirmInputEl = useRef(null);
 
   useEffect(() => {
-    firstInputEl.current?.focus();
+    nicknameEl.current.focus();
   }, []);
 
   useEffect(() => {
@@ -33,10 +33,11 @@ const Index = () => {
   }, [passwordTestError]);
 
   useEffect(() => {
-    if (passwordMatchError) {
+    // 사용자가 비밀번호를 수정하는 도중에는 비밀번호 확인 input으론 focus가 발생하지 않도록 설정
+    if (passwordMatchError && !isTypingPassword) {
       passwordConfirmInputEl.current.focus();
     }
-  }, [passwordMatchError]);
+  }, [passwordMatchError, isTypingPassword]);
 
   const verifyInputs = useCallback(() => {
     // input 모두 검증 후 전체 테스트 통과여부 반환
@@ -60,19 +61,30 @@ const Index = () => {
     verifyInputs();
   }, [verifyInputs, initSubmitDone]);
 
-  const onChangeTerm = useCallback(() => {
+  const flipIsTypingPassword = () => {
+    setIsTypingPassword((prev) => !prev);
+  };
+
+  const onChangeTerm = () => {
     setTerm((prev) => !prev);
-  }, []);
+  };
 
   const onSubmit = useCallback(
     (e) => {
       e.preventDefault();
       setInitSubmitDone(true);
+
       const isAllPass = verifyInputs();
       if (!isAllPass) return;
-      dispatch(verifyInfoRequest({ nickname, password }));
+
+      dispatch(
+        verifyInfoRequest({
+          nickname: nicknameEl.current.value,
+          password,
+        }),
+      );
     },
-    [dispatch, verifyInputs, nickname, password],
+    [dispatch, verifyInputs, password],
   );
 
   return (
@@ -85,10 +97,8 @@ const Index = () => {
           <CS.Input
             type="text"
             id="nickname"
-            value={nickname}
-            onChange={onChangeNickname}
             size="small"
-            ref={firstInputEl}
+            ref={nicknameEl}
             required
           />
         </CS.InputWrapper>
@@ -99,6 +109,8 @@ const Index = () => {
             id="password"
             value={password}
             onChange={onChangePassword}
+            onFocus={flipIsTypingPassword}
+            onBlur={flipIsTypingPassword}
             size="small"
             ref={passwordInputEl}
             required
