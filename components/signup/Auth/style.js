@@ -1,15 +1,11 @@
 import styled from '@emotion/styled';
 
-export const Description = styled.div`
-  font-size: 1.125rem;
-`;
-
 export const SocialLoginWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin-top: 3.25rem;
+  margin-top: 3rem;
 
   a:nth-of-type(1) {
     margin-bottom: 1.25rem;
@@ -32,10 +28,11 @@ export const SocialAnchor = styled.a`
       : 'var(--color-black)'};
   border-radius: 0.4rem;
   font-size: 1.125rem;
-  box-shadow: 0 3px 3px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
   cursor: pointer;
 
-  &:hover {
+  &:hover,
+  &:focus {
     background-color: ${(props) =>
       props.service === 'google'
         ? 'var(--color-gray-0)'

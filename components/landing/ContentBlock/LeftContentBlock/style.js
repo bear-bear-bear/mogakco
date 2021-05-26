@@ -49,7 +49,7 @@ export const FirstBlockJoinButton = styled(Button)`
   display: flex;
   justify-content: center;
   margin-top: 0.33rem;
-  padding: 1.33rem 1.66rem;
+  padding: 1.33rem 2.33rem;
 
   ${media.sm} {
     width: initial;

@@ -99,8 +99,7 @@ export const Button = styled.button`
   border-radius: 4px;
   color: black;
   cursor: pointer;
-  padding-left: 1rem;
-  padding-right: 1rem;
+  padding: 1.33rem;
 
   /* 컬러 스타일 */
   ${colorStyles}
