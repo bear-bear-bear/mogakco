@@ -47,6 +47,8 @@ class UserService {
     const currentVerification = await this.userVerifyRepository.findOne({
       email,
     });
+
+    return currentVerification?.isVerified;
   }
 
   /**
@@ -83,6 +85,18 @@ class UserService {
     );
 
     return { token, email, id };
+  }
+
+  public async lastCheckingEmailVerify(id: string) {
+    const verificationInstance = await this.userVerifyRepository.findOne({
+      id: Number(id),
+    });
+
+    if (!verificationInstance) {
+      return false;
+    }
+
+    return verificationInstance;
   }
 
   /**
