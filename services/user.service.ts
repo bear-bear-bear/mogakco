@@ -57,29 +57,32 @@ class UserService {
    * 만료 날짜가 아직 지나지 않았다면 기존에 생성된 레코드를 그대로 리턴할 것입니다.
    * 그렇지 않다면 새로운 레코드를 만들어서 프론트에 제공합니다.
    */
-  public async prepareJoin(email: string) {
+  async prepareJoin(email: string) {
     const now = new Date();
     const currentVerification = await this.userVerifyRepository.findOne({
       email,
     });
-    if (currentVerification && currentVerification.expiredAt < now) {
-      await this.userVerifyRepository.delete(currentVerification.id);
-    }
-    if (currentVerification && currentVerification.expiredAt > now) {
-      return {
-        token: currentVerification.token,
-        email,
-        id: currentVerification.id,
-      };
+
+    if (currentVerification?.expiredAt) {
+      const { expiredAt, id, token } = currentVerification;
+
+      if (expiredAt < now) await this.userVerifyRepository.delete(id);
+      if (expiredAt > now) {
+        return {
+          token,
+          email,
+          id,
+        };
+      }
     }
 
     const newVerificationToken = await makeHash(`${email}|${uuid()}`);
-    const newVerification = await this.userVerifyRepository.createOne(
+    const { token, id } = await this.userVerifyRepository.createOne(
       email,
       newVerificationToken,
     );
 
-    return { token: newVerification.token, email, id: newVerification.id };
+    return { token, email, id };
   }
 
   /**
@@ -90,7 +93,7 @@ class UserService {
    * @returns boolean
    * id, 이메일 토큰 값으로 해당 테이블에 일치하는 레코드가 있는지 확인합니다.
    */
-  public async verifyEmail(id: string, token: string) {
+  async verifyEmail(id: string, token: string) {
     const record = await this.userVerifyRepository.findOne(id);
     console.log({ record });
     if (!record) {
@@ -118,27 +121,27 @@ class UserService {
     return false;
   }
 
-  public async findUserOne(id: number) {
+  async findUserOne(id: number) {
     return this.userRepository.findUserOne(id);
   }
 
-  public async findUserByName(username: string) {
+  async findUserByName(username: string) {
     return this.userRepository.findUserByName(username);
   }
 
-  public async findUserByEmail(email: string) {
+  async findUserByEmail(email: string) {
     return this.userRepository.findUserByEmail(email);
   }
 
-  public async updateUserOne(user: any) {
+  async updateUserOne(user: any) {
     return this.userRepository.updateUser(user);
   }
 
-  public async deleteUser(id: number) {
+  async deleteUser(id: number) {
     return this.userRepository.deleteUser(id);
   }
 
-  public async join({ username, password, email }: createUserDTO) {
+  async join({ username, password, email }: createUserDTO) {
     const currentUser = await this.userRepository.findUserByEmail(email);
     if (currentUser) {
       throw new HttpException(
@@ -160,7 +163,7 @@ class UserService {
    * @param("refreshToken")
    * hashRefreshToken makes refresh token be hashed in database.
    */
-  public async hashRefreshToken(refreshToken: string, email: string) {
+  async hashRefreshToken(refreshToken: string, email: string) {
     const hashedToken = await bcrypt.hash(refreshToken, 12);
     const isSaved = await this.userRepository.update(
       { email },
@@ -171,7 +174,7 @@ class UserService {
     return isSaved;
   }
 
-  public async getUserIfTokenMatches(refreshToken: string, email: string) {
+  async getUserIfTokenMatches(refreshToken: string, email: string) {
     const user = await this.userRepository.findOne({ email });
     if (user && user.hashedRefreshToken) {
       const isMatch = await bcrypt.compare(
@@ -194,7 +197,7 @@ class UserService {
    * 나누는 단위는 |
    * 그렇지 않을 경우 검증 토큰을 다시 생성 및 이메일 전송
    */
-  public async verifyUserWithToken(id: number, verifyToken: string) {
+  async verifyUserWithToken(id: number, verifyToken: string) {
     const userVerify = await this.userVerifyRepository.findOne({ id });
     if (!userVerify) {
       throw new InternalServerErrorException();
