@@ -14,6 +14,7 @@ import UserRepository from '../models/repositories/user.repository';
 import UserVerifyRepository from '../models/repositories/user.verify.repository';
 import createUserDTO from '../models/dto/create-user.dto';
 import makeHash from '../lib/backend/makeHash';
+import UserVerify from '@models/entities/user.verify';
 
 @Injectable()
 class UserService {
@@ -87,9 +88,9 @@ class UserService {
     return { token, email, id };
   }
 
-  public async lastCheckingEmailVerify(id: string | number) {
+  public async lastCheckingEmailVerify(email: string) {
     const verificationInstance = await this.userVerifyRepository.findOne({
-      id: Number(id),
+      email,
     });
 
     if (!verificationInstance) {
@@ -108,30 +109,22 @@ class UserService {
    * id, 이메일 토큰 값으로 해당 테이블에 일치하는 레코드가 있는지 확인합니다.
    */
   async verifyEmail(id: string, token: string) {
-    const record = await this.userVerifyRepository.findOne(id);
-
+    const record = (await this.userVerifyRepository.findOne(id)) as UserVerify;
     if (!record) {
       throw new HttpException(
         '인증 url 이 잘못되었습니다.',
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
-
-    if (record.expiredAt < new Date()) {
-      return false;
-    }
+    if (record.isVerified) return record;
+    if (record.expiredAt < new Date()) return false;
 
     const isEqual = token === record.token;
-    if (isEqual) {
-      record.isVerified = true;
-    }
+    if (isEqual) record.isVerified = true;
+    if (!isEqual) record.isVerified = false;
 
-    if (!isEqual) {
-      record.isVerified = false;
-    }
     await record.save();
-
-    return false;
+    return record;
   }
 
   async findUserOne(id: number) {

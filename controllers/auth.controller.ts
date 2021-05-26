@@ -129,20 +129,26 @@ class AuthController {
     @Query()
     { id, token }: { id: string; token: string },
   ) {
-    await this.userService.verifyEmail(id, token);
+    const redirection = `http://localhost:3000/signup`;
+    const verification = await this.userService.verifyEmail(id, token);
+    if (!verification || verification.isVerified) {
+      return { url: `${redirection}?success=false` };
+    }
 
-    return {
-      url: `http://localhost:3000/signup?id=${id}`,
-    };
+    const { email } = verification;
+    return { url: `${redirection}?email=${email}?success=true` };
   }
 
   @Get('/is-verified/before-register')
   @HttpCode(200)
-  async lastCheckingBeforeRegister(@Query('id') id: string | number) {
-    if (!id) {
-      throw new HttpException('id 인자가 없습니다.', HttpStatus.BAD_REQUEST);
+  async lastCheckingBeforeRegister(@Query('email') email: string) {
+    if (!email) {
+      throw new HttpException(
+        '이메일 인자가 없습니다.',
+        HttpStatus.BAD_REQUEST,
+      );
     }
-    const verification = await this.userService.lastCheckingEmailVerify(id);
+    const verification = await this.userService.lastCheckingEmailVerify(email);
 
     if (!verification) {
       throw new HttpException(
