@@ -4,9 +4,9 @@ import Link from 'next/link';
 
 import GoogleLogo from 'assets/svg/btn_google_light_normal_ios.svg';
 import { emailRule } from '~/lib/regex';
-import { getVerifyEmailLoading } from '~/redux/selectors/signup';
+import { getSendEmailDone } from '~/redux/selectors/signup';
 import { landingEmailSelector } from '~/redux/selectors/landing';
-import { verifyEmailRequest } from '~/redux/reducers/signup';
+import { sendEmailRequest } from '~/redux/reducers/signup';
 import { saveEmail as saveLandingEmail } from '~/redux/reducers/landing';
 
 import * as CS from '../common/styles';
@@ -15,7 +15,7 @@ import * as S from './style';
 const Index = () => {
   const dispatch = useDispatch();
   const [emailTestError, setEmailTestError] = useState(false);
-  const verifyEmailLoading = useSelector(getVerifyEmailLoading);
+  const sendEmailDone = useSelector(getSendEmailDone);
   const landingEmail = useSelector(landingEmailSelector);
   const emailEl = useRef(null);
   const submitButtonEl = useRef(null);
@@ -46,7 +46,7 @@ const Index = () => {
         setEmailTestError(true);
         return;
       }
-      dispatch(verifyEmailRequest(email));
+      dispatch(sendEmailRequest(email));
     },
     [dispatch],
   );
@@ -58,7 +58,7 @@ const Index = () => {
 
   return (
     <CS.Container>
-      {!verifyEmailLoading ? (
+      {!sendEmailDone ? (
         <>
           <CS.Title>회원가입</CS.Title>
           <CS.SubTitle>이메일을 입력하세요</CS.SubTitle>
@@ -66,7 +66,7 @@ const Index = () => {
       ) : (
         <CS.Title>메일함을 확인하세요</CS.Title>
       )}
-      {!verifyEmailLoading && (
+      {!sendEmailDone && (
         <CS.Form action="" onSubmit={onSubmitEmail}>
           <CS.Input
             type="text"
@@ -83,7 +83,7 @@ const Index = () => {
           </CS.SubmitButton>
         </CS.Form>
       )}
-      {verifyEmailLoading && (
+      {sendEmailDone && (
         <>
           <CS.Description>
             <b>{emailEl.current.value}</b>로 인증 링크가 전송되었습니다.
@@ -91,7 +91,7 @@ const Index = () => {
           </CS.Description>
         </>
       )}
-      {!verifyEmailLoading && (
+      {!sendEmailDone && (
         <>
           <CS.Description>
             이메일 인증을 성공하면 회원가입을 계속 진행할 수 있습니다.

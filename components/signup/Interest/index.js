@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { verifyInterestRequest } from '~/redux/reducers/signup';
+import { saveOptionalInfoRequest } from '~/redux/reducers/signup';
 
 import * as CS from '../common/styles';
 import * as S from './style';
@@ -15,7 +15,7 @@ const Index = () => {
     e.preventDefault();
     const field = fieldEl.current.value || null;
     const job = jobEl.current.value || null;
-    dispatch(verifyInterestRequest({ field, job }));
+    dispatch(saveOptionalInfoRequest({ field, job }));
   };
 
   return (
