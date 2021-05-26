@@ -124,12 +124,43 @@ class AuthController {
   }
 
   @Get('/verify-email')
-  @Redirect('http://localhost:3000/signup')
-  async verify(
+  @Redirect('http://localhost:3000/signup', 302)
+  async processVerifyEmail(
     @Query()
     { id, token }: { id: string; token: string },
   ) {
-    await this.userService.verifyEmail(id, token);
+    const redirection = `http://localhost:3000/signup`;
+    const verification = await this.userService.verifyEmail(id, token);
+    if (!verification || verification.isVerified) {
+      return { url: `${redirection}?success=false` };
+    }
+
+    const { email } = verification;
+    return { url: `${redirection}?email=${email}?success=true` };
+  }
+
+  @Get('/is-verified/before-register')
+  @HttpCode(200)
+  async lastCheckingBeforeRegister(@Query('email') email: string) {
+    if (!email) {
+      throw new HttpException(
+        '이메일 인자가 없습니다.',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+    const verification = await this.userService.lastCheckingEmailVerify(email);
+
+    if (!verification) {
+      throw new HttpException(
+        '인증에 실패하였습니다.',
+        HttpStatus.UNAUTHORIZED,
+      );
+    }
+
+    return {
+      statusCode: 200,
+      message: verification.isVerified,
+    };
   }
 
   /**
