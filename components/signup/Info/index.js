@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useEffect } from 'react';
+import React, { useCallback, useState, useEffect, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 
 import useInput from '~/hooks/useInput';
@@ -10,14 +10,34 @@ import * as S from './style';
 
 const Index = () => {
   const dispatch = useDispatch();
-  const [nickname, onChangeNickname] = useInput('');
   const [password, onChangePassword] = useInput('');
   const [passwordConfirm, onChangePasswordConfirm] = useInput('');
-  const [initSubmit, setInitSubmit] = useState(false);
+  const [initSubmitDone, setInitSubmitDone] = useState(false);
   const [term, setTerm] = useState(false);
   const [passwordMatchError, setPasswordMatchError] = useState(false);
   const [passwordTestError, setPasswordTestError] = useState(false);
   const [termError, setTermError] = useState(false);
+  const [isTypingPassword, setIsTypingPassword] = useState(false);
+  const nicknameEl = useRef(null);
+  const passwordInputEl = useRef(null);
+  const passwordConfirmInputEl = useRef(null);
+
+  useEffect(() => {
+    nicknameEl.current.focus();
+  }, []);
+
+  useEffect(() => {
+    if (passwordTestError) {
+      passwordInputEl.current.focus();
+    }
+  }, [passwordTestError]);
+
+  useEffect(() => {
+    // 사용자가 비밀번호를 수정하는 도중에는 비밀번호 확인 input으론 focus가 발생하지 않도록 설정
+    if (passwordMatchError && !isTypingPassword) {
+      passwordConfirmInputEl.current.focus();
+    }
+  }, [passwordMatchError, isTypingPassword]);
 
   const verifyInputs = useCallback(() => {
     // input 모두 검증 후 전체 테스트 통과여부 반환
@@ -37,88 +57,105 @@ const Index = () => {
 
   useEffect(() => {
     // 처음 화면이 렌더링 됐을 땐 오류를 표시하지 않음
-    if (!initSubmit) return;
+    if (!initSubmitDone) return;
     verifyInputs();
-  }, [verifyInputs, initSubmit]);
+  }, [verifyInputs, initSubmitDone]);
 
-  const onChangeTerm = useCallback(() => {
+  const flipIsTypingPassword = () => {
+    setIsTypingPassword((prev) => !prev);
+  };
+
+  const onChangeTerm = () => {
     setTerm((prev) => !prev);
-  }, []);
+  };
 
   const onSubmit = useCallback(
     (e) => {
       e.preventDefault();
-      setInitSubmit(true);
+      setInitSubmitDone(true);
+
       const isAllPass = verifyInputs();
       if (!isAllPass) return;
-      dispatch(verifyInfoRequest({ nickname, password }));
+
+      dispatch(
+        verifyInfoRequest({
+          nickname: nicknameEl.current.value,
+          password,
+        }),
+      );
     },
-    [dispatch, verifyInputs, nickname, password],
+    [dispatch, verifyInputs, password],
   );
 
   return (
     <CS.Container>
       <CS.Title>별명과 비밀번호를 입력하세요</CS.Title>
+      <CS.Description>설정한 별명은 나중에 수정할 수 있어요.</CS.Description>
       <CS.Form action="" onSubmit={onSubmit}>
         <CS.InputWrapper>
-          <CS.Label htmlFor="nickname">별명</CS.Label>
+          <CS.Label htmlFor="nickname">* 별명</CS.Label>
           <CS.Input
             type="text"
             id="nickname"
-            value={nickname}
-            onChange={onChangeNickname}
-            page="info"
+            size="small"
+            ref={nicknameEl}
             required
           />
         </CS.InputWrapper>
         <CS.InputWrapper>
-          <CS.Label htmlFor="password">비밀번호</CS.Label>
+          <CS.Label htmlFor="password">* 비밀번호</CS.Label>
           <CS.Input
             type="password"
             id="password"
             value={password}
             onChange={onChangePassword}
-            page="info"
+            onFocus={flipIsTypingPassword}
+            onBlur={flipIsTypingPassword}
+            size="small"
+            ref={passwordInputEl}
             required
           />
         </CS.InputWrapper>
         <CS.InputWrapper>
-          <CS.Label htmlFor="passwordConfirm">비밀번호 확인</CS.Label>
+          <CS.Label htmlFor="passwordConfirm">* 비밀번호 확인</CS.Label>
           <CS.Input
             type="password"
             id="passwordConfirm"
             value={passwordConfirm}
             onChange={onChangePasswordConfirm}
-            page="info"
+            size="small"
+            ref={passwordConfirmInputEl}
             required
           />
         </CS.InputWrapper>
-        <S.WarningText>
-          ※ 비밀번호는 8자리 이상의 대소문자와 숫자, 특수문자를 각 1개 이상을
-          입력하셔야 합니다
-        </S.WarningText>
-        {passwordTestError && (
-          <S.WarningText>형식에 맞는 비밀번호를 입력하세요!</S.WarningText>
-        )}
-        {passwordMatchError && (
-          <S.WarningText>비밀번호가 일치하지 않습니다!</S.WarningText>
-        )}
-        <CS.InputWrapper page="info">
-          <CS.Input
+        <S.DescWrapper>
+          <CS.Description size="small">
+            ※ 비밀번호는 문자, 숫자, 기호를 조합하여 8자 이상을 사용하세요
+          </CS.Description>
+        </S.DescWrapper>
+        <S.TermWrapper>
+          <CS.CheckBox
             type="checkbox"
             id="policy"
-            page="info"
             value={term}
             onChange={onChangeTerm}
           />
-          <CS.Label htmlFor="policy" page="info">
+          <CS.Label htmlFor="policy">
             (필수)개인정보 수집 및 이용에 동의하겠습니다.
           </CS.Label>
-        </CS.InputWrapper>
-        {termError && <S.WarningText>약관에 동의하셔야 합니다!</S.WarningText>}
-        <CS.SubmitButton type="submit" complete={false}>
+        </S.TermWrapper>
+        {passwordTestError && (
+          <CS.WarningText>형식에 맞는 비밀번호를 입력하세요.</CS.WarningText>
+        )}
+        {passwordMatchError && (
+          <CS.WarningText>비밀번호가 일치하지 않습니다.</CS.WarningText>
+        )}
+        {termError && (
+          <CS.WarningText>약관에 동의하셔야 합니다.</CS.WarningText>
+        )}
+        <S.CustomSubmitButton type="submit" complete={false}>
           계속
-        </CS.SubmitButton>
+        </S.CustomSubmitButton>
       </CS.Form>
     </CS.Container>
   );

@@ -1,13 +1,13 @@
 import { createSelector } from '@reduxjs/toolkit';
 
-const selectExEmail = (state) => state.signUp.email;
-const selectVerifyEmailLoading = (state) => state.signUp.verifyEmailLoading;
-const selectVerifyEmailDone = (state) => state.signUp.verifyEmailDone;
-const selectVerifySocialLoading = (state) => state.signUp.verifyEmailLoading;
-const selectVerifySocialDone = (state) => state.signUp.verifySocialDone;
-const selectVerifyInfoDone = (state) => state.signUp.verifyInfoDone;
-const selectVerifyInterestDone = (state) => state.signUp.verifyInterestDone;
-const selectSignUptDone = (state) => state.signUp.signUpDone;
+const selectExEmail = (state) => state.signup.email;
+const selectVerifyEmailLoading = (state) => state.signup.verifyEmailLoading;
+const selectVerifyEmailDone = (state) => state.signup.verifyEmailDone;
+const selectVerifySocialLoading = (state) => state.signup.verifyEmailLoading;
+const selectVerifySocialDone = (state) => state.signup.verifySocialDone;
+const selectVerifyInfoDone = (state) => state.signup.verifyInfoDone;
+const selectVerifyInterestDone = (state) => state.signup.verifyInterestDone;
+const selectSignUptDone = (state) => state.signup.signUpDone;
 
 export const getExEmail = createSelector(selectExEmail, (value) => value);
 

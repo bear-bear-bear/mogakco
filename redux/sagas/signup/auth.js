@@ -10,7 +10,7 @@ import {
 
 function* verifyEmail(action) {
   try {
-    yield delay(1000);
+    yield delay(2000);
     yield put({
       type: VERIFY_EMAIL_SUCCESS,
       email: action.payload,
@@ -22,6 +22,24 @@ function* verifyEmail(action) {
     });
   }
 }
+
+// const sendSignUpEmailAPI = (data) => axios.post('/user/prepare', data);
+// function* sendSignUpEmail(action) {
+//   try {
+//     console.log('sendSignUpEmail action', action);
+//     const result = yield call(sendSignUpEmailAPI, action.data);
+//     console.log('result', result);
+//     yield put({
+//       type: VERIFY_EMAIL_SUCCESS,
+//       // email: result.message,
+//     });
+//   } catch (err) {
+//     yield put({
+//       type: VERIFY_EMAIL_FAILURE,
+//       error: err.response.data,
+//     });
+//   }
+// }
 
 function* verifySocial() {
   try {

@@ -9,6 +9,7 @@ export const Container = styled.div`
   margin-left: auto;
   padding: 0.66rem;
   overflow: hidden;
+  padding: 0.33rem 0.66rem;
 
   ${media.lg} {
     padding: 0.66rem 2rem;

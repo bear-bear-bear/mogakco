@@ -16,6 +16,7 @@ import {
   HttpException,
   Redirect,
   Param,
+  HttpCode,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import JwtAuthGuard from 'services/passport/jwt.guard';
@@ -45,7 +46,7 @@ class AuthController {
    * @author galaxy4276
    */
   @Get('/test')
-  public getTest() {
+  getTest() {
     return '준재형 지용이형 열심히 힘내서 달립시다. 수익내야죠?';
   }
 
@@ -97,20 +98,16 @@ class AuthController {
    * @param email required. ex ) galaxyhi4276@gmail.com
    */
   @Post('/send-token/before-register')
+  @HttpCode(200)
   async sendTokenBeforeRegister(@Body('email') email: string) {
-    if (!email) {
-      throw new HttpException(
-        '이메일 필드가 존재하지 않습니다.',
-        HttpStatus.BAD_REQUEST,
-      );
-    }
+    this.authService.verifyEmailRequest(email);
 
     try {
       const {
         token,
         email: destinatedEmail,
         id,
-      } = await this.userService.prepareJoin(email);
+      } = await this.userService.getEmailVerifyToken(email);
       this.emailService.userVerify({
         email: destinatedEmail,
         token,
@@ -119,6 +116,7 @@ class AuthController {
     } catch (e) {
       prepareFailure(e);
     }
+
     return {
       statusCode: HttpStatus.OK,
       message: `이메일 전송 성공`,
@@ -140,7 +138,7 @@ class AuthController {
    */
   @Post('/account')
   @UseGuards(JwtAuthGuard)
-  public async account(@Req() req: Request) {
+  async account(@Req() req: Request) {
     const { email } = req.user as any;
     const user = await this.userService.findUserByEmail(email);
     if (!user) {
@@ -160,7 +158,7 @@ class AuthController {
    */
   @Post('/refresh-token')
   @UseGuards(JwtAuthGuardWithRefresh)
-  public async refresh(
+  async refresh(
     @Req() req: Request,
     @Res({ passthrough: true }) res: Response,
   ): Promise<any> {
@@ -179,7 +177,7 @@ class AuthController {
 
   @UseGuards(JwtAuthGuardWithRefresh)
   @Post('/logout')
-  public async logout(@Req() req: Request, @Res() res: Response) {
+  async logout(@Req() req: Request, @Res() res: Response) {
     res.setHeader('Set-Cookie', `x-token=; HttpOnly; Path=/; Max-Age=0`);
     return res.status(200).json({
       message: 'logout',
@@ -189,7 +187,7 @@ class AuthController {
 
   @Get('/me')
   // ERROR Unknown column 'NaN' in 'where clause'
-  public async requestData(@Req() req: Request) {
+  async requestData(@Req() req: Request) {
     console.log(req.user);
     return {
       message: '1',
