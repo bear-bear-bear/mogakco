@@ -9,7 +9,7 @@ import { Repository, EntityRepository } from 'typeorm';
  */
 @EntityRepository(UserVerify)
 class UserVerifyRepository extends Repository<UserVerify> {
-  public async createOne(email: string, verifyToken: string) {
+  async createOne(email: string, verifyToken: string) {
     const userVerify = new UserVerify();
     userVerify.token = verifyToken;
     userVerify.expiredAt = new Date(Date.now() + 1000 * 60 * 30);
@@ -18,7 +18,7 @@ class UserVerifyRepository extends Repository<UserVerify> {
     return userVerify;
   }
 
-  public async findOneByEmail(id: number, email: string) {
+  async findOneByEmail(id: number, email: string) {
     const userVerify = await this.findOne({ id, email });
     if (!userVerify) throw new Error('');
     return userVerify;
