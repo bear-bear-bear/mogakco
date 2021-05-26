@@ -124,12 +124,37 @@ class AuthController {
   }
 
   @Get('/verify-email')
-  @Redirect('http://localhost:3000/signup')
-  async verify(
+  @Redirect('http://localhost:3000/signup', 302)
+  async processVerifyEmail(
     @Query()
     { id, token }: { id: string; token: string },
   ) {
     await this.userService.verifyEmail(id, token);
+
+    return {
+      url: `http://localhost:3000/signup?id=${id}`,
+    };
+  }
+
+  @Get('/is-verified/before-register')
+  @HttpCode(200)
+  async lastCheckingBeforeRegister(@Query('id') id: string) {
+    if (!id) {
+      throw new HttpException('id 인자가 없습니다.', HttpStatus.BAD_REQUEST);
+    }
+    const verification = await this.userService.lastCheckingEmailVerify(id);
+
+    if (!verification) {
+      throw new HttpException(
+        '인증에 실패하였습니다.',
+        HttpStatus.UNAUTHORIZED,
+      );
+    }
+
+    return {
+      statusCode: 200,
+      message: verification.isVerified,
+    };
   }
 
   /**
