@@ -16,6 +16,7 @@ import {
   HttpException,
   Redirect,
   Param,
+  HttpCode,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import JwtAuthGuard from 'services/passport/jwt.guard';
@@ -97,13 +98,9 @@ class AuthController {
    * @param email required. ex ) galaxyhi4276@gmail.com
    */
   @Post('/send-token/before-register')
+  @HttpCode(200)
   async sendTokenBeforeRegister(@Body('email') email: string) {
-    if (!email) {
-      throw new HttpException(
-        '이메일 필드가 존재하지 않습니다.',
-        HttpStatus.BAD_REQUEST,
-      );
-    }
+    this.authService.verifyEmailRequest(email);
 
     try {
       const {
@@ -119,6 +116,7 @@ class AuthController {
     } catch (e) {
       prepareFailure(e);
     }
+
     return {
       statusCode: HttpStatus.OK,
       message: `이메일 전송 성공`,
