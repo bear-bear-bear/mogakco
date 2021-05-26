@@ -57,7 +57,7 @@ class UserService {
    * 만료 날짜가 아직 지나지 않았다면 기존에 생성된 레코드를 그대로 리턴할 것입니다.
    * 그렇지 않다면 새로운 레코드를 만들어서 프론트에 제공합니다.
    */
-  async prepareJoin(email: string) {
+  async getEmailVerifyToken(email: string) {
     const now = new Date();
     const currentVerification = await this.userVerifyRepository.findOne({
       email,
@@ -95,7 +95,7 @@ class UserService {
    */
   async verifyEmail(id: string, token: string) {
     const record = await this.userVerifyRepository.findOne(id);
-    console.log({ record });
+
     if (!record) {
       throw new HttpException(
         '인증 url 이 잘못되었습니다.',
@@ -115,7 +115,6 @@ class UserService {
     if (!isEqual) {
       record.isVerified = false;
     }
-    console.log('before save:', record.isVerified);
     await record.save();
 
     return false;

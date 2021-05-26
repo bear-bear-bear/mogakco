@@ -107,7 +107,7 @@ class AuthController {
         token,
         email: destinatedEmail,
         id,
-      } = await this.userService.prepareJoin(email);
+      } = await this.userService.getEmailVerifyToken(email);
       this.emailService.userVerify({
         email: destinatedEmail,
         token,
