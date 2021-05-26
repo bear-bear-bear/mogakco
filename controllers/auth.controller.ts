@@ -138,7 +138,7 @@ class AuthController {
 
   @Get('/is-verified/before-register')
   @HttpCode(200)
-  async lastCheckingBeforeRegister(@Query('id') id: string) {
+  async lastCheckingBeforeRegister(@Query('id') id: string | number) {
     if (!id) {
       throw new HttpException('id 인자가 없습니다.', HttpStatus.BAD_REQUEST);
     }

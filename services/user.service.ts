@@ -87,7 +87,7 @@ class UserService {
     return { token, email, id };
   }
 
-  public async lastCheckingEmailVerify(id: string) {
+  public async lastCheckingEmailVerify(id: string | number) {
     const verificationInstance = await this.userVerifyRepository.findOne({
       id: Number(id),
     });
