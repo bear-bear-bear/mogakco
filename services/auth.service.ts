@@ -70,6 +70,24 @@ class AuthService {
       token,
     };
   }
+
+  verifyEmailRequest(email: string | undefined) {
+    if (!email) {
+      throw new HttpException(
+        '이메일 필드가 존재하지 않습니다.',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    const isEmpty = email.trim() === '';
+    const matcher = email.match(/\w+@\w+.\w{3}/);
+    if (isEmpty || matcher === null) {
+      throw new HttpException(
+        '이메일 형식이 아닙니다.',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+  }
 }
 
 export default AuthService;
