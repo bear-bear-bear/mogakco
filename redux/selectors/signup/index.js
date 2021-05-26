@@ -1,18 +1,18 @@
 import { createSelector } from '@reduxjs/toolkit';
 
-const selectExEmail = (state) => state.signup.email;
-const selectVerifyEmailLoading = (state) => state.signup.verifyEmailLoading;
-const selectVerifyEmailDone = (state) => state.signup.verifyEmailDone;
-const selectVerifySocialLoading = (state) => state.signup.verifyEmailLoading;
-const selectVerifySocialDone = (state) => state.signup.verifySocialDone;
-const selectVerifyInfoDone = (state) => state.signup.verifyInfoDone;
-const selectVerifyInterestDone = (state) => state.signup.verifyInterestDone;
-const selectSignUptDone = (state) => state.signup.signUpDone;
+const selectExEmail = ({ signup }) => signup.email;
+const selectSendEmailDone = ({ signup }) => signup.sendEmailDone;
+const selectVerifyEmailDone = ({ signup }) => signup.verifyEmailDone;
+const selectVerifySocialLoading = ({ signup }) => signup.verifySocialLoading;
+const selectVerifySocialDone = ({ signup }) => signup.verifySocialDone;
+const selectSaveRequiredInfoDone = ({ signup }) => signup.saveRequiredInfoDone;
+const selectSaveOptionalInfoDone = ({ signup }) => signup.saveOptionalInfoDone;
+const selectSignUpDone = ({ signup }) => signup.signUpDone;
 
 export const getExEmail = createSelector(selectExEmail, (value) => value);
 
-export const getVerifyEmailLoading = createSelector(
-  selectVerifyEmailLoading,
+export const getSendEmailDone = createSelector(
+  selectSendEmailDone,
   (value) => value,
 );
 
@@ -31,17 +31,14 @@ export const getVerifySocialDone = createSelector(
   (value) => value,
 );
 
-export const getVerifyInfoDone = createSelector(
-  selectVerifyInfoDone,
+export const getSaveRequiredInfoDone = createSelector(
+  selectSaveRequiredInfoDone,
   (value) => value,
 );
 
-export const getVerifyInterestDone = createSelector(
-  selectVerifyInterestDone,
+export const getSaveOptionalInfoDone = createSelector(
+  selectSaveOptionalInfoDone,
   (value) => value,
 );
 
-export const getSignUpDone = createSelector(
-  selectSignUptDone,
-  (value) => value,
-);
+export const getSignUpDone = createSelector(selectSignUpDone, (value) => value);

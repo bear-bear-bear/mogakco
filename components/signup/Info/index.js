@@ -2,7 +2,7 @@ import React, { useCallback, useState, useEffect, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 
 import useInput from '~/hooks/useInput';
-import { verifyInfoRequest } from '~/redux/reducers/signup';
+import { saveRequiredInfo } from '~/redux/reducers/signup';
 import { passwordRule } from '~/lib/regex';
 
 import * as CS from '../common/styles';
@@ -78,7 +78,7 @@ const Index = () => {
       if (!isAllPass) return;
 
       dispatch(
-        verifyInfoRequest({
+        saveRequiredInfo({
           nickname: nicknameEl.current.value,
           password,
         }),
