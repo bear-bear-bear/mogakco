@@ -17,7 +17,7 @@ export default class EmailService {
     private readonly configService: ConfigService,
   ) {}
 
-  public userVerify({ email, token, id }: UserVerifyEmailDTO): void {
+  userVerify({ email, token, id }: UserVerifyEmailDTO): void {
     this.mailerService
       .sendMail({
         to: email,

@@ -45,7 +45,7 @@ class AuthController {
    * @author galaxy4276
    */
   @Get('/test')
-  public getTest() {
+  getTest() {
     return '준재형 지용이형 열심히 힘내서 달립시다. 수익내야죠?';
   }
 
@@ -140,7 +140,7 @@ class AuthController {
    */
   @Post('/account')
   @UseGuards(JwtAuthGuard)
-  public async account(@Req() req: Request) {
+  async account(@Req() req: Request) {
     const { email } = req.user as any;
     const user = await this.userService.findUserByEmail(email);
     if (!user) {
@@ -160,7 +160,7 @@ class AuthController {
    */
   @Post('/refresh-token')
   @UseGuards(JwtAuthGuardWithRefresh)
-  public async refresh(
+  async refresh(
     @Req() req: Request,
     @Res({ passthrough: true }) res: Response,
   ): Promise<any> {
@@ -179,7 +179,7 @@ class AuthController {
 
   @UseGuards(JwtAuthGuardWithRefresh)
   @Post('/logout')
-  public async logout(@Req() req: Request, @Res() res: Response) {
+  async logout(@Req() req: Request, @Res() res: Response) {
     res.setHeader('Set-Cookie', `x-token=; HttpOnly; Path=/; Max-Age=0`);
     return res.status(200).json({
       message: 'logout',
@@ -189,7 +189,7 @@ class AuthController {
 
   @Get('/me')
   // ERROR Unknown column 'NaN' in 'where clause'
-  public async requestData(@Req() req: Request) {
+  async requestData(@Req() req: Request) {
     console.log(req.user);
     return {
       message: '1',

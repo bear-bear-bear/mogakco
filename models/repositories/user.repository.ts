@@ -5,7 +5,7 @@ import createUserDTO from '../dto/create-user.dto';
 
 @EntityRepository(User)
 class UserRepository extends Repository<User> {
-  public async createUserOne(user: createUserDTO): Promise<User> {
+  async createUserOne(user: createUserDTO): Promise<User> {
     const newUser = new User();
     newUser.password = user.password;
     newUser.username = user.username;
@@ -14,7 +14,7 @@ class UserRepository extends Repository<User> {
     return newUser;
   }
 
-  public async findUserOne(id: number) {
+  async findUserOne(id: number) {
     const user = await this.findOne({ id });
     if (!user) {
       throw new InternalServerErrorException();
@@ -22,7 +22,7 @@ class UserRepository extends Repository<User> {
     return user;
   }
 
-  public async findUserByName(username: string) {
+  async findUserByName(username: string) {
     const user = await this.findOne({
       where: { username },
       select: ['id', 'username', 'password', 'email'],
@@ -33,7 +33,7 @@ class UserRepository extends Repository<User> {
     return user;
   }
 
-  public async findUserByEmail(email: string) {
+  async findUserByEmail(email: string) {
     const user = await this.findOne({ email });
     if (!user) {
       return null;
@@ -41,7 +41,7 @@ class UserRepository extends Repository<User> {
     return user;
   }
 
-  public async updateUser(user: any): Promise<User> {
+  async updateUser(user: any): Promise<User> {
     const updatedUser = await this.save(user);
     if (!updatedUser) {
       throw new InternalServerErrorException();
@@ -49,7 +49,7 @@ class UserRepository extends Repository<User> {
     return updatedUser;
   }
 
-  public async deleteUser(id: number) {
+  async deleteUser(id: number) {
     return this.softDelete(id);
   }
 }

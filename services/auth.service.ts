@@ -18,7 +18,7 @@ class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  public async validateUser(email: string, password: string): Promise<any> {
+  async validateUser(email: string, password: string): Promise<any> {
     const user = await this.userService.findUserByEmail(email);
 
     if (!user) throw new BadRequestException();
@@ -37,7 +37,7 @@ class AuthService {
     return null;
   }
 
-  public async validate(loginUserDTO: LoginUserDTO) {
+  async validate(loginUserDTO: LoginUserDTO) {
     const { email, password } = loginUserDTO;
     const user = await this.userService.findUserByEmail(email);
     if (!user) throw new UnauthorizedException();
@@ -46,7 +46,7 @@ class AuthService {
     return user;
   }
 
-  public getCookieWithAccessToken(email: string) {
+  getCookieWithAccessToken(email: string) {
     const payload: JwtPayload = { email };
     const token = this.jwtService.sign(payload, {
       secret: 'ACCESS_TOKEN_!@#',
@@ -56,7 +56,7 @@ class AuthService {
     return { cookie };
   }
 
-  public getCookieWithRefreshToken(email: string) {
+  getCookieWithRefreshToken(email: string) {
     const payload: JwtPayload = { email };
     const token = this.jwtService.sign(payload, {
       secret: 'REFRESH_TOKEN_!@#',
