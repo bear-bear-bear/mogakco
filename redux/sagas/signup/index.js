@@ -11,7 +11,7 @@ import {
   SIGN_UP_SUCCESS,
   SIGN_UP_FAILURE,
 } from '~/redux/reducers/signup';
-import { getAxiosError } from '~/lib/axios';
+import { getAxiosError } from '~/lib/apiClient';
 
 // 인증 이메일 전송
 // 인증 이메일에서 /signup으로 리다이렉션 시에, localStorage 안의 이메일로 이메일 검증여부 확인

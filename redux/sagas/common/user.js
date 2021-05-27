@@ -8,7 +8,7 @@ import {
   LOG_OUT_SUCCESS,
   LOG_OUT_FAILURE,
 } from '../../reducers/common/user';
-import { getAxiosError } from '~/lib/axios';
+import { getAxiosError } from '~/lib/apiClient';
 
 const logInAPI = (data) => axios.post('/user/login', data);
 function* logIn(action) {
