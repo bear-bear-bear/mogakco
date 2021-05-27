@@ -8,6 +8,7 @@ import {
   LOG_OUT_SUCCESS,
   LOG_OUT_FAILURE,
 } from '../../reducers/common/user';
+import { getAxiosError } from '~/lib/apiClient';
 
 const logInAPI = (data) => axios.post('/user/login', data);
 function* logIn(action) {
@@ -21,7 +22,7 @@ function* logIn(action) {
     // console.error(err);
     yield put({
       type: LOG_IN_FAILURE,
-      error: err.response.data,
+      error: getAxiosError(err),
     });
   }
 }
@@ -38,7 +39,7 @@ function* logOut() {
     // console.error(err);
     yield put({
       type: LOG_OUT_FAILURE,
-      error: err.response.data,
+      error: getAxiosError(err),
     });
   }
 }
