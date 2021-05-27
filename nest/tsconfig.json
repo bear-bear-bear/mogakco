@@ -1,0 +1,29 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./",
+    "module": "commonjs",
+    "declaration": true,
+    "removeComments": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "target": "es2017",
+    "lib": ["ES2015", "ES6"],
+    "sourceMap": true,
+    "outDir": "./dist",
+    "incremental": true,
+    "allowJs": false,
+    "esModuleInterop": true,
+    "downlevelIteration": true,
+    "noImplicitAny": true,
+    "strict": true,
+    "paths": {
+      "@controllers/*": ["./controllers/*"],
+      "@libs/*": ["./libs/*"],
+      "@models/*": ["./models/*"],
+      "@modules/*": ["./modules/*"],
+      "@services/*": ["./services/*"],
+      "@test/*": ["./test/*"]
+    }
+  }
+}

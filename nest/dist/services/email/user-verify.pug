@@ -1,0 +1,5 @@
+html
+  body
+    if isDev
+      h3 인증을 완료하기 위해 해당 링크를 클릭해주세요.
+      p http://localhost:#{port}/api/user/verify-email?id=#{id}&token=#{verifyToken}
