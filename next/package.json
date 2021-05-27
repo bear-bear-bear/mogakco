@@ -9,8 +9,7 @@
     "next:dev": "next",
     "lint": "eslint .",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
-    "lint:next": "eslint --ext .js,.jsx components/**/* pages/**/* redux/**/*",
-    "test:next": "jest --config test/unit/frontend/test-config.json test/unit/frontend/**/*.jsx",
+    "test:unit": "jest --config test/unit/frontend/test-config.json test/unit/frontend/**/*.jsx",
     "stylelint": "stylelint styles/**/*.js",
     "stylelint-check": "stylelint-config-prettier-check"
   },

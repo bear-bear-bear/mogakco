@@ -13,10 +13,9 @@
     "nest:debug": "nest start --debug --watch",
     "lint": "eslint .",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
-    "lint:nest": "eslint controllers/**/*  models/**/* modules/**/* services/**/*",
     "lint:test-nest": "eslint test/**/*.ts",
     "test:e2e-nest": "jest --config ./test/e2e/jest-e2e.json",
-    "test:unit-nest": "jest --config ./test/unit/server/test-config.json"
+    "test:unit": "jest --config ./test/unit/server/test-config.json"
   },
   "dependencies": {
     "@nestjs/common": "^7.6.17",
