@@ -37,20 +37,41 @@ jobs:
         mysql user: 'mogauser'
         mysql password: 'mogatest'
 
-    - name: copy .env.example..
-      run: cp .env.example nest/.env
+    - name: test GITHUB_REPOSITORY
+      run: echo $GITHUB_REPOSITORY
 
-    - name: insall npm package dependencies...
-      run: cd nest && npm ci && cd ../next && npm ci
+    - name: run ls -al
+      run: ls -al
 
-    - name: NestJS Unit Test...
-      run: cd ~/nest && npm run test:unit
+    - name: copy .env.example to nest directory
+      run: cp .env.example ./nest/.env
+      working-directory: ${{ env.PROJECT_ROOT }}
 
-    - name: NestJS eslint...
-      run: npm run lint
+    - name: insall npm nest package dependencies
+      run: npm ci
+      working-directory: ${{ env.NEST }}
 
-    - name: NextJS eslint...
-      run: cd ~/next && npm run lint
+    - name: insall npm next package dependencies
+      run: npm ci
+      working-directory: ${{ env.NEXT }}
 
-    - name: NextJS Unit Test...
+    - name: Testing Nest Unit Test
       run: npm run test:unit
+      working-directory: ${{ env.NEST }}
+      
+    # - name: Run Eslint Nest
+    #   run: npm run lint
+    #   working-directory: ${{ env.NEST }}
+
+    - name: Run Eslint Next
+      run: npm run lint
+      working-directory: ${{ env.NEXT }}
+
+    - name: Next Unit Test...
+      run: npm run test:unit
+      working-directory: ${{ env.NEXT }}
+    
+    env:
+      PROJECT_ROOT: '/home/runner/work/mogakco/mogakco'
+      NEST: '/home/runner/work/mogakco/mogakco/nest'
+      NEXT: '/home/runner/work/mogakco/mogakco/next'
