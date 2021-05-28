@@ -41,7 +41,7 @@ jobs:
       run: pwd
 
     - name: copy .env.example to nest directory
-      run: pwd && cp .env.example nest/.env
+      run: pwd
       working-directory: ${{ env.PROJECT_ROOT }}
 
     - name: insall npm nest package dependencies
