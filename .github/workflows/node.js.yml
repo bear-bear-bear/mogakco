@@ -37,6 +37,9 @@ jobs:
         mysql user: 'mogauser'
         mysql password: 'mogatest'
 
+    - name: test GITHUB_REPOSITORY
+      run: echo $GITHUB_REPOSITORY
+
     - name: pwd
       run: pwd
 
