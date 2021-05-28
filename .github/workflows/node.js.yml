@@ -37,33 +37,45 @@ jobs:
         mysql user: 'mogauser'
         mysql password: 'mogatest'
 
+    - name: pwd
+      run: pwd
+
+    - name: is correct PROJECT_ENV PROJECT_ROOT?
+      run: echo $PROJECT_ROOT
+
+    - name: is correct PROJECT_ENV NEST?
+      run: echo $NEST
+
+    - name: is correct PROJECT_ENV NEXT?
+      run: echo $NEXT
+
     - name: copy .env.example to nest directory
       run: cp .env.example nest/.env
-      working-directory: PROJECT_ROOT
+      working-directory: ${{ env.PROJECT_ROOT }}
 
     - name: insall npm nest package dependencies
       run: npm ci
-      working-directory: NEST
+      working-directory: ${{ env.NEST }}
 
     - name: insall npm next package dependencies
       run: npm ci
-      working-directory: NEXT
+      working-directory: ${{ env.NEXT }}
 
     - name: Testing Nest Unit Test
       run: npm run test:unit
-      working-directory: NEST
+      working-directory: ${{ env.NEST }}
       
     - name: Run Eslint Nest
       run: npm run lint
-      working-directory: NEST
+      working-directory: ${{ env.NEST }}
 
     - name: Run Eslint Next
       run: npm run lint
-      working-directory: NEXT
+      working-directory: ${{ env.NEXT }}
 
     - name: Next Unit Test...
       run: npm run test:unit
-      working-directory: NEXT
+      working-directory: ${{ env.NEXT }}
     
     env:
       PROJECT_ROOT: './mogakco'
