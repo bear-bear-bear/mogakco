@@ -37,20 +37,20 @@ jobs:
         mysql user: 'mogauser'
         mysql password: 'mogatest'
 
-    - name: copy .env.example..
+    - name: copy .env.example to nest directory
       run: cp .env.example nest/.env
 
-    - name: insall npm package dependencies...
-      run: cd nest && npm ci && cd ../next && npm ci
+    - name: insall npm package dependencies
+      run: cd ~/runner/nest && npm ci && cd ~/runner/next && npm ci
 
-    - name: NestJS Unit Test...
-      run: cd ~/nest && npm run test:unit
+    - name: Testing Nest Unit Test
+      run: cd ~/runner/nest && npm run test:unit
 
-    - name: NestJS eslint...
+    - name: Run Eslint Nest
       run: npm run lint
 
-    - name: NextJS eslint...
-      run: cd ~/next && npm run lint
+    - name: Run Eslint Next
+      run: cd ~/runner/next && npm run lint
 
     - name: NextJS Unit Test...
       run: npm run test:unit
