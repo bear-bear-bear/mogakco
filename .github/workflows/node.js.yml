@@ -38,22 +38,19 @@ jobs:
         mysql password: 'mogatest'
 
     - name: copy .env.example..
-      run: cp .env.example .env
+      run: cp .env.example nest/.env
 
     - name: insall npm package dependencies...
-      run: npm ci
+      run: cd nest && npm ci && cd ../next && npm ci
 
     - name: NestJS Unit Test...
-      run: npm run test:unit-nest
-
-    - name: NextJS Unit Test ...
-      run: npm run test:next
+      run: cd ~/nest && npm run test:unit
 
     - name: NestJS eslint...
-      run: npm run lint:nest
+      run: npm run lint
 
     - name: NextJS eslint...
-      run: npm run lint:next
+      run: cd ~/next && npm run lint
 
-    - name: NextJS Unit Test eslint...
-      run: npm run lint:test-nest
+    - name: NextJS Unit Test...
+      run: npm run test:unit
