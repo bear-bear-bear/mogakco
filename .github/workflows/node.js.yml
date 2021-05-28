@@ -72,6 +72,6 @@ jobs:
       working-directory: ${{ env.NEXT }}
     
     env:
-      PROJECT_ROOT: '/home/runner/work/mogakco'
-      NEST: '/home/runner/work/mogakco/nest'
-      NEXT: '/home/runner/work/mogakco/next'
+      PROJECT_ROOT: '/home/runner/work/mogakco/mogakco'
+      NEST: '/home/runner/work/mogakco/mogakco/nest'
+      NEXT: '/home/runner/work/mogakco/mogakco/next'
