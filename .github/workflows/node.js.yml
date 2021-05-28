@@ -40,11 +40,11 @@ jobs:
     - name: test GITHUB_REPOSITORY
       run: echo $GITHUB_REPOSITORY
 
-    - name: pwd
-      run: pwd
+    - name: run ls -al
+      run: ls -al
 
     - name: copy .env.example to nest directory
-      run: pwd
+      run: cp .env.example ./nest/.env
       working-directory: ${{ env.PROJECT_ROOT }}
 
     - name: insall npm nest package dependencies
@@ -72,6 +72,6 @@ jobs:
       working-directory: ${{ env.NEXT }}
     
     env:
-      PROJECT_ROOT: './mogakco'
-      NEST: '.mogakco/nest'
-      NEXT: '.mogakco/next'
+      PROJECT_ROOT: '/home/runner/work/mogakco'
+      NEST: '/home/runner/work/mogakco/nest'
+      NEXT: '/home/runner/work/mogakco/next'
