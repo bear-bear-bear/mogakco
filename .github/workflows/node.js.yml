@@ -41,7 +41,7 @@ jobs:
       run: cp .env.example nest/.env
 
     - name: insall npm package dependencies
-      run: cd ~/runner/nest && npm ci && cd ~/runner/next && npm ci
+      run: cd ~/nest && npm ci && cd ~/next && npm ci
 
     - name: Testing Nest Unit Test
       run: cd ~/runner/nest && npm run test:unit
