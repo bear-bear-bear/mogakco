@@ -40,17 +40,8 @@ jobs:
     - name: pwd
       run: pwd
 
-    - name: is correct PROJECT_ENV PROJECT_ROOT?
-      run: echo $PROJECT_ROOT
-
-    - name: is correct PROJECT_ENV NEST?
-      run: echo $NEST
-
-    - name: is correct PROJECT_ENV NEXT?
-      run: echo $NEXT
-
     - name: copy .env.example to nest directory
-      run: cp .env.example nest/.env
+      run: cp .env.example $NEST/.env
       working-directory: ${{ env.PROJECT_ROOT }}
 
     - name: insall npm nest package dependencies
