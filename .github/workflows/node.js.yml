@@ -39,18 +39,33 @@ jobs:
 
     - name: copy .env.example to nest directory
       run: cp .env.example nest/.env
+      working-directory: PROJECT_ROOT
 
-    - name: insall npm package dependencies
-      run: cd ~/nest && npm ci && cd ~/next && npm ci
+    - name: insall npm nest package dependencies
+      run: npm ci
+      working-directory: NEST
+
+    - name: insall npm next package dependencies
+      run: npm ci
+      working-directory: NEXT
 
     - name: Testing Nest Unit Test
-      run: cd ~/runner/nest && npm run test:unit
-
+      run: npm run test:unit
+      working-directory: NEST
+      
     - name: Run Eslint Nest
       run: npm run lint
+      working-directory: NEST
 
     - name: Run Eslint Next
-      run: cd ~/runner/next && npm run lint
+      run: npm run lint
+      working-directory: NEXT
 
-    - name: NextJS Unit Test...
+    - name: Next Unit Test...
       run: npm run test:unit
+      working-directory: NEXT
+    
+    env:
+      PROJECT_ROOT: './mogakco'
+      NEST: '.mogakco/nest'
+      NEXT: '.mogakco/next'
