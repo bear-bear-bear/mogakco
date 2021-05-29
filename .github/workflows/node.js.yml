@@ -41,12 +41,12 @@ jobs:
       run: cp .env.example ./nest/.env
       working-directory: ${{ env.PROJECT_ROOT }}
 
-    - name: Database Schema Sync
-      run: npm run typeorm:ci schema:sync
-      working-directory: ${{ env.NEST }}
-
     - name: insall npm nest package dependencies
       run: npm ci
+      working-directory: ${{ env.NEST }}
+
+    - name: Database Schema Sync
+      run: npm run typeorm:ci schema:sync
       working-directory: ${{ env.NEST }}
 
     - name: insall npm next package dependencies
