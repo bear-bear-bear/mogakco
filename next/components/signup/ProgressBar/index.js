@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import * as S from './style';
 
-const Index = ({ fill }) => {
+const ProgressBar = ({ fill }) => {
   return (
     <S.ProgressBarWrapper>
       <S.ProgressBarFiller fill={fill} />
@@ -11,8 +11,8 @@ const Index = ({ fill }) => {
   );
 };
 
-Index.propTypes = {
+ProgressBar.propTypes = {
   fill: PropTypes.arrayOf(PropTypes.bool).isRequired,
 };
 
-export default Index;
+export default ProgressBar;
