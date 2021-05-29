@@ -1,5 +1,4 @@
 const { resolve } = require('path');
-const Dotenv = require('dotenv-webpack');
 
 module.exports = {
   webpack: (config) => {
@@ -13,7 +12,6 @@ module.exports = {
       },
       use: ['@svgr/webpack'],
     });
-    config.plugins.push(new Dotenv({ silent: true }));
 
     return config;
   },
