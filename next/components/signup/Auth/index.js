@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Link from 'next/link';
 
 import GoogleLogo from 'assets/svg/btn_google_light_normal_ios.svg';
-import { emailRule } from '~/libs/regex';
+import { emailRule } from '~/lib/regex';
 import { getSendEmailDone } from '~/redux/selectors/signup';
 import { landingEmailSelector } from '~/redux/selectors/landing';
 import { sendEmailRequest } from '~/redux/reducers/signup';

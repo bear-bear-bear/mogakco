@@ -41,7 +41,7 @@ const user_1 = __importDefault(require("../models/entities/user"));
 const uuid_1 = require("uuid");
 const user_repository_1 = __importDefault(require("../models/repositories/user.repository"));
 const user_verify_repository_1 = __importDefault(require("../models/repositories/user.verify.repository"));
-const makeHash_1 = __importDefault(require("../libs/makeHash"));
+const makeHash_1 = __importDefault(require("../lib/makeHash"));
 const user_verify_1 = __importDefault(require("../models/entities/user.verify"));
 let UserService = class UserService {
     constructor(userRepository, userVerifyRepository) {

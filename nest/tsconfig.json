@@ -19,7 +19,7 @@
     "strict": true,
     "paths": {
       "@controllers/*": ["./controllers/*"],
-      "@libs/*": ["./libs/*"],
+      "@lib/*": ["./lib/*"],
       "@models/*": ["./models/*"],
       "@modules/*": ["./modules/*"],
       "@services/*": ["./services/*"],

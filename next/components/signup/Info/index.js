@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 
 import useInput from '~/hooks/useInput';
 import { saveRequiredInfo } from '~/redux/reducers/signup';
-import { passwordRule } from '~/libs/regex';
+import { passwordRule } from '~/lib/regex';
 
 import * as CS from '../common/styles';
 import * as S from './style';
