@@ -1,13 +1,12 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
-import Header from '~/components/signup/header';
+import AuthContainer from '../components/common/AuthContainer';
 import ProgressBar from '~/components/signup/progressBar';
 import Auth from '~/components/signup/auth';
 import Info from '~/components/signup/info';
 import Interest from '~/components/signup/interest';
 import Complete from '~/components/signup/complete';
-import { SignUpPageContainer } from '../components/signup/common/styles';
 import {
   getVerifyEmailDone,
   getVerifySocialDone,
@@ -34,14 +33,12 @@ const SignUp = () => {
   }, [dispatch]);
 
   return (
-    <SignUpPageContainer>
-      <Header />
-      <ProgressBar fill={fill} />
+    <AuthContainer progressBar={<ProgressBar fill={fill} />}>
       {(!verifyEmailDone || !verifySocialDone) && <Auth />}
       {verifyEmailDone && !saveRequiredInfoDone && <Info />}
       {saveRequiredInfoDone && !verifySignUpDone && <Interest />}
       {saveOptionalInfoDone && verifySignUpDone && <Complete />}
-    </SignUpPageContainer>
+    </AuthContainer>
   );
 };
 

@@ -3,7 +3,7 @@ import Router from 'next/router';
 
 import * as CS from '../common/styles';
 
-const Index = () => {
+const Complete = () => {
   const buttonEl = useRef(null);
 
   useEffect(() => {
@@ -17,7 +17,7 @@ const Index = () => {
   }, []);
 
   return (
-    <CS.Container>
+    <>
       <CS.Title>회원가입이 완료되었습니다!</CS.Title>
       <CS.SubmitButton
         type="button"
@@ -27,8 +27,8 @@ const Index = () => {
       >
         모각코 참여하러 가기
       </CS.SubmitButton>
-    </CS.Container>
+    </>
   );
 };
 
-export default Index;
+export default Complete;

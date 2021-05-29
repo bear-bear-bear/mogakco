@@ -11,8 +11,3 @@ export const Option = styled.option`
   outline: 0;
   padding: 0.5rem;
 `;
-
-export const WarningText = styled.span`
-  color: var(--color-red-1);
-  margin-bottom: 2rem;
-`;

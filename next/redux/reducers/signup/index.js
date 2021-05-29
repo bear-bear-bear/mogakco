@@ -72,13 +72,15 @@ const signUpSlice = createSlice({
       state.verifySocialError = action.error;
     },
     SAVE_REQUIRED_INFO: (state, action) => {
-      state.nickname = action.nickname;
-      state.password = action.password;
+      const { nickname, password } = action.payload;
+      state.nickname = nickname;
+      state.password = password;
       state.saveRequiredInfoDone = true;
     },
     SAVE_OPTIONAL_INFO: (state, action) => {
-      state.field = action.field;
-      state.job = action.job;
+      const { field, job } = action.payload;
+      state.field = field;
+      state.job = job;
       state.saveOptionalInfoDone = true;
     },
     SIGN_UP_REQUEST: (state) => {

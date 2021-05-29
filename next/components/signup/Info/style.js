@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 
-import { InputWrapper, SubmitButton } from '../common/styles';
+import { SubmitButton } from '../common/styles';
 
 export const DescWrapper = styled.div`
   width: 100%;
@@ -10,15 +10,11 @@ export const DescWrapper = styled.div`
   margin-bottom: 1rem;
 `;
 
-export const TermWrapper = styled(InputWrapper)`
+export const TermWrapper = styled.div`
   display: flex;
   justify-content: flex-end;
   align-items: center;
   margin-top: 1rem;
-
-  & label {
-    margin-bottom: initial !important;
-  }
 `;
 
 export const CustomSubmitButton = styled(SubmitButton)`
