@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import fromActionTypes from '~/libs/fromActionTypes';
+import fromActionTypes from '~/lib/fromActionTypes';
 
 const initialState = {
   email: null,

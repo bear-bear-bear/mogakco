@@ -8,7 +8,7 @@ const config = {
     collectCoverageFrom: ['**/*.(t|j)s'],
     transform: {
         '^.+\\.(t|j)s$': 'ts-jest',
-        '^.+\\.svg$': '<rootDir>/libs/svgTransform.js',
+        '^.+\\.svg$': '<rootDir>/lib/svgTransform.js',
     },
 };
 exports.default = config;

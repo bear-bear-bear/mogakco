@@ -13,7 +13,7 @@ const common_1 = require("@nestjs/common");
 const mailer_1 = require("@nestjs-modules/mailer");
 const config_1 = require("@nestjs/config");
 const path_1 = require("path");
-const log_1 = require("../libs/log");
+const log_1 = require("../lib/log");
 let EmailService = class EmailService {
     constructor(mailerService, configService) {
         this.mailerService = mailerService;

@@ -29,7 +29,7 @@ import response from './dto/response';
 import LoginBadRequestException from './exception/login.exception';
 import LoginUserDTO from '../models/dto/login-user.dto';
 import EmailService from '../services/email.service';
-import { prepareFailure } from '@libs/log';
+import { prepareFailure } from '@lib/log';
 
 @Controller('user')
 @UseInterceptors(ClassSerializerInterceptor)

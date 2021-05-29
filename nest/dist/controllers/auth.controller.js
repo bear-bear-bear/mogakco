@@ -36,7 +36,7 @@ const create_user_dto_1 = __importDefault(require("../models/dto/create-user.dto
 const login_exception_1 = __importDefault(require("./exception/login.exception"));
 const login_user_dto_1 = __importDefault(require("../models/dto/login-user.dto"));
 const email_service_1 = __importDefault(require("../services/email.service"));
-const log_1 = require("../libs/log");
+const log_1 = require("../lib/log");
 let AuthController = class AuthController {
     constructor(userService, authService, emailService) {
         this.userService = userService;
