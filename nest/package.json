@@ -31,6 +31,7 @@
     "@nestjs/passport": "^7.1.5",
     "@nestjs/platform-express": "^7.6.17",
     "@types/cookie-parser": "^1.4.2",
+    "@types/eslint-plugin-prettier": "^3.1.0",
     "@types/nodemailer": "^6.4.2",
     "@types/passport": "^1.0.6",
     "@types/uuid": "^8.3.0",
