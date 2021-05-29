@@ -21,7 +21,8 @@ import { ConfigModule } from '@nestjs/config';
           service: process.env.EMAIL_SERVICE_NAME as string,
           host: process.env.EMAIL_HOST as string,
           port: parseInt(process.env.EMAIL_SERVICE_PORT as string, 10),
-          secure: process.env.NODE_ENV === 'production',
+          // secure: process.env.NODE_ENV === 'production', // TODO: 기존 정상 작동 코드
+          secure: true,
           auth: {
             type: 'login',
             user: process.env.EMAIL_ADMIN as string,
