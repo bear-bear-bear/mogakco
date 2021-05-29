@@ -4,7 +4,7 @@ const config: Config.InitialOptions = {
   rootDir: './',
   moduleFileExtensions: ['ts', 'js', 'json'],
   testEnvironment: 'node',
-  testRegex: '.test.ts$',
+  testRegex: '.e2e.test.ts$',
   transformIgnorePatterns: ['<rootDir>/node_modules/'],
   moduleNameMapper: {
     '^@controllers/(./*)$': '<rootDir>/controllers/$1',
