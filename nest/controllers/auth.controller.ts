@@ -124,7 +124,7 @@ class AuthController {
   ) {
     const redirection = 'http://localhost:3000/signup';
     const verification = await this.userService.verifyEmail(id, token);
-    if (!verification || verification.isVerified) {
+    if (!verification || !verification.isVerified) {
       return { url: `${redirection}?success=false` };
     }
 
