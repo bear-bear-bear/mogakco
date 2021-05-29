@@ -37,15 +37,13 @@ jobs:
         mysql user: 'mogauser'
         mysql password: 'mogatest'
 
-    - name: test GITHUB_REPOSITORY
-      run: echo $GITHUB_REPOSITORY
-
-    - name: run ls -al
-      run: ls -al
-
     - name: copy .env.example to nest directory
       run: cp .env.example ./nest/.env
       working-directory: ${{ env.PROJECT_ROOT }}
+
+    - name: Database Schema Sync
+      run: npm run typeorm schema:sync
+      working-directory: ${{ env.NEST }}
 
     - name: insall npm nest package dependencies
       run: npm ci
@@ -58,7 +56,7 @@ jobs:
     - name: Testing Nest Unit Test
       run: npm run test:unit
       working-directory: ${{ env.NEST }}
-      
+
     # - name: Run Eslint Nest
     #   run: npm run lint
     #   working-directory: ${{ env.NEST }}
@@ -75,3 +73,4 @@ jobs:
       PROJECT_ROOT: '/home/runner/work/mogakco/mogakco'
       NEST: '/home/runner/work/mogakco/mogakco/nest'
       NEXT: '/home/runner/work/mogakco/mogakco/next'
+      NODE_ENV: 'development'
