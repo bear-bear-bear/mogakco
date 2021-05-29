@@ -2,8 +2,6 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import Joi from 'joi';
-import UserVerify from 'models/entities/user.verify';
-import User from '../models/entities/user';
 import AuthModule from './auth.module';
 import MailModule from './mail.module';
 
@@ -25,7 +23,7 @@ import MailModule from './mail.module';
       }),
     }),
     TypeOrmModule.forRoot({
-      type: 'mysql',
+      type: 'mariadb',
       host: process.env.DATABASE_HOST as string,
       port: parseInt(process.env.DATABASE_PORT as string, 10),
       username: process.env.DATABASE_USER as string,
@@ -33,7 +31,10 @@ import MailModule from './mail.module';
       database: process.env.DATABASE_NAME as string,
       synchronize: process.env.NODE_ENV === 'development',
       logging: process.env.NODE_ENV === 'development',
-      entities: [User, UserVerify],
+      migrationsTableName: 'migrations',
+      migrations: ['migrations/*.ts'],
+      cli: { 'migrationsDir': 'migration' },
+      entities: ['dist/models/**/*.js'],
     }),
     AuthModule,
     MailModule,
