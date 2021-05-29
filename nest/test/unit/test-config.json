@@ -1,7 +1,0 @@
-{
-  "moduleFileExtensions": ["ts", "js", "json"],
-  "rootDir": ".",
-  "testRegex": ".test.ts$",
-  "testEnvironment": "jsdom",
-  "transformIgnorePatterns": ["<rootDir>/node_modules"]
-}
