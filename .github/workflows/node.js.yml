@@ -42,7 +42,7 @@ jobs:
       working-directory: ${{ env.PROJECT_ROOT }}
 
     - name: Database Schema Sync
-      run: npm run typeorm schema:sync
+      run: npm run typeorm:ci schema:sync
       working-directory: ${{ env.NEST }}
 
     - name: insall npm nest package dependencies

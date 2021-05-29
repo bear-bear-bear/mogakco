@@ -17,6 +17,7 @@
     "test:e2e-nest": "jest --config ./test/e2e/jest-e2e.json",
     "test:unit": "jest --config ./test/unit/test-config.json",
     "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js",
+    "typeorm:ci": "npx ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js",
     "migrate:create": "npm run typeorm migration:create -- -n",
     "migrate:generate": "npm run typeorm migration:generate -- -n",
     "migrate:revert": "npm run typeorm migration:revert",
