@@ -38,8 +38,8 @@ jobs:
         mysql password: 'mogatest'
 
     - name: copy .env.example to nest directory
-      run: cp .env.example ./nest/.env
-      working-directory: ${{ env.PROJECT_ROOT }}
+      run: cp .env.example .env
+      working-directory: ${{ env.NEST }}
 
     - name: insall npm nest package dependencies
       run: npm ci
