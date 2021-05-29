@@ -11,9 +11,7 @@ import MailModule from './mail.module';
       envFilePath: '.env',
       isGlobal: true,
       validationSchema: Joi.object({
-        NODE_ENV: Joi.string()
-          .valid('development', 'test', 'production')
-          .required(),
+        NODE_ENV: Joi.string().valid('development', 'test', 'production').required(),
         DATABASE_NAME: Joi.string().required(),
         DATABASE_USER: Joi.string().required(),
         DATABASE_PASSWORD: Joi.string().required(),
@@ -33,7 +31,7 @@ import MailModule from './mail.module';
       logging: process.env.NODE_ENV === 'development',
       migrationsTableName: 'migrations',
       migrations: ['migrations/*.ts'],
-      cli: { 'migrationsDir': 'migration' },
+      cli: { migrationsDir: 'migration' },
       entities: ['dist/models/**/*.js'],
     }),
     AuthModule,

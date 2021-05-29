@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { Request } from 'express';
 import { ExtractJwt, Strategy } from 'passport-jwt';
@@ -11,10 +11,7 @@ import { JwtPayload } from './jwt.payload';
  * validate 메소드에서 리프레시 토큰과 이메일을 가지고 검증한다.
  */
 @Injectable()
-class JwtStrategyWithRefresh extends PassportStrategy(
-  Strategy,
-  'jwt-with-refresh',
-) {
+class JwtStrategyWithRefresh extends PassportStrategy(Strategy, 'jwt-with-refresh') {
   constructor(private userService: UserService) {
     super({
       jwtFromRequest: ExtractJwt.fromExtractors([

@@ -3,18 +3,16 @@ import {
   HttpStatus,
   Injectable,
   InternalServerErrorException,
-  NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcrypt';
-import User from '@models/entities/user';
 import { v4 as uuid } from 'uuid';
+import makeHash from '@lib/makeHash';
+import UserVerifyEntity from '@models/entities/user-verify.entity';
 import UserRepository from '../models/repositories/user.repository';
 import UserVerifyRepository from '../models/repositories/user.verify.repository';
 import createUserDTO from '../models/dto/create-user.dto';
-import makeHash from '@lib/makeHash';
-import UserVerify from '@models/entities/user.verify';
 
 @Injectable()
 class UserService {
@@ -80,10 +78,7 @@ class UserService {
     }
 
     const newVerificationToken = await makeHash(`${email}|${uuid()}`);
-    const { token, id } = await this.userVerifyRepository.createOne(
-      email,
-      newVerificationToken,
-    );
+    const { token, id } = await this.userVerifyRepository.createOne(email, newVerificationToken);
 
     return { token, email, id };
   }
@@ -109,12 +104,9 @@ class UserService {
    * id, 이메일 토큰 값으로 해당 테이블에 일치하는 레코드가 있는지 확인합니다.
    */
   async verifyEmail(id: string, token: string) {
-    const record = (await this.userVerifyRepository.findOne(id)) as UserVerify;
+    const record = (await this.userVerifyRepository.findOne(id)) as UserVerifyEntity;
     if (!record) {
-      throw new HttpException(
-        '인증 url 이 잘못되었습니다.',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
+      throw new HttpException('인증 url 이 잘못되었습니다.', HttpStatus.INTERNAL_SERVER_ERROR);
     }
     if (record.isVerified) return record;
     if (record.expiredAt < new Date()) return false;
@@ -150,10 +142,7 @@ class UserService {
   async join({ username, password, email }: createUserDTO) {
     const currentUser = await this.userRepository.findUserByEmail(email);
     if (currentUser) {
-      throw new HttpException(
-        '이미 존재하는 유저입니다.',
-        HttpStatus.UNAUTHORIZED,
-      );
+      throw new HttpException('이미 존재하는 유저입니다.', HttpStatus.UNAUTHORIZED);
     }
     const hashedPassword = await makeHash(password);
     await this.userRepository.createUserOne({
@@ -183,10 +172,7 @@ class UserService {
   async getUserIfTokenMatches(refreshToken: string, email: string) {
     const user = await this.userRepository.findOne({ email });
     if (user && user.hashedRefreshToken) {
-      const isMatch = await bcrypt.compare(
-        refreshToken,
-        user.hashedRefreshToken,
-      );
+      const isMatch = await bcrypt.compare(refreshToken, user.hashedRefreshToken);
       if (isMatch) {
         return user;
       }

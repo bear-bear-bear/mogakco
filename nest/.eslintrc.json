@@ -22,7 +22,9 @@
     "class-methods-use-this": "off",
     "no-useless-constructor": "off",
     "import/no-unresolved": "off",
-    "no-console": "warn"
+    "no-console": "warn",
+    "no-shadow": "warn",
+    "@typescript-eslint/no-shadow": "warn"
   },
-  "ignorePatterns": ["./dist"]
+  "ignorePatterns": ["dist", "node_modules"]
 }

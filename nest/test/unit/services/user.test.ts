@@ -9,7 +9,7 @@
 // } from '@nestjs/common';
 // import createUserDTO from '../../../models/dto/create-user.dto';
 // import UserService from '../../../services/user.service';
-// import User from '../../../models/entities/user';
+// import UserEntity from '../../../models/entities/user';
 // import UserMockRepository from '../helper/userMockRepository';
 // import updateUserRequestDto from './dto/update-user-request.dto';
 //
@@ -22,7 +22,7 @@
 //       providers: [
 //         UserService,
 //         {
-//           provide: getRepositoryToken(User),
+//           provide: getRepositoryToken(UserEntity),
 //           useClass: UserMockRepository,
 //         },
 //       ],
@@ -38,7 +38,7 @@
 //         password: 'ihavegf',
 //         email: 'bear-bear-bear@god.com',
 //       };
-//       const createdUser: User = await userService.createUserOne(user);
+//       const createdUser: UserEntity = await userService.createUserOne(user);
 //       expect(createdUser.id).toBe(1);
 //       expect(createdUser).toMatchObject({ username: 'eunjunjung123' });
 //       expect(createdUser).toMatchObject({ email: 'bear-bear-bear@god.com' });
@@ -51,7 +51,7 @@
 //     //     email: 'bear-bear-bear@kinggod.com',
 //     //   };
 //     //
-//     //   const createdUser: User = await userService.createUserOne(user);
+//     //   const createdUser: UserEntity = await userService.createUserOne(user);
 //     //   expect(createdUser.id).toBe(2);
 //     // });
 //

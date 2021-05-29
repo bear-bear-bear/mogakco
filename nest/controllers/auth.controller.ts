@@ -15,21 +15,20 @@ import {
   HttpStatus,
   HttpException,
   Redirect,
-  Param,
   HttpCode,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import JwtAuthGuard from 'services/passport/jwt.guard';
 import JwtAuthGuardWithRefresh from 'services/passport/jwt.refresh.guard';
 import AuthService from 'services/auth.service';
-import User from 'models/entities/user';
+import UserEntity from '@models/entities/user.entity';
+import { prepareFailure } from '@lib/log';
 import UserService from '../services/user.service';
 import createUserDTO from '../models/dto/create-user.dto';
 import response from './dto/response';
 import LoginBadRequestException from './exception/login.exception';
 import LoginUserDTO from '../models/dto/login-user.dto';
 import EmailService from '../services/email.service';
-import { prepareFailure } from '@lib/log';
 
 @Controller('user')
 @UseInterceptors(ClassSerializerInterceptor)
@@ -56,23 +55,17 @@ class AuthController {
    */
   @Post('/login')
   @UseFilters(LoginBadRequestException)
-  async login(
-    @Body(ValidationPipe) req: LoginUserDTO,
-    @Res({ passthrough: true }) res: Response,
-  ) {
+  async login(@Body(ValidationPipe) req: LoginUserDTO, @Res({ passthrough: true }) res: Response) {
     const user = await this.authService.validate(req);
     if (!user) {
       throw new UnauthorizedException();
     }
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { password, hashedRefreshToken, ...props } = user;
-    const {
-      cookie: accessTokenCookie,
-    } = this.authService.getCookieWithAccessToken(user.email);
-    const {
-      cookie: refreshTokenCookie,
-      token,
-    } = this.authService.getCookieWithRefreshToken(user.email);
+    const { cookie: accessTokenCookie } = this.authService.getCookieWithAccessToken(user.email);
+    const { cookie: refreshTokenCookie, token } = this.authService.getCookieWithRefreshToken(
+      user.email,
+    );
     await this.userService.hashRefreshToken(token, user.email);
     res.setHeader('Set-Cookie', [accessTokenCookie, refreshTokenCookie]);
     return {
@@ -119,7 +112,7 @@ class AuthController {
 
     return {
       statusCode: HttpStatus.OK,
-      message: `이메일 전송 성공`,
+      message: '이메일 전송 성공',
     };
   }
 
@@ -129,7 +122,7 @@ class AuthController {
     @Query()
     { id, token }: { id: string; token: string },
   ) {
-    const redirection = `http://localhost:3000/signup`;
+    const redirection = 'http://localhost:3000/signup';
     const verification = await this.userService.verifyEmail(id, token);
     if (!verification || verification.isVerified) {
       return { url: `${redirection}?success=false` };
@@ -143,18 +136,12 @@ class AuthController {
   @HttpCode(200)
   async lastCheckingBeforeRegister(@Query('email') email: string) {
     if (!email) {
-      throw new HttpException(
-        '이메일 인자가 없습니다.',
-        HttpStatus.BAD_REQUEST,
-      );
+      throw new HttpException('이메일 인자가 없습니다.', HttpStatus.BAD_REQUEST);
     }
     const verification = await this.userService.lastCheckingEmailVerify(email);
 
     if (!verification) {
-      throw new HttpException(
-        '인증에 실패하였습니다.',
-        HttpStatus.UNAUTHORIZED,
-      );
+      throw new HttpException('인증에 실패하였습니다.', HttpStatus.UNAUTHORIZED);
     }
 
     return {
@@ -189,15 +176,10 @@ class AuthController {
    */
   @Post('/refresh-token')
   @UseGuards(JwtAuthGuardWithRefresh)
-  async refresh(
-    @Req() req: Request,
-    @Res({ passthrough: true }) res: Response,
-  ): Promise<any> {
-    const { email } = req.user as User;
-    const {
-      cookie: accessTokenCookie,
-    } = this.authService.getCookieWithAccessToken(email);
-    const { password, hashedRefreshToken, ...props } = req.user as User;
+  async refresh(@Req() req: Request, @Res({ passthrough: true }) res: Response): Promise<any> {
+    const { email } = req.user as UserEntity;
+    const { cookie: accessTokenCookie } = this.authService.getCookieWithAccessToken(email);
+    const { password, hashedRefreshToken, ...props } = req.user as UserEntity;
     res.setHeader('Set-Cookie', accessTokenCookie);
     return {
       message: 'Authenticated & Refreshed',
@@ -209,7 +191,7 @@ class AuthController {
   @UseGuards(JwtAuthGuardWithRefresh)
   @Post('/logout')
   async logout(@Req() req: Request, @Res() res: Response) {
-    res.setHeader('Set-Cookie', `x-token=; HttpOnly; Path=/; Max-Age=0`);
+    res.setHeader('Set-Cookie', 'x-token=; HttpOnly; Path=/; Max-Age=0');
     return res.status(200).json({
       message: 'logout',
       statusCode: HttpStatus.OK,

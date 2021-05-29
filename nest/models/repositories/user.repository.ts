@@ -1,12 +1,12 @@
 import { EntityRepository, Repository } from 'typeorm';
 import { InternalServerErrorException } from '@nestjs/common';
-import User from '../entities/user';
+import UserEntity from '../entities/user.entity';
 import createUserDTO from '../dto/create-user.dto';
 
-@EntityRepository(User)
-class UserRepository extends Repository<User> {
-  async createUserOne(user: createUserDTO): Promise<User> {
-    const newUser = new User();
+@EntityRepository(UserEntity)
+class UserRepository extends Repository<UserEntity> {
+  async createUserOne(user: createUserDTO): Promise<UserEntity> {
+    const newUser = new UserEntity();
     newUser.password = user.password;
     newUser.username = user.username;
     newUser.email = user.email;
@@ -41,7 +41,7 @@ class UserRepository extends Repository<User> {
     return user;
   }
 
-  async updateUser(user: any): Promise<User> {
+  async updateUser(user: any): Promise<UserEntity> {
     const updatedUser = await this.save(user);
     if (!updatedUser) {
       throw new InternalServerErrorException();

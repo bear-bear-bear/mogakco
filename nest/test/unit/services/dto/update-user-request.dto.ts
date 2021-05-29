@@ -1,4 +1,4 @@
-class updateUserRequestDto {
+class UpdateUserRequestDto {
   username?: string;
 
   email?: string;
@@ -6,4 +6,4 @@ class updateUserRequestDto {
   password?: string;
 }
 
-export default updateUserRequestDto;
+export default UpdateUserRequestDto;
