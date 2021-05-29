@@ -221,7 +221,7 @@ class UserService {
       // await this.userVerifyRepository.createOne(user);
       return false;
     }
-    user.verifiedAt = new Date();
+
     await user.save();
     return true;
   }
