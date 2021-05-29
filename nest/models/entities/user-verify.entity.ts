@@ -9,7 +9,7 @@ import {
 
 @Entity()
 @Unique(['id'])
-class UserVerify extends BaseEntity {
+class UserVerifyEntity extends BaseEntity {
   @PrimaryGeneratedColumn()
   public id!: number;
 
@@ -29,4 +29,4 @@ class UserVerify extends BaseEntity {
   public isVerified!: boolean;
 }
 
-export default UserVerify;
+export default UserVerifyEntity;

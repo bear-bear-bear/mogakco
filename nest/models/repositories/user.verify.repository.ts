@@ -1,4 +1,4 @@
-import UserVerify from 'models/entities/user.verify';
+import UserVerifyEntity from '@models/entities/user-verify.entity';
 import { Repository, EntityRepository } from 'typeorm';
 
 /**
@@ -7,10 +7,10 @@ import { Repository, EntityRepository } from 'typeorm';
  * verifyToken에 들어가는 id는 사용자 아이디
  * userId 외래키에 사용자 아이디가 들어가고 이메일 검증 토큰 id는 따로 생성됨.
  */
-@EntityRepository(UserVerify)
-class UserVerifyRepository extends Repository<UserVerify> {
+@EntityRepository(UserVerifyEntity)
+class UserVerifyRepository extends Repository<UserVerifyEntity> {
   async createOne(email: string, verifyToken: string) {
-    const userVerify = new UserVerify();
+    const userVerify = new UserVerifyEntity();
     userVerify.token = verifyToken;
     userVerify.expiredAt = new Date(Date.now() + 1000 * 60 * 30);
     userVerify.email = email;

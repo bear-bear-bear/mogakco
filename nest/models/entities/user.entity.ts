@@ -10,7 +10,7 @@ import {
 import { Exclude } from 'class-transformer';
 
 @Entity()
-class User extends BaseEntity {
+class UserEntity extends BaseEntity {
   @PrimaryGeneratedColumn({ unsigned: true })
   id!: number;
 
@@ -37,4 +37,4 @@ class User extends BaseEntity {
   hashedRefreshToken?: string;
 }
 
-export default User;
+export default UserEntity;

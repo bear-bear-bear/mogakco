@@ -15,21 +15,20 @@ import {
   HttpStatus,
   HttpException,
   Redirect,
-  Param,
   HttpCode,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import JwtAuthGuard from 'services/passport/jwt.guard';
 import JwtAuthGuardWithRefresh from 'services/passport/jwt.refresh.guard';
 import AuthService from 'services/auth.service';
-import User from 'models/entities/user';
+import UserEntity from '@models/entities/user.entity';
+import { prepareFailure } from '@lib/log';
 import UserService from '../services/user.service';
 import createUserDTO from '../models/dto/create-user.dto';
 import response from './dto/response';
 import LoginBadRequestException from './exception/login.exception';
 import LoginUserDTO from '../models/dto/login-user.dto';
 import EmailService from '../services/email.service';
-import { prepareFailure } from '@lib/log';
 
 @Controller('user')
 @UseInterceptors(ClassSerializerInterceptor)
@@ -57,7 +56,7 @@ class AuthController {
   @Post('/login')
   @UseFilters(LoginBadRequestException)
   async login(
-    @Body(ValidationPipe) req: LoginUserDTO,
+  @Body(ValidationPipe) req: LoginUserDTO,
     @Res({ passthrough: true }) res: Response,
   ) {
     const user = await this.authService.validate(req);
@@ -119,17 +118,17 @@ class AuthController {
 
     return {
       statusCode: HttpStatus.OK,
-      message: `이메일 전송 성공`,
+      message: '이메일 전송 성공',
     };
   }
 
   @Get('/verify-email')
   @Redirect('http://localhost:3000/signup', 302)
   async processVerifyEmail(
-    @Query()
+  @Query()
     { id, token }: { id: string; token: string },
   ) {
-    const redirection = `http://localhost:3000/signup`;
+    const redirection = 'http://localhost:3000/signup';
     const verification = await this.userService.verifyEmail(id, token);
     if (!verification || verification.isVerified) {
       return { url: `${redirection}?success=false` };
@@ -191,13 +190,13 @@ class AuthController {
   @UseGuards(JwtAuthGuardWithRefresh)
   async refresh(
     @Req() req: Request,
-    @Res({ passthrough: true }) res: Response,
+      @Res({ passthrough: true }) res: Response,
   ): Promise<any> {
-    const { email } = req.user as User;
+    const { email } = req.user as UserEntity;
     const {
       cookie: accessTokenCookie,
     } = this.authService.getCookieWithAccessToken(email);
-    const { password, hashedRefreshToken, ...props } = req.user as User;
+    const { password, hashedRefreshToken, ...props } = req.user as UserEntity;
     res.setHeader('Set-Cookie', accessTokenCookie);
     return {
       message: 'Authenticated & Refreshed',
@@ -209,7 +208,7 @@ class AuthController {
   @UseGuards(JwtAuthGuardWithRefresh)
   @Post('/logout')
   async logout(@Req() req: Request, @Res() res: Response) {
-    res.setHeader('Set-Cookie', `x-token=; HttpOnly; Path=/; Max-Age=0`);
+    res.setHeader('Set-Cookie', 'x-token=; HttpOnly; Path=/; Max-Age=0');
     return res.status(200).json({
       message: 'logout',
       statusCode: HttpStatus.OK,

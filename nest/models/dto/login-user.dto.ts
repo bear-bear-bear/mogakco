@@ -1,6 +1,6 @@
 import { IsEmail, IsNotEmpty, Matches } from 'class-validator';
 
-class LoginUserDTO {
+class LoginUserDto {
   @IsNotEmpty()
   @IsEmail()
   readonly email!: string;
@@ -12,4 +12,4 @@ class LoginUserDTO {
   user?: Request;
 }
 
-export default LoginUserDTO;
+export default LoginUserDto;

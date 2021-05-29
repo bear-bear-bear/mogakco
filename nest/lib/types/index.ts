@@ -11,7 +11,3 @@ export interface EmailSucProps {
   };
   messageId: string;
 }
-
-export interface ignore {
-  ig: number;
-}
