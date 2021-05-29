@@ -10,15 +10,15 @@ import ScrollTop from '~/components/common/ScrollTop';
 
 import 'antd/dist/antd.css';
 
+const pageProps = {
+  title: '모여서 각자 코딩 - Mogakco',
+  description: 'Free online video chat for developers',
+  url: '', // TODO: 도메인 정해지면 url에 추가하기
+  locale: 'ko_KR',
+};
+
 const Landing = () => {
   const emailEl = useRef(null);
-
-  const pageProps = {
-    title: '모여서 각자 코딩 - Mogakco',
-    description: 'Free online video chat for developers',
-    url: '', // TODO: 도메인 정해지면 url에 추가하기
-    locale: 'ko_KR',
-  };
 
   return (
     <>
