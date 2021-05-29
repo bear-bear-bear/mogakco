@@ -21,8 +21,8 @@
     ],
     "class-methods-use-this": "off",
     "no-useless-constructor": "off",
-    "import/no-unresolved": "off"
-
+    "import/no-unresolved": "off",
+    "no-console": "warn"
   },
   "ignorePatterns": ["./dist"]
 }
