@@ -4,11 +4,18 @@ import { useDispatch } from 'react-redux';
 import useInput from '~/hooks/useInput';
 import { saveRequiredInfo } from '~/redux/reducers/signup';
 import { passwordRule } from '~/lib/regex';
+import Checkbox from '~/components/common/Checkbox';
+import Warning from '~/components/common/Warning';
+import Desc from '~/components/common/Desc';
+import Form from '~/components/common/Form';
+import InputWrapper from '~/components/common/InputWrapper';
+import InputBox from '~/components/common/InputBox';
+import Label from '~/components/common/Label';
 
 import * as CS from '../common/styles';
 import * as S from './style';
 
-const Index = () => {
+const Info = () => {
   const dispatch = useDispatch();
   const [password, onChangePassword] = useInput('');
   const [passwordConfirm, onChangePasswordConfirm] = useInput('');
@@ -88,23 +95,27 @@ const Index = () => {
   );
 
   return (
-    <CS.Container>
+    <>
       <CS.Title>별명과 비밀번호를 입력하세요</CS.Title>
-      <CS.Description>설정한 별명은 나중에 수정할 수 있어요.</CS.Description>
-      <CS.Form action="" onSubmit={onSubmit}>
-        <CS.InputWrapper>
-          <CS.Label htmlFor="nickname">* 별명</CS.Label>
-          <CS.Input
+      <Desc>설정한 별명은 나중에 수정할 수 있어요.</Desc>
+      <Form action="" onSubmit={onSubmit}>
+        <InputWrapper>
+          <Label htmlFor="nickname" direction="bottom">
+            * 별명
+          </Label>
+          <InputBox
             type="text"
             id="nickname"
             size="small"
             ref={nicknameEl}
             required
           />
-        </CS.InputWrapper>
-        <CS.InputWrapper>
-          <CS.Label htmlFor="password">* 비밀번호</CS.Label>
-          <CS.Input
+        </InputWrapper>
+        <InputWrapper>
+          <Label htmlFor="password" direction="bottom">
+            * 비밀번호
+          </Label>
+          <InputBox
             type="password"
             id="password"
             value={password}
@@ -115,10 +126,12 @@ const Index = () => {
             ref={passwordInputEl}
             required
           />
-        </CS.InputWrapper>
-        <CS.InputWrapper>
-          <CS.Label htmlFor="passwordConfirm">* 비밀번호 확인</CS.Label>
-          <CS.Input
+        </InputWrapper>
+        <InputWrapper>
+          <Label htmlFor="passwordConfirm" direction="bottom">
+            * 비밀번호 확인
+          </Label>
+          <InputBox
             type="password"
             id="passwordConfirm"
             value={passwordConfirm}
@@ -127,38 +140,34 @@ const Index = () => {
             ref={passwordConfirmInputEl}
             required
           />
-        </CS.InputWrapper>
+        </InputWrapper>
         <S.DescWrapper>
-          <CS.Description size="small">
+          <Desc size="small">
             ※ 비밀번호는 문자, 숫자, 기호를 조합하여 8자 이상을 사용하세요
-          </CS.Description>
+          </Desc>
         </S.DescWrapper>
         <S.TermWrapper>
-          <CS.CheckBox
-            type="checkbox"
+          <Checkbox
             id="policy"
+            type="checkbox"
             value={term}
             onChange={onChangeTerm}
           />
-          <CS.Label htmlFor="policy">
+          <Label htmlFor="policy" direction="left">
             (필수)개인정보 수집 및 이용에 동의하겠습니다.
-          </CS.Label>
+          </Label>
         </S.TermWrapper>
         {passwordTestError && (
-          <CS.WarningText>형식에 맞는 비밀번호를 입력하세요.</CS.WarningText>
+          <Warning>형식에 맞는 비밀번호를 입력하세요.</Warning>
         )}
-        {passwordMatchError && (
-          <CS.WarningText>비밀번호가 일치하지 않습니다.</CS.WarningText>
-        )}
-        {termError && (
-          <CS.WarningText>약관에 동의하셔야 합니다.</CS.WarningText>
-        )}
+        {passwordMatchError && <Warning>비밀번호가 일치하지 않습니다.</Warning>}
+        {termError && <Warning>약관에 동의하셔야 합니다.</Warning>}
         <S.CustomSubmitButton type="submit" complete={false}>
           계속
         </S.CustomSubmitButton>
-      </CS.Form>
-    </CS.Container>
+      </Form>
+    </>
   );
 };
 
-export default Index;
+export default Info;
