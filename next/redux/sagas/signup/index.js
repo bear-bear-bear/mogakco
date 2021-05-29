@@ -1,4 +1,3 @@
-// import axios from 'axios';
 import { put, delay, takeLatest, all, fork } from 'redux-saga/effects';
 import {
   SEND_EMAIL_REQUEST,
@@ -17,7 +16,7 @@ import { getAxiosError } from '~/lib/apiClient';
 // 인증 이메일에서 /signup으로 리다이렉션 시에, localStorage 안의 이메일로 이메일 검증여부 확인
 // 회원가입 완료시 입력한 정보들 모아서 회원가입 요청
 
-// const sendEmailAPI = (data) => axios.post('/user/prepare', data);
+// const sendEmailAPI = (data) => apiClient.post('/user/prepare', data);
 function* sendEmail() {
   try {
     yield delay(2000);
@@ -36,7 +35,7 @@ function* sendEmail() {
   }
 }
 
-// const verifyEmailAPI = (data) => axios.get('');
+// const verifyEmailAPI = (data) => apiClient.get('');
 function* verifyEmail(action) {
   try {
     yield delay(2000);
@@ -61,7 +60,7 @@ function* verifyEmail(action) {
 //   job: signUpReducer.job,
 // });
 
-// const signUpApi = (data) => axios.post('/api/user', data);
+// const signUpApi = (data) => apiClient.post('/api/user', data);
 function* verifySignUp() {
   try {
     // const user = yield select(infoForSignUp);
