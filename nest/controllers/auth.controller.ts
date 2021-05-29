@@ -55,23 +55,17 @@ class AuthController {
    */
   @Post('/login')
   @UseFilters(LoginBadRequestException)
-  async login(
-  @Body(ValidationPipe) req: LoginUserDTO,
-    @Res({ passthrough: true }) res: Response,
-  ) {
+  async login(@Body(ValidationPipe) req: LoginUserDTO, @Res({ passthrough: true }) res: Response) {
     const user = await this.authService.validate(req);
     if (!user) {
       throw new UnauthorizedException();
     }
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { password, hashedRefreshToken, ...props } = user;
-    const {
-      cookie: accessTokenCookie,
-    } = this.authService.getCookieWithAccessToken(user.email);
-    const {
-      cookie: refreshTokenCookie,
-      token,
-    } = this.authService.getCookieWithRefreshToken(user.email);
+    const { cookie: accessTokenCookie } = this.authService.getCookieWithAccessToken(user.email);
+    const { cookie: refreshTokenCookie, token } = this.authService.getCookieWithRefreshToken(
+      user.email,
+    );
     await this.userService.hashRefreshToken(token, user.email);
     res.setHeader('Set-Cookie', [accessTokenCookie, refreshTokenCookie]);
     return {
@@ -125,7 +119,7 @@ class AuthController {
   @Get('/verify-email')
   @Redirect('http://localhost:3000/signup', 302)
   async processVerifyEmail(
-  @Query()
+    @Query()
     { id, token }: { id: string; token: string },
   ) {
     const redirection = 'http://localhost:3000/signup';
@@ -142,18 +136,12 @@ class AuthController {
   @HttpCode(200)
   async lastCheckingBeforeRegister(@Query('email') email: string) {
     if (!email) {
-      throw new HttpException(
-        '이메일 인자가 없습니다.',
-        HttpStatus.BAD_REQUEST,
-      );
+      throw new HttpException('이메일 인자가 없습니다.', HttpStatus.BAD_REQUEST);
     }
     const verification = await this.userService.lastCheckingEmailVerify(email);
 
     if (!verification) {
-      throw new HttpException(
-        '인증에 실패하였습니다.',
-        HttpStatus.UNAUTHORIZED,
-      );
+      throw new HttpException('인증에 실패하였습니다.', HttpStatus.UNAUTHORIZED);
     }
 
     return {
@@ -188,14 +176,9 @@ class AuthController {
    */
   @Post('/refresh-token')
   @UseGuards(JwtAuthGuardWithRefresh)
-  async refresh(
-    @Req() req: Request,
-      @Res({ passthrough: true }) res: Response,
-  ): Promise<any> {
+  async refresh(@Req() req: Request, @Res({ passthrough: true }) res: Response): Promise<any> {
     const { email } = req.user as UserEntity;
-    const {
-      cookie: accessTokenCookie,
-    } = this.authService.getCookieWithAccessToken(email);
+    const { cookie: accessTokenCookie } = this.authService.getCookieWithAccessToken(email);
     const { password, hashedRefreshToken, ...props } = req.user as UserEntity;
     res.setHeader('Set-Cookie', accessTokenCookie);
     return {

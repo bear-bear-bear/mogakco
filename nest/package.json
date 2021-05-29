@@ -7,7 +7,7 @@
   "license": "UNLICENSED",
   "scripts": {
     "nest:prebuild": "rimraf dist",
-    "nest:build": "nest build",
+    "nest:build": "nest build && tsc-alias",
     "nest:build-run": "node dist/main",
     "nest:dev": "nest start --watch",
     "nest:debug": "nest start --debug --watch",
@@ -24,6 +24,7 @@
     "migrate": "npm run typeorm migration:run"
   },
   "dependencies": {
+    "@jest/types": "^27.0.2",
     "@nestjs-modules/mailer": "^1.6.0",
     "@nestjs/common": "^7.6.17",
     "@nestjs/config": "^0.6.3",
@@ -52,6 +53,7 @@
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^7.1.0",
+    "typeorm": "^0.2.32",
     "uuid": "^8.3.2"
   },
   "devDependencies": {
@@ -90,8 +92,8 @@
     "ts-jest": "^26.5.6",
     "ts-loader": "^9.2.2",
     "ts-node": "^10.0.0",
+    "tsc-alias": "^1.2.11",
     "tsconfig-paths": "^3.9.0",
-    "typeorm": "^0.2.32",
     "typescript": "^4.2.4"
   }
 }

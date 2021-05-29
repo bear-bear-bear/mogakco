@@ -4,13 +4,9 @@ import { EmailSucProps } from './types';
 const errWrapConsole = (message: string, err: Error) => {
   if (process.env.NODE_ENV === 'development') {
     console.log(message);
-    console.log(
-      '================================================================',
-    );
+    console.log('================================================================');
     console.log(`reason: ${err}`);
-    console.log(
-      '================================================================',
-    );
+    console.log('================================================================');
   }
   return null;
 };
@@ -22,13 +18,9 @@ export const emailSuccess = ({ envelope: { to } }: EmailSucProps) => {
 };
 
 // Deprecated
-export const emailFailure = (err: Error) =>
-  errWrapConsole('Email transfer failed', err);
+export const emailFailure = (err: Error) => errWrapConsole('Email transfer failed', err);
 
 export const prepareFailure = (err: Error) => {
   errWrapConsole('An Error occurs prepareJoin Controller.', err);
-  throw new HttpException(
-    '이메일 전송에 실패 하였습니다.',
-    HttpStatus.INTERNAL_SERVER_ERROR,
-  );
+  throw new HttpException('이메일 전송에 실패 하였습니다.', HttpStatus.INTERNAL_SERVER_ERROR);
 };

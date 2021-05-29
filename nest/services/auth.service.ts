@@ -13,10 +13,7 @@ import UserService from './user.service';
 
 @Injectable()
 class AuthService {
-  constructor(
-    private userService: UserService,
-    private jwtService: JwtService,
-  ) {}
+  constructor(private userService: UserService, private jwtService: JwtService) {}
 
   async validateUser(email: string, password: string): Promise<any> {
     const user = await this.userService.findUserByEmail(email);
@@ -24,10 +21,7 @@ class AuthService {
     if (!user) throw new BadRequestException();
     const hash = await bcrypt.compare(password, user?.password);
     if (!hash && !user) {
-      return new HttpException(
-        '아이디 또는 비밀번호가 틀렸습니다.',
-        HttpStatus.UNAUTHORIZED,
-      );
+      return new HttpException('아이디 또는 비밀번호가 틀렸습니다.', HttpStatus.UNAUTHORIZED);
     }
     if (user && hash) {
       const { password, ...result } = user;
@@ -61,9 +55,7 @@ class AuthService {
       secret: 'REFRESH_TOKEN_!@#',
       expiresIn: '7d',
     });
-    const cookie = `refresh-token=${token}; HttpOnly; Path=/; Max-Age=${
-      7 * 24 * 60 * 60
-    }`;
+    const cookie = `refresh-token=${token}; HttpOnly; Path=/; Max-Age=${7 * 24 * 60 * 60}`;
     return {
       cookie,
       token,
@@ -72,19 +64,13 @@ class AuthService {
 
   verifyEmailRequest(email: string | undefined) {
     if (!email) {
-      throw new HttpException(
-        '이메일 필드가 존재하지 않습니다.',
-        HttpStatus.BAD_REQUEST,
-      );
+      throw new HttpException('이메일 필드가 존재하지 않습니다.', HttpStatus.BAD_REQUEST);
     }
 
     const isEmpty = email.trim() === '';
     const matcher = email.match(/\w+@\w+.\w{3}/);
     if (isEmpty || matcher === null) {
-      throw new HttpException(
-        '이메일 형식이 아닙니다.',
-        HttpStatus.BAD_REQUEST,
-      );
+      throw new HttpException('이메일 형식이 아닙니다.', HttpStatus.BAD_REQUEST);
     }
   }
 }

@@ -1,10 +1,6 @@
-import {
-  BadRequestException,
-  HttpStatus,
-  NotFoundException,
-} from '@nestjs/common';
+import { BadRequestException, HttpStatus, NotFoundException } from '@nestjs/common';
 import createUserDto from '@models/dto/create-user.dto';
-import updateUserRequestDto from '@services/dto/update-user-request.dto';
+// import updateUserRequestDto from '@services/dto/update-user-request.dto';
 
 class UserMockRepository {
   public createUserOne(user: createUserDto) {
@@ -45,15 +41,15 @@ class UserMockRepository {
     return this.testReadAndDelete(id, false);
   }
 
-  public updateUser(user: updateUserRequestDto) {
+  public updateUser(user: any) {
+    // 임시 any
     const currentUser = {
       id: 1,
       username: 'eunjunjung123',
       email: 'bear-bear-bear@god.com',
     };
 
-    if (Object.keys(user).includes('sex'))
-      throw new BadRequestException('올바른 요청이 아닙니다.');
+    if (Object.keys(user).includes('sex')) throw new BadRequestException('올바른 요청이 아닙니다.');
 
     return {
       ...currentUser,

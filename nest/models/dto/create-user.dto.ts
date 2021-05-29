@@ -1,10 +1,4 @@
-import {
-  IsEmail,
-  IsString,
-  MaxLength,
-  MinLength,
-  Matches,
-} from 'class-validator';
+import { IsEmail, IsString, MaxLength, MinLength, Matches } from 'class-validator';
 
 class CreateUserDto {
   @MinLength(5, { message: '닉네임은 최소 3글자 이상이어야 합니다.' })
