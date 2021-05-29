@@ -129,7 +129,7 @@ class AuthController {
     }
 
     const { email } = verification;
-    return { url: `${redirection}?email=${email}?success=true` };
+    return { url: `${redirection}?email=${email}&success=true` };
   }
 
   @Get('/is-verified/before-register')
