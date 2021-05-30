@@ -10,7 +10,7 @@ import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import LoginUserDTO from '@models/dto/login-user.dto';
 import makeHash from '@lib/makeHash';
-import { v4 as uuid } from 'uuid';
+import { v4 as uuidv4 } from 'uuid';
 import UserVerifyEntity from '@models/entities/user-verify.entity';
 import UserVerifyRepository from '@models/repositories/user.verify.repository';
 import createUserDTO from '@models/dto/create-user.dto';
@@ -140,7 +140,7 @@ class AuthService {
       }
     }
 
-    const newVerificationToken = await makeHash(`${email}|${uuid()}`);
+    const newVerificationToken = await makeHash(`${email}|${uuidv4()}`);
     const { token, id } = await this.userVerifyRepository.createOne(email, newVerificationToken);
 
     return { token, email, id };
