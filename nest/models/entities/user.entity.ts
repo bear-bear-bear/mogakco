@@ -4,12 +4,17 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  ManyToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
+  JoinTable,
 } from 'typeorm';
 import { Exclude } from 'class-transformer';
+import UserFieldEntity from '@models/entities/user-field.entity';
 
-@Entity()
+@Entity({
+  name: 'users',
+})
 class UserEntity extends BaseEntity {
   @PrimaryGeneratedColumn({ unsigned: true })
   id!: number;
@@ -35,6 +40,10 @@ class UserEntity extends BaseEntity {
   @Column({ nullable: true, name: 'refresh_token' })
   @Exclude()
   hashedRefreshToken?: string;
+
+  @ManyToMany(() => UserFieldEntity)
+  @JoinTable({ name: 'users_and_fields' })
+  fields!: UserFieldEntity[];
 }
 
 export default UserEntity;
