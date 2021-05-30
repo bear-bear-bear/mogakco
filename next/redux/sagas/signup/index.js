@@ -18,14 +18,19 @@ import {
   SIGN_UP_FAILURE,
 } from '~/redux/reducers/signup';
 import { LOG_IN_SUCCESS } from '~/redux/reducers/common/user';
-import apiClient, { getAxiosError } from '~/lib/apiClient';
 
-// 인증 이메일 전송
-// 인증 이메일에서 /signup으로 리다이렉션 시에, localStorage 안의 이메일로 이메일 검증여부 확인
-// 회원가입 완료시 입력한 정보들 모아서 회원가입 요청
+import { signupAPIs } from '~/lib/APIs';
+import { getAxiosError } from '~/lib/apiClient';
 
-const sendEmailAPI = (email) =>
-  apiClient.post('/api/user/send-token/before-register', { email });
+const {
+  //
+  sendEmailAPI,
+  verifyEmailAPI,
+  // loadSkillsAPI,
+  // loadJobsAPI,
+  signUpApI,
+} = signupAPIs;
+
 function* sendEmail(action) {
   try {
     yield call(sendEmailAPI, action.payload);
@@ -40,8 +45,6 @@ function* sendEmail(action) {
   }
 }
 
-const verifyEmailAPI = (email) =>
-  apiClient.get(`/api/user/is-verified/before-register?email=${email}`);
 function* verifyEmail(action) {
   try {
     yield call(verifyEmailAPI, action.payload);
@@ -57,7 +60,6 @@ function* verifyEmail(action) {
   }
 }
 
-// const loadSkillsAPI = () => apiClient.get(`/api/user/skills`);
 function* loadSkills() {
   try {
     // const result = yield call(loadSkillsAPI);
@@ -73,7 +75,6 @@ function* loadSkills() {
   }
 }
 
-// const loadJobsAPI = () => apiClient.get(`/api/user/jobs`);
 function* loadJobs() {
   try {
     // const result = yield call(loadJobsAPI);
@@ -89,10 +90,9 @@ function* loadJobs() {
   }
 }
 
-const signUpApi = (data) => apiClient.post('/api/user', data);
 function* verifySignUp(action) {
   try {
-    const result = yield call(signUpApi, action.payload);
+    const result = yield call(signUpApI, action.payload);
     yield put({ type: SIGN_UP_SUCCESS });
     yield put({
       type: LOG_IN_SUCCESS,
