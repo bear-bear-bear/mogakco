@@ -7,6 +7,12 @@ import {
   VERIFY_EMAIL_REQUEST,
   VERIFY_EMAIL_SUCCESS,
   VERIFY_EMAIL_FAILURE,
+  LOAD_SKILLS_REQUEST,
+  LOAD_SKILLS_SUCCESS,
+  LOAD_SKILLS_FAILURE,
+  LOAD_JOBS_REQUEST,
+  LOAD_JOBS_SUCCESS,
+  LOAD_JOBS_FAILURE,
   SIGN_UP_REQUEST,
   SIGN_UP_SUCCESS,
   SIGN_UP_FAILURE,
@@ -51,6 +57,38 @@ function* verifyEmail(action) {
   }
 }
 
+// const loadSkillsAPI = () => apiClient.get(`/api/user/skills`);
+function* loadSkills() {
+  try {
+    // const result = yield call(loadSkillsAPI);
+    yield put({
+      type: LOAD_SKILLS_SUCCESS,
+      // skills: result.skills,
+    });
+  } catch (err) {
+    yield put({
+      type: LOAD_SKILLS_FAILURE,
+      error: getAxiosError(err),
+    });
+  }
+}
+
+// const loadJobsAPI = () => apiClient.get(`/api/user/jobs`);
+function* loadJobs() {
+  try {
+    // const result = yield call(loadJobsAPI);
+    yield put({
+      type: LOAD_JOBS_SUCCESS,
+      // jobs: result.jobs,
+    });
+  } catch (err) {
+    yield put({
+      type: LOAD_JOBS_FAILURE,
+      error: getAxiosError(err),
+    });
+  }
+}
+
 const signUpApi = (data) => apiClient.post('/api/user', data);
 function* verifySignUp(action) {
   try {
@@ -73,15 +111,24 @@ function* watchVerifyEmail() {
   yield takeLatest(VERIFY_EMAIL_REQUEST, verifyEmail);
 }
 
+function* watchLoadSkills() {
+  yield takeLatest(LOAD_SKILLS_REQUEST, loadSkills);
+}
+
+function* watchLoadJobs() {
+  yield takeLatest(LOAD_JOBS_REQUEST, loadJobs);
+}
+
 function* watchSignUp() {
   yield takeLatest(SIGN_UP_REQUEST, verifySignUp);
 }
 
 export default function* signUpSaga() {
   yield all([
-    //
     fork(watchSendEmail),
     fork(watchVerifyEmail),
+    fork(watchLoadSkills),
+    fork(watchLoadJobs),
     fork(watchSignUp),
   ]);
 }

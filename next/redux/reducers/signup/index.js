@@ -6,24 +6,45 @@ const initialState = {
     email: null,
     username: null,
     password: null,
-    skills: null,
-    job: null,
+    skills: [], // 사용자가 선택한 skills.
+    job: null, // 사용자가 선택한 job
   },
-  sendEmailLoading: false,
+  sendEmailLoading: false, // 이메일 전송 요청 중
   sendEmailDone: false,
   sendEmailError: null,
-  verifyEmailLoading: false,
+  verifyEmailLoading: false, // 쿼리 속 이메일에 대한 검증 요청 중
   verifyEmailDone: false,
   verifyEmailError: null,
-  verifySocialLoading: false,
+  verifySocialLoading: false, // 소셜 회원가입 요청 중
   verifySocialDone: false,
   verifySocialError: null,
-  saveRequiredInfoDone: false,
-  saveOptionalInfoDone: false,
-  signUpLoading: false,
+  loadSkillsLoading: false, // skill 목록 요청 중
+  loadSkillsDone: false,
+  loadSkillsError: null,
+  loadJobsLoading: false, // job 목록 요청 중
+  loadJobsDone: false,
+  loadJobsError: null,
+  saveRequiredInfoDone: false, // 필수 정보 저장 완료 여부
+  saveOptionalInfoDone: false, // 미 필수 정보 저장 완료 여부
+  signUpLoading: false, // 회원가입 요청 중
   signUpDone: false,
   signUpError: null,
+  skills: [], // 서버에서 내려주는 skills 목록
+  jobs: [], // 서버에서 내려주는 jobs 목록
 };
+
+const dummySkills = [
+  { id: 1, name: '프론트엔드' },
+  { id: 2, name: '백엔드' },
+  { id: 3, name: '데브옵스' },
+];
+
+const dummyJobs = [
+  { id: 1, name: '학생' },
+  { id: 2, name: '직장인' },
+  { id: 3, name: '자유인' },
+  { id: 3, name: '우주인' },
+];
 
 const signUpSlice = createSlice({
   name: 'signup',
@@ -72,6 +93,36 @@ const signUpSlice = createSlice({
       state.verifySocialLoading = false;
       state.verifySocialError = action.error;
     },
+    LOAD_SKILLS_REQUEST: (state) => {
+      state.loadSkillsLoading = true;
+      state.loadSkillsDone = false;
+      state.loadSkillsError = null;
+    },
+    LOAD_SKILLS_SUCCESS: (state) => {
+      state.loadSkillsLoading = false;
+      state.loadSkillsDone = true;
+      // state.skills = action.skills;
+      state.skills = dummySkills;
+    },
+    LOAD_SKILLS_FAILURE: (state, action) => {
+      state.loadSkillsLoading = false;
+      state.loadSkillsError = action.error;
+    },
+    LOAD_JOBS_REQUEST: (state) => {
+      state.loadJobsLoading = true;
+      state.loadJobsDone = false;
+      state.loadJobsError = null;
+    },
+    LOAD_JOBS_SUCCESS: (state) => {
+      state.loadJobsLoading = false;
+      state.loadJobsDone = true;
+      // state.jobs = action.jobs;
+      state.jobs = dummyJobs;
+    },
+    LOAD_JOBS_FAILURE: (state, action) => {
+      state.loadJobsLoading = false;
+      state.loadJobsError = action.error;
+    },
     SAVE_REQUIRED_INFO: (state, action) => {
       const { username, password } = action.payload;
       state.userInfo.username = username;
@@ -112,6 +163,12 @@ export const {
   VERIFY_SOCIAL_REQUEST,
   VERIFY_SOCIAL_SUCCESS,
   VERIFY_SOCIAL_FAILURE,
+  LOAD_SKILLS_REQUEST,
+  LOAD_SKILLS_SUCCESS,
+  LOAD_SKILLS_FAILURE,
+  LOAD_JOBS_REQUEST,
+  LOAD_JOBS_SUCCESS,
+  LOAD_JOBS_FAILURE,
   SIGN_UP_REQUEST,
   SIGN_UP_SUCCESS,
   SIGN_UP_FAILURE,
@@ -122,6 +179,8 @@ export const {
   SEND_EMAIL_REQUEST: sendEmailRequest,
   VERIFY_EMAIL_REQUEST: verifyEmailRequest,
   VERIFY_SOCIAL_REQUEST: verifySocialRequest,
+  LOAD_SKILLS_REQUEST: loadSkillsRequest,
+  LOAD_JOBS_REQUEST: loadJobsRequest,
   SAVE_REQUIRED_INFO: saveRequiredInfo,
   SAVE_OPTIONAL_INFO: saveOptionalInfoRequest,
   SIGN_UP_REQUEST: signUpRequest,

@@ -1,6 +1,8 @@
 import { createSelector } from '@reduxjs/toolkit';
 
 const selectUserInfo = ({ signup }) => signup.userInfo;
+const selectSkills = ({ signup }) => signup.skills;
+const selectJobs = ({ signup }) => signup.jobs;
 const selectSendEmailDone = ({ signup }) => signup.sendEmailDone;
 const selectVerifyEmailDone = ({ signup }) => signup.verifyEmailDone;
 const selectVerifySocialLoading = ({ signup }) => signup.verifySocialLoading;
@@ -9,12 +11,25 @@ const selectSaveRequiredInfoDone = ({ signup }) => signup.saveRequiredInfoDone;
 const selectSaveOptionalInfoDone = ({ signup }) => signup.saveOptionalInfoDone;
 const selectSignUpDone = ({ signup }) => signup.signUpDone;
 
+/**
+ * @desc Select 라이브러리 props 형식에 맞게 skills와 jobs 데이터를 가공해주는 함수
+ */
+const toSelectOptions = (arrayOfObject) =>
+  arrayOfObject.map(({ id, name }) => ({
+    id,
+    value: name,
+    label: name,
+  }));
+
+export const getSkillOptions = createSelector(selectSkills, (value) =>
+  toSelectOptions(value),
+);
+
+export const getJobOptions = createSelector(selectJobs, (value) =>
+  toSelectOptions(value),
+);
+
 export const getUserInfo = createSelector(selectUserInfo, (value) => value);
-// export const getUserInfo = createSelector(
-//   // 테스트용 코드: 백엔드 skills, job 미구현으로 skills, job 임시 제거
-//   selectUserInfo,
-//   ({ email, username, password }) => ({ email, username, password }),
-// );
 
 export const getSendEmailDone = createSelector(
   selectSendEmailDone,

@@ -2,7 +2,11 @@ import React, { useCallback, useState, useEffect, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 
 import useInput from '~/hooks/useInput';
-import { saveRequiredInfo } from '~/redux/reducers/signup';
+import {
+  saveRequiredInfo,
+  loadSkillsRequest,
+  loadJobsRequest,
+} from '~/redux/reducers/signup';
 import { usernameRule, passwordRule } from '~/lib/regex';
 import Checkbox from '~/components/common/Checkbox';
 import Warning from '~/components/common/Warning';
@@ -33,7 +37,10 @@ const Info = () => {
 
   useEffect(() => {
     usernameEl.current.focus();
-  }, []);
+    // 필수 정보 입력 페이지 진입 시 다음 단계인 추가 정보 페이지의 데이터 프리로딩
+    dispatch(loadSkillsRequest());
+    dispatch(loadJobsRequest());
+  }, [dispatch]);
 
   useEffect(() => {
     if (passwordTestError) {
@@ -115,6 +122,7 @@ const Info = () => {
             value={username}
             onChange={onChangeUsername}
             ref={usernameEl}
+            spellCheck={false}
             required
           />
         </InputWrapper>
