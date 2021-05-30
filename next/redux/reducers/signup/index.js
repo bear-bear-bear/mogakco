@@ -6,7 +6,7 @@ const initialState = {
     email: null,
     username: null,
     password: null,
-    field: null,
+    skills: null,
     job: null,
   },
   sendEmailLoading: false,
@@ -79,8 +79,8 @@ const signUpSlice = createSlice({
       state.saveRequiredInfoDone = true;
     },
     SAVE_OPTIONAL_INFO: (state, action) => {
-      const { field, job } = action.payload;
-      state.userInfo.field = field;
+      const { skills, job } = action.payload;
+      state.userInfo.skills = skills;
       state.userInfo.job = job;
       state.saveOptionalInfoDone = true;
     },
@@ -124,6 +124,7 @@ export const {
   VERIFY_SOCIAL_REQUEST: verifySocialRequest,
   SAVE_REQUIRED_INFO: saveRequiredInfo,
   SAVE_OPTIONAL_INFO: saveOptionalInfoRequest,
+  SIGN_UP_REQUEST: signUpRequest,
   RESET_SIGN_UP: resetSignUp,
 } = signUpSlice.actions;
 

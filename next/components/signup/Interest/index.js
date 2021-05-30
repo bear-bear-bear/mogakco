@@ -17,14 +17,15 @@ import * as S from './style';
 const Interest = () => {
   const dispatch = useDispatch();
   const userInfo = useSelector(getUserInfo);
-  const fieldEl = useRef(null);
+  const skillsEl = useRef(null);
   const jobEl = useRef(null);
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    const field = fieldEl.current.value || null;
+    const skills = skillsEl.current.value || null;
     const job = jobEl.current.value || null;
-    dispatch(saveOptionalInfoRequest({ field, job }));
+    await dispatch(saveOptionalInfoRequest({ skills, job }));
+    dispatch(signUpRequest(userInfo));
   };
 
   return (
@@ -33,10 +34,10 @@ const Interest = () => {
       <Desc>선택 사항입니다. 입력 시 분야별 랭킹에 이름을 올릴 수 있어요.</Desc>
       <Form action="" onSubmit={onSubmit}>
         <InputWrapper>
-          <Label htmlFor="field" direction="bottom">
+          <Label htmlFor="skills" direction="bottom">
             개발 분야
           </Label>
-          <S.Select id="field" ref={fieldEl}>
+          <S.Select id="skills" ref={skillsEl}>
             <S.Option value="">개발 분야를 선택해주세요</S.Option>
             <S.Option value="frontend">프론트엔드</S.Option>
             <S.Option value="backend">백엔드</S.Option>

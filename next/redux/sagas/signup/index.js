@@ -1,4 +1,5 @@
-import { put, delay, takeLatest, all, fork, call } from 'redux-saga/effects';
+import { put, takeLatest, all, fork, call } from 'redux-saga/effects';
+
 import {
   SEND_EMAIL_REQUEST,
   SEND_EMAIL_SUCCESS,
@@ -10,6 +11,7 @@ import {
   SIGN_UP_SUCCESS,
   SIGN_UP_FAILURE,
 } from '~/redux/reducers/signup';
+import { LOG_IN_SUCCESS } from '~/redux/reducers/common/user';
 import apiClient, { getAxiosError } from '~/lib/apiClient';
 
 // 인증 이메일 전송
@@ -49,21 +51,15 @@ function* verifyEmail(action) {
   }
 }
 
-// const infoForSignUp = ({ signUpReducer }) => ({
-//   email: signUpReducer.email,
-//   nickname: signUpReducer.nickname,
-//   password: signUpReducer.password,
-//   field: signUpReducer.field,
-//   job: signUpReducer.job,
-// });
-
-// const signUpApi = (data) => apiClient.post('/api/user', data);
-function* verifySignUp() {
+const signUpApi = (data) => apiClient.post('/api/user', data);
+function* verifySignUp(action) {
   try {
-    // const user = yield select(infoForSignUp);
-    // const result = yield call(signUpApi(user));
-    yield delay(3000);
+    const result = yield call(signUpApi, action.payload);
     yield put({ type: SIGN_UP_SUCCESS });
+    yield put({
+      type: LOG_IN_SUCCESS,
+      token: result.token,
+    });
   } catch (err) {
     yield put({ type: SIGN_UP_FAILURE, error: getAxiosError(err) });
   }

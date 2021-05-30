@@ -10,6 +10,11 @@ const selectSaveOptionalInfoDone = ({ signup }) => signup.saveOptionalInfoDone;
 const selectSignUpDone = ({ signup }) => signup.signUpDone;
 
 export const getUserInfo = createSelector(selectUserInfo, (value) => value);
+// export const getUserInfo = createSelector(
+//   // 테스트용 코드: 백엔드 skills, job 미구현으로 skills, job 임시 제거
+//   selectUserInfo,
+//   ({ email, username, password }) => ({ email, username, password }),
+// );
 
 export const getSendEmailDone = createSelector(
   selectSendEmailDone,
