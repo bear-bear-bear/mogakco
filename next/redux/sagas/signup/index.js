@@ -1,4 +1,4 @@
-import { put, delay, takeLatest, all, fork } from 'redux-saga/effects';
+import { put, delay, takeLatest, all, fork, call } from 'redux-saga/effects';
 import {
   SEND_EMAIL_REQUEST,
   SEND_EMAIL_SUCCESS,
@@ -10,22 +10,19 @@ import {
   SIGN_UP_SUCCESS,
   SIGN_UP_FAILURE,
 } from '~/redux/reducers/signup';
-import { getAxiosError } from '~/lib/apiClient';
+import apiClient, { getAxiosError } from '~/lib/apiClient';
 
 // 인증 이메일 전송
 // 인증 이메일에서 /signup으로 리다이렉션 시에, localStorage 안의 이메일로 이메일 검증여부 확인
 // 회원가입 완료시 입력한 정보들 모아서 회원가입 요청
 
-// const sendEmailAPI = (data) => apiClient.post('/user/prepare', data);
-function* sendEmail() {
+const sendEmailAPI = (email) =>
+  apiClient.post('/api/user/send-token/before-register', { email });
+function* sendEmail(action) {
   try {
-    yield delay(2000);
-    // console.log('sendEmail action', action);
-    // const result = yield call(sendEmailAPI, action.data);
-    // console.log('result', result);
+    yield call(sendEmailAPI, action.payload);
     yield put({
       type: SEND_EMAIL_SUCCESS,
-      // email: result.message,
     });
   } catch (err) {
     yield put({
