@@ -10,10 +10,9 @@ const Complete = () => {
     buttonEl.current.focus();
   }, []);
 
-  const onClickLogo = useCallback(() => {
-    // TODO: 회원가입 도중 입력한 정보를 바탕으로 로그인 dispatch
+  const onClickButton = useCallback(() => {
     // TODO: 모각코 서비스 페이지로 이동
-    Router.push('/');
+    Router.replace('/');
   }, []);
 
   return (
@@ -22,7 +21,7 @@ const Complete = () => {
       <CS.SubmitButton
         type="button"
         ref={buttonEl}
-        onClick={onClickLogo}
+        onClick={onClickButton}
         complete
       >
         모각코 참여하러 가기

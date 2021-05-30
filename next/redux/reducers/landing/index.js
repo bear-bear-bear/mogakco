@@ -9,7 +9,7 @@ const landingSlice = createSlice({
   initialState,
   reducers: {
     SAVE_EMAIL: (state, action) => {
-      state.email = action.payload;
+      state.userInfo.email = action.payload;
     },
   },
 });
