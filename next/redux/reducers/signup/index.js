@@ -2,11 +2,13 @@ import { createSlice } from '@reduxjs/toolkit';
 import fromActionTypes from '~/lib/fromActionTypes';
 
 const initialState = {
-  email: null,
-  nickname: null,
-  password: null,
-  field: null,
-  job: null,
+  userInfo: {
+    email: null,
+    username: null,
+    password: null,
+    field: null,
+    job: null,
+  },
   sendEmailLoading: false,
   sendEmailDone: false,
   sendEmailError: null,
@@ -40,7 +42,6 @@ const signUpSlice = createSlice({
     SEND_EMAIL_FAILURE: (state, action) => {
       state.sendEmailLoading = false;
       state.sendEmailError = action.error;
-      localStorage.removeItem('email');
     },
     VERIFY_EMAIL_REQUEST: (state) => {
       state.verifyEmailLoading = true;
@@ -51,7 +52,7 @@ const signUpSlice = createSlice({
       state.verifyEmailLoading = false;
       state.verifyEmailDone = true;
       state.verifySocialDone = true;
-      state.email = action.email;
+      state.userInfo.email = action.email;
     },
     VERIFY_EMAIL_FAILURE: (state, action) => {
       state.verifyEmailLoading = false;
@@ -72,15 +73,15 @@ const signUpSlice = createSlice({
       state.verifySocialError = action.error;
     },
     SAVE_REQUIRED_INFO: (state, action) => {
-      const { nickname, password } = action.payload;
-      state.nickname = nickname;
-      state.password = password;
+      const { username, password } = action.payload;
+      state.userInfo.username = username;
+      state.userInfo.password = password;
       state.saveRequiredInfoDone = true;
     },
     SAVE_OPTIONAL_INFO: (state, action) => {
       const { field, job } = action.payload;
-      state.field = field;
-      state.job = job;
+      state.userInfo.field = field;
+      state.userInfo.job = job;
       state.saveOptionalInfoDone = true;
     },
     SIGN_UP_REQUEST: (state) => {
@@ -91,7 +92,6 @@ const signUpSlice = createSlice({
     SIGN_UP_SUCCESS: (state) => {
       state.signUpLoading = false;
       state.signUpDone = true;
-      localStorage.removeItem('email');
     },
     SIGN_UP_FAILURE: (state, action) => {
       state.signUpLoading = false;

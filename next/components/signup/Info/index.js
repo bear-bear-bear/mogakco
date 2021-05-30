@@ -25,12 +25,12 @@ const Info = () => {
   const [passwordTestError, setPasswordTestError] = useState(false);
   const [termError, setTermError] = useState(false);
   const [isTypingPassword, setIsTypingPassword] = useState(false);
-  const nicknameEl = useRef(null);
+  const usernameEl = useRef(null);
   const passwordInputEl = useRef(null);
   const passwordConfirmInputEl = useRef(null);
 
   useEffect(() => {
-    nicknameEl.current.focus();
+    usernameEl.current.focus();
   }, []);
 
   useEffect(() => {
@@ -86,7 +86,7 @@ const Info = () => {
 
       dispatch(
         saveRequiredInfo({
-          nickname: nicknameEl.current.value,
+          username: usernameEl.current.value,
           password,
         }),
       );
@@ -100,14 +100,14 @@ const Info = () => {
       <Desc>설정한 별명은 나중에 수정할 수 있어요.</Desc>
       <Form action="" onSubmit={onSubmit}>
         <InputWrapper>
-          <Label htmlFor="nickname" direction="bottom">
+          <Label htmlFor="username" direction="bottom">
             * 별명
           </Label>
           <InputBox
             type="text"
-            id="nickname"
+            id="username"
             size="small"
-            ref={nicknameEl}
+            ref={usernameEl}
             required
           />
         </InputWrapper>

@@ -1,6 +1,6 @@
 import { createSelector } from '@reduxjs/toolkit';
 
-const selectExEmail = ({ signup }) => signup.email;
+const selectUserInfo = ({ signup }) => signup.userInfo;
 const selectSendEmailDone = ({ signup }) => signup.sendEmailDone;
 const selectVerifyEmailDone = ({ signup }) => signup.verifyEmailDone;
 const selectVerifySocialLoading = ({ signup }) => signup.verifySocialLoading;
@@ -9,7 +9,7 @@ const selectSaveRequiredInfoDone = ({ signup }) => signup.saveRequiredInfoDone;
 const selectSaveOptionalInfoDone = ({ signup }) => signup.saveOptionalInfoDone;
 const selectSignUpDone = ({ signup }) => signup.signUpDone;
 
-export const getExEmail = createSelector(selectExEmail, (value) => value);
+export const getUserInfo = createSelector(selectUserInfo, (value) => value);
 
 export const getSendEmailDone = createSelector(
   selectSendEmailDone,

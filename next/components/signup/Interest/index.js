@@ -1,7 +1,11 @@
 import React, { useRef } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
-import { saveOptionalInfoRequest } from '~/redux/reducers/signup';
+import {
+  saveOptionalInfoRequest,
+  signUpRequest,
+} from '~/redux/reducers/signup';
+import { getUserInfo } from '~/redux/selectors/signup';
 import Desc from '~/components/common/Desc';
 import Form from '~/components/common/Form';
 import InputWrapper from '~/components/common/InputWrapper';
@@ -12,10 +16,11 @@ import * as S from './style';
 
 const Interest = () => {
   const dispatch = useDispatch();
+  const userInfo = useSelector(getUserInfo);
   const fieldEl = useRef(null);
   const jobEl = useRef(null);
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
     const field = fieldEl.current.value || null;
     const job = jobEl.current.value || null;
