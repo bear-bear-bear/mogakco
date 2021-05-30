@@ -32,11 +32,11 @@ function* sendEmail(action) {
   }
 }
 
-// const verifyEmailAPI = (data) => apiClient.get('');
+const verifyEmailAPI = (email) =>
+  apiClient.get(`/api/user/is-verified/before-register?email=${email}`);
 function* verifyEmail(action) {
   try {
-    yield delay(2000);
-    // const result = yield call(verifyEmailAPI, action.data);
+    yield call(verifyEmailAPI, action.payload);
     yield put({
       type: VERIFY_EMAIL_SUCCESS,
       email: action.payload,

@@ -1,12 +1,13 @@
 import React, { useCallback, useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Link from 'next/link';
+import { useRouter } from 'next/Router';
 
 import GoogleLogo from 'assets/svg/btn_google_light_normal_ios.svg';
 import { emailRule } from '~/lib/regex';
 import { getSendEmailDone } from '~/redux/selectors/signup';
 import { landingEmailSelector } from '~/redux/selectors/landing';
-import { sendEmailRequest } from '~/redux/reducers/signup';
+import { sendEmailRequest, verifyEmailRequest } from '~/redux/reducers/signup';
 import { saveEmail as saveLandingEmail } from '~/redux/reducers/landing';
 import Warning from '~/components/common/Warning';
 import Desc from '~/components/common/Desc';
@@ -18,6 +19,7 @@ import * as S from './style';
 
 const Auth = () => {
   const dispatch = useDispatch();
+  const router = useRouter();
   const [emailTestError, setEmailTestError] = useState(false);
   const sendEmailDone = useSelector(getSendEmailDone);
   const landingEmail = useSelector(landingEmailSelector);
@@ -36,11 +38,19 @@ const Auth = () => {
     dispatch(saveLandingEmail(null));
   }, [landingEmail, dispatch]);
 
-  // useEffect(() => {
-  //   if (localStorage.getItem('email') === ) {
-  //     console.log('Email Auth is completed!!');
-  //   }
-  // }, [exEmail]);
+  useEffect(() => {
+    const { success, email } = router.query;
+
+    const isQuery = Boolean(success);
+    if (!isQuery) {
+      return;
+    }
+
+    if (success === 'true') {
+      dispatch(verifyEmailRequest(email));
+    }
+    router.push('/signup', undefined, { shallow: true });
+  }, [dispatch, router]);
 
   const onSubmitEmail = useCallback(
     (e) => {
