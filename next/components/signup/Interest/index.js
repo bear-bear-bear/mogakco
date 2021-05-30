@@ -57,10 +57,11 @@ const Interest = () => {
       <Desc>선택 사항입니다. 입력 시 분야별 랭킹에 이름을 올릴 수 있어요.</Desc>
       <Form action="" onSubmit={onSubmit}>
         <InputWrapper>
-          <Label htmlFor="skillIds" direction="bottom">
+          <Label htmlFor="skills" direction="bottom">
             개발 분야
           </Label>
           <Select
+            id="skills"
             closeMenuOnSelect={false}
             isMulti
             isClearable
@@ -74,6 +75,7 @@ const Interest = () => {
             직업
           </Label>
           <Select
+            id="job"
             isClearable
             options={jobOptions}
             placeholder="직업을 선택해 주세요..."
