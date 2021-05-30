@@ -1,5 +1,4 @@
-import { BaseEntity, Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import UserEntity from './user.entity';
+import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity({
   name: 'users-field',
@@ -10,9 +9,6 @@ class UserFieldEntity extends BaseEntity {
 
   @Column({ length: 20, nullable: false })
   public name!: string;
-
-  @ManyToOne(() => UserEntity, user => user.fields)
-  user!: UserEntity;
 }
 
 export default UserFieldEntity;
