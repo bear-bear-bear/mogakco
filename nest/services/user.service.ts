@@ -1,9 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Connection } from 'typeorm';
-import UserRepository from '../models/repositories/user.repository';
-import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
+import UserFieldEntity from '@models/entities/user-field.entity';
 import UserRepository from '../models/repositories/user.repository';
 
 @Injectable()
