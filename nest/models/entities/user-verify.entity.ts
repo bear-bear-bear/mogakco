@@ -1,14 +1,8 @@
-import {
-  BaseEntity,
-  Column,
-  CreateDateColumn,
-  Entity,
-  PrimaryGeneratedColumn,
-  Unique,
-} from 'typeorm';
+import { BaseEntity, Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity()
-@Unique(['id'])
+@Entity({
+  name: 'users-verify',
+})
 class UserVerifyEntity extends BaseEntity {
   @PrimaryGeneratedColumn()
   public id!: number;
