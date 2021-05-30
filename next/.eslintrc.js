@@ -34,9 +34,9 @@ module.exports = {
       plugins: ['@typescript-eslint'],
       extends: ['plugin:@typescript-eslint/recommended'],
       rules: {
-        'no-shadow': 'off',
+        'no-shadow': 'warn',
+        '@typescript-eslint/no-shadow': 'warn',
         'no-use-before-define': 'off',
-        '@typescript-eslint/no-shadow': 'off',
         '@typescript-eslint/no-explicit-any': 'off',
         '@typescript-eslint/explicit-module-boundary-types': 'off',
         'react/prop-types': 'off',
@@ -63,12 +63,12 @@ module.exports = {
         endOfLine: 'auto',
       },
     ],
-    'no-shadow-restricted-names': 'off',
+    'no-shadow': 'warn',
+    'no-shadow-restricted-names': 'warn',
     'class-methods-use-this': 'off', // 클래스 메서드에 무조건 this 사용
     'no-useless-constructor': 'off', // 생성자 선언 필드 무조건 사용
     'import/no-unresolved': 'off', // import 에 상대경로 금지
     '@emotion/pkg-renaming': 'error',
-    'no-shadow': 'off',
     'import/extensions': ['off'],
     'import/no-extraneous-dependencies': ['off'],
     'no-param-reassign': ['error', { props: false }],
