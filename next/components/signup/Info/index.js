@@ -22,6 +22,7 @@ import * as S from './style';
 const Info = () => {
   const dispatch = useDispatch();
   const [initSubmitDone, setInitSubmitDone] = useState(false);
+  const [isSoftVerificationPass, setIsSoftVerificationPass] = useState(false);
   const [username, onChangeUsername] = useInput('');
   const [usernameError, setUsernameError] = useState(false);
   const [password, onChangePassword] = useInput('');
@@ -34,6 +35,7 @@ const Info = () => {
   const usernameEl = useRef(null);
   const passwordInputEl = useRef(null);
   const passwordConfirmInputEl = useRef(null);
+  const debouncingTimer = useRef(null);
 
   useEffect(() => {
     usernameEl.current.focus();
@@ -41,6 +43,12 @@ const Info = () => {
     dispatch(loadSkillsRequest());
     dispatch(loadJobsRequest());
   }, [dispatch]);
+
+  useEffect(() => {
+    if (usernameError) {
+      usernameEl.current.focus();
+    }
+  }, [usernameError]);
 
   useEffect(() => {
     if (passwordTestError) {
@@ -78,16 +86,24 @@ const Info = () => {
     const isTermError = term === false;
     setTermError(isTermError);
 
-    return [isTermError, isPasswordTestError, isPasswordMatchError].every(
-      (isError) => isError === false,
-    );
+    return [
+      isUsernameError,
+      isTermError,
+      isPasswordTestError,
+      isPasswordMatchError,
+    ].every((isError) => isError === false);
   }, [username, password, passwordConfirm, term]);
 
   useEffect(() => {
     // 처음 화면이 렌더링 됐을 땐 오류를 표시하지 않음
     if (!initSubmitDone) return;
-    verifyInputs();
-  }, [verifyInputs, initSubmitDone]);
+
+    // 타이핑에 대해 디바운싱
+    if (debouncingTimer.current !== 0) {
+      clearTimeout(debouncingTimer.current);
+    }
+    debouncingTimer.current = setTimeout(() => hardVerifyInputs(), 200);
+  }, [hardVerifyInputs, initSubmitDone]);
 
   const flipIsTypingPassword = () => {
     setIsTypingPassword((prev) => !prev);
@@ -102,7 +118,7 @@ const Info = () => {
       e.preventDefault();
       setInitSubmitDone(true);
 
-      const isAllPass = verifyInputs();
+      const isAllPass = hardVerifyInputs();
       if (!isAllPass) return;
 
       dispatch(
@@ -112,7 +128,7 @@ const Info = () => {
         }),
       );
     },
-    [dispatch, verifyInputs, password],
+    [dispatch, hardVerifyInputs, password],
   );
 
   return (
