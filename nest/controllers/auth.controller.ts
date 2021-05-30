@@ -30,7 +30,10 @@ import LoginBadRequestException from './exception/login.exception';
 import LoginUserDTO from '../models/dto/login-user.dto';
 import EmailService from '../services/email.service';
 
-@Controller('user')
+/**
+ * @desc 회원가입/로그인에 대한 처리 컨트롤러
+ */
+@Controller('auth')
 @UseInterceptors(ClassSerializerInterceptor)
 class AuthController {
   constructor(
@@ -42,7 +45,6 @@ class AuthController {
   /**
    * @desc 테스트 전용 컨트롤러 입니다.
    * jest 에서 서버가 원활하게 작동하는 지 수행합니다.
-   * @author galaxy4276
    */
   @Get('/test')
   getTest() {
@@ -51,7 +53,6 @@ class AuthController {
 
   /**
    * @returns 로그인을 수행하고 로그인 정보를 반환합니다.
-   * @author quavious
    */
   @Post('/login')
   @UseFilters(LoginBadRequestException)
@@ -60,13 +61,12 @@ class AuthController {
     if (!user) {
       throw new UnauthorizedException();
     }
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { password, hashedRefreshToken, ...props } = user;
     const { cookie: accessTokenCookie } = this.authService.getCookieWithAccessToken(user.email);
     const { cookie: refreshTokenCookie, token } = this.authService.getCookieWithRefreshToken(
       user.email,
     );
-    await this.userService.hashRefreshToken(token, user.email);
+    await this.authService.hashRefreshToken(token, user.email);
     res.setHeader('Set-Cookie', [accessTokenCookie, refreshTokenCookie]);
     return {
       message: 'Token Generated',
@@ -77,17 +77,15 @@ class AuthController {
   /**
    * @desc 회원가입 컨트롤러 입니다.
    * @returns 성공적으로 회원가입 된 사용자 객체
-   * @author galaxy4276
    */
   @Post()
   async join(@Body() user: createUserDTO): Promise<response> {
-    const message = await this.userService.join(user);
+    const message = await this.authService.join(user);
     return message;
   }
 
   /**
    * @desc 사용자가 회원가입 전에, 인증 메일을 거쳐가는 단계 입니다.
-   * @author galaxy4276
    * @param email required. ex ) galaxyhi4276@gmail.com
    */
   @Post('/send-token/before-register')
@@ -100,7 +98,7 @@ class AuthController {
         token,
         email: destinatedEmail,
         id,
-      } = await this.userService.getEmailVerifyToken(email);
+      } = await this.authService.getEmailVerifyToken(email);
       this.emailService.userVerify({
         email: destinatedEmail,
         token,
@@ -116,15 +114,15 @@ class AuthController {
     };
   }
 
-  @Get('/verify-email')
+  @Get('/verify-email/before-register')
   @Redirect('http://localhost:3000/signup', 302)
   async processVerifyEmail(
     @Query()
     { id, token }: { id: string; token: string },
   ) {
     const redirection = 'http://localhost:3000/signup';
-    const verification = await this.userService.verifyEmail(id, token);
-    if (!verification || !verification.isVerified) {
+    const verification = await this.authService.verifyEmail(id, token);
+    if (!verification) {
       return { url: `${redirection}?success=false` };
     }
 
@@ -138,7 +136,7 @@ class AuthController {
     if (!email) {
       throw new HttpException('이메일 인자가 없습니다.', HttpStatus.BAD_REQUEST);
     }
-    const verification = await this.userService.lastCheckingEmailVerify(email);
+    const verification = await this.authService.lastCheckingEmailVerify(email);
 
     if (!verification) {
       throw new HttpException('인증에 실패하였습니다.', HttpStatus.UNAUTHORIZED);
@@ -152,7 +150,6 @@ class AuthController {
 
   /**
    * @desc 사용자 정보를 반환합니다.
-   * @author quavious
    */
   @Post('/account')
   @UseGuards(JwtAuthGuard)
@@ -172,7 +169,6 @@ class AuthController {
 
   /**
    * @desc refresh-token 을 갱신하여 반환합니다.
-   * @author quavious
    */
   @Post('/refresh-token')
   @UseGuards(JwtAuthGuardWithRefresh)
@@ -196,16 +192,6 @@ class AuthController {
       message: 'logout',
       statusCode: HttpStatus.OK,
     });
-  }
-
-  @Get('/me')
-  // ERROR Unknown column 'NaN' in 'where clause'
-  async requestData(@Req() req: Request) {
-    console.log(req.user);
-    return {
-      message: '1',
-      statusCode: HttpStatus.OK,
-    };
   }
 }
 
