@@ -55,7 +55,16 @@ const Info = () => {
     }
   }, [passwordMatchError, isTypingPassword]);
 
-  const verifyInputs = useCallback(() => {
+  useEffect(() => {
+    const isSoftPass = // input 값이 모두 있는지만 검사
+      Boolean(password) &&
+      Boolean(username) &&
+      Boolean(passwordConfirm) &&
+      Boolean(term);
+    setIsSoftVerificationPass(isSoftPass);
+  }, [username, password, passwordConfirm, term]);
+
+  const hardVerifyInputs = useCallback(() => {
     // input 모두 검증 후 전체 테스트 통과여부 반환
     const isUsernameError = usernameRule.test(username) === false;
     setUsernameError(isUsernameError);
@@ -188,7 +197,11 @@ const Info = () => {
         )}
         {passwordMatchError && <Warning>비밀번호가 일치하지 않습니다.</Warning>}
         {termError && <Warning>약관에 동의하셔야 합니다.</Warning>}
-        <S.CustomSubmitButton type="submit" complete={false}>
+        <S.CustomSubmitButton
+          type="submit"
+          complete={false}
+          disabled={!isSoftVerificationPass}
+        >
           계속
         </S.CustomSubmitButton>
       </Form>

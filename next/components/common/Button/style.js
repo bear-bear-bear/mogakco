@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import { css } from '@emotion/react';
 import { darken, lighten } from 'polished';
 
-const colorStyles = ({ theme, color, outline, underline }) => {
+const colorStyles = ({ theme, color, outline, underline, disabled }) => {
   const mainColor = theme.palette[color];
   const subColors = {
     white: '#000',
@@ -15,7 +15,8 @@ const colorStyles = ({ theme, color, outline, underline }) => {
   return css`
     color: ${subColor};
     background: ${mainColor};
-    &:hover {
+    &:hover,
+    &:focus {
       background: ${darken(0.1, mainColor)};
     }
     &:active {
@@ -27,7 +28,8 @@ const colorStyles = ({ theme, color, outline, underline }) => {
       color: ${mainColor};
       background: none;
       border: 1px solid ${mainColor};
-      &:hover {
+      &:hover,
+      &:focus {
         background: ${mainColor};
         color: ${subColor};
       }
@@ -39,7 +41,8 @@ const colorStyles = ({ theme, color, outline, underline }) => {
       background: none;
       border: none;
       border-radius: none;
-      &:hover {
+      &:hover,
+      &:focus {
         background: none;
         &::before {
           content: '';
@@ -50,6 +53,16 @@ const colorStyles = ({ theme, color, outline, underline }) => {
           height: 100%;
           border-bottom: 1px solid ${mainColor};
         }
+      }
+    `}
+
+    ${disabled &&
+    css`
+      color: var(--color-gray-4);
+      background: var(--color-gray-1);
+      &:hover,
+      &:focus {
+        background: var(--color-gray-1);
       }
     `}
   `;
