@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 
 import useInput from '~/hooks/useInput';
 import { saveRequiredInfo } from '~/redux/reducers/signup';
-import { passwordRule } from '~/lib/regex';
+import { usernameRule, passwordRule } from '~/lib/regex';
 import Checkbox from '~/components/common/Checkbox';
 import Warning from '~/components/common/Warning';
 import Desc from '~/components/common/Desc';
@@ -17,12 +17,14 @@ import * as S from './style';
 
 const Info = () => {
   const dispatch = useDispatch();
-  const [password, onChangePassword] = useInput('');
-  const [passwordConfirm, onChangePasswordConfirm] = useInput('');
   const [initSubmitDone, setInitSubmitDone] = useState(false);
-  const [term, setTerm] = useState(false);
-  const [passwordMatchError, setPasswordMatchError] = useState(false);
+  const [username, onChangeUsername] = useInput('');
+  const [usernameError, setUsernameError] = useState(false);
+  const [password, onChangePassword] = useInput('');
   const [passwordTestError, setPasswordTestError] = useState(false);
+  const [passwordConfirm, onChangePasswordConfirm] = useInput('');
+  const [passwordMatchError, setPasswordMatchError] = useState(false);
+  const [term, setTerm] = useState(false);
   const [termError, setTermError] = useState(false);
   const [isTypingPassword, setIsTypingPassword] = useState(false);
   const usernameEl = useRef(null);
@@ -48,8 +50,8 @@ const Info = () => {
 
   const verifyInputs = useCallback(() => {
     // input 모두 검증 후 전체 테스트 통과여부 반환
-    const isTermError = term === false;
-    setTermError(isTermError);
+    const isUsernameError = usernameRule.test(username) === false;
+    setUsernameError(isUsernameError);
 
     const isPasswordTestError = passwordRule.test(password) === false;
     setPasswordTestError(isPasswordTestError);
@@ -57,10 +59,13 @@ const Info = () => {
     const isPasswordMatchError = password !== passwordConfirm;
     setPasswordMatchError(isPasswordMatchError);
 
+    const isTermError = term === false;
+    setTermError(isTermError);
+
     return [isTermError, isPasswordTestError, isPasswordMatchError].every(
       (isError) => isError === false,
     );
-  }, [term, password, passwordConfirm]);
+  }, [username, password, passwordConfirm, term]);
 
   useEffect(() => {
     // 처음 화면이 렌더링 됐을 땐 오류를 표시하지 않음
@@ -107,10 +112,17 @@ const Info = () => {
             type="text"
             id="username"
             size="small"
+            value={username}
+            onChange={onChangeUsername}
             ref={usernameEl}
             required
           />
         </InputWrapper>
+        <S.DescWrapper>
+          <Desc size="small">
+            ※ 한글, 영문, 숫자, 마침표를 사용할 수 있습니다
+          </Desc>
+        </S.DescWrapper>
         <InputWrapper>
           <Label htmlFor="password" direction="bottom">
             * 비밀번호
@@ -143,7 +155,7 @@ const Info = () => {
         </InputWrapper>
         <S.DescWrapper>
           <Desc size="small">
-            ※ 비밀번호는 문자, 숫자, 기호를 조합하여 8자 이상을 사용하세요
+            ※ 비밀번호는 영문, 숫자, 기호를 조합하여 8자 이상을 사용하세요
           </Desc>
         </S.DescWrapper>
         <S.TermWrapper>
@@ -157,6 +169,12 @@ const Info = () => {
             (필수)개인정보 수집 및 이용에 동의하겠습니다.
           </Label>
         </S.TermWrapper>
+        {usernameError &&
+          (username.length > 12 ? (
+            <Warning>별명은 12자를 넘을 수 없습니다.</Warning>
+          ) : (
+            <Warning>형식에 맞는 별명을 입력하세요.</Warning>
+          ))}
         {passwordTestError && (
           <Warning>형식에 맞는 비밀번호를 입력하세요.</Warning>
         )}

@@ -13,8 +13,7 @@ const initialState = {
 
 const dummyUser = {
   id: 1, // 아이디
-  privateName: '최은기', // 나한테만 보이는 이름
-  publicName: '라이언', // 방 들어갈때 랜덤  부여
+  username: '최은기', // 나한테만 보이는 이름
   skills: [], // 백에선 index로 관리, 프론트에선 index를 받아 문자열로 가공. 회원가입시 문자열을 인덱스로 가공하여 post
   job: '',
 };

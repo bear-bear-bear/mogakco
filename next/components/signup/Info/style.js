@@ -7,7 +7,7 @@ export const DescWrapper = styled.div`
   display: flex;
   justify-content: flex-end;
   margin-top: 1rem;
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
 `;
 
 export const TermWrapper = styled.div`
