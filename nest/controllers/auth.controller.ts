@@ -66,7 +66,7 @@ class AuthController {
     const { cookie: refreshTokenCookie, token } = this.authService.getCookieWithRefreshToken(
       user.email,
     );
-    await this.userService.hashRefreshToken(token, user.email);
+    await this.authService.hashRefreshToken(token, user.email);
     res.setHeader('Set-Cookie', [accessTokenCookie, refreshTokenCookie]);
     return {
       message: 'Token Generated',
@@ -80,7 +80,7 @@ class AuthController {
    */
   @Post()
   async join(@Body() user: createUserDTO): Promise<response> {
-    const message = await this.userService.join(user);
+    const message = await this.authService.join(user);
     return message;
   }
 
@@ -98,7 +98,7 @@ class AuthController {
         token,
         email: destinatedEmail,
         id,
-      } = await this.userService.getEmailVerifyToken(email);
+      } = await this.authService.getEmailVerifyToken(email);
       this.emailService.userVerify({
         email: destinatedEmail,
         token,
@@ -121,7 +121,7 @@ class AuthController {
     { id, token }: { id: string; token: string },
   ) {
     const redirection = 'http://localhost:3000/signup';
-    const verification = await this.userService.verifyEmail(id, token);
+    const verification = await this.authService.verifyEmail(id, token);
     if (!verification || !verification.isVerified) {
       return { url: `${redirection}?success=false` };
     }
@@ -136,7 +136,7 @@ class AuthController {
     if (!email) {
       throw new HttpException('이메일 인자가 없습니다.', HttpStatus.BAD_REQUEST);
     }
-    const verification = await this.userService.lastCheckingEmailVerify(email);
+    const verification = await this.authService.lastCheckingEmailVerify(email);
 
     if (!verification) {
       throw new HttpException('인증에 실패하였습니다.', HttpStatus.UNAUTHORIZED);
