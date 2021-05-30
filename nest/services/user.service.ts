@@ -2,6 +2,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Connection } from 'typeorm';
 import UserFieldEntity from '@models/entities/user-field.entity';
+import UserJobEntity from '@models/entities/users-job.entity';
 import UserRepository from '../models/repositories/user.repository';
 
 @Injectable()
@@ -43,6 +44,19 @@ class UserService {
     }
 
     return fieldList;
+  }
+
+  async findAllJobs() {
+    const jobList = await this.connection
+      .getRepository(UserJobEntity)
+      .createQueryBuilder('users-job')
+      .getMany();
+
+    if (!jobList) {
+      throw new HttpException('필드 정보를 불러올 수 없습니다.', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    return jobList;
   }
 }
 

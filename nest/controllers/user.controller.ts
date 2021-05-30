@@ -15,5 +15,11 @@ class UserController {
     const fieldList = await this.userService.findAllFields();
     return fieldList;
   }
+
+  @Get('/jobs')
+  async getAllJobs() {
+    const jobList = await this.userService.findAllJobs();
+    return jobList;
+  }
 }
 export default UserController;
