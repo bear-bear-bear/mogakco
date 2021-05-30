@@ -26,8 +26,8 @@ const {
   //
   sendEmailAPI,
   verifyEmailAPI,
-  // loadSkillsAPI,
-  // loadJobsAPI,
+  loadSkillsAPI,
+  loadJobsAPI,
   signUpApI,
 } = signupAPIs;
 
@@ -62,10 +62,10 @@ function* verifyEmail(action) {
 
 function* loadSkills() {
   try {
-    // const result = yield call(loadSkillsAPI);
+    const result = yield call(loadSkillsAPI);
     yield put({
       type: LOAD_SKILLS_SUCCESS,
-      // skills: result.skills,
+      skills: result.data,
     });
   } catch (err) {
     yield put({
@@ -77,10 +77,10 @@ function* loadSkills() {
 
 function* loadJobs() {
   try {
-    // const result = yield call(loadJobsAPI);
+    const result = yield call(loadJobsAPI);
     yield put({
       type: LOAD_JOBS_SUCCESS,
-      // jobs: result.jobs,
+      jobs: result.data,
     });
   } catch (err) {
     yield put({
