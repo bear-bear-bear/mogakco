@@ -1,34 +1,48 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Connection } from 'typeorm';
+import UserFieldEntity from '@models/entities/user-field.entity';
 import UserRepository from '../models/repositories/user.repository';
-import UserVerifyRepository from '../models/repositories/user.verify.repository';
 
 @Injectable()
 class UserService {
   constructor(
     @InjectRepository(UserRepository)
-    @InjectRepository(UserVerifyRepository)
     private userRepository: UserRepository,
+    private connection: Connection,
   ) {}
 
   async findUserOne(id: number) {
     return this.userRepository.findUserOne(id);
   }
 
-  async findUserByName(username: string) {
+  findUserByName(username: string) {
     return this.userRepository.findUserByName(username);
   }
 
-  async findUserByEmail(email: string) {
+  findUserByEmail(email: string) {
     return this.userRepository.findUserByEmail(email);
   }
 
-  async updateUserOne(user: any) {
+  updateUserOne(user: any) {
     return this.userRepository.updateUser(user);
   }
 
-  async deleteUser(id: number) {
+  deleteUser(id: number) {
     return this.userRepository.deleteUser(id);
+  }
+
+  async findAllFields() {
+    const fieldList = await this.connection
+      .getRepository(UserFieldEntity)
+      .createQueryBuilder('users-field')
+      .getMany();
+
+    if (!fieldList) {
+      throw new HttpException('필드 정보를 불러올 수 없습니다.', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    return fieldList;
   }
 }
 
