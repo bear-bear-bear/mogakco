@@ -1,6 +1,7 @@
 import { all, fork, call, takeLatest, put } from 'redux-saga/effects';
 
-import apiClient, { getAxiosError } from '~/lib/apiClient';
+import { getAxiosError } from '~/lib/apiClient';
+import { userAPIs } from '~/lib/APIs';
 import {
   LOG_IN_REQUEST,
   LOG_IN_SUCCESS,
@@ -8,9 +9,10 @@ import {
   LOG_OUT_REQUEST,
   LOG_OUT_SUCCESS,
   LOG_OUT_FAILURE,
-} from '../../reducers/common/user';
+} from '~/redux/reducers/common/user';
 
-const logInAPI = (data) => apiClient.post('/user/login', data);
+const { logInAPI, logOutAPI } = userAPIs;
+
 function* logIn(action) {
   try {
     const result = yield call(logInAPI, action.data);
@@ -27,7 +29,6 @@ function* logIn(action) {
   }
 }
 
-const logOutAPI = () => apiClient.get('/user/logout');
 function* logOut() {
   try {
     const result = yield call(logOutAPI);
