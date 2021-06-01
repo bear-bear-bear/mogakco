@@ -1,15 +1,15 @@
 import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
-import JwtStrategy from 'services/passport/jwt.strategy';
-import AuthService from 'services/auth.service';
-import JwtStrategyWithRefresh from 'services/passport/jwt.refresh.strategy';
+import JwtStrategy from '@services/passport/jwt.strategy';
+import AuthService from '@services/auth.service';
+import JwtStrategyWithRefresh from '@services/passport/jwt.refresh.strategy';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import AuthController from '@controllers/auth.controller';
+import EmailService from '@services/email.service';
+import UserRepository from '@models/repositories/user.repository';
+import UserVerifyRepository from '@models/repositories/user-verify.repository';
 import UserModule from './user.module';
-import AuthController from '../controllers/auth.controller';
-import EmailService from '../services/email.service';
-import UserVerifyRepository from '../models/repositories/user.verify.repository';
-import UserRepository from '../models/repositories/user.repository';
 
 @Module({
   imports: [
