@@ -24,7 +24,10 @@
     "import/no-unresolved": "off",
     "no-console": "warn",
     "no-shadow": "warn",
-    "@typescript-eslint/no-shadow": "warn"
+    "@typescript-eslint/no-shadow": "warn",
+    "no-unused-vars": "error",
+    "max-classes-per-file": ["off"],
+    "import/no-cycle": "off"
   },
   "ignorePatterns": ["dist", "node_modules"]
 }
