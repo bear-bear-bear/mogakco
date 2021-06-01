@@ -1,16 +1,16 @@
 import {
-  BaseEntity,
   Column,
   CreateDateColumn,
   Entity,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { BaseEntityHardDelete } from './helper/abstract';
 
 @Entity({
-  name: 'users-field',
+  name: 'users_field',
 })
-class UserFieldEntity extends BaseEntity {
+class UserFieldEntity extends BaseEntityHardDelete {
   @PrimaryGeneratedColumn()
   public id!: number;
 
