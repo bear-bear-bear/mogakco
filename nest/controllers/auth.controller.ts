@@ -18,17 +18,17 @@ import {
   HttpCode,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
-import JwtAuthGuard from 'services/passport/jwt.guard';
-import JwtAuthGuardWithRefresh from 'services/passport/jwt.refresh.guard';
-import AuthService from 'services/auth.service';
+import JwtAuthGuard from '@services/passport/jwt.guard';
+import JwtAuthGuardWithRefresh from '@services/passport/jwt.refresh.guard';
+import AuthService from '@services/auth.service';
 import UserEntity from '@models/entities/user.entity';
 import { prepareFailure } from '@lib/log';
-import UserService from '../services/user.service';
-import createUserDTO from '../models/dto/create-user.dto';
+import UserService from '@services/user.service';
+import createUserDTO from '@models/dto/create-user.dto';
+import LoginUserDTO from '@models/dto/login-user.dto';
+import EmailService from '@services/email.service';
 import response from './dto/response';
 import LoginBadRequestException from './exception/login.exception';
-import LoginUserDTO from '../models/dto/login-user.dto';
-import EmailService from '../services/email.service';
 
 /**
  * @desc 회원가입/로그인에 대한 처리 컨트롤러
