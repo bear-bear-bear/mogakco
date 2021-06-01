@@ -1,20 +1,15 @@
-import { BaseEntity, Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity } from 'typeorm';
+import { BaseEntityOnlyCreatedAt } from './helper/abstract';
 
 @Entity({
-  name: 'users-verify',
+  name: 'users_verify',
 })
-class UserVerifyEntity extends BaseEntity {
-  @PrimaryGeneratedColumn()
-  public id!: number;
-
+class UserVerifyEntity extends BaseEntityOnlyCreatedAt {
   @Column({ length: 50 })
   public email!: string;
 
   @Column()
   public token!: string;
-
-  @CreateDateColumn({ name: 'created_at' })
-  public createdAt!: Date;
 
   @Column({ name: 'expired_at' })
   public expiredAt!: Date;

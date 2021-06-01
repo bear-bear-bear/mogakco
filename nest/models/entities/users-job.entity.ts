@@ -1,27 +1,17 @@
-import {
-  BaseEntity,
-  Column,
-  CreateDateColumn,
-  Entity,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
-} from 'typeorm';
+import { Column, Entity, OneToMany } from 'typeorm';
+import UserEntity from './user.entity';
+import { BaseEntityHardDelete } from './helper/abstract';
 
 @Entity({
-  name: 'users-job',
+  name: 'users_job',
 })
-class UserJobEntity extends BaseEntity {
-  @PrimaryGeneratedColumn()
-  public id!: number;
-
+class UserJobEntity extends BaseEntityHardDelete {
   @Column({ length: 15, nullable: false })
   public name!: string;
 
-  @CreateDateColumn({ name: 'created_at' })
-  createdAt!: Date;
-
-  @UpdateDateColumn({ name: 'updated_at' })
-  updatedAt!: Date;
+  /* relation */
+  @OneToMany(() => UserEntity, user => user.job)
+  user!: UserEntity;
 }
 
 export default UserJobEntity;
