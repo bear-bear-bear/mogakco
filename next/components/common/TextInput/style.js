@@ -20,7 +20,7 @@ const inputSizeStyles = ({ size }) => {
   `;
 };
 
-export const InputBox = styled.input`
+export const TextInput = styled.input`
   width: 100%;
 
   ${inputSizeStyles}

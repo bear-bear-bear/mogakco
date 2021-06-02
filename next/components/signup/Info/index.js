@@ -8,12 +8,13 @@ import {
   loadJobsRequest,
 } from '~/redux/reducers/signup';
 import { usernameRule, passwordRule } from '~/lib/regex';
-import Checkbox from '~/components/common/Checkbox';
+import CheckboxInput from '~/components/common/CheckboxInput';
 import Warning from '~/components/common/Warning';
 import Desc from '~/components/common/Desc';
 import Form from '~/components/common/Form';
 import InputWrapper from '~/components/common/InputWrapper';
-import InputBox from '~/components/common/InputBox';
+import TextInput from '~/components/common/TextInput';
+import PasswordInput from '~/components/common/PasswordInput';
 import Label from '~/components/common/Label';
 
 import * as CS from '../common/styles';
@@ -140,7 +141,7 @@ const Info = () => {
           <Label htmlFor="username" direction="bottom">
             * 별명
           </Label>
-          <InputBox
+          <TextInput
             type="text"
             id="username"
             size="small"
@@ -192,7 +193,7 @@ const Info = () => {
           </Desc>
         </S.DescWrapper>
         <S.TermWrapper>
-          <Checkbox
+          <CheckboxInput
             id="policy"
             type="checkbox"
             value={term}
