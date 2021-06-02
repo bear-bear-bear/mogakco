@@ -53,12 +53,12 @@ const Interest = () => {
 
   return (
     <>
-      <CS.Title>관심 분야를 입력하세요</CS.Title>
-      <Desc>선택 사항입니다. 입력 시 분야별 랭킹에 이름을 올릴 수 있어요.</Desc>
+      <Desc>아래 항목들은 선택 사항입니다.</Desc>
+      <Desc>작성하시면 랭킹 시스템에 참여할 수 있어요</Desc>
       <Form action="" onSubmit={onSubmit}>
         <InputWrapper>
           <Label htmlFor="skills" direction="bottom">
-            개발 분야
+            관심 분야
           </Label>
           <Select
             id="skills"
@@ -66,7 +66,7 @@ const Interest = () => {
             isMulti
             isClearable
             options={skillOptions}
-            placeholder="개발 분야를 선택해 주세요..."
+            placeholder="관심 분야를 선택해 주세요... (다중 선택 가능)"
             onChange={onChangeSkills}
           />
         </InputWrapper>
