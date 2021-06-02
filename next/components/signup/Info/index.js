@@ -33,6 +33,7 @@ const Info = () => {
   const [term, setTerm] = useState(false);
   const [termError, setTermError] = useState(false);
   const [isTypingPassword, setIsTypingPassword] = useState(false);
+  const [isVisiblePassword, setIsVisiblePassword] = useState(false);
   const usernameEl = useRef(null);
   const passwordInputEl = useRef(null);
   const passwordConfirmInputEl = useRef(null);
@@ -132,6 +133,10 @@ const Info = () => {
     [dispatch, hardVerifyInputs, password],
   );
 
+  const onClickEye = () => {
+    setIsVisiblePassword((prev) => !prev);
+  };
+
   return (
     <>
       <CS.Title>별명과 비밀번호를 입력하세요</CS.Title>
@@ -161,7 +166,7 @@ const Info = () => {
           <Label htmlFor="password" direction="bottom">
             * 비밀번호
           </Label>
-          <InputBox
+          <PasswordInput
             type="password"
             id="password"
             value={password}
@@ -170,6 +175,8 @@ const Info = () => {
             onBlur={flipIsTypingPassword}
             size="small"
             ref={passwordInputEl}
+            onClickEye={onClickEye}
+            isVisible={isVisiblePassword}
             required
           />
         </InputWrapper>
@@ -177,13 +184,15 @@ const Info = () => {
           <Label htmlFor="passwordConfirm" direction="bottom">
             * 비밀번호 확인
           </Label>
-          <InputBox
+          <PasswordInput
             type="password"
             id="passwordConfirm"
             value={passwordConfirm}
             onChange={onChangePasswordConfirm}
             size="small"
             ref={passwordConfirmInputEl}
+            onClickEye={onClickEye}
+            isVisible={isVisiblePassword}
             required
           />
         </InputWrapper>
