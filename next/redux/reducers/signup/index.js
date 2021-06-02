@@ -33,19 +33,6 @@ const initialState = {
   jobs: [], // 서버에서 내려주는 jobs 목록
 };
 
-const dummySkills = [
-  { id: 1, name: '프론트엔드' },
-  { id: 2, name: '백엔드' },
-  { id: 3, name: '데브옵스' },
-];
-
-const dummyJobs = [
-  { id: 1, name: '학생' },
-  { id: 2, name: '직장인' },
-  { id: 3, name: '자유인' },
-  { id: 3, name: '우주인' },
-];
-
 const signUpSlice = createSlice({
   name: 'signup',
   initialState,
@@ -98,11 +85,10 @@ const signUpSlice = createSlice({
       state.loadSkillsDone = false;
       state.loadSkillsError = null;
     },
-    LOAD_SKILLS_SUCCESS: (state) => {
+    LOAD_SKILLS_SUCCESS: (state, action) => {
       state.loadSkillsLoading = false;
       state.loadSkillsDone = true;
-      // state.skills = action.skills;
-      state.skills = dummySkills;
+      state.skills = action.skills;
     },
     LOAD_SKILLS_FAILURE: (state, action) => {
       state.loadSkillsLoading = false;
@@ -113,11 +99,10 @@ const signUpSlice = createSlice({
       state.loadJobsDone = false;
       state.loadJobsError = null;
     },
-    LOAD_JOBS_SUCCESS: (state) => {
+    LOAD_JOBS_SUCCESS: (state, action) => {
       state.loadJobsLoading = false;
       state.loadJobsDone = true;
-      // state.jobs = action.jobs;
-      state.jobs = dummyJobs;
+      state.jobs = action.jobs;
     },
     LOAD_JOBS_FAILURE: (state, action) => {
       state.loadJobsLoading = false;

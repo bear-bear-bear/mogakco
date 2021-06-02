@@ -1,27 +1,12 @@
-import {
-  BaseEntity,
-  Column,
-  CreateDateColumn,
-  Entity,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
-} from 'typeorm';
+import { Column, Entity } from 'typeorm';
+import { BaseEntityHardDelete } from './helper/abstract';
 
 @Entity({
-  name: 'users-field',
+  name: 'users_field',
 })
-class UserFieldEntity extends BaseEntity {
-  @PrimaryGeneratedColumn()
-  public id!: number;
-
+class UserFieldEntity extends BaseEntityHardDelete {
   @Column({ length: 20, nullable: false })
   public name!: string;
-
-  @CreateDateColumn({ name: 'created_at' })
-  createdAt!: Date;
-
-  @UpdateDateColumn({ name: 'updated_at' })
-  updatedAt!: Date;
 }
 
 export default UserFieldEntity;

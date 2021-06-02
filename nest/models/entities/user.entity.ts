@@ -1,24 +1,12 @@
-import {
-  BaseEntity,
-  Column,
-  CreateDateColumn,
-  DeleteDateColumn,
-  Entity,
-  ManyToMany,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
-  JoinTable,
-} from 'typeorm';
+import { Column, Entity, ManyToOne, JoinColumn } from 'typeorm';
 import { Exclude } from 'class-transformer';
-import UserFieldEntity from '@models/entities/user-field.entity';
+import { BaseEntitySoftDelete } from './helper/abstract';
+import UserJobEntity from './users-job.entity';
 
 @Entity({
   name: 'users',
 })
-class UserEntity extends BaseEntity {
-  @PrimaryGeneratedColumn({ unsigned: true })
-  id!: number;
-
+class UserEntity extends BaseEntitySoftDelete {
   @Column({ nullable: false, length: 10 })
   username!: string;
 
@@ -28,22 +16,17 @@ class UserEntity extends BaseEntity {
   @Column({ nullable: false, length: 150 })
   password!: string;
 
-  @CreateDateColumn({ name: 'created_at' })
-  createdAt!: Date;
-
-  @UpdateDateColumn({ name: 'updated_at' })
-  updatedAt!: Date;
-
-  @DeleteDateColumn({ name: 'deleted_at' })
-  deletedAt?: Date;
+  @Column({ nullable: false, type: 'simple-array' })
+  skills!: string[];
 
   @Column({ nullable: true, name: 'refresh_token' })
   @Exclude()
   hashedRefreshToken?: string;
 
-  @ManyToMany(() => UserFieldEntity)
-  @JoinTable({ name: 'users_and_fields' })
-  fields!: UserFieldEntity[];
+  /* relation */
+  @ManyToOne(() => UserJobEntity, job => job.user)
+  @JoinColumn({ name: 'job_id' })
+  job?: UserJobEntity;
 }
 
 export default UserEntity;

@@ -12,7 +12,7 @@ import LoginUserDTO from '@models/dto/login-user.dto';
 import makeHash from '@lib/makeHash';
 import { v4 as uuidv4 } from 'uuid';
 import UserVerifyEntity from '@models/entities/user-verify.entity';
-import UserVerifyRepository from '@models/repositories/user.verify.repository';
+import UserVerifyRepository from '@models/repositories/user-verify.repository';
 import createUserDTO from '@models/dto/create-user.dto';
 import UserRepository from '@models/repositories/user.repository';
 import UserService from './user.service';

@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import Joi from 'joi';
+import { join } from 'path';
 import AuthModule from './auth.module';
 import MailModule from './mail.module';
 
@@ -32,7 +33,7 @@ import MailModule from './mail.module';
       migrationsTableName: 'migrations',
       migrations: ['migrations/*.ts'],
       cli: { migrationsDir: 'migration' },
-      entities: ['dist/models/**/*.js'],
+      entities: [join(__dirname, '../models/entities/*.entity{.ts,.js}')],
     }),
     AuthModule,
     MailModule,
