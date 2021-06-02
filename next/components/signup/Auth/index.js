@@ -10,7 +10,7 @@ import { saveEmail as saveLandingEmail } from '~/redux/reducers/landing';
 import Warning from '~/components/common/Warning';
 import Desc from '~/components/common/Desc';
 import Form from '~/components/common/Form';
-import TextInput from '~/components/common/TextInput';
+import TextInput from '~/components/common/Input/TextInput';
 
 import * as CS from '../common/styles';
 import * as S from './style';

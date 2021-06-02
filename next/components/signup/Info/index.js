@@ -8,13 +8,13 @@ import {
   loadJobsRequest,
 } from '~/redux/reducers/signup';
 import { usernameRule, passwordRule } from '~/lib/regex';
-import CheckboxInput from '~/components/common/CheckboxInput';
+import CheckboxInput from '~/components/common/Input/CheckboxInput';
 import Warning from '~/components/common/Warning';
 import Desc from '~/components/common/Desc';
 import Form from '~/components/common/Form';
 import InputWrapper from '~/components/common/InputWrapper';
-import TextInput from '~/components/common/TextInput';
-import PasswordInput from '~/components/common/PasswordInput';
+import TextInput from '~/components/common/Input/TextInput';
+import PasswordInput from '~/components/common/Input/PasswordInput';
 import Label from '~/components/common/Label';
 
 import * as CS from '../common/styles';

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import TextInput from '~/components/common/TextInput';
+import TextInput from '~/components/common/Input/TextInput';
 import * as S from './style';
 
 /**
