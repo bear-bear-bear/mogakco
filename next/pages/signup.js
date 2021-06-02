@@ -8,13 +8,6 @@ import Auth from '~/components/signup/auth';
 import Info from '~/components/signup/info';
 import Interest from '~/components/signup/interest';
 import Complete from '~/components/signup/complete';
-import {
-  getVerifyEmailDone,
-  getVerifySocialDone,
-  getSaveRequiredInfoDone,
-  getSaveOptionalInfoDone,
-  getSignUpDone,
-} from '~/redux/selectors/signup';
 import { resetSignUp } from '~/redux/reducers/signup';
 
 const pageProps = {
@@ -26,12 +19,16 @@ const pageProps = {
 
 const SignUp = () => {
   const dispatch = useDispatch();
-  const verifyEmailDone = useSelector(getVerifyEmailDone);
-  const verifySocialDone = useSelector(getVerifySocialDone);
-  const saveRequiredInfoDone = useSelector(getSaveRequiredInfoDone);
-  const saveOptionalInfoDone = useSelector(getSaveOptionalInfoDone);
-  const verifySignUpDone = useSelector(getSignUpDone);
-  const fill = [verifyEmailDone, saveRequiredInfoDone, verifySignUpDone];
+  const verifyEmailDone = useSelector(({ signup }) => signup.verifyEmailDone);
+  const verifySocialDone = useSelector(({ signup }) => signup.verifySocialDone);
+  const saveRequiredInfoDone = useSelector(
+    ({ signup }) => signup.saveRequiredInfoDone,
+  );
+  const saveOptionalInfoDone = useSelector(
+    ({ signup }) => signup.saveOptionalInfoDone,
+  );
+  const signUpDone = useSelector(({ signup }) => signup.signUpDone);
+  const fill = [verifyEmailDone, saveRequiredInfoDone, signUpDone];
 
   useEffect(() => {
     // 페이지 떠날 때 모든 state 초기화
@@ -46,8 +43,8 @@ const SignUp = () => {
       <AuthContainer progressBar={<ProgressBar fill={fill} />}>
         {(!verifyEmailDone || !verifySocialDone) && <Auth />}
         {verifyEmailDone && !saveRequiredInfoDone && <Info />}
-        {saveRequiredInfoDone && !verifySignUpDone && <Interest />}
-        {saveOptionalInfoDone && verifySignUpDone && <Complete />}
+        {saveRequiredInfoDone && !signUpDone && <Interest />}
+        {saveOptionalInfoDone && signUpDone && <Complete />}
       </AuthContainer>
     </>
   );

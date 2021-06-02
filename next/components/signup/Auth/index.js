@@ -5,8 +5,6 @@ import { useRouter } from 'next/Router';
 
 import GoogleLogo from 'assets/svg/btn_google_light_normal_ios.svg';
 import { emailRule } from '~/lib/regex';
-import { getSendEmailDone } from '~/redux/selectors/signup';
-import { landingEmailSelector } from '~/redux/selectors/landing';
 import { sendEmailRequest, verifyEmailRequest } from '~/redux/reducers/signup';
 import { saveEmail as saveLandingEmail } from '~/redux/reducers/landing';
 import Warning from '~/components/common/Warning';
@@ -21,8 +19,8 @@ const Auth = () => {
   const dispatch = useDispatch();
   const router = useRouter();
   const [emailTestError, setEmailTestError] = useState(false);
-  const sendEmailDone = useSelector(getSendEmailDone);
-  const landingEmail = useSelector(landingEmailSelector);
+  const sendEmailDone = useSelector(({ signup }) => signup.sendEmailDone);
+  const landingEmail = useSelector(({ landing }) => landing.email);
   const emailEl = useRef(null);
   const submitButtonEl = useRef(null);
 
