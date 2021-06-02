@@ -183,6 +183,14 @@ class AuthService {
   }
 
   async join({ username, password, email }: createUserDTO) {
+    const verification = await this.userVerifyRepository.findOne({
+      email,
+    });
+
+    if (!verification || !verification.isVerified) {
+      throw new HttpException('이메일 인증을 수행해주세요.', HttpStatus.BAD_REQUEST);
+    }
+
     const currentUser = await this.userRepository.findUserByEmail(email);
     if (currentUser) {
       throw new HttpException('이미 존재하는 유저입니다.', HttpStatus.UNAUTHORIZED);
