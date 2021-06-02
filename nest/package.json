@@ -21,7 +21,11 @@
     "migrate:create": "npm run typeorm migration:create -- -n",
     "migrate:generate": "npm run typeorm migration:generate -- -n",
     "migrate:revert": "npm run typeorm migration:revert",
-    "migrate": "npm run typeorm migration:run"
+    "migrate": "npm run typeorm migration:run",
+    "seed:config": "ts-node ./node_modules/typeorm-seeding/dist/cli.js config",
+    "seed:run": "ts-node ./node_modules/typeorm-seeding/dist/cli.js seed",
+    "schema:drop": "npm run typeorm schema:drop",
+    "schema:sync": "npm run typeorm schema:sync"
   },
   "dependencies": {
     "@jest/types": "^27.0.2",
@@ -45,6 +49,7 @@
     "class-validator": "^0.13.1",
     "cookie-parser": "^1.4.5",
     "express": "^4.17.1",
+    "faker": "^5.5.3",
     "joi": "^17.4.0",
     "nodemailer": "^6.6.1",
     "passport": "^0.4.1",
@@ -54,6 +59,7 @@
     "rimraf": "^3.0.2",
     "rxjs": "^7.1.0",
     "typeorm": "^0.2.32",
+    "typeorm-seeding": "^1.6.1",
     "uuid": "^8.3.2"
   },
   "devDependencies": {
@@ -62,6 +68,7 @@
     "@nestjs/testing": "^7.6.17",
     "@types/bcrypt": "^5.0.0",
     "@types/express": "^4.17.11",
+    "@types/faker": "^5.5.6",
     "@types/inline-css": "^3.0.0",
     "@types/jest": "^26.0.23",
     "@types/joi": "^17.2.3",

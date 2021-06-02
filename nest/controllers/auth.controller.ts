@@ -133,12 +133,11 @@ class AuthController {
   @Get('/is-verified/before-register')
   @HttpCode(200)
   async lastCheckingBeforeRegister(@Query('email') email: string) {
-    if (!email) {
-      throw new HttpException('이메일 인자가 없습니다.', HttpStatus.BAD_REQUEST);
-    }
+    this.authService.verifyEmailRequest(email);
+
     const verification = await this.authService.lastCheckingEmailVerify(email);
 
-    if (!verification) {
+    if (typeof verification === 'boolean' || !verification.isVerified) {
       throw new HttpException('인증에 실패하였습니다.', HttpStatus.UNAUTHORIZED);
     }
 
