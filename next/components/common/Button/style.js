@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
-import { css } from '@emotion/react';
+import { css, keyframes } from '@emotion/react';
+import { VscLoading } from 'react-icons/vsc';
 import { darken, lighten } from 'polished';
 
 const colorStyles = ({ theme, color, outline, underline, disabled }) => {
@@ -104,6 +105,7 @@ const fullWidthStyle = ({ fullWidth }) =>
 
 export const Button = styled.button`
   /* 공통 스타일 */
+  min-width: ${({ loading }) => loading && '8.1rem'};
   position: relative;
   display: inline-flex;
   align-items: center;
@@ -113,6 +115,7 @@ export const Button = styled.button`
   color: black;
   cursor: pointer;
   padding: 1.33rem;
+  transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
 
   /* 컬러 스타일 */
   ${colorStyles}
@@ -126,4 +129,26 @@ export const Button = styled.button`
 
   /* fullWidth */
   ${fullWidthStyle}
+`;
+
+const loadingAnimation = keyframes`
+  ${'0%'} {
+    transform: rotateZ(0deg);
+  }
+
+  ${'50%'} {
+    transform: rotateZ(400deg);
+  }
+
+  ${'100%'} {
+    transform: rotateZ(1080deg);
+  }
+`;
+
+export const Loading = styled(VscLoading)`
+  margin-left: 0.33rem;
+  font-size: 1.1rem;
+  color: ${({ color }) => (color === 'white' ? 'black' : 'white')};
+  animation: ${loadingAnimation} 1.8s cubic-bezier(0.645, 0.045, 0.355, 1)
+    infinite;
 `;

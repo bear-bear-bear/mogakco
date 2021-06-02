@@ -1,11 +1,14 @@
 import React from 'react';
-import { ThemeProvider } from '@emotion/react';
 import PropTypes from 'prop-types';
+import { ThemeProvider } from '@emotion/react';
 
 import * as S from './style';
 
 const Button = React.forwardRef(
-  ({ children, color, size, fullWidth, outline, underline, ...rest }, ref) => {
+  (
+    { children, color, size, fullWidth, outline, underline, loading, ...rest },
+    ref,
+  ) => {
     const theme = {
       palette: {
         white: '#ffffff',
@@ -27,6 +30,7 @@ const Button = React.forwardRef(
           {...rest}
         >
           {children}
+          {loading && <S.Loading />}
         </S.Button>
       </ThemeProvider>
     );
@@ -41,6 +45,7 @@ Button.propTypes = {
   fullWidth: PropTypes.bool,
   outline: PropTypes.bool,
   underline: PropTypes.bool,
+  loading: PropTypes.bool,
 };
 Button.defaultProps = {
   color: 'blue',
@@ -48,6 +53,7 @@ Button.defaultProps = {
   fullWidth: false,
   outline: false,
   underline: false,
+  loading: false,
 };
 
 export default Button;
