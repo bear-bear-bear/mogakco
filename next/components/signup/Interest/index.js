@@ -22,10 +22,10 @@ const Interest = () => {
   const dispatch = useDispatch();
   const [skillIds, setSkillIds] = useState([]);
   const [jobId, setJobId] = useState(0);
+  const signUpLoading = useSelector(({ signup }) => signup.signUpLoading);
   const userInfo = useSelector(getUserInfo);
   const skillOptions = useSelector(getSkillOptions);
   const jobOptions = useSelector(getJobOptions);
-
   // react-select에서 onChange는 해당 Select에서 선택되어 있는 현재 데이터를 반환합니다.
   const onChangeSkills = useCallback((data) => {
     const isData = data[0]?.id;
@@ -82,7 +82,7 @@ const Interest = () => {
             onChange={onChangeJob}
           />
         </InputWrapper>
-        <CS.SubmitButton type="submit" complete={false}>
+        <CS.SubmitButton type="submit" complete={false} loading={signUpLoading}>
           완료
         </CS.SubmitButton>
       </Form>

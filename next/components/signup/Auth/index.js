@@ -19,6 +19,7 @@ const Auth = () => {
   const dispatch = useDispatch();
   const router = useRouter();
   const [emailTestError, setEmailTestError] = useState(false);
+  const sendEmailLoading = useSelector(({ signup }) => signup.sendEmailLoading);
   const sendEmailDone = useSelector(({ signup }) => signup.sendEmailDone);
   const landingEmail = useSelector(({ landing }) => landing.email);
   const emailEl = useRef(null);
@@ -88,7 +89,12 @@ const Auth = () => {
             spellCheck="false"
           />
           {emailTestError && <Warning>정확한 이메일을 입력해주세요!</Warning>}
-          <CS.SubmitButton ref={submitButtonEl} type="submit" complete={false}>
+          <CS.SubmitButton
+            ref={submitButtonEl}
+            type="submit"
+            complete={false}
+            loading={sendEmailLoading}
+          >
             인증메일 발송
           </CS.SubmitButton>
         </Form>
