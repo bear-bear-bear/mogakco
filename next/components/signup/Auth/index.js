@@ -1,12 +1,10 @@
 import React, { useCallback, useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Link from 'next/link';
-import { useRouter } from 'next/Router';
+import { useRouter } from 'next/router';
 
 import GoogleLogo from 'assets/svg/btn_google_light_normal_ios.svg';
 import { emailRule } from '~/lib/regex';
-import { getSendEmailDone } from '~/redux/selectors/signup';
-import { landingEmailSelector } from '~/redux/selectors/landing';
 import { sendEmailRequest, verifyEmailRequest } from '~/redux/reducers/signup';
 import { saveEmail as saveLandingEmail } from '~/redux/reducers/landing';
 import Warning from '~/components/common/Warning';
@@ -21,8 +19,9 @@ const Auth = () => {
   const dispatch = useDispatch();
   const router = useRouter();
   const [emailTestError, setEmailTestError] = useState(false);
-  const sendEmailDone = useSelector(getSendEmailDone);
-  const landingEmail = useSelector(landingEmailSelector);
+  const sendEmailLoading = useSelector(({ signup }) => signup.sendEmailLoading);
+  const sendEmailDone = useSelector(({ signup }) => signup.sendEmailDone);
+  const landingEmail = useSelector(({ landing }) => landing.email);
   const emailEl = useRef(null);
   const submitButtonEl = useRef(null);
 
@@ -90,7 +89,12 @@ const Auth = () => {
             spellCheck="false"
           />
           {emailTestError && <Warning>정확한 이메일을 입력해주세요!</Warning>}
-          <CS.SubmitButton ref={submitButtonEl} type="submit" complete={false}>
+          <CS.SubmitButton
+            ref={submitButtonEl}
+            type="submit"
+            complete={false}
+            loading={sendEmailLoading}
+          >
             인증메일 발송
           </CS.SubmitButton>
         </Form>
