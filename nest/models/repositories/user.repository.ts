@@ -1,7 +1,7 @@
 import { EntityRepository, Repository } from 'typeorm';
 import { InternalServerErrorException } from '@nestjs/common';
-import UserEntity from '../entities/user.entity';
 import UserJobEntity from '@models/entities/users-job.entity';
+import UserEntity from '../entities/user.entity';
 import createUserDTO from '../dto/create-user.dto';
 
 @EntityRepository(UserEntity)
