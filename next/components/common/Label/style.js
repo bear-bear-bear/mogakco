@@ -30,7 +30,7 @@ const labelSizeStyles = ({ size }) => {
 
 export const Label = styled.label`
   display: block;
-  color: var(--color-gray-5);
+  color: var(--color-gray-4);
 
   ${labelSizeStyles}
   ${labelMarginStyles}
