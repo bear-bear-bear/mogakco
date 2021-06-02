@@ -3,11 +3,11 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import CustomHead from '~/components/common/CustomHead';
 import AuthContainer from '~/components/common/AuthContainer';
-import ProgressBar from '~/components/signup/progressBar';
-import Auth from '~/components/signup/auth';
-import Info from '~/components/signup/info';
-import Interest from '~/components/signup/interest';
-import Complete from '~/components/signup/complete';
+import ProgressBar from '~/components/signup/ProgressBar';
+import Auth from '~/components/signup/Auth';
+import Info from '~/components/signup/Info';
+import Interest from '~/components/signup/Interest';
+import Complete from '~/components/signup/Complete';
 import { resetSignUp } from '~/redux/reducers/signup';
 
 const pageProps = {

@@ -1,7 +1,7 @@
 import React, { useCallback, useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Link from 'next/link';
-import { useRouter } from 'next/Router';
+import { useRouter } from 'next/router';
 
 import GoogleLogo from 'assets/svg/btn_google_light_normal_ios.svg';
 import { emailRule } from '~/lib/regex';
