@@ -137,7 +137,7 @@ class AuthController {
 
     const verification = await this.authService.lastCheckingEmailVerify(email);
 
-    if (!verification || !verification?.isVerified) {
+    if (!verification || !verification.isVerified) {
       throw new HttpException('인증에 실패하였습니다.', HttpStatus.UNAUTHORIZED);
     }
 
