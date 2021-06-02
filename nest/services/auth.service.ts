@@ -13,7 +13,7 @@ import makeHash from '@lib/makeHash';
 import { v4 as uuidv4 } from 'uuid';
 import UserVerifyEntity from '@models/entities/user-verify.entity';
 import UserVerifyRepository from '@models/repositories/user.verify.repository';
-import createUserDTO from '@models/dto/create-user.dto';
+import createUserDto from '@models/dto/create-user.dto';
 import UserRepository from '@models/repositories/user.repository';
 import UserService from './user.service';
 import { JwtPayload } from './passport/jwt.payload';
@@ -182,18 +182,33 @@ class AuthService {
     return record;
   }
 
-  async join({ username, password, email }: createUserDTO) {
+  async join({ username, password, email }: createUserDto) {
+    const verification = await this.userVerifyRepository.findOne({
+      email,
+    });
+
+    if (!verification || !verification.isVerified) {
+      throw new HttpException('이메일 인증을 수행해주세요.', HttpStatus.BAD_REQUEST);
+    }
+
     const currentUser = await this.userRepository.findUserByEmail(email);
     if (currentUser) {
       throw new HttpException('이미 존재하는 유저입니다.', HttpStatus.UNAUTHORIZED);
     }
+
+    const currentName = await this.userRepository.findUserByName(username);
+    if (currentName) {
+      throw new HttpException('이미 존재하는 닉네임입니다.', HttpStatus.BAD_REQUEST);
+    }
+
     const hashedPassword = await makeHash(password);
     await this.userRepository.createUserOne({
       username,
       password: hashedPassword,
       email,
-    } as createUserDTO);
+    } as createUserDto);
 
+    // TODO: 로그인 처리 후 토큰 발급으로 수정 예정
     return { message: '유저가 생성되었습니다.', statusCode: 201 };
   }
 
