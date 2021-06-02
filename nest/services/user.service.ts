@@ -33,7 +33,7 @@ class UserService {
     return this.userRepository.deleteUser(id);
   }
 
-  async findAllFields() {
+  async findAllFields(): Promise<UserFieldEntity[]> {
     const fieldList = await this.connection
       .getRepository(UserFieldEntity)
       .createQueryBuilder('users-field')
@@ -46,7 +46,7 @@ class UserService {
     return fieldList;
   }
 
-  async findAllJobs() {
+  async findAllJobs(): Promise<UserJobEntity[]> {
     const jobList = await this.connection
       .getRepository(UserJobEntity)
       .createQueryBuilder('users-job')
