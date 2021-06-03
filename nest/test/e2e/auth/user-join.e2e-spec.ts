@@ -23,6 +23,7 @@ describe('사용자 관련 데이터 테스트', () => {
   let jobList: number[];
   let rand: number;
   let job: number;
+  let user: CreateUserDto;
 
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
@@ -34,6 +35,13 @@ describe('사용자 관련 데이터 테스트', () => {
     jobList = getIdList(await UserJobEntity.find());
     rand = Math.floor(Math.random() * jobList.length);
     job = jobList[rand];
+    user = {
+      username: 'mogatest',
+      email: TEST_EMAIL,
+      password: '@Mogatest123',
+      skills: fieldList,
+      job,
+    };
     app.setGlobalPrefix('api');
     await app.init();
   });
@@ -62,14 +70,6 @@ describe('사용자 관련 데이터 테스트', () => {
         await currentVerification.save();
       }
 
-      const user: CreateUserDto = {
-        username: 'mogatest',
-        email: TEST_EMAIL,
-        password: '@Mogatest123',
-        skills: fieldList,
-        job,
-      };
-
       await request(app.getHttpServer())
         .post('/api/auth')
         .send(user)
@@ -86,13 +86,10 @@ describe('사용자 관련 데이터 테스트', () => {
     });
 
     it('회원가입에 성공한다.', async () => {
-      const user: CreateUserDto = {
-        username: 'ㄴ',
-        email: TEST_EMAIL,
-        password: '@Mogatest123',
-        skills: fieldList,
-        job,
-      };
+      const current = await UserEntity.findOne({ email: TEST_EMAIL });
+      if (current !== undefined) {
+        await current.remove();
+      }
 
       await request(app.getHttpServer())
         .post('/api/auth')
@@ -101,19 +98,29 @@ describe('사용자 관련 데이터 테스트', () => {
     });
 
     it('이미 회원가입한 유저는 예외처리된다.', async () => {
-      const user: CreateUserDto = {
-        username: 'ㄴ',
-        email: TEST_EMAIL,
-        password: '@Mogatest123',
-        skills: fieldList,
-        job,
-      };
-
       await request(app.getHttpServer())
         .post('/api/auth')
         .send(user)
         .then(({ body: res }) => evalResponseBodyMessage(res, 401, '이미 존재하는 유저입니다.'));
-      await getConnection().getRepository(UserEntity).createQueryBuilder().softDelete();
+      await getConnection()
+        .createQueryBuilder()
+        .delete()
+        .from(UserEntity, 'user')
+        .where('email = :email', { email: TEST_EMAIL });
     });
+
+    // TODO: class-validator 가 제대로 먹지 않는 점 추후 수정
+    // it('닉네임 형식이 맞지 않으면 실패한다.', async () => {
+    //   const unMatchUser = {
+    //     ...user,
+    //     username: 'ㄴ',
+    //   };
+    //   console.log({ unMatchUser });
+    //
+    //   await request(app.getHttpServer())
+    //     .post('/api/auth')
+    //     .send(unMatchUser)
+    //     .then(res => console.log(res));
+    // });
   });
 });
