@@ -12,9 +12,10 @@ import LoginUserDTO from '@models/dto/login-user.dto';
 import makeHash from '@lib/makeHash';
 import { v4 as uuidv4 } from 'uuid';
 import UserVerifyEntity from '@models/entities/user-verify.entity';
-import UserVerifyRepository from '@models/repositories/user.verify.repository';
+import UserVerifyRepository from '@models/repositories/user-verify.repository';
 import createUserDto from '@models/dto/create-user.dto';
 import UserRepository from '@models/repositories/user.repository';
+import UserJobEntity from '@models/entities/users-job.entity';
 import UserService from './user.service';
 import { JwtPayload } from './passport/jwt.payload';
 
@@ -182,11 +183,12 @@ class AuthService {
     return record;
   }
 
-  async join({ username, password, email }: createUserDto) {
+  async join({ username, password, email, skills, job }: createUserDto) {
     const verification = await this.userVerifyRepository.findOne({
       email,
     });
 
+    console.log({ verification });
     if (!verification || !verification.isVerified) {
       throw new HttpException('이메일 인증을 수행해주세요.', HttpStatus.BAD_REQUEST);
     }
@@ -200,14 +202,25 @@ class AuthService {
     if (currentName) {
       throw new HttpException('이미 존재하는 닉네임입니다.', HttpStatus.BAD_REQUEST);
     }
+    const jobEntity = await UserJobEntity.findOne(job);
+
+    if (jobEntity === undefined) {
+      throw new HttpException('직업 정보가 일치하지 않습니다.', HttpStatus.BAD_REQUEST);
+    }
 
     const hashedPassword = await makeHash(password);
-    await this.userRepository.createUserOne({
-      username,
-      password: hashedPassword,
-      email,
-    } as createUserDto);
-
+    console.log({ hashedPassword });
+    try {
+      await this.userRepository.createUserOne({
+        username,
+        password: hashedPassword,
+        email,
+        skills,
+        job: jobEntity.id,
+      } as createUserDto);
+    } catch (err) {
+      console.log(err);
+    }
     // TODO: 로그인 처리 후 토큰 발급으로 수정 예정
     return { message: '유저가 생성되었습니다.', statusCode: 201 };
   }
