@@ -13,7 +13,7 @@ import {
 const passwordRegex = new RegExp(
   /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@!%*#?&])[A-Za-z\d$@!%*#?&]{8,50}$/,
 );
-const nickNameRegex = new RegExp(/[가-힣a-zA-Z0-9.]{1,12}$/);
+const nickNameRegex = new RegExp(/^[^ㄱ-ㅎ]?[가-힣a-zA-Z0-9.]{1,12}$/);
 const emptyMessage = '빈 값이 올 수 없습니다.';
 
 class CreateUserDto {

@@ -33,7 +33,7 @@ class UserRepository extends Repository<UserEntity> {
       select: ['username'],
     });
     if (!user) {
-      throw new InternalServerErrorException();
+      return null;
     }
     return user;
   }
