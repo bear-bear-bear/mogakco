@@ -27,7 +27,6 @@ import UserService from '@services/user.service';
 import createUserDTO from '@models/dto/create-user.dto';
 import LoginUserDTO from '@models/dto/login-user.dto';
 import EmailService from '@services/email.service';
-import response from './dto/response';
 import LoginBadRequestException from './exception/login.exception';
 
 /**

@@ -7,6 +7,7 @@ import request from 'supertest';
 import CreateUserDto from '@models/dto/create-user.dto';
 import UserFieldEntity from '@models/entities/user-field.entity';
 import UserJobEntity from '@models/entities/users-job.entity';
+import UserEntity from '@models/entities/user.entity';
 import { evalResponseBodyMessage } from '../helper/support';
 
 const TEST_EMAIL = 'mockTest@test.com';
@@ -84,7 +85,7 @@ describe('사용자 관련 데이터 테스트', () => {
       expect(currentVerification.isVerified).toBeTruthy();
     });
 
-    it('닉네임 형식이 틀리면 실패한다.', async () => {
+    it('회원가입에 성공한다.', async () => {
       const user: CreateUserDto = {
         username: 'ㄴ',
         email: TEST_EMAIL,
@@ -96,7 +97,23 @@ describe('사용자 관련 데이터 테스트', () => {
       await request(app.getHttpServer())
         .post('/api/auth')
         .send(user)
-        .then(({ body: res }) => evalResponseBodyMessage(res, 400, '닉네임 형식이 맞지 않습니다.'));
+        .then(({ body: res }) => evalResponseBodyMessage(res, 201, '유저가 생성되었습니다.'));
+    });
+
+    it('이미 회원가입한 유저는 예외처리된다.', async () => {
+      const user: CreateUserDto = {
+        username: 'ㄴ',
+        email: TEST_EMAIL,
+        password: '@Mogatest123',
+        skills: fieldList,
+        job,
+      };
+
+      await request(app.getHttpServer())
+        .post('/api/auth')
+        .send(user)
+        .then(({ body: res }) => evalResponseBodyMessage(res, 401, '이미 존재하는 유저입니다.'));
+      await getConnection().getRepository(UserEntity).createQueryBuilder().softDelete();
     });
   });
 });
