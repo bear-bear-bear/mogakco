@@ -1,5 +1,5 @@
-import React, { useCallback } from 'react';
-import Router from 'next/router';
+import React from 'react';
+import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
 
 import Image from '~/components/common/Image';
@@ -7,9 +7,11 @@ import Image from '~/components/common/Image';
 import * as S from './style';
 
 const AuthContainer = ({ progressBar, children, ...rest }) => {
-  const onClickLogo = useCallback(() => {
-    Router.push('/');
-  }, []);
+  const router = useRouter();
+
+  const onClickLogo = () => {
+    router.push('/');
+  };
 
   return (
     <S.OuterContainer {...rest}>

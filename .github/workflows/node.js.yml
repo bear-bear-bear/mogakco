@@ -46,7 +46,11 @@ jobs:
       working-directory: ${{ env.NEST }}
 
     - name: Database Schema Sync
-      run: npm run typeorm:ci schema:sync
+      run: npm run schema:sync
+      working-directory: ${{ env.NEST }}
+
+    - name: Seeding Database Data
+      run: npm run seed:run
       working-directory: ${{ env.NEST }}
 
     - name: insall npm next package dependencies

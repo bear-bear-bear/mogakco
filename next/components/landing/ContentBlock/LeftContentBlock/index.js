@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import Router from 'next/router';
+import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
 import { Row, Col } from 'antd';
 import Fade from 'react-reveal/Fade';
@@ -13,6 +13,7 @@ import * as S from './style';
 
 const LeftContentBlock = ({ title, content, imgName, firstBlock, emailEl }) => {
   const dispatch = useDispatch();
+  const router = useRouter();
   const me = useSelector(meSelector);
 
   useEffect(() => {
@@ -23,7 +24,7 @@ const LeftContentBlock = ({ title, content, imgName, firstBlock, emailEl }) => {
   const toSignUp = (e) => {
     e.preventDefault();
     dispatch(saveEmail(emailEl.current.value));
-    Router.push('/signup');
+    router.push('/signup');
   };
 
   return (

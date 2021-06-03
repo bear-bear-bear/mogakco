@@ -11,13 +11,13 @@ export abstract class BaseEntitySoftDelete extends BaseEntity {
   id!: number;
 
   @CreateDateColumn({ name: 'created_at' })
-  createdAt!: Date;
+  createdAt?: Date;
 
   @UpdateDateColumn({ name: 'updated_at' })
-  updatedAt!: Date;
+  updatedAt?: Date;
 
   @DeleteDateColumn({ name: 'deleted_at' })
-  deletedAt!: Date;
+  deletedAt?: Date;
 }
 
 export abstract class BaseEntityHardDelete extends BaseEntity {
@@ -25,10 +25,10 @@ export abstract class BaseEntityHardDelete extends BaseEntity {
   id!: number;
 
   @CreateDateColumn({ name: 'created_at' })
-  createdAt!: Date;
+  createdAt?: Date;
 
   @UpdateDateColumn({ name: 'updated_at' })
-  updatedAt!: Date;
+  updatedAt?: Date;
 }
 
 export abstract class BaseEntityOnlyCreatedAt extends BaseEntity {
@@ -36,5 +36,5 @@ export abstract class BaseEntityOnlyCreatedAt extends BaseEntity {
   id!: number;
 
   @CreateDateColumn({ name: 'created_at' })
-  createdAt!: Date;
+  createdAt?: Date;
 }
