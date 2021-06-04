@@ -27,7 +27,8 @@
     "@typescript-eslint/no-shadow": "warn",
     "no-unused-vars": "error",
     "max-classes-per-file": ["off"],
-    "import/no-cycle": "off"
+    "import/no-cycle": "off",
+    "no-param-reassign": "warn"
   },
   "ignorePatterns": ["dist", "node_modules"]
 }
