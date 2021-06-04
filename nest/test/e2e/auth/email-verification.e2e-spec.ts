@@ -4,7 +4,7 @@ import request from 'supertest';
 import AppModule from '@modules/app.module';
 import UserVerifyEntity from '@models/entities/user-verify.entity';
 
-const TEST_EMAIL = 'mockTest@mock.com';
+const TEST_EMAIL = 'mockTest@test.com';
 
 describe('사용자 관련 데이터 테스트', () => {
   let app: INestApplication;

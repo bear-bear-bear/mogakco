@@ -25,7 +25,7 @@ class UserEntity extends BaseEntitySoftDelete {
   password!: string;
 
   @Column({ nullable: false, type: 'simple-array' })
-  skills!: string[];
+  skills!: number[];
 
   @Column({ nullable: true, name: 'refresh_token' })
   @Exclude()
