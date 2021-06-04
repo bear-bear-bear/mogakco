@@ -1,7 +1,7 @@
 import { define } from 'typeorm-seeding';
 import UserJobEntity from '../models/entities/users-job.entity';
 
-const jobData = [
+export const jobData = [
   '학생',
   '웹 개발자',
   '서버 개발자',
@@ -13,8 +13,7 @@ const jobData = [
   '기타',
 ];
 
-const jobDataLength = jobData.length;
-export default jobDataLength;
+export const jobDataLength = jobData.length;
 
 define(UserJobEntity, () => {
   const job = new UserJobEntity();
