@@ -27,7 +27,6 @@ import UserService from '@services/user.service';
 import createUserDTO from '@models/dto/create-user.dto';
 import LoginUserDTO from '@models/dto/login-user.dto';
 import EmailService from '@services/email.service';
-import response from './dto/response';
 import LoginBadRequestException from './exception/login.exception';
 
 /**
@@ -79,7 +78,7 @@ class AuthController {
    * @returns 성공적으로 회원가입 된 사용자 객체
    */
   @Post()
-  async join(@Body() user: createUserDTO): Promise<response> {
+  async join(@Body() user: createUserDTO) {
     const message = await this.authService.join(user);
     return message;
   }
