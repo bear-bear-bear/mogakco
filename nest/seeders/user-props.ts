@@ -6,7 +6,6 @@ import { fieldDataLength } from '../factory/users-field.factory';
 import UserFieldEntity from '../models/entities/user-field.entity';
 import UserEntity from '../models/entities/user.entity';
 
-
 export default class CreateUserJobs implements Seeder {
   async run(factory: Factory) {
     await factory(UserJobEntity)().createMany(jobDataLength);
