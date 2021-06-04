@@ -3,14 +3,6 @@ import { Exclude } from 'class-transformer';
 import { BaseEntitySoftDelete } from './helper/abstract';
 import UserJobEntity from './users-job.entity';
 
-interface IUserProps {
-  username: string;
-  email: string;
-  password: string;
-  skills: string[];
-  job: UserJobEntity | null;
-}
-
 @Entity({
   name: 'users',
 })
@@ -25,7 +17,7 @@ class UserEntity extends BaseEntitySoftDelete {
   password!: string;
 
   @Column({ nullable: false, type: 'simple-array' })
-  skills!: number[];
+  skills!: number[] | null;
 
   @Column({ nullable: true, name: 'refresh_token' })
   @Exclude()
@@ -35,15 +27,6 @@ class UserEntity extends BaseEntitySoftDelete {
   @ManyToOne(() => UserJobEntity, job => job.user)
   @JoinColumn({ name: 'job_id' })
   job?: UserJobEntity | null;
-
-  constructor({ email, job, password, skills, username }: IUserProps) {
-    super();
-    this.username = username;
-    this.email = email;
-    this.password = password;
-    this.skills = skills;
-    this.job = job;
-  }
 }
 
 export default UserEntity;
