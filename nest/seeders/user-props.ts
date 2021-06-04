@@ -11,7 +11,7 @@ export default class CreateUserJobs implements Seeder {
     await factory(UserJobEntity)().createMany(jobDataLength);
     await factory(UserFieldEntity)().createMany(fieldDataLength);
     await factory(UserEntity)()
-      .map(async ({ username, email, password: plain }: UserEntity): Promise<any> => {
+      .map(async ({ username, email, password: plain }: UserEntity): Promise<UserEntity> => {
         const password = await makeHash(plain);
         const jobList = await UserJobEntity.find();
         const fieldList = await UserFieldEntity.find();
