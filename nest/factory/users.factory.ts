@@ -6,7 +6,7 @@ define(UserEntity, (faker: typeof Faker) => {
   faker.locale = 'ko';
   const user = new UserEntity();
   user.username = faker.name.lastName() + faker.name.firstName();
-  user.email = faker.internet.email();
+  user.email = user.username + faker.internet.email();
   user.password = 'junjae';
   return user;
 });
