@@ -15,7 +15,7 @@ import UserVerifyEntity from '@models/entities/user-verify.entity';
 import UserVerifyRepository from '@models/repositories/user-verify.repository';
 import createUserDto from '@models/dto/create-user.dto';
 import UserRepository from '@models/repositories/user.repository';
-import UserJobEntity from '@models/entities/users-job.entity';
+import UserJobRepository from '@models/repositories/ user-job.reposity';
 import UserService from './user.service';
 import { JwtPayload } from './passport/jwt.payload';
 
@@ -26,6 +26,7 @@ class AuthService {
     private jwtService: JwtService,
     private userVerifyRepository: UserVerifyRepository,
     private userRepository: UserRepository,
+    private userJobRepository: UserJobRepository,
   ) {}
 
   async validateUser(email: string, password: string): Promise<any> {
@@ -188,7 +189,6 @@ class AuthService {
       email,
     });
 
-    console.log({ verification });
     if (!verification || !verification.isVerified) {
       throw new HttpException('이메일 인증을 수행해주세요.', HttpStatus.BAD_REQUEST);
     }
@@ -202,25 +202,20 @@ class AuthService {
     if (currentName) {
       throw new HttpException('이미 존재하는 닉네임입니다.', HttpStatus.BAD_REQUEST);
     }
-    const jobEntity = await UserJobEntity.findOne(job);
+    const jobEntity = await this.userJobRepository.fineOneById(job);
 
     if (jobEntity === undefined) {
       throw new HttpException('직업 정보가 일치하지 않습니다.', HttpStatus.BAD_REQUEST);
     }
 
-    const hashedPassword = await makeHash(password);
-    console.log({ hashedPassword });
-    try {
-      await this.userRepository.createUserOne({
-        username,
-        password: hashedPassword,
-        email,
-        skills,
-        job: jobEntity.id,
-      } as createUserDto);
-    } catch (err) {
-      console.log(err);
-    }
+    await this.userRepository.createUserOne({
+      username,
+      password: await makeHash(password),
+      email,
+      skills,
+      job: jobEntity ? jobEntity.id : null,
+    } as createUserDto);
+
     // TODO: 로그인 처리 후 토큰 발급으로 수정 예정
     return { message: '유저가 생성되었습니다.', statusCode: 201 };
   }

@@ -7,8 +7,9 @@ import { fieldDataLength } from '../factory/users-field.factory';
 import UserFieldEntity from '../models/entities/user-field.entity';
 import UserEntity from '../models/entities/user.entity';
 import UserRepository from '../models/repositories/user.repository';
+import { getRandomFieldList, getRandomJob } from '../lib/test-support';
 
-export default class CreateUserJobs implements Seeder {
+export default class CreateUserProps implements Seeder {
   async run(factory: Factory) {
     await factory(UserJobEntity)().createMany(jobDataLength);
     await factory(UserFieldEntity)().createMany(fieldDataLength);
@@ -16,27 +17,18 @@ export default class CreateUserJobs implements Seeder {
       username: 'mogauser',
       password: await makeHash('mogapass'),
       email: process.env.EMAIL_ADMIN as string,
-      skills: [1, 2, 3],
-      job: 1,
+      skills: await getRandomFieldList(),
+      job: await getRandomJob(),
     });
     await factory(UserEntity)()
       .map(async ({ username, email, password: plain }: UserEntity): Promise<UserEntity> => {
         const password = await makeHash(plain);
-        const jobList = await UserJobEntity.find();
-        const fieldList = await UserFieldEntity.find();
-        const fieldIndexArray = fieldList.map(({ id }) => id);
-        const rand = Math.floor(Math.random() * jobList.length);
         const returnUser = new UserEntity();
         returnUser.username = username;
         returnUser.password = password;
         returnUser.email = email;
-        returnUser.skills = [
-          // TODO: 코드 보완 예정
-          fieldIndexArray[1],
-          fieldIndexArray[3],
-          fieldIndexArray[4],
-        ];
-        returnUser.job = jobList[rand];
+        returnUser.skills = await getRandomFieldList();
+        returnUser.job = await getRandomJob();
         return returnUser;
       })
       .createMany(30);

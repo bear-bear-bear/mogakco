@@ -9,11 +9,12 @@ import AuthController from '@controllers/auth.controller';
 import EmailService from '@services/email.service';
 import UserRepository from '@models/repositories/user.repository';
 import UserVerifyRepository from '@models/repositories/user-verify.repository';
+import UserJobRepository from '@models/repositories/ user-job.reposity';
 import UserModule from './user.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([UserVerifyRepository, UserRepository]),
+    TypeOrmModule.forFeature([UserVerifyRepository, UserRepository, UserJobRepository]),
     PassportModule.register({
       defaultStrategy: 'jwt',
     }),
