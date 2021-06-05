@@ -17,7 +17,7 @@ class UserEntity extends BaseEntitySoftDelete {
   password!: string;
 
   @Column({ nullable: false, type: 'simple-array' })
-  skills!: number[];
+  skills!: number[] | null;
 
   @Column({ nullable: true, name: 'refresh_token' })
   @Exclude()
@@ -26,7 +26,7 @@ class UserEntity extends BaseEntitySoftDelete {
   /* relation */
   @ManyToOne(() => UserJobEntity, job => job.user)
   @JoinColumn({ name: 'job_id' })
-  job?: UserJobEntity;
+  job?: UserJobEntity | null;
 }
 
 export default UserEntity;

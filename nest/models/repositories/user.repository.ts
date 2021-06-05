@@ -6,14 +6,19 @@ import createUserDTO from '../dto/create-user.dto';
 
 @EntityRepository(UserEntity)
 class UserRepository extends Repository<UserEntity> {
-  async createUserOne(user: createUserDTO): Promise<UserEntity> {
-    const job = await UserJobEntity.findOne(user.job);
+  async createUserOne({
+    username,
+    password,
+    email,
+    job,
+    skills,
+  }: createUserDTO): Promise<UserEntity> {
     const newUser = new UserEntity();
-    newUser.password = user.password;
-    newUser.username = user.username;
-    newUser.email = user.email;
-    newUser.skills = user.skills;
-    newUser.job = job;
+    newUser.username = username;
+    newUser.password = password;
+    newUser.email = email;
+    newUser.job = job as unknown as UserJobEntity;
+    newUser.skills = skills;
 
     await this.save(newUser);
     return newUser;
