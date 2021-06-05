@@ -1,7 +1,7 @@
-class Response {
+class ResponseMessage {
   message!: string;
 
   statusCode!: number;
 }
 
-export default Response;
+export default ResponseMessage;

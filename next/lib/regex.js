@@ -1,5 +1,5 @@
 // username: 유저 닉네임, 영문/한글/숫자/마침표 1-12자
-export const usernameRule = /^[가-힣a-zA-Z0-9.]{1,12}$/;
+export const usernameRule = /^[^ㄱ-ㅎ]?[가-힣a-zA-Z0-9.]{1,12}$/;
 
 // email: 이메일
 export const emailRule =

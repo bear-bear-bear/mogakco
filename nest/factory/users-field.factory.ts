@@ -1,7 +1,7 @@
 import { define } from 'typeorm-seeding';
 import UserFieldEntity from '../models/entities/user-field.entity';
 
-const fieldData = [
+export const fieldData = [
   '프론트엔드',
   '백엔드',
   '풀스택',
@@ -18,8 +18,7 @@ const fieldData = [
   '리눅스',
 ];
 
-const fieldDataLength = fieldData.length;
-export default fieldDataLength;
+export const fieldDataLength = fieldData.length;
 
 define(UserFieldEntity, () => {
   const field = new UserFieldEntity();

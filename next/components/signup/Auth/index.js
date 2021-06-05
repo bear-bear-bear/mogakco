@@ -8,7 +8,7 @@ import { saveEmail as saveLandingEmail } from '~/redux/reducers/landing';
 import Warning from '~/components/common/Warning';
 import Desc from '~/components/common/Desc';
 import Form from '~/components/common/Form';
-import InputBox from '~/components/common/InputBox';
+import TextInput from '~/components/common/Input/TextInput';
 import InputWrapper from '~/components/common/InputWrapper';
 import Label from '~/components/common/Label';
 
@@ -88,9 +88,9 @@ const Auth = () => {
           <Form action="" onSubmit={onSubmitEmail}>
             <InputWrapper>
               <Label direction="bottom">이메일</Label>
-              <InputBox
+              <TextInput
                 type="text"
-                placeholder="이메일 주소를 입력하세요"
+                placeholder="이메일 입력"
                 ref={emailEl}
                 size="medium"
                 spellCheck="false"

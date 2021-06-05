@@ -1,15 +1,25 @@
 import { EntityRepository, Repository } from 'typeorm';
 import { InternalServerErrorException } from '@nestjs/common';
+import UserJobEntity from '@models/entities/users-job.entity';
 import UserEntity from '../entities/user.entity';
 import createUserDTO from '../dto/create-user.dto';
 
 @EntityRepository(UserEntity)
 class UserRepository extends Repository<UserEntity> {
-  async createUserOne(user: createUserDTO): Promise<UserEntity> {
+  async createUserOne({
+    username,
+    password,
+    email,
+    job,
+    skills,
+  }: createUserDTO): Promise<UserEntity> {
     const newUser = new UserEntity();
-    newUser.password = user.password;
-    newUser.username = user.username;
-    newUser.email = user.email;
+    newUser.username = username;
+    newUser.password = password;
+    newUser.email = email;
+    newUser.job = job as unknown as UserJobEntity;
+    newUser.skills = skills;
+
     await this.save(newUser);
     return newUser;
   }
@@ -25,10 +35,10 @@ class UserRepository extends Repository<UserEntity> {
   async findUserByName(username: string) {
     const user = await this.findOne({
       where: { username },
-      select: ['id', 'username', 'password', 'email'],
+      select: ['username'],
     });
     if (!user) {
-      throw new InternalServerErrorException();
+      return null;
     }
     return user;
   }

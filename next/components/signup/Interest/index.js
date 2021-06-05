@@ -34,10 +34,10 @@ const Interest = () => {
     const nextSkillIds = data.map(({ id }) => id);
     setSkillIds(nextSkillIds);
   }, []);
-  const onChangeJob = ({ id: nextJobId }) => {
-    if (!nextJobId) return;
+  const onChangeJob = (data) => {
+    if (!data) return;
 
-    setJobId(nextJobId);
+    setJobId(data.id);
   };
 
   const onSubmit = async (e) => {

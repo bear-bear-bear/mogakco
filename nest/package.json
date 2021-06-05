@@ -23,7 +23,7 @@
     "migrate:revert": "npm run typeorm migration:revert",
     "migrate": "npm run typeorm migration:run",
     "seed:config": "ts-node ./node_modules/typeorm-seeding/dist/cli.js config",
-    "seed:run": "ts-node ./node_modules/typeorm-seeding/dist/cli.js seed",
+    "seed:run": "npm run schema:drop && npm run schema:sync && ts-node ./node_modules/typeorm-seeding/dist/cli.js seed",
     "schema:drop": "npm run typeorm schema:drop",
     "schema:sync": "npm run typeorm schema:sync"
   },
