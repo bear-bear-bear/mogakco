@@ -1,28 +1,18 @@
-import { INestApplication } from '@nestjs/common';
+import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import AppModule from '@modules/app.module';
 import { getConnection } from 'typeorm';
 import UserVerifyEntity from '@models/entities/user-verify.entity';
 import request from 'supertest';
 import CreateUserDto from '@models/dto/create-user.dto';
-import UserFieldEntity from '@models/entities/user-field.entity';
-import UserJobEntity from '@models/entities/users-job.entity';
 import UserEntity from '@models/entities/user.entity';
-import { evalResponseBodyMessage } from '../helper/support';
+import { getRandomFieldList, getRandomJob } from '@lib/test-support';
+import { evalResponseBodyMessage, evalToContainBodyMessage } from '../helper/support';
 
 const TEST_EMAIL = 'mockTest@test.com';
 
-const getIdList = (list: UserFieldEntity[] | UserJobEntity[]) => {
-  const fieldIdList = list.map(({ id }) => id);
-  return fieldIdList.length > 5 ? fieldIdList.slice(0, 5) : fieldIdList;
-};
-
 describe('사용자 관련 데이터 테스트', () => {
   let app: INestApplication;
-  let fieldList: number[];
-  let jobList: number[];
-  let rand: number;
-  let job: number;
   let user: CreateUserDto;
 
   beforeAll(async () => {
@@ -31,18 +21,21 @@ describe('사용자 관련 데이터 테스트', () => {
     }).compile();
 
     app = moduleRef.createNestApplication();
-    fieldList = getIdList(await UserFieldEntity.find());
-    jobList = getIdList(await UserJobEntity.find());
-    rand = Math.floor(Math.random() * jobList.length);
-    job = jobList[rand];
     user = {
       username: 'mogatest',
       email: TEST_EMAIL,
       password: '@Mogatest123',
-      skills: fieldList,
-      job,
+      skills: await getRandomFieldList(),
+      job: await getRandomJob(),
     };
     app.setGlobalPrefix('api');
+    app.useGlobalPipes(
+      new ValidationPipe({
+        whitelist: true,
+        forbidNonWhitelisted: true,
+        transform: true,
+      }),
+    );
     await app.init();
   });
 
@@ -109,18 +102,46 @@ describe('사용자 관련 데이터 테스트', () => {
         .where('email = :email', { email: TEST_EMAIL });
     });
 
-    // TODO: class-validator 가 제대로 먹지 않는 점 추후 수정
-    // it('닉네임 형식이 맞지 않으면 실패한다.', async () => {
-    //   const unMatchUser = {
-    //     ...user,
-    //     username: 'ㄴ',
-    //   };
-    //   console.log({ unMatchUser });
-    //
-    //   await request(app.getHttpServer())
-    //     .post('/api/auth')
-    //     .send(unMatchUser)
-    //     .then(res => console.log(res));
-    // });
+    it('닉네임 형식이 맞지 않으면 실패한다.', async () => {
+      const unMatchUser = {
+        ...user,
+        username: 'ㄴ',
+      };
+
+      await request(app.getHttpServer())
+        .post('/api/auth')
+        .send(unMatchUser)
+        .then(({ body: res }) =>
+          evalToContainBodyMessage(res, 400, '닉네임 형식이 맞지 않습니다.'),
+        );
+    });
+
+    it('패스워드 형식이 맞지 않으면 실패한다.', async () => {
+      const unMatchUser = {
+        ...user,
+        password: 'junjaewilla+',
+      };
+
+      await request(app.getHttpServer())
+        .post('/api/auth')
+        .send(unMatchUser)
+        .then(({ body: res }) =>
+          evalToContainBodyMessage(res, 400, '패스워드 형식이 맞지 않습니다.'),
+        );
+    });
+
+    it('관심 분야는 5개 이상 등록 할 수 없다.', async () => {
+      const unMatchUser = {
+        ...user,
+        skills: [1, 2, 3, 4, 5, 6],
+      };
+
+      await request(app.getHttpServer())
+        .post('/api/auth')
+        .send(unMatchUser)
+        .then(({ body: res }) =>
+          evalToContainBodyMessage(res, 400, '관심 분야는 5개 이상 등록 할 수 없습니다.'),
+        );
+    });
   });
 });
