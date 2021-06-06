@@ -1,6 +1,7 @@
 import React, { useCallback, useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
+import log from 'loglevel';
 
 import { emailRule } from '~/lib/regex';
 import { sendEmailRequest, verifyEmailRequest } from '~/redux/reducers/signup';
@@ -65,7 +66,8 @@ const Auth = () => {
   );
 
   const onClickSocial = () => {
-    alert('미구현 기능입니다');
+    log.setLevel('debug');
+    log.warn('미구현 기능입니다.');
     // dispatch(verifySocialRequest());
   };
 
