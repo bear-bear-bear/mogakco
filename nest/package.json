@@ -14,7 +14,7 @@
     "lint": "eslint . --ext .ts",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "lint:test-nest": "eslint test/**/*.ts",
-    "test:e2e": "jest --config jest.config.e2e.ts",
+    "test:e2e": "jest -i --config jest.config.e2e.ts",
     "test:unit": "jest --config jest.config.ts",
     "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js",
     "typeorm:ci": "npx ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js",
