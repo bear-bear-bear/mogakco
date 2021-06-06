@@ -1,6 +1,5 @@
 import { EntityRepository, Repository } from 'typeorm';
 import { InternalServerErrorException } from '@nestjs/common';
-import UserJobEntity from '@models/entities/users-job.entity';
 import UserEntity from '../entities/user.entity';
 import createUserDTO from '../dto/create-user.dto';
 
@@ -17,7 +16,7 @@ class UserRepository extends Repository<UserEntity> {
     newUser.username = username;
     newUser.password = password;
     newUser.email = email;
-    newUser.job = job as unknown as UserJobEntity;
+    newUser.job = job;
     newUser.skills = skills;
 
     await this.save(newUser);

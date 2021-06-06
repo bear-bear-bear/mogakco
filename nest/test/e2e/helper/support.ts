@@ -1,11 +1,22 @@
+type ResponseBodyProps = {
+  statusCode: number;
+  message: string | string[];
+};
+
 export const evalResponseBodyMessage = (
-  response: { statusCode: number; message: string },
+  response: ResponseBodyProps,
   expectStatusCode: number,
-  expectMessage: string,
+  expectMessage: any,
 ) => {
-  console.log(response);
   expect(response.statusCode).toBe(expectStatusCode);
   expect(response.message).toBe(expectMessage);
 };
 
-export default {};
+export const evalToContainBodyMessage = (
+  response: ResponseBodyProps,
+  expectStatusCode: number,
+  expectMessage: any,
+) => {
+  expect(response.statusCode).toBe(expectStatusCode);
+  expect(response.message).toContain(expectMessage);
+};

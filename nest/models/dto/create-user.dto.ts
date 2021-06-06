@@ -5,9 +5,7 @@ import {
   MinLength,
   Matches,
   IsNotEmpty,
-  IsArray,
   ArrayMaxSize,
-  IsNumber,
 } from 'class-validator';
 
 const passwordRegex = new RegExp(
@@ -37,13 +35,11 @@ class CreateUserDto {
   readonly password!: string;
 
   @IsNotEmpty({ message: emptyMessage })
-  @IsArray({ message: '관심 분야는 배열 형태여야 합니다.' })
   @ArrayMaxSize(5, { message: '관심 분야는 5개 이상 등록 할 수 없습니다.' })
-  skills!: number[];
+  skills!: number[] | null;
 
   @IsNotEmpty({ message: emptyMessage })
-  @IsNumber()
-  job!: number;
+  job!: number | null;
 }
 
 export default CreateUserDto;

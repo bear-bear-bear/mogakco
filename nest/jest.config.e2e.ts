@@ -3,7 +3,6 @@ import { Config } from '@jest/types';
 const config: Config.InitialOptions = {
   rootDir: './',
   moduleFileExtensions: ['js', 'json', 'ts'],
-  // moduleDirectories: ['node_modules'],
   testEnvironment: 'node',
   transform: {
     '^.+\\.(t|j)s$': 'ts-jest',
