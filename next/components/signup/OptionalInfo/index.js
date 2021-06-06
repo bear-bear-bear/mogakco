@@ -18,9 +18,12 @@ import Label from '~/components/common/Label';
 
 import * as CS from '../common/styles';
 
+const SKILLS_LIMIT = 5;
+
 const OptionalInfo = () => {
   const dispatch = useDispatch();
   const [skillIds, setSkillIds] = useState([]);
+  const [isExcessSkillIdsNum, setIsExcessSkillIdsNum] = useState(false);
   const [jobId, setJobId] = useState(0);
   const signUpLoading = useSelector(({ signup }) => signup.signUpLoading);
   const skillOptions = useSelector(getSkillOptions);
@@ -41,6 +44,7 @@ const OptionalInfo = () => {
   const onChangeSkills = useCallback((data) => {
     const isData = data[0]?.id;
     if (!isData) return;
+    setIsExcessSkillIdsNum(data.length >= SKILLS_LIMIT);
 
     const nextSkillIds = data.map(({ id }) => id);
     setSkillIds(nextSkillIds);
@@ -75,8 +79,8 @@ const OptionalInfo = () => {
             closeMenuOnSelect={false}
             isMulti
             isClearable
-            options={skillOptions}
-            placeholder="관심 분야를 선택해 주세요... (다중 선택 가능)"
+            options={isExcessSkillIdsNum ? [] : skillOptions}
+            placeholder="관심 분야를 선택해 주세요... (5개까지 선택 가능)"
             onChange={onChangeSkills}
           />
         </InputWrapper>
