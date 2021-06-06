@@ -59,8 +59,8 @@ const OptionalInfo = () => {
     e.preventDefault();
     dispatch(
       saveOptionalInfoRequest({
-        skills: skillIds || null,
-        job: jobId || null,
+        skills: skillIds.length !== 0 ? skillIds : null, // 백단으로 보내기 전, 빈 값은 null 처리
+        job: jobId !== 0 ? jobId : null,
       }),
     );
   };
