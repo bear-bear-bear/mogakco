@@ -2,6 +2,7 @@ import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 
 import Button from '~/components/common/Button';
+import EmailInput from '~/components/common/Input/EmailInput';
 import media from '~/components/globalStyles/media';
 
 export const LeftBlockContainer = styled.article(({ firstBlock }) => ({
