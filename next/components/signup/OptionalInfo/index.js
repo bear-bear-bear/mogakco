@@ -18,7 +18,7 @@ import Label from '~/components/common/Label';
 
 import * as CS from '../common/styles';
 
-const Interest = () => {
+const OptionalInfo = () => {
   const dispatch = useDispatch();
   const [skillIds, setSkillIds] = useState([]);
   const [jobId, setJobId] = useState(0);
@@ -90,4 +90,4 @@ const Interest = () => {
   );
 };
 
-export default Interest;
+export default OptionalInfo;
