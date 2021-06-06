@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Select from 'react-select';
 
@@ -7,9 +7,9 @@ import {
   signUpRequest,
 } from '~/redux/reducers/signup';
 import {
-  getUserInfo,
   getSkillOptions,
   getJobOptions,
+  getUserInfo,
 } from '~/redux/selectors/signup';
 import Desc from '~/components/common/Desc';
 import Form from '~/components/common/Form';
@@ -23,9 +23,20 @@ const OptionalInfo = () => {
   const [skillIds, setSkillIds] = useState([]);
   const [jobId, setJobId] = useState(0);
   const signUpLoading = useSelector(({ signup }) => signup.signUpLoading);
-  const userInfo = useSelector(getUserInfo);
   const skillOptions = useSelector(getSkillOptions);
   const jobOptions = useSelector(getJobOptions);
+  const userInfo = useSelector(getUserInfo);
+  const saveOptionalInfoDone = useSelector(
+    ({ signup }) => signup.saveOptionalInfoDone,
+  );
+
+  useEffect(() => {
+    // 회원가입 마지막 단계가 끝나면 입력받은 정보로 회원가입
+    if (saveOptionalInfoDone) {
+      dispatch(signUpRequest(userInfo));
+    }
+  }, [dispatch, saveOptionalInfoDone, userInfo]);
+
   // react-select에서 onChange는 해당 Select에서 선택되어 있는 현재 데이터를 반환합니다.
   const onChangeSkills = useCallback((data) => {
     const isData = data[0]?.id;
@@ -42,13 +53,12 @@ const OptionalInfo = () => {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    await dispatch(
+    dispatch(
       saveOptionalInfoRequest({
-        skills: skillIds,
+        skills: skillIds || null,
         job: jobId || null,
       }),
     );
-    dispatch(signUpRequest(userInfo));
   };
 
   return (
