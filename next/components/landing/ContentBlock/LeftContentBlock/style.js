@@ -32,15 +32,8 @@ export const FirstBlockForm = styled.form`
   }
 `;
 
-export const FirstBlockInput = styled.input`
-  width: 100%;
-  height: 100%;
+export const FirstBlockInput = styled(EmailInput)`
   padding: 0.66rem 0.33rem;
-
-  ${media.sm} {
-    width: initial;
-    flex: 1;
-  }
 `;
 
 export const FirstBlockJoinButton = styled(Button)`

@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 
-const sizeStyles = ({ size, fullWidth }) => {
+const sizeStyles = ({ size }) => {
   const sizes = {
     small: {
       fontSize: '1rem',
@@ -17,7 +17,6 @@ const sizeStyles = ({ size, fullWidth }) => {
   return css`
     font-size: ${fontSize};
     padding: ${padding};
-    width: ${fullWidth ? '100%' : 'initial'};
   `;
 };
 

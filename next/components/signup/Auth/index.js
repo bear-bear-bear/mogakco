@@ -2,13 +2,14 @@ import React, { useCallback, useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
 
+import useInput from '~/hooks/useInput';
 import { emailRule } from '~/lib/regex';
 import { sendEmailRequest, verifyEmailRequest } from '~/redux/reducers/signup';
 import { saveEmail as saveLandingEmail } from '~/redux/reducers/landing';
 import Warning from '~/components/common/Warning';
 import Desc from '~/components/common/Desc';
 import Form from '~/components/common/Form';
-import TextInput from '~/components/common/Input/TextInput';
+import EmailInput from '~/components/common/Input/EmailInput';
 import InputWrapper from '~/components/common/InputWrapper';
 import Label from '~/components/common/Label';
 
