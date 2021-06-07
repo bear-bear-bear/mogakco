@@ -10,6 +10,7 @@ import EmailService from '@services/email.service';
 import UserRepository from '@models/repositories/user.repository';
 import UserVerifyRepository from '@models/repositories/user-verify.repository';
 import UserJobRepository from '@models/repositories/ user-job.reposity';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import UserModule from './user.module';
 
 @Module({
@@ -18,11 +19,20 @@ import UserModule from './user.module';
     PassportModule.register({
       defaultStrategy: 'jwt',
     }),
-    JwtModule.register({}),
+    JwtModule.registerAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: async (configService: ConfigService) => ({
+        secret: configService.get('JWT_ACCESS_TOKEN_SECRET'),
+        signOptions: {
+          expiresIn: `${configService.get('JWT_ACCESS_TOKEN_EXPIRATION_TIME')}s`,
+        },
+      }),
+    }),
     UserModule,
   ],
   controllers: [AuthController],
-  providers: [AuthService, JwtStrategy, JwtStrategyWithRefresh, EmailService],
+  providers: [ConfigService, AuthService, JwtStrategy, JwtStrategyWithRefresh, EmailService],
   exports: [JwtStrategy, JwtStrategyWithRefresh, PassportModule],
 })
 class AuthModule {}
