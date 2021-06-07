@@ -4,13 +4,11 @@ import {
   Body,
   Controller,
   UseGuards,
-  UseFilters,
   UnauthorizedException,
   Req,
   Res,
   UseInterceptors,
   ClassSerializerInterceptor,
-  ValidationPipe,
   Query,
   HttpStatus,
   HttpException,
@@ -25,9 +23,8 @@ import UserEntity from '@models/entities/user.entity';
 import { prepareFailure } from '@lib/log';
 import UserService from '@services/user.service';
 import createUserDTO from '@models/dto/create-user.dto';
-import LoginUserDTO from '@models/dto/login-user.dto';
+import LoginUserDto from '@models/dto/login-user.dto';
 import EmailService from '@services/email.service';
-import LoginBadRequestException from './exception/login.exception';
 
 /**
  * @desc 회원가입/로그인에 대한 처리 컨트롤러
@@ -53,23 +50,22 @@ class AuthController {
   /**
    * @returns 로그인을 수행하고 로그인 정보를 반환합니다.
    */
+  // TODO: type 고치기, 로직 다듬기, Decorator 설정 필요성 확인하기
+  // @UseGuards(AuthGuard('local'))
   @Post('/login')
-  @UseFilters(LoginBadRequestException)
-  async login(@Body(ValidationPipe) req: LoginUserDTO, @Res({ passthrough: true }) res: Response) {
-    const user = await this.authService.validate(req);
-    if (!user) {
-      throw new UnauthorizedException();
-    }
-    const { password, hashedRefreshToken, ...props } = user;
-    const { cookie: accessTokenCookie } = this.authService.getCookieWithAccessToken(user.email);
-    const { cookie: refreshTokenCookie, token } = this.authService.getCookieWithRefreshToken(
-      user.email,
-    );
-    await this.authService.hashRefreshToken(token, user.email);
-    res.setHeader('Set-Cookie', [accessTokenCookie, refreshTokenCookie]);
+  // @UseFilters(LoginBadRequestException)
+  async login(@Body() { email, password }: any, @Res({ passthrough: true }) res: Response) {
+    console.log(email);
+    const user = await this.authService.validateUser(email, password);
+    console.log(user);
+
+    const accessTokenCookie = this.authService.getCookieWithAccessToken(user.email);
+    const { cookie: refreshTokenCookie, token } = this.authService.getCookieWithRefreshToken(email);
+    await this.authService.hashRefreshToken(token, email);
+    res.cookie('Set-Cookie', [accessTokenCookie, refreshTokenCookie]);
     return {
       message: 'Token Generated',
-      user: props,
+      user,
     };
   }
 
@@ -172,9 +168,10 @@ class AuthController {
   @UseGuards(JwtAuthGuardWithRefresh)
   async refresh(@Req() req: Request, @Res({ passthrough: true }) res: Response): Promise<any> {
     const { email } = req.user as UserEntity;
-    const { cookie: accessTokenCookie } = this.authService.getCookieWithAccessToken(email);
+    const accessTokenCookie = this.authService.getCookieWithAccessToken(email);
+    console.log(accessTokenCookie);
     const { password, hashedRefreshToken, ...props } = req.user as UserEntity;
-    res.setHeader('Set-Cookie', accessTokenCookie);
+    console.log(res);
     return {
       message: 'Authenticated & Refreshed',
       statusCode: HttpStatus.OK,
