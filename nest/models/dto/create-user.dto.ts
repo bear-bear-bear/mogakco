@@ -6,6 +6,7 @@ import {
   Matches,
   IsNotEmpty,
   ArrayMaxSize,
+  IsOptional,
 } from 'class-validator';
 
 const passwordRegex = new RegExp(
@@ -34,11 +35,11 @@ class CreateUserDto {
   @Matches(passwordRegex, { message: '패스워드 형식이 맞지 않습니다.' })
   readonly password!: string;
 
-  @IsNotEmpty({ message: emptyMessage })
+  @IsOptional()
   @ArrayMaxSize(5, { message: '관심 분야는 5개 이상 등록 할 수 없습니다.' })
   skills!: number[] | null;
 
-  @IsNotEmpty({ message: emptyMessage })
+  @IsOptional()
   job!: number | null;
 }
 
