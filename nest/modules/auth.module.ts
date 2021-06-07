@@ -10,6 +10,7 @@ import EmailService from '@services/email.service';
 import UserRepository from '@models/repositories/user.repository';
 import UserVerifyRepository from '@models/repositories/user-verify.repository';
 import UserJobRepository from '@models/repositories/ user-job.reposity';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import UserModule from './user.module';
 
 @Module({
@@ -20,9 +21,10 @@ import UserModule from './user.module';
     }),
     JwtModule.register({}),
     UserModule,
+    ConfigModule,
   ],
   controllers: [AuthController],
-  providers: [AuthService, JwtStrategy, JwtStrategyWithRefresh, EmailService],
+  providers: [AuthService, JwtStrategy, JwtStrategyWithRefresh, EmailService, ConfigService],
   exports: [JwtStrategy, JwtStrategyWithRefresh, PassportModule],
 })
 class AuthModule {}

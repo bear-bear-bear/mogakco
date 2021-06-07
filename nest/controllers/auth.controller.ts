@@ -22,11 +22,13 @@ import JwtAuthGuard from '@services/passport/jwt.guard';
 import JwtAuthGuardWithRefresh from '@services/passport/jwt.refresh.guard';
 import AuthService from '@services/auth.service';
 import UserEntity from '@models/entities/user.entity';
-import { prepareFailure } from '@lib/log';
+// import { prepareFailure } from '@lib/log';
 import UserService from '@services/user.service';
 import createUserDTO from '@models/dto/create-user.dto';
 import LoginUserDTO from '@models/dto/login-user.dto';
 import EmailService from '@services/email.service';
+import ParseJoinPipe from '@controllers/pipe/parse-join-pipe';
+import { ConfigService } from '@nestjs/config';
 import LoginBadRequestException from './exception/login.exception';
 
 /**
@@ -39,6 +41,7 @@ class AuthController {
     private userService: UserService,
     private authService: AuthService,
     private emailService: EmailService,
+    private configService: ConfigService,
   ) {}
 
   /**
@@ -78,7 +81,7 @@ class AuthController {
    * @returns 성공적으로 회원가입 된 사용자 객체
    */
   @Post()
-  async join(@Body() user: createUserDTO) {
+  async join(@Body(ParseJoinPipe) user: createUserDTO) {
     const message = await this.authService.join(user);
     return message;
   }
@@ -92,20 +95,12 @@ class AuthController {
   async sendTokenBeforeRegister(@Body('email') email: string) {
     this.authService.verifyEmailRequest(email);
 
-    try {
-      const {
-        token,
-        email: destinatedEmail,
-        id,
-      } = await this.authService.getEmailVerifyToken(email);
-      this.emailService.userVerify({
-        email: destinatedEmail,
-        token,
-        id,
-      });
-    } catch (e) {
-      prepareFailure(e);
-    }
+    const { token, email: destinatedEmail, id } = await this.authService.getEmailVerifyToken(email);
+    this.emailService.userVerify({
+      email: destinatedEmail,
+      token,
+      id,
+    });
 
     return {
       statusCode: HttpStatus.OK,
@@ -113,13 +108,14 @@ class AuthController {
     };
   }
 
+  // TODO: Domain ( Production ) Required
   @Get('/verify-email/before-register')
   @Redirect('http://localhost:3000/signup', 302)
   async processVerifyEmail(
     @Query()
     { id, token }: { id: string; token: string },
   ) {
-    const redirection = 'http://localhost:3000/signup';
+    const redirection = `http://localhost:${this.configService.get('SERVER_PORT')}/signup`;
     const verification = await this.authService.verifyEmail(id, token);
     if (!verification) {
       return { url: `${redirection}?success=false` };

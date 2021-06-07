@@ -2,6 +2,7 @@ import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 
 import Button from '~/components/common/Button';
+import EmailInput from '~/components/common/Input/EmailInput';
 import media from '~/components/globalStyles/media';
 
 export const LeftBlockContainer = styled.article(({ firstBlock }) => ({
@@ -32,15 +33,8 @@ export const FirstBlockForm = styled.form`
   }
 `;
 
-export const FirstBlockInput = styled.input`
-  width: 100%;
-  height: 100%;
+export const FirstBlockInput = styled(EmailInput)`
   padding: 0.66rem 0.33rem;
-
-  ${media.sm} {
-    width: initial;
-    flex: 1;
-  }
 `;
 
 export const FirstBlockJoinButton = styled(Button)`

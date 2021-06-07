@@ -3,13 +3,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
 import log from 'loglevel';
 
+import useInput from '~/hooks/useInput';
 import { emailRule } from '~/lib/regex';
 import { sendEmailRequest, verifyEmailRequest } from '~/redux/reducers/signup';
 import { saveEmail as saveLandingEmail } from '~/redux/reducers/landing';
 import Warning from '~/components/common/Warning';
 import Desc from '~/components/common/Desc';
 import Form from '~/components/common/Form';
-import TextInput from '~/components/common/Input/TextInput';
+import EmailInput from '~/components/common/Input/EmailInput';
 import InputWrapper from '~/components/common/InputWrapper';
 import Label from '~/components/common/Label';
 
@@ -19,6 +20,7 @@ import * as S from './style';
 const Auth = () => {
   const dispatch = useDispatch();
   const router = useRouter();
+  const [email, onChangeEmail, setEmail] = useInput('');
   const [emailTestError, setEmailTestError] = useState(false);
   const sendEmailLoading = useSelector(({ signup }) => signup.sendEmailLoading);
   const sendEmailDone = useSelector(({ signup }) => signup.sendEmailDone);
@@ -34,12 +36,12 @@ const Auth = () => {
     // 랜딩에서 이메일 입력 후 버튼을 눌렀다면, 해당 이메일을 자동 입력
     if (landingEmail === null) return;
 
-    emailEl.current.value = landingEmail;
+    setEmail(landingEmail);
     dispatch(saveLandingEmail(null));
-  }, [landingEmail, dispatch]);
+  }, [landingEmail, setEmail, dispatch]);
 
   useEffect(() => {
-    const { success, email } = router.query;
+    const { success, email: verifiedEmail } = router.query;
 
     const isQuery = Boolean(success);
     if (!isQuery) {
@@ -47,7 +49,7 @@ const Auth = () => {
     }
 
     if (success === 'true') {
-      dispatch(verifyEmailRequest(email));
+      dispatch(verifyEmailRequest(verifiedEmail));
     }
     router.push('/signup', undefined, { shallow: true });
   }, [dispatch, router]);
@@ -55,14 +57,13 @@ const Auth = () => {
   const onSubmitEmail = useCallback(
     (e) => {
       e.preventDefault();
-      const email = emailEl.current.value;
       if (!emailRule.test(email)) {
         setEmailTestError(true);
         return;
       }
       dispatch(sendEmailRequest(email));
     },
-    [dispatch],
+    [dispatch, email],
   );
 
   const onClickSocial = () => {
@@ -90,8 +91,11 @@ const Auth = () => {
           <Form action="" onSubmit={onSubmitEmail}>
             <InputWrapper>
               <Label direction="bottom">이메일</Label>
-              <TextInput
-                type="text"
+              <EmailInput
+                type="email"
+                value={email}
+                setValue={setEmail}
+                onChange={onChangeEmail}
                 placeholder="이메일 입력"
                 ref={emailEl}
                 size="medium"
@@ -113,8 +117,7 @@ const Auth = () => {
         <>
           <CS.Title>메일함을 확인하세요</CS.Title>
           <Desc>
-            <b>{emailEl.current.value}</b>로 인증 링크가 전송되었습니다.
-            메일함을 확인해주세요.
+            <b>{email}</b>로 인증 링크가 전송되었습니다. 메일함을 확인해주세요.
           </Desc>
         </>
       )}
