@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Select from 'react-select';
 
@@ -7,9 +7,9 @@ import {
   signUpRequest,
 } from '~/redux/reducers/signup';
 import {
-  getUserInfo,
   getSkillOptions,
   getJobOptions,
+  getUserInfo,
 } from '~/redux/selectors/signup';
 import Desc from '~/components/common/Desc';
 import Form from '~/components/common/Form';
@@ -18,17 +18,33 @@ import Label from '~/components/common/Label';
 
 import * as CS from '../common/styles';
 
-const Interest = () => {
+const SKILLS_LIMIT = 5;
+
+const OptionalInfo = () => {
   const dispatch = useDispatch();
   const [skillIds, setSkillIds] = useState([]);
   const [jobId, setJobId] = useState(0);
   const signUpLoading = useSelector(({ signup }) => signup.signUpLoading);
-  const userInfo = useSelector(getUserInfo);
   const skillOptions = useSelector(getSkillOptions);
+  const [isShowSkillOptions, setIsShowSkillOptions] = useState(true);
   const jobOptions = useSelector(getJobOptions);
+  const userInfo = useSelector(getUserInfo);
+  const saveOptionalInfoDone = useSelector(
+    ({ signup }) => signup.saveOptionalInfoDone,
+  );
+
+  useEffect(() => {
+    // 회원가입 마지막 단계가 끝나면 입력받은 정보로 회원가입
+    if (saveOptionalInfoDone) {
+      dispatch(signUpRequest(userInfo));
+    }
+  }, [dispatch, saveOptionalInfoDone, userInfo]);
+
   // react-select에서 onChange는 해당 Select에서 선택되어 있는 현재 데이터를 반환합니다.
   const onChangeSkills = useCallback((data) => {
-    const isData = data[0]?.id;
+    setIsShowSkillOptions(data.length < SKILLS_LIMIT);
+
+    const isData = !!data[0];
     if (!isData) return;
 
     const nextSkillIds = data.map(({ id }) => id);
@@ -42,13 +58,12 @@ const Interest = () => {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    await dispatch(
+    dispatch(
       saveOptionalInfoRequest({
-        skills: skillIds,
-        job: jobId || null,
+        skills: skillIds.length !== 0 ? skillIds : null, // 백단으로 보내기 전, 빈 값은 null 처리
+        job: jobId !== 0 ? jobId : null,
       }),
     );
-    dispatch(signUpRequest(userInfo));
   };
 
   return (
@@ -65,8 +80,8 @@ const Interest = () => {
             closeMenuOnSelect={false}
             isMulti
             isClearable
-            options={skillOptions}
-            placeholder="관심 분야를 선택해 주세요... (다중 선택 가능)"
+            options={isShowSkillOptions ? skillOptions : []}
+            placeholder="관심 분야를 선택해 주세요... (5개까지 선택 가능)"
             onChange={onChangeSkills}
           />
         </InputWrapper>
@@ -90,4 +105,4 @@ const Interest = () => {
   );
 };
 
-export default Interest;
+export default OptionalInfo;

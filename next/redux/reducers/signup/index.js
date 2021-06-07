@@ -6,7 +6,7 @@ const initialState = {
     email: null,
     username: null,
     password: null,
-    skills: [], // 사용자가 선택한 skills.
+    skills: null, // 사용자가 선택한 skills
     job: null, // 사용자가 선택한 job
   },
   sendEmailLoading: false, // 이메일 전송 요청 중

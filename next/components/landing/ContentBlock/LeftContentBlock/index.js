@@ -20,6 +20,7 @@ const LeftContentBlock = ({ title, content, imgName, firstBlock, emailEl }) => {
 
   useEffect(() => {
     if (!firstBlock) return;
+    if (!emailEl) return;
     emailEl.current.focus();
   }, [emailEl, firstBlock]);
 

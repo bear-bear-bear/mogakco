@@ -4,10 +4,10 @@ import { useSelector, useDispatch } from 'react-redux';
 import CustomHead from '~/components/common/CustomHead';
 import AuthContainer from '~/components/common/AuthContainer';
 import ProgressBar from '~/components/signup/ProgressBar';
-import Auth from '~/components/signup/Auth';
-import Info from '~/components/signup/Info';
-import Interest from '~/components/signup/Interest';
-import Complete from '~/components/signup/Complete';
+import Start from '~/components/signup/Start';
+import RequiredInfo from '~/components/signup/RequiredInfo';
+import OptionalInfo from '~/components/signup/OptionalInfo';
+import End from '~/components/signup/End';
 import { resetSignUp } from '~/redux/reducers/signup';
 
 const pageProps = {
@@ -41,10 +41,10 @@ const SignUp = () => {
     <>
       <CustomHead {...pageProps} />
       <AuthContainer progressBar={<ProgressBar fill={fill} />}>
-        {(!verifyEmailDone || !verifySocialDone) && <Auth />}
-        {verifyEmailDone && !saveRequiredInfoDone && <Info />}
-        {saveRequiredInfoDone && !signUpDone && <Interest />}
-        {saveOptionalInfoDone && signUpDone && <Complete />}
+        {(!verifyEmailDone || !verifySocialDone) && <Start />}
+        {verifyEmailDone && !saveRequiredInfoDone && <RequiredInfo />}
+        {saveRequiredInfoDone && !signUpDone && <OptionalInfo />}
+        {saveOptionalInfoDone && signUpDone && <End />}
       </AuthContainer>
     </>
   );

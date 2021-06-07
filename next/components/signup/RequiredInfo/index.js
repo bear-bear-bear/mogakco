@@ -20,7 +20,7 @@ import Label from '~/components/common/Label';
 import * as CS from '../common/styles';
 import * as S from './style';
 
-const Info = () => {
+const RequiredInfo = () => {
   const dispatch = useDispatch();
   const [initSubmitDone, setInitSubmitDone] = useState(false);
   const [isSoftVerificationPass, setIsSoftVerificationPass] = useState(false);
@@ -235,4 +235,4 @@ const Info = () => {
   );
 };
 
-export default Info;
+export default RequiredInfo;
