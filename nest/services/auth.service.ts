@@ -150,6 +150,8 @@ class AuthService {
     const currentVerification = await this.userVerifyRepository.findOne({
       email,
     });
+    const signedUser = await this.userRepository.findUserByEmail(email);
+    if (signedUser) throw new BadRequestException('이미 가입한 유저입니다.');
 
     if (currentVerification?.expiredAt) {
       const { expiredAt, id, token } = currentVerification;
@@ -171,6 +173,8 @@ class AuthService {
   }
 
   public async lastCheckingEmailVerify(email: string) {
+    const alreadyUser = await this.userRepository.findUserByEmail(email);
+    if (alreadyUser) throw new BadRequestException('이미 가입된 이메일입니다.');
     const verificationInstance = await this.userVerifyRepository.findOne({
       email,
     });

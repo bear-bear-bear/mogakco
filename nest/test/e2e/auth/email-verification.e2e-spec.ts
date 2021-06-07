@@ -4,6 +4,7 @@ import request from 'supertest';
 import AppModule from '@modules/app.module';
 import UserVerifyEntity from '@models/entities/user-verify.entity';
 import { evalResponseBodyMessage } from '@test/e2e/helper/support';
+import UserEntity from '@models/entities/user.entity';
 
 const TEST_EMAIL = 'mockTest@test.com';
 
@@ -47,6 +48,27 @@ describe('사용자 관련 데이터 테스트', () => {
         .post('/api/auth/send-token/before-register')
         .send({ email: '개발자하기 너무 벅찬 현실이네요.' })
         .then(({ body: res }) => evalResponseBodyMessage(res, 400, '이메일 형식이 아닙니다.'));
+    });
+
+    it('이미 가입한 유저에게는 에러 메시지를 반환한다.', async () => {
+      const user = await UserEntity.findOne({ email: TEST_EMAIL });
+      if (user === undefined) {
+        const testUser = new UserEntity();
+        testUser.username = 'testuser';
+        testUser.email = TEST_EMAIL;
+        testUser.skills = [1];
+        testUser.password = 'test';
+        testUser.createdAt = new Date();
+        testUser.updatedAt = new Date();
+        await testUser.save();
+      }
+
+      await request(app.getHttpServer())
+        .post('/api/auth/send-token/before-register')
+        .send({ email: TEST_EMAIL })
+        .then(({ body: res }) => evalResponseBodyMessage(res, 400, '이미 가입한 유저입니다.'));
+      const deleteUser = (await UserEntity.findOne({ email: TEST_EMAIL })) as UserEntity;
+      await deleteUser.remove();
     });
   });
 
@@ -113,6 +135,23 @@ describe('사용자 관련 데이터 테스트', () => {
       await request(app.getHttpServer())
         .get(`/api/auth/is-verified/before-register?email=${TEST_EMAIL}`)
         .then(({ body: res }) => evalResponseBodyMessage(res, 200, true));
+    });
+
+    it('이미 가입된 이메일에 대한 검증 요청은 에러가 발생한다.', async () => {
+      const testUser = new UserEntity();
+      testUser.username = 'testuser';
+      testUser.email = TEST_EMAIL;
+      testUser.skills = [1];
+      testUser.password = 'test';
+      testUser.createdAt = new Date();
+      testUser.updatedAt = new Date();
+      await testUser.save();
+
+      await request(app.getHttpServer())
+        .get(`/api/auth/is-verified/before-register?email=${TEST_EMAIL}`)
+        .then(({ body: res }) => evalResponseBodyMessage(res, 400, '이미 가입된 이메일입니다.'));
+      const deleteUser = (await UserEntity.findOne({ email: TEST_EMAIL })) as UserEntity;
+      await deleteUser.remove();
     });
   });
 });

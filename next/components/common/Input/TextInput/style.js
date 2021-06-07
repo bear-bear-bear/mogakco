@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 
-const inputSizeStyles = ({ size }) => {
+const sizeStyles = ({ size }) => {
   const sizes = {
     small: {
       fontSize: '1rem',
@@ -20,8 +20,8 @@ const inputSizeStyles = ({ size }) => {
   `;
 };
 
-export const Text = styled.input`
+export const TextInput = styled.input`
   width: 100%;
 
-  ${inputSizeStyles}
+  ${sizeStyles}
 `;

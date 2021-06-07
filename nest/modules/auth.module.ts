@@ -30,6 +30,7 @@ import UserModule from './user.module';
       }),
     }),
     UserModule,
+    ConfigModule,
   ],
   controllers: [AuthController],
   providers: [ConfigService, AuthService, JwtStrategy, JwtStrategyWithRefresh, EmailService],
