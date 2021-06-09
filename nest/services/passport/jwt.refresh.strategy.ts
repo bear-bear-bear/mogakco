@@ -29,8 +29,7 @@ class JwtStrategyWithRefresh extends PassportStrategy(Strategy, 'jwt-with-refres
     console.log(payload);
 
     const refreshToken = request.cookies.Refresh;
-    const { email }: { email: string } = payload;
-    return this.authService.getUserIfTokenMatches(refreshToken, email);
+    return this.authService.getUserIfTokenMatches(refreshToken, payload.email);
   }
 }
 
