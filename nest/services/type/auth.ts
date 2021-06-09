@@ -4,6 +4,7 @@ export interface ICookieProps {
   path: string;
   httpOnly: boolean;
   maxAge: number;
+  secure?: boolean;
 }
 
 export {};
