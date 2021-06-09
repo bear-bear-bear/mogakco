@@ -1,4 +1,5 @@
 import { getConnection } from 'typeorm';
+import UserJobEntity from '../models/entities/users-job.entity';
 
 type RowQueryResult = {
   id: number;
@@ -33,5 +34,7 @@ export const getRandomFieldList = async () => {
 export const getRandomJob = async () => {
   const jobList = (await getConnection().query('SELECT id FROM users_job')) as RowQueryResult;
   const idList = parseTextRows(jobList);
-  return idList[getRand(jobList.length)];
+  const jobId = idList[getRand(jobList.length)];
+  const job = (await UserJobEntity.findOne(jobId)) as UserJobEntity;
+  return job as unknown as UserJobEntity;
 };

@@ -11,7 +11,7 @@ class UserJobEntity extends BaseEntityHardDelete {
 
   /* relation */
   @OneToMany(() => UserEntity, user => user.job)
-  user!: UserEntity;
+  user!: UserEntity[];
 }
 
 export default UserJobEntity;
