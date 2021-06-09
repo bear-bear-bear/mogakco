@@ -16,7 +16,6 @@ import {
   HttpCode,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
-import JwtAuthGuard from '@services/passport/jwt.guard';
 import JwtAuthGuardWithRefresh from '@services/passport/jwt.refresh.guard';
 import AuthService from '@services/auth.service';
 import UserEntity from '@models/entities/user.entity';
@@ -25,6 +24,7 @@ import createUserDTO from '@models/dto/create-user.dto';
 import EmailService from '@services/email.service';
 import ParseJoinPipe from '@controllers/pipe/parse-join-pipe';
 import { ConfigService } from '@nestjs/config';
+import JwtAuthGuard from '../guard/jwt-auth.guard';
 
 /**
  * @desc 회원가입/로그인에 대한 처리 컨트롤러
