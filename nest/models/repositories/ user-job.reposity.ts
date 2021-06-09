@@ -3,7 +3,7 @@ import UserJobEntity from '@models/entities/users-job.entity';
 
 @EntityRepository(UserJobEntity)
 export default class UserJobRepository extends Repository<UserJobEntity> {
-  async fineOneById(id: number | null) {
+  async fineOneById(id: UserJobEntity | null) {
     if (id === null) {
       return null;
     }
