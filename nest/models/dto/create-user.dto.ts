@@ -8,6 +8,7 @@ import {
   ArrayMaxSize,
   IsOptional,
 } from 'class-validator';
+import UserJobEntity from '@models/entities/users-job.entity';
 
 const passwordRegex = new RegExp(
   /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@!%*#?&])[A-Za-z\d$@!%*#?&]{8,50}$/,
@@ -40,7 +41,7 @@ class CreateUserDto {
   skills!: number[] | null;
 
   @IsOptional()
-  job!: number | null;
+  job!: UserJobEntity | null;
 }
 
 export default CreateUserDto;

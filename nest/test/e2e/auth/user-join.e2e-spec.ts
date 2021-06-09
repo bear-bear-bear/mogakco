@@ -7,6 +7,7 @@ import request from 'supertest';
 import CreateUserDto from '@models/dto/create-user.dto';
 import UserEntity from '@models/entities/user.entity';
 import { getRandomFieldList, getRandomJob } from '@lib/test-support';
+import cookieParser from 'cookie-parser';
 import { evalResponseBodyMessage, evalToContainBodyMessage } from '../helper/support';
 
 const TEST_EMAIL = 'mockTest@test.com';
@@ -36,6 +37,8 @@ describe('사용자 관련 데이터 테스트', () => {
         transform: true,
       }),
     );
+    app.use(cookieParser());
+
     await app.init();
   });
 

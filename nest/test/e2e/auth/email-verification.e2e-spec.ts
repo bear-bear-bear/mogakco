@@ -5,6 +5,7 @@ import AppModule from '@modules/app.module';
 import UserVerifyEntity from '@models/entities/user-verify.entity';
 import { evalResponseBodyMessage } from '@test/e2e/helper/support';
 import UserEntity from '@models/entities/user.entity';
+import cookieParser from 'cookie-parser';
 
 const TEST_EMAIL = 'mockTest@test.com';
 
@@ -18,6 +19,7 @@ describe('사용자 관련 데이터 테스트', () => {
 
     app = moduleRef.createNestApplication();
     app.setGlobalPrefix('api');
+    app.use(cookieParser());
     await app.init();
   });
 
@@ -27,6 +29,8 @@ describe('사용자 관련 데이터 테스트', () => {
 
   describe('POST /api/auth/send-token/before-register - 이메일 인증 코드 발송', () => {
     it('이메일 발송에 성공한다.', async () => {
+      const user = await UserEntity.findOne({ email: TEST_EMAIL });
+      if (user) await user.remove();
       const currentVerification = await UserVerifyEntity.findOne({ email: TEST_EMAIL });
 
       if (!currentVerification) {

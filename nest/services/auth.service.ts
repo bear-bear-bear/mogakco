@@ -18,10 +18,21 @@ import UserRepository from '@models/repositories/user.repository';
 import UserJobRepository from '@models/repositories/ user-job.reposity';
 import { ConfigService } from '@nestjs/config';
 import { ICookieProps } from '@services/type/auth';
+import UserEntity from '@models/entities/user.entity';
+import UserFieldEntity from '@models/entities/user-field.entity';
+import UserJobEntity from '@models/entities/users-job.entity';
 import UserService from './user.service';
 
-interface JwtPayload {
+interface JwtUserProps {
+  skills: UserFieldEntity[];
+  job: UserJobEntity | undefined;
+  username: string;
   email: string;
+  hashedRefreshToken?: string | null | undefined;
+  id: number;
+  createdAt?: Date | undefined;
+  updatedAt?: Date | undefined;
+  deletedAt?: Date | undefined;
 }
 
 @Injectable()
@@ -36,15 +47,15 @@ class AuthService {
   ) {}
 
   async validateUser(email: string, password: string) {
-    const user = await this.userRepository.findUserByEmail(email);
-    if (!user) throw new BadRequestException('가입되지 않은 유저입니다.');
-    const hash = await bcrypt.compare(password, user.password);
-    if (!hash) {
+    const user = await this.userRepository.findUserByEmailForLogin(email);
+    if (user === null) throw new BadRequestException('가입되지 않은 유저입니다.');
+    const isPasswordMatch = await bcrypt.compare(password, user.password);
+    if (!isPasswordMatch) {
       throw new UnauthorizedException('비밀번호가 틀렸습니다.');
     }
+    const { password: notUsingProp, ...returnProps } = user;
     // TODO: refreshToken 제외 하기 ( 현재 디버깅 때문에 포함 )
-    const { password: exclude, ...props } = user;
-    return props;
+    return returnProps;
   }
 
   /**
@@ -57,53 +68,67 @@ class AuthService {
     };
   }
 
+  async removeRefreshToken(id: number) {
+    await this.userRepository.update(id, {
+      hashedRefreshToken: null,
+    });
+  }
+
   /**
    * @deprecated 중복 메서드 ( 삭제 예정 2021-06-21 )
    */
-  async validate(loginUserDTO: LoginUserDTO) {
-    const { email, password } = loginUserDTO;
+  async validate({ email, password: plainPassword }: LoginUserDTO) {
     const user = await this.userRepository.findUserByEmail(email);
     if (!user) throw new UnauthorizedException();
-    const isMatch = await bcrypt.compare(password, user.password);
+    const isMatch = await bcrypt.compare(plainPassword, user.password);
     if (!isMatch) throw new UnauthorizedException();
     return user;
   }
 
-  getCookieWithAccessToken(email: string) {
+  getCookieWithAccessToken({ id, username }: JwtUserProps) {
     const accessTokenExpirationTime = Number(
       this.configService.get('JWT_ACCESS_TOKEN_EXPIRATION_TIME'),
     );
-    console.log(accessTokenExpirationTime);
-
-    const payload: JwtPayload = { email };
+    const payload = { id, username };
     const token = this.jwtService.sign(payload, {
       secret: this.configService.get('JWT_ACCESS_TOKEN_SECRET'),
       expiresIn: `${accessTokenExpirationTime}s`,
+      algorithm: 'HS256',
     });
-    console.log('accessToken: ', token);
 
-    const cookie: ICookieProps = {
+    return {
       token,
       path: '/',
       httpOnly: true,
       maxAge: accessTokenExpirationTime * 1000,
-    };
-    console.log('getCookieWithAccessToken Cookie: ', cookie);
-    return cookie;
+    } as ICookieProps;
   }
 
-  getCookieWithRefreshToken(email: string) {
-    const payload: JwtPayload = { email };
+  getRefreshToken({ id, username }: JwtUserProps) {
+    const refreshTokenExpirationTime = Number(
+      this.configService.get('JWT_REFRESH_TOKEN_EXPIRATION_TIME'),
+    );
+    const payload = { id, username };
     const token = this.jwtService.sign(payload, {
       secret: this.configService.get('JWT_REFRESH_TOKEN_SECRET'),
-      expiresIn: this.configService.get('JWT_REFRESH_TOKEN_EXPIRATION_TIME'),
+      expiresIn: `${refreshTokenExpirationTime}s`,
     });
-    const cookie = `refresh-token=${token}; HttpOnly; Path=/; Max-Age=${7 * 24 * 60 * 60}`;
-    console.log('getCookieWithRefreshToken Cookie: ', cookie);
-    return {
-      cookie,
-      token,
-    };
+
+    return token;
+  }
+
+  async getUserIfRefreshTokenMatches(refreshToken: string, id: number) {
+    const user = (await this.userRepository.findOne(id)) as UserEntity;
+
+    const isRefreshTokenMatching = await bcrypt.compare(
+      refreshToken,
+      user.hashedRefreshToken as string,
+    );
+
+    if (isRefreshTokenMatching) {
+      return user;
+    }
+    return null;
   }
 
   verifyEmailRequest(email: string | undefined) {
@@ -250,21 +275,19 @@ class AuthService {
    * @param("refreshToken")
    * hashRefreshToken makes refresh token be hashed in database.
    */
-  async hashRefreshToken(refreshToken: string, email: string) {
+  async saveHashRefreshToken(refreshToken: string, email: string) {
     const hashedToken = await bcrypt.hash(refreshToken, 12);
-    console.log('hashRefreshToken: ', hashedToken);
-    const isSaved = await this.userRepository.update(
+    await this.userRepository.update(
       { email },
       {
         hashedRefreshToken: hashedToken,
       },
     );
-    return isSaved;
   }
 
-  async getUserIfTokenMatches(refreshToken: string, email: string) {
-    const user = await this.userRepository.findOne({ email });
-    if (user && user.hashedRefreshToken) {
+  async getUserIfTokenMatches(refreshToken: string, id: number) {
+    const user = await this.userRepository.findOne(id);
+    if (user?.hashedRefreshToken) {
       const isMatch = await bcrypt.compare(refreshToken, user.hashedRefreshToken);
       if (isMatch) {
         return user;

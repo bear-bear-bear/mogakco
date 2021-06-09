@@ -1,4 +1,5 @@
-import { Column, Entity, ManyToOne, JoinColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
+import { Exclude } from 'class-transformer';
 import { BaseEntitySoftDelete } from './helper/abstract';
 import UserJobEntity from './users-job.entity';
 
@@ -19,12 +20,13 @@ class UserEntity extends BaseEntitySoftDelete {
   skills!: number[] | null;
 
   @Column({ type: 'varchar', nullable: true, name: 'refresh_token' })
+  @Exclude()
   hashedRefreshToken?: string | null;
 
   /* relation */
   @ManyToOne(() => UserJobEntity, job => job.user)
-  @JoinColumn({ name: 'job_id' })
-  job?: UserJobEntity | number | null;
+  @JoinColumn({ name: 'job_id', referencedColumnName: 'id' })
+  job?: UserJobEntity | null;
 }
 
 export default UserEntity;

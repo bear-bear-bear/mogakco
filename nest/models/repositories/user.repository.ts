@@ -1,7 +1,9 @@
 import { EntityRepository, Repository } from 'typeorm';
 import { InternalServerErrorException } from '@nestjs/common';
+import UserFieldEntity from '../entities/user-field.entity';
 import UserEntity from '../entities/user.entity';
 import createUserDTO from '../dto/create-user.dto';
+import UserJobEntity from '../entities/users-job.entity';
 
 @EntityRepository(UserEntity)
 class UserRepository extends Repository<UserEntity> {
@@ -48,6 +50,59 @@ class UserRepository extends Repository<UserEntity> {
       return null;
     }
     return user;
+  }
+
+  /**
+   * @return 로그인 성공 시 전달 될 유저 객체를 만들어 반환한다.
+   * @desc 클라이언트, 사용자에게 제공되어야 할 객체만을 전달합니다.
+   */
+  async findUserByEmailForLogin(email: string) {
+    const user = await this.findOne(
+      { email },
+      {
+        select: ['id', 'username', 'email', 'password', 'skills', 'job'],
+      },
+    );
+
+    if (user === undefined) return null;
+
+    // TODO: Relation Column 개선 필요
+    const skillIds = user.skills!.map(s => Number(s));
+    const skills = await UserFieldEntity.findByIds(skillIds, {
+      select: ['id', 'name'],
+    });
+    const job = await UserJobEntity.findOne({
+      select: ['id', 'name'],
+      where: { id: user.id },
+    });
+    return {
+      ...user,
+      skills,
+      job,
+    };
+  }
+
+  async findUserByIdForLogin(id: number) {
+    const user = await this.findOne(id, {
+      select: ['id', 'username', 'email', 'password', 'skills', 'job'],
+    });
+
+    if (user === undefined) return null;
+
+    // TODO: Relation Column 개선 필요
+    const skillIds = user.skills!.map(s => Number(s));
+    const skills = await UserFieldEntity.findByIds(skillIds, {
+      select: ['id', 'name'],
+    });
+    const job = await UserJobEntity.findOne({
+      select: ['id', 'name'],
+      where: { id: user.id },
+    });
+    return {
+      ...user,
+      skills,
+      job,
+    };
   }
 
   async updateUser(user: any): Promise<UserEntity> {
