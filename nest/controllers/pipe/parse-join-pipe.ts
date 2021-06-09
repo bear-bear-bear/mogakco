@@ -1,5 +1,4 @@
 import { Injectable, PipeTransform } from '@nestjs/common';
-import CreateUserDto from '@models/dto/create-user.dto';
 
 interface IValueProps {
   username: string;
@@ -9,8 +8,13 @@ interface IValueProps {
   job: number | string | null;
 }
 
+type RValueProps = {
+  skills: number[] | null;
+  job: number | null;
+} & Pick<IValueProps, 'username' | 'password' | 'email'>;
+
 @Injectable()
-export default class ParseJoinPipe implements PipeTransform<IValueProps, CreateUserDto> {
+export default class ParseJoinPipe implements PipeTransform<IValueProps, RValueProps> {
   parseNumberArray(array: string[] | number[] | null) {
     if (array === null) {
       return null;
@@ -28,7 +32,7 @@ export default class ParseJoinPipe implements PipeTransform<IValueProps, CreateU
     return Number.isNaN(Number(data)) ? null : Number(data);
   }
 
-  transform(value: IValueProps): CreateUserDto {
+  transform(value: IValueProps): RValueProps {
     return {
       ...value,
       skills: this.parseNumberArray(value.skills),
