@@ -16,12 +16,18 @@ import UserVerifyRepository from '@models/repositories/user-verify.repository';
 import createUserDto from '@models/dto/create-user.dto';
 import UserRepository from '@models/repositories/user.repository';
 import UserJobRepository from '@models/repositories/ user-job.reposity';
+import { ConfigService } from '@nestjs/config';
+import { ICookieProps } from '@services/type/auth';
 import UserService from './user.service';
-import { JwtPayload } from './passport/jwt.payload';
+
+interface JwtPayload {
+  email: string;
+}
 
 @Injectable()
 class AuthService {
   constructor(
+    private configService: ConfigService,
     private userService: UserService,
     private jwtService: JwtService,
     private userVerifyRepository: UserVerifyRepository,
@@ -29,21 +35,31 @@ class AuthService {
     private userJobRepository: UserJobRepository,
   ) {}
 
-  async validateUser(email: string, password: string): Promise<any> {
+  async validateUser(email: string, password: string) {
     const user = await this.userRepository.findUserByEmail(email);
-
-    if (!user) throw new BadRequestException();
-    const hash = await bcrypt.compare(password, user?.password);
-    if (!hash && !user) {
-      return new HttpException('아이디 또는 비밀번호가 틀렸습니다.', HttpStatus.UNAUTHORIZED);
+    if (!user) throw new BadRequestException('가입되지 않은 유저입니다.');
+    const hash = await bcrypt.compare(password, user.password);
+    if (!hash) {
+      throw new UnauthorizedException('비밀번호가 틀렸습니다.');
     }
-    if (user && hash) {
-      const { password, ...result } = user;
-      return result;
-    }
-    return null;
+    // TODO: refreshToken 제외 하기 ( 현재 디버깅 때문에 포함 )
+    const { password: exclude, ...props } = user;
+    return props;
   }
 
+  /**
+   * @return return jwt access_token
+   */
+  async login(user: any) {
+    const payload = { username: user.username, sub: user.id };
+    return {
+      access_token: this.jwtService.sign(payload),
+    };
+  }
+
+  /**
+   * @deprecated 중복 메서드 ( 삭제 예정 2021-06-21 )
+   */
   async validate(loginUserDTO: LoginUserDTO) {
     const { email, password } = loginUserDTO;
     const user = await this.userRepository.findUserByEmail(email);
@@ -54,22 +70,36 @@ class AuthService {
   }
 
   getCookieWithAccessToken(email: string) {
+    const accessTokenExpirationTime = Number(
+      this.configService.get('JWT_ACCESS_TOKEN_EXPIRATION_TIME'),
+    );
+    console.log(accessTokenExpirationTime);
+
     const payload: JwtPayload = { email };
     const token = this.jwtService.sign(payload, {
-      secret: 'ACCESS_TOKEN_!@#',
-      expiresIn: '10m',
+      secret: this.configService.get('JWT_ACCESS_TOKEN_SECRET'),
+      expiresIn: `${accessTokenExpirationTime}s`,
     });
-    const cookie = `x-token=${token}; HttpOnly; Path=/; Max-Age=${10 * 60}`;
-    return { cookie };
+    console.log('accessToken: ', token);
+
+    const cookie: ICookieProps = {
+      token,
+      path: '/',
+      httpOnly: true,
+      maxAge: accessTokenExpirationTime * 1000,
+    };
+    console.log('getCookieWithAccessToken Cookie: ', cookie);
+    return cookie;
   }
 
   getCookieWithRefreshToken(email: string) {
     const payload: JwtPayload = { email };
     const token = this.jwtService.sign(payload, {
-      secret: 'REFRESH_TOKEN_!@#',
-      expiresIn: '7d',
+      secret: this.configService.get('JWT_REFRESH_TOKEN_SECRET'),
+      expiresIn: this.configService.get('JWT_REFRESH_TOKEN_EXPIRATION_TIME'),
     });
     const cookie = `refresh-token=${token}; HttpOnly; Path=/; Max-Age=${7 * 24 * 60 * 60}`;
+    console.log('getCookieWithRefreshToken Cookie: ', cookie);
     return {
       cookie,
       token,
@@ -106,14 +136,6 @@ class AuthService {
   //   console.log(id, token, verifyToken, userId);
   //   return newUser;
   // }
-
-  async verifyTokenBeforeRegister(email: string) {
-    const currentVerification = await this.userVerifyRepository.findOne({
-      email,
-    });
-
-    return currentVerification?.isVerified;
-  }
 
   /**
    *
@@ -230,6 +252,7 @@ class AuthService {
    */
   async hashRefreshToken(refreshToken: string, email: string) {
     const hashedToken = await bcrypt.hash(refreshToken, 12);
+    console.log('hashRefreshToken: ', hashedToken);
     const isSaved = await this.userRepository.update(
       { email },
       {
@@ -274,7 +297,6 @@ class AuthService {
     const [userId] = verifyToken.split('|');
     const user = await this.userService.findUserOne(parseInt(userId, 10));
     if (!user && typeof user === 'boolean') {
-      // await this.userVerifyRepository.createOne(user);
       return false;
     }
 

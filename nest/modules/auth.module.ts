@@ -19,12 +19,21 @@ import UserModule from './user.module';
     PassportModule.register({
       defaultStrategy: 'jwt',
     }),
-    JwtModule.register({}),
+    JwtModule.registerAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: async (configService: ConfigService) => ({
+        secret: configService.get('JWT_ACCESS_TOKEN_SECRET'),
+        signOptions: {
+          expiresIn: `${configService.get('JWT_ACCESS_TOKEN_EXPIRATION_TIME')}s`,
+        },
+      }),
+    }),
     UserModule,
     ConfigModule,
   ],
   controllers: [AuthController],
-  providers: [AuthService, JwtStrategy, JwtStrategyWithRefresh, EmailService, ConfigService],
+  providers: [ConfigService, AuthService, JwtStrategy, JwtStrategyWithRefresh, EmailService],
   exports: [JwtStrategy, JwtStrategyWithRefresh, PassportModule],
 })
 class AuthModule {}
