@@ -5,6 +5,12 @@ import { ExtractJwt, Strategy } from 'passport-jwt';
 import AuthService from '@services/auth.service';
 import { ConfigService } from '@nestjs/config';
 
+interface IPayload {
+  id: number;
+  username: string;
+  iat: number;
+  exp: number;
+}
 /**
  *
  * refresh-token을 사용해 jwt 검증
@@ -14,22 +20,16 @@ import { ConfigService } from '@nestjs/config';
 class JwtStrategyWithRefresh extends PassportStrategy(Strategy, 'jwt-with-refresh') {
   constructor(private authService: AuthService, private configService: ConfigService) {
     super({
-      jwtFromRequest: ExtractJwt.fromExtractors([
-        (request: Request) => {
-          return request?.cookies?.refreshToken;
-        },
-      ]),
+      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       secretOrKey: configService.get('JWT_REFRESH_TOKEN_SECRET'),
       passReqToCallback: true,
     });
   }
 
-  async validate(request: Request, payload: any) {
-    console.log(__dirname);
-    console.log(payload);
-
-    const refreshToken = request.cookies.Refresh;
-    return this.authService.getUserIfTokenMatches(refreshToken, payload.email);
+  async validate(request: Request, { id }: IPayload) {
+    const refreshToken = request.headers.authorization?.slice(7);
+    if (refreshToken === undefined) return false;
+    return this.authService.getUserIfTokenMatches(refreshToken, id);
   }
 }
 

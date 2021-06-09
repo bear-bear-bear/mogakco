@@ -287,7 +287,7 @@ class AuthService {
 
   async getUserIfTokenMatches(refreshToken: string, id: number) {
     const user = await this.userRepository.findOne(id);
-    if (user && user.hashedRefreshToken) {
+    if (user?.hashedRefreshToken) {
       const isMatch = await bcrypt.compare(refreshToken, user.hashedRefreshToken);
       if (isMatch) {
         return user;
