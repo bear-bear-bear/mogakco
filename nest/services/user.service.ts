@@ -33,6 +33,10 @@ class UserService {
     return this.userRepository.deleteUser(id);
   }
 
+  findUserForLogin(id: number) {
+    return this.userRepository.findUserByIdForLogin(id);
+  }
+
   async findAllFields(): Promise<UserFieldEntity[]> {
     const fieldList = await this.connection
       .getRepository(UserFieldEntity)
