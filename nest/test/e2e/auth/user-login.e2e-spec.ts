@@ -66,7 +66,6 @@ describe('사용자 로그인 테스트', () => {
         }));
       accessToken = response.accessToken;
       refreshToken = response.body.refreshToken;
-      console.log({ refreshToken });
       evalResponseBodyMessage(response.body, 200, '로그인에 성공하였습니다!');
     });
 
