@@ -21,7 +21,7 @@ const detectProgress = (progress) => {
   return 0;
 };
 
-export const ProgressBarFiller = styled.div(({ fill }) => ({
+export const ProgressBarFiller = styled.div(({ fill }: any) => ({
   height: '100%',
   width: `${detectProgress(fill)}%`,
   backgroundColor: 'var(--color-blue-1)',
