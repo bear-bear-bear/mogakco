@@ -1,5 +1,5 @@
 module.exports = {
-  parser: 'babel-eslint',
+  parser: '@typescript-eslint/parser',
   env: {
     browser: true,
     es2021: true,
@@ -12,6 +12,7 @@ module.exports = {
     'airbnb/hooks',
     'eslint:recommended',
     'plugin:react/recommended',
+    'plugin:@typescript-eslint/recommended',
     'plugin:prettier/recommended',
   ],
   parserOptions: {
@@ -21,7 +22,13 @@ module.exports = {
     ecmaVersion: 12,
     sourceType: 'module',
   },
-  plugins: ['react', 'react-hooks', 'prettier', '@emotion'],
+  plugins: [
+    'react',
+    'react-hooks',
+    'prettier',
+    '@emotion',
+    '@typescript-eslint',
+  ],
   settings: {
     react: {
       version: 'detect',

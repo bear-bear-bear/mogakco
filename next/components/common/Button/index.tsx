@@ -6,7 +6,16 @@ import * as S from './style';
 
 const Button = React.forwardRef(
   (
-    { children, color, size, fullWidth, outline, underline, loading, ...rest },
+    {
+      children,
+      color,
+      size,
+      fullWidth,
+      outline,
+      underline,
+      loading,
+      ...rest
+    }: any,
     ref,
   ) => {
     const theme = {

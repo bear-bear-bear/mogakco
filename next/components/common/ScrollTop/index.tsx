@@ -4,7 +4,7 @@ import scrollToTop from '~/lib/scrollToTop';
 
 import * as S from './style';
 
-const ScrollTop = () => (
+const ScrollTop = ({ verticalAlign, horizonAlign }: any) => (
   <S.ScrollTop onClick={() => scrollToTop()}>
     <S.ChevronUp />
   </S.ScrollTop>
