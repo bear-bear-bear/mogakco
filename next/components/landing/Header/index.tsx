@@ -10,7 +10,8 @@ import * as S from './style';
 
 // TODO: 로그인/로그아웃 컴포넌트 작은 모니터에서 버거로 변경
 
-const Header = () => {
+const Header = ({ isLoggedIn }: any) => {
+  console.log(isLoggedIn);
   const me = useSelector(meSelector);
 
   return (

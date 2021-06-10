@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import * as S from './style';
 
-const ProgressBar = ({ fill }) => {
+const ProgressBar = ({ fill }: any) => {
   return (
     <S.ProgressBarWrapper>
       <S.ProgressBarFiller fill={fill} />
