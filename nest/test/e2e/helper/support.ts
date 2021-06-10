@@ -20,3 +20,10 @@ export const evalToContainBodyMessage = (
   expect(response.statusCode).toBe(expectStatusCode);
   expect(response.message).toContain(expectMessage);
 };
+
+export const evalToStrictEqualBodyMessage = (
+  response: ResponseBodyProps & { error: string },
+  strictEqual: any,
+) => {
+  expect(response).toStrictEqual(strictEqual);
+};
