@@ -131,4 +131,21 @@ describe('사용자 로그인 테스트', () => {
         });
     });
   });
+
+  describe('POST /api/auth/logout - 유저 로그아웃', () => {
+    it('로그인 상태가 아니라면 401이 반환된다.', async () => {
+      await request(app.getHttpServer())
+        .post('/api/auth/logout')
+        .then(({ body: res }) => evalResponseBodyMessage(res, 401, 'Unauthorized'));
+    });
+
+    it('로그아웃을 정상적으로 수행한다.', async () => {
+      await request(app.getHttpServer())
+        .post('/api/auth/logout')
+        .set('Authorization', `bearer ${refreshToken}`)
+        .then(({ body: res }) =>
+          evalResponseBodyMessage(res, 200, 'mogauser 유저가 로그아웃 되었습니다.'),
+        );
+    });
+  });
 });
