@@ -22,7 +22,6 @@ describe('사용자 로그인 테스트', () => {
     };
     app = moduleRef.createNestApplication();
     app.setGlobalPrefix('api');
-    app.setGlobalPrefix('api');
     app.useGlobalPipes(
       new ValidationPipe({
         whitelist: true,
@@ -67,7 +66,7 @@ describe('사용자 로그인 테스트', () => {
         }));
       accessToken = response.accessToken;
       refreshToken = response.body.refreshToken;
-      console.log({ accessToken, refreshToken });
+      console.log({ refreshToken });
       evalResponseBodyMessage(response.body, 200, '로그인에 성공하였습니다!');
     });
 
@@ -78,6 +77,58 @@ describe('사용자 로그인 테스트', () => {
         .then(({ body: res }) =>
           evalResponseBodyMessage(res, 401, '로그인 상태에서 접근할 수 없습니다.'),
         );
+    });
+  });
+
+  describe('GET /api/auth/test - 로그인 상태 여부 ( 테스트 )', () => {
+    it('로그인 한 상태면, accessToken 과 함께 간단한 유저 정보가 반환된다.', async () => {
+      await request(app.getHttpServer())
+        .get('/api/auth/test')
+        .set('Cookie', [`accessToken=${accessToken}`])
+        .then(({ body: res }) => {
+          expect(res.cookies).toHaveProperty('accessToken');
+          expect(res.user).toHaveProperty('id');
+          expect(res.user).toHaveProperty('username');
+        });
+    });
+
+    it('10분이 지나면 401 상태 코드가 반환된다.', async () => {
+      await request(app.getHttpServer())
+        .get('/api/auth/test')
+        .then(({ body: res }) => {
+          expect(res.statusCode).toBe(401);
+        });
+    });
+  });
+
+  describe('GET /api/auth/refresh-token - 새로운 accessToken 발급', () => {
+    it('refreshToken 값이 검증되면 accessToken이 새로 발급된다.', async () => {
+      await request(app.getHttpServer())
+        .get('/api/auth/refresh-token')
+        .set('Authorization', `bearer ${refreshToken}`)
+        .then(({ body: res }) => evalResponseBodyMessage(res, 201, 'accessToken 갱신 완료!'));
+    });
+
+    it('refreshToken 값이 만료, 존재하지 않으면 401이 반환된다.', async () => {
+      await request(app.getHttpServer())
+        .get('/api/auth/refresh-token')
+        .then(({ body: res }) => evalResponseBodyMessage(res, 401, 'Unauthorized'));
+    });
+
+    it('accessToken 새로 발급 후, /api/auth/test 가 정상적으로 응답된다.', async () => {
+      const accessTokenResponse = await request(app.getHttpServer())
+        .get('/api/auth/refresh-token')
+        .set('Authorization', `bearer ${refreshToken}`)
+        .then(({ headers }) => headers['set-cookie'][0].split(';')[0].slice(12));
+
+      await request(app.getHttpServer())
+        .get('/api/auth/test')
+        .set('Cookie', [`accessToken=${accessTokenResponse}`])
+        .then(({ body: res }) => {
+          expect(res.cookies).toHaveProperty('accessToken');
+          expect(res.user).toHaveProperty('id');
+          expect(res.user).toHaveProperty('username');
+        });
     });
   });
 });
