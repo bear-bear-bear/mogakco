@@ -16,8 +16,8 @@ const config: Config.InitialOptions = {
     '^@modules/(.*)$': '<rootDir>/modules/$1',
     '^@services/(.*)$': '<rootDir>/services/$1',
     '^@test/(.*)$': '<rootDir>/test/$1',
-    '^@guard/(./*)$': '<rootDir>/guard/$1',
-    '^@typing/(./*)$': '<rootDir>/typing/$1',
+    '^@guard/(.*)$': '<rootDir>/guard/$1',
+    '^@typing/(.*)$': '<rootDir>/typing/$1',
   },
 };
 
