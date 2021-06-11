@@ -23,7 +23,9 @@
       "@models/*": ["./models/*"],
       "@modules/*": ["./modules/*"],
       "@services/*": ["./services/*"],
-      "@test/*": ["./test/*"]
+      "@test/*": ["./test/*"],
+      "@guard/*": ["./guard/*"],
+      "@typing/*": ["./typing/*"]
     }
   }
 }
