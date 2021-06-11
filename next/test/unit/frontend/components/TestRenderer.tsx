@@ -4,7 +4,7 @@ const TestRenderer = () => {
   const [count, setCount] = useState(0);
 
   const onClick = useCallback(() => {
-    setCount(prev => prev + 1);
+    setCount((prev) => prev + 1);
   }, []);
 
   return (

@@ -19,15 +19,19 @@ const pageProps = {
 
 const SignUp = () => {
   const dispatch = useDispatch();
-  const verifyEmailDone = useSelector(({ signup }) => signup.verifyEmailDone);
-  const verifySocialDone = useSelector(({ signup }) => signup.verifySocialDone);
+  const verifyEmailDone = useSelector(
+    ({ signup }: any) => signup.verifyEmailDone,
+  );
+  const verifySocialDone = useSelector(
+    ({ signup }: any) => signup.verifySocialDone,
+  );
   const saveRequiredInfoDone = useSelector(
-    ({ signup }) => signup.saveRequiredInfoDone,
+    ({ signup }: any) => signup.saveRequiredInfoDone,
   );
   const saveOptionalInfoDone = useSelector(
-    ({ signup }) => signup.saveOptionalInfoDone,
+    ({ signup }: any) => signup.saveOptionalInfoDone,
   );
-  const signUpDone = useSelector(({ signup }) => signup.signUpDone);
+  const signUpDone = useSelector(({ signup }: any) => signup.signUpDone);
   const fill = [verifyEmailDone, saveRequiredInfoDone, signUpDone];
 
   useEffect(() => {

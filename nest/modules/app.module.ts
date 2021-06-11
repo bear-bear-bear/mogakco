@@ -29,6 +29,7 @@ import MailModule from './mail.module';
         JWT_REFRESH_TOKEN_SECRET: Joi.string().required(),
         JWT_REFRESH_TOKEN_EXPIRATION_TIME: Joi.number().required(),
         FRONTEND_PORT: Joi.number().required(),
+        TYPEORM_LOGGING: Joi.boolean().required(),
       }),
     }),
     TypeOrmModule.forRoot({
@@ -39,7 +40,7 @@ import MailModule from './mail.module';
       password: process.env.DATABASE_PASSWORD as string,
       database: process.env.DATABASE_NAME as string,
       synchronize: process.env.NODE_ENV === 'development',
-      logging: process.env.NODE_ENV === 'development',
+      logging: Boolean(process.env.TYPEORM_LOGGING),
       migrationsTableName: 'migrations',
       migrations: ['migrations/*.ts'],
       cli: { migrationsDir: 'migration' },
