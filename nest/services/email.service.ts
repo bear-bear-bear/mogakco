@@ -3,12 +3,13 @@ import { MailerService } from '@nestjs-modules/mailer';
 import { ConfigService } from '@nestjs/config';
 import { join } from 'path';
 import { emailFailure, emailSuccess } from '@lib/log';
+import { UserVerifyEmailDto } from '@typing/auth';
 
-interface UserVerifyEmailDTO {
-  email: string;
-  token: string;
-  id: number;
-}
+// interface UserVerifyEmailDTO {
+//   email: string;
+//   token: string;
+//   id: number;
+// }
 
 @Injectable()
 export default class EmailService {
@@ -17,7 +18,7 @@ export default class EmailService {
     private readonly configService: ConfigService,
   ) {}
 
-  userVerify({ email, token, id }: UserVerifyEmailDTO): void {
+  userVerify({ email, token, id }: UserVerifyEmailDto): void {
     this.mailerService
       .sendMail({
         to: email,

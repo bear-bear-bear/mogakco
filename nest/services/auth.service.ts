@@ -8,32 +8,16 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
-import LoginUserDTO from '@models/dto/login-user.dto';
 import makeHash from '@lib/makeHash';
 import { v4 as uuidv4 } from 'uuid';
 import UserVerifyEntity from '@models/entities/user-verify.entity';
 import UserVerifyRepository from '@models/repositories/user-verify.repository';
-import createUserDto from '@models/dto/create-user.dto';
 import UserRepository from '@models/repositories/user.repository';
 import UserJobRepository from '@models/repositories/ user-job.reposity';
 import { ConfigService } from '@nestjs/config';
-import { ICookieProps } from '@services/type/auth';
 import UserEntity from '@models/entities/user.entity';
-import UserFieldEntity from '@models/entities/user-field.entity';
-import UserJobEntity from '@models/entities/users-job.entity';
+import { CreateUserDto, ICookieProps, JwtUserProps, LoginUserDto } from '@typing/auth';
 import UserService from './user.service';
-
-interface JwtUserProps {
-  skills: UserFieldEntity[];
-  job: UserJobEntity | undefined;
-  username: string;
-  email: string;
-  hashedRefreshToken?: string | null | undefined;
-  id: number;
-  createdAt?: Date | undefined;
-  updatedAt?: Date | undefined;
-  deletedAt?: Date | undefined;
-}
 
 @Injectable()
 class AuthService {
@@ -77,7 +61,7 @@ class AuthService {
   /**
    * @deprecated 중복 메서드 ( 삭제 예정 2021-06-21 )
    */
-  async validate({ email, password: plainPassword }: LoginUserDTO) {
+  async validate({ email, password: plainPassword }: LoginUserDto) {
     const user = await this.userRepository.findUserByEmail(email);
     if (!user) throw new UnauthorizedException();
     const isMatch = await bcrypt.compare(plainPassword, user.password);
@@ -235,7 +219,7 @@ class AuthService {
     return record;
   }
 
-  async join({ username, password, email, skills, job }: createUserDto) {
+  async join({ username, password, email, skills, job }: CreateUserDto) {
     const verification = await this.userVerifyRepository.findOne({
       email,
     });
@@ -265,7 +249,7 @@ class AuthService {
       email,
       skills,
       job: jobEntity ? jobEntity.id : null,
-    } as createUserDto);
+    } as CreateUserDto);
 
     // TODO: 로그인 처리 후 토큰 발급으로 수정 예정
     return { message: '유저가 생성되었습니다.', statusCode: 201 };
