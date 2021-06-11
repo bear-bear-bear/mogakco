@@ -1,5 +1,5 @@
 import { CanActivate, ExecutionContext, UnauthorizedException } from '@nestjs/common';
-import { GuardReturnType } from '@controllers/type/guard-type';
+import { GuardReturnType } from '@typing/auth';
 
 export default class NonAuthGuard implements CanActivate {
   canActivate(context: ExecutionContext): GuardReturnType {

@@ -1,17 +1,5 @@
 import { Injectable, PipeTransform } from '@nestjs/common';
-
-interface IValueProps {
-  username: string;
-  password: string;
-  email: string;
-  skills: number[] | string[] | null;
-  job: number | string | null;
-}
-
-type RValueProps = {
-  skills: number[] | null;
-  job: number | null;
-} & Pick<IValueProps, 'username' | 'password' | 'email'>;
+import { IValueProps, RValueProps } from '@typing/auth';
 
 @Injectable()
 export default class ParseJoinPipe implements PipeTransform<IValueProps, RValueProps> {
