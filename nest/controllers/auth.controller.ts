@@ -21,11 +21,10 @@ import JwtAuthGuardWithRefresh from '@services/passport/jwt.refresh.guard';
 import AuthService from '@services/auth.service';
 import UserEntity from '@models/entities/user.entity';
 import UserService from '@services/user.service';
-import createUserDTO from '@models/dto/create-user.dto';
 import EmailService from '@services/email.service';
 import ParseJoinPipe from '@controllers/pipe/parse-join-pipe';
 import { ConfigService } from '@nestjs/config';
-import LoginUserDto from '@models/dto/login-user.dto';
+import { CreateUserDto, LoginUserDto } from '@typing/auth';
 import JwtAuthGuard from '../guard/jwt-auth.guard';
 import NonAuthGuard from '../guard/non-auth.guard';
 
@@ -128,7 +127,7 @@ class AuthController {
    */
   @UseGuards(NonAuthGuard)
   @Post()
-  async join(@Body(ParseJoinPipe) user: createUserDTO) {
+  async join(@Body(ParseJoinPipe) user: CreateUserDto) {
     const message = await this.authService.join(user);
     return message;
   }
@@ -157,12 +156,12 @@ class AuthController {
 
   // TODO: Domain ( Production ) Required
   @Get('/verify-email/before-register')
-  @Redirect('http://localhost:3000/signup', 302)
+  @Redirect(`http://localhost:3000/signup`, 302)
   async processVerifyEmail(
     @Query()
     { id, token }: { id: string; token: string },
   ) {
-    const redirection = `http://localhost:${this.configService.get('SERVER_PORT')}/signup`;
+    const redirection = `http://localhost:${this.configService.get('FRONTEND_PORT')}/signup`;
     const verification = await this.authService.verifyEmail(id, token);
     if (!verification) {
       return { url: `${redirection}?success=false` };

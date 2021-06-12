@@ -4,10 +4,10 @@ import AppModule from '@modules/app.module';
 import { getConnection } from 'typeorm';
 import UserVerifyEntity from '@models/entities/user-verify.entity';
 import request from 'supertest';
-import CreateUserDto from '@models/dto/create-user.dto';
 import UserEntity from '@models/entities/user.entity';
 import { getRandomFieldList, getRandomJob } from '@lib/test-support';
 import cookieParser from 'cookie-parser';
+import { CreateUserDto } from '@typing/auth';
 import { evalResponseBodyMessage, evalToContainBodyMessage } from '../helper/support';
 
 const TEST_EMAIL = 'mockTest@test.com';

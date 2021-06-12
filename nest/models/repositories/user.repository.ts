@@ -1,8 +1,8 @@
 import { EntityRepository, Repository } from 'typeorm';
 import { InternalServerErrorException } from '@nestjs/common';
+import { CreateUserDto } from '@typing/auth';
 import UserFieldEntity from '../entities/user-field.entity';
 import UserEntity from '../entities/user.entity';
-import createUserDTO from '../dto/create-user.dto';
 import UserJobEntity from '../entities/users-job.entity';
 
 @EntityRepository(UserEntity)
@@ -13,7 +13,7 @@ class UserRepository extends Repository<UserEntity> {
     email,
     job,
     skills,
-  }: createUserDTO): Promise<UserEntity> {
+  }: CreateUserDto): Promise<UserEntity> {
     const newUser = new UserEntity();
     newUser.username = username;
     newUser.password = password;
