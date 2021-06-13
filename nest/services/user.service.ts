@@ -47,7 +47,7 @@ class UserService {
       const fieldList = await this.fieldRepository.find();
       return fieldList;
     } catch (err) {
-      throw new InternalServerErrorException(`필드 정보를 불러올 수 없습니다.\n${err}`);
+      throw new InternalServerErrorException(`필드 정보를 불러올 수 없습니다.`);
     }
   }
 
@@ -59,7 +59,7 @@ class UserService {
       const jobList = await this.jobRepository.find();
       return jobList;
     } catch (err) {
-      throw new InternalServerErrorException(`직업 정보를 불러올 수 없습니다.\n${err}`);
+      throw new InternalServerErrorException(`직업 정보를 불러올 수 없습니다.`);
     }
   }
 }
