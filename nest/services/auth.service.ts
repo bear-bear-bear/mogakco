@@ -3,7 +3,6 @@ import {
   HttpException,
   HttpStatus,
   Injectable,
-  Res,
   UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
@@ -17,7 +16,6 @@ import UserJobRepository from '@models/repositories/ user-job.reposity';
 import { ConfigService } from '@nestjs/config';
 import UserEntity from '@models/entities/user.entity';
 import { CreateUserDto, ICookieProps, JwtUserProps } from '@typing/auth';
-import { Response } from 'express';
 import UserService from './user.service';
 
 @Injectable()
