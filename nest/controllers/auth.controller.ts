@@ -120,9 +120,14 @@ class AuthController {
    */
   @UseGuards(NonAuthGuard)
   @Post()
-  async join(@Body(ParseJoinPipe) user: CreateUserDto) {
-    const message = await this.authService.join(user);
-    return message;
+  async join(@Body(ParseJoinPipe) user: CreateUserDto, @Res({ passthrough: true }) res: Response) {
+    const { accessTokenObject, statusCode, message, refreshToken } = await this.authService.join(
+      user,
+    );
+    res.cookie('accessToken', accessTokenObject.accessToken, {
+      ...accessTokenObject.accessTokenCookieOptions,
+    });
+    return { statusCode, message, refreshToken };
   }
 
   /**

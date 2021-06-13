@@ -3,6 +3,7 @@ import {
   HttpException,
   HttpStatus,
   Injectable,
+  Res,
   UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
@@ -16,6 +17,7 @@ import UserJobRepository from '@models/repositories/ user-job.reposity';
 import { ConfigService } from '@nestjs/config';
 import UserEntity from '@models/entities/user.entity';
 import { CreateUserDto, ICookieProps, JwtUserProps } from '@typing/auth';
+import { Response } from 'express';
 import UserService from './user.service';
 
 @Injectable()
@@ -195,7 +197,6 @@ class AuthService {
     const verification = await this.userVerifyRepository.findOne({
       email,
     });
-
     if (!verification || !verification.isVerified) {
       throw new HttpException('이메일 인증을 수행해주세요.', HttpStatus.BAD_REQUEST);
     }
@@ -215,7 +216,7 @@ class AuthService {
       throw new HttpException('직업 정보가 일치하지 않습니다.', HttpStatus.BAD_REQUEST);
     }
 
-    await this.userRepository.createUserOne({
+    const { id } = await this.userRepository.createUserOne({
       username,
       password: await makeHash(password),
       email,
@@ -223,8 +224,17 @@ class AuthService {
       job: jobEntity ? jobEntity.id : null,
     } as CreateUserDto);
 
-    // TODO: 로그인 처리 후 토큰 발급으로 수정 예정
-    return { message: '유저가 생성되었습니다.', statusCode: 201 };
+    const { token: accessToken, ...accessTokenCookieOptions } = this.getCookieWithAccessToken({
+      id,
+      username,
+    } as JwtUserProps);
+    const refreshToken = this.getRefreshToken({ id, username } as JwtUserProps);
+    return {
+      message: '유저가 생성되었습니다.',
+      statusCode: 201,
+      accessTokenObject: { accessToken, accessTokenCookieOptions },
+      refreshToken,
+    };
   }
 
   /**
