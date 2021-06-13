@@ -8,7 +8,7 @@ const Footer = () => {
   return (
     // TODO: 차후 컨텐츠 추가 예정
     <S.FooterContainer>
-      <Row justify="center" align="middie">
+      <Row justify="center" align="middle">
         <Col>
           <Fade bottom>
             <S.TempText>[ 컨텐츠 추가 예정입니다 ]</S.TempText>
