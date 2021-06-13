@@ -3,7 +3,6 @@ import {
   HttpException,
   HttpStatus,
   Injectable,
-  InternalServerErrorException,
   UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
@@ -16,7 +15,7 @@ import UserRepository from '@models/repositories/user.repository';
 import UserJobRepository from '@models/repositories/ user-job.reposity';
 import { ConfigService } from '@nestjs/config';
 import UserEntity from '@models/entities/user.entity';
-import { CreateUserDto, ICookieProps, JwtUserProps, LoginUserDto } from '@typing/auth';
+import { CreateUserDto, ICookieProps, JwtUserProps } from '@typing/auth';
 import UserService from './user.service';
 
 @Injectable()
@@ -30,6 +29,9 @@ class AuthService {
     private userJobRepository: UserJobRepository,
   ) {}
 
+  /**
+   * @return 로그인 성공 시 패스워드가 제외된 유저 정보 객체를 넘긴다.
+   */
   async validateUser(email: string, password: string) {
     const user = await this.userRepository.findUserByEmailForLogin(email);
     if (user === null) throw new BadRequestException('가입되지 않은 유저입니다.');
@@ -38,20 +40,12 @@ class AuthService {
       throw new UnauthorizedException('비밀번호가 틀렸습니다.');
     }
     const { password: notUsingProp, ...returnProps } = user;
-    // TODO: refreshToken 제외 하기 ( 현재 디버깅 때문에 포함 )
     return returnProps;
   }
 
   /**
-   * @return return jwt access_token
+   * @desc id 에 대응하는 사용자의 refreshToken 을 제거한다.
    */
-  async login(user: any) {
-    const payload = { username: user.username, sub: user.id };
-    return {
-      access_token: this.jwtService.sign(payload),
-    };
-  }
-
   async removeRefreshToken(id: number) {
     await this.userRepository.update(id, {
       hashedRefreshToken: null,
@@ -59,16 +53,8 @@ class AuthService {
   }
 
   /**
-   * @deprecated 중복 메서드 ( 삭제 예정 2021-06-21 )
+   * @return AccessToken 을 생성하여 쿠키 정보와 함께 반환한다.
    */
-  async validate({ email, password: plainPassword }: LoginUserDto) {
-    const user = await this.userRepository.findUserByEmail(email);
-    if (!user) throw new UnauthorizedException();
-    const isMatch = await bcrypt.compare(plainPassword, user.password);
-    if (!isMatch) throw new UnauthorizedException();
-    return user;
-  }
-
   getCookieWithAccessToken({ id, username }: JwtUserProps) {
     const accessTokenExpirationTime = Number(
       this.configService.get('JWT_ACCESS_TOKEN_EXPIRATION_TIME'),
@@ -88,6 +74,9 @@ class AuthService {
     } as ICookieProps;
   }
 
+  /**
+   * @return RefreshToken 을 생성하여 객체정보로 반환한다.
+   */
   getRefreshToken({ id, username }: JwtUserProps) {
     const refreshTokenExpirationTime = Number(
       this.configService.get('JWT_REFRESH_TOKEN_EXPIRATION_TIME'),
@@ -101,6 +90,9 @@ class AuthService {
     return token;
   }
 
+  /**
+   * @return RefreshToken 검증 후, 사용자 정보 객체를 반환합니다.
+   */
   async getUserIfRefreshTokenMatches(refreshToken: string, id: number) {
     const user = (await this.userRepository.findOne(id)) as UserEntity;
 
@@ -115,6 +107,9 @@ class AuthService {
     return null;
   }
 
+  /**
+   * @return 이메일 형태를 검증합니다.
+   */
   verifyEmailRequest(email: string | undefined) {
     if (!email) {
       throw new HttpException('이메일 필드가 존재하지 않습니다.', HttpStatus.BAD_REQUEST);
@@ -128,28 +123,7 @@ class AuthService {
   }
 
   /**
-   *
-   * @param user 사용자 생성 DTO
-   * @returns 새로운 사용자
-   * 사용자 생성 DTO를 받아서 새로운 사용자를 생성한다.
-   * 그리고 검증 레포지토리를 통해 새롭게 생성된 유저에 대해 토큰을 받는다.
-   * 토큰을 받아서 이메일을 보낸다.
-   * 이메일 라이브러리를 뭘 쓸지, 구조를 어떻게 잡을지 생각 중입니다.
-   */
-  // public async createUserOne(user: createUserDTO) {
-  //   const newUser = await this.userRepository.createUserOne(user);
-  //   const {
-  //     userVerify: { id, token, userId },
-  //     verifyToken,
-  //   } = await this.userVerifyRepository.createOne(newUser);
-  //   console.log(id, token, verifyToken, userId);
-  //   return newUser;
-  // }
-
-  /**
-   *
-   * @param email
-   * 이메일을 입력받습니다.
+   * @desc 이메일을 입력받습니다.
    * 이메일을 통해 이미 레코드가 있는지 보고, 레코드의 만료 날짜가 지났는지 검증합니다.
    * 만료 날짜가 아직 지나지 않았다면 기존에 생성된 레코드를 그대로 리턴할 것입니다.
    * 그렇지 않다면 새로운 레코드를 만들어서 프론트에 제공합니다.
@@ -161,10 +135,8 @@ class AuthService {
     });
     const signedUser = await this.userRepository.findUserByEmail(email);
     if (signedUser) throw new BadRequestException('이미 가입한 유저입니다.');
-
     if (currentVerification?.expiredAt) {
       const { expiredAt, id, token } = currentVerification;
-
       if (expiredAt < now) await this.userVerifyRepository.delete(id);
       if (expiredAt > now) {
         return {
@@ -174,13 +146,15 @@ class AuthService {
         };
       }
     }
-
     const newVerificationToken = await makeHash(`${email}|${uuidv4()}`);
     const { token, id } = await this.userVerifyRepository.createOne(email, newVerificationToken);
 
     return { token, email, id };
   }
 
+  /**
+   * @returns 이메일 사용자가 이메일을 검증하였는 지 여부를 반환합니다.
+   */
   public async lastCheckingEmailVerify(email: string) {
     const alreadyUser = await this.userRepository.findUserByEmail(email);
     if (alreadyUser) throw new BadRequestException('이미 가입된 이메일입니다.');
@@ -196,12 +170,7 @@ class AuthService {
   }
 
   /**
-   *
-   * @param _id 컨트롤러에서 ID 값을 받습니다.
-   * @param email 컨트롤러에서 이메일 값을 받습니다.
-   * @param token 컨트롤러에서 토큰 값을 받습니다.
-   * @returns boolean
-   * id, 이메일 토큰 값으로 해당 테이블에 일치하는 레코드가 있는지 확인합니다.
+   * @return 이메일 형식에 대한 검증 값을 UserVerify Entity 정보로 반환한다.
    */
   async verifyEmail(id: string, token: string) {
     const record = (await this.userVerifyRepository.findOne(id)) as UserVerifyEntity;
@@ -219,11 +188,13 @@ class AuthService {
     return record;
   }
 
+  /**
+   * @return 사용자 정보를 입력받아 다양한 예외를 처리하고, 생성정보를 반환합니다.
+   */
   async join({ username, password, email, skills, job }: CreateUserDto) {
     const verification = await this.userVerifyRepository.findOne({
       email,
     });
-
     if (!verification || !verification.isVerified) {
       throw new HttpException('이메일 인증을 수행해주세요.', HttpStatus.BAD_REQUEST);
     }
@@ -243,7 +214,7 @@ class AuthService {
       throw new HttpException('직업 정보가 일치하지 않습니다.', HttpStatus.BAD_REQUEST);
     }
 
-    await this.userRepository.createUserOne({
+    const { id } = await this.userRepository.createUserOne({
       username,
       password: await makeHash(password),
       email,
@@ -251,13 +222,21 @@ class AuthService {
       job: jobEntity ? jobEntity.id : null,
     } as CreateUserDto);
 
-    // TODO: 로그인 처리 후 토큰 발급으로 수정 예정
-    return { message: '유저가 생성되었습니다.', statusCode: 201 };
+    const { token: accessToken, ...accessTokenCookieOptions } = this.getCookieWithAccessToken({
+      id,
+      username,
+    } as JwtUserProps);
+    const refreshToken = this.getRefreshToken({ id, username } as JwtUserProps);
+    return {
+      message: '유저가 생성되었습니다.',
+      statusCode: 201,
+      accessTokenObject: { accessToken, accessTokenCookieOptions },
+      refreshToken,
+    };
   }
 
   /**
-   * @param("refreshToken")
-   * hashRefreshToken makes refresh token be hashed in database.
+   * @desc RefreshToken 을 사용자 정보에 저장합니다.
    */
   async saveHashRefreshToken(refreshToken: string, email: string) {
     const hashedToken = await bcrypt.hash(refreshToken, 12);
@@ -269,6 +248,9 @@ class AuthService {
     );
   }
 
+  /**
+   * @desc id 에 대응하는 유저정보에 대한 RefreshToken 을 검증합니다.
+   */
   async getUserIfTokenMatches(refreshToken: string, id: number) {
     const user = await this.userRepository.findOne(id);
     if (user?.hashedRefreshToken) {
@@ -278,37 +260,6 @@ class AuthService {
       }
     }
     return null;
-  }
-
-  /**
-   *
-   * @param id number
-   * @param verifyToken string
-   * 아이디와 이메일로 받은 토큰과 토큰의 아이디를 받아서 토큰이 맞는지, 그리고 토큰이 만료되었는지 검증
-   * 검증되면 토큰을 사용자 ID와 uuid로 나눠 사용자 아이디로부터 사용자를 허가시킨다.
-   * 나누는 단위는 |
-   * 그렇지 않을 경우 검증 토큰을 다시 생성 및 이메일 전송
-   */
-  async verifyUserWithToken(id: number, verifyToken: string) {
-    const userVerify = await this.userVerifyRepository.findOne({ id });
-    if (!userVerify) {
-      throw new InternalServerErrorException();
-    }
-    const isMatch = await bcrypt.compare(verifyToken, userVerify.token);
-    if (!isMatch) {
-      throw new UnauthorizedException();
-    }
-    if (userVerify.expiredAt < new Date()) {
-      throw new UnauthorizedException('The verify token was expired.');
-    }
-    const [userId] = verifyToken.split('|');
-    const user = await this.userService.findUserOne(parseInt(userId, 10));
-    if (!user && typeof user === 'boolean') {
-      return false;
-    }
-
-    await user.save();
-    return true;
   }
 }
 

@@ -4,7 +4,6 @@ import {
   Body,
   Controller,
   UseGuards,
-  UnauthorizedException,
   Req,
   Res,
   UseInterceptors,
@@ -42,8 +41,7 @@ class AuthController {
   ) {}
 
   /**
-   * @desc 테스트 전용 컨트롤러 입니다.
-   * jest 에서 서버가 원활하게 작동하는 지 수행합니다.
+   * @returns 사용자 accessToken, 정보를 반환한다.
    */
   @UseGuards(JwtAuthGuard)
   @Get('/test')
@@ -63,26 +61,21 @@ class AuthController {
     @Body() { email, password: plainPassword }: LoginUserDto,
     @Res({ passthrough: true }) res: Response,
   ) {
-    try {
-      const user = await this.authService.validateUser(email, plainPassword);
-      const { token: accessToken, ...accessTokenCookieOptions } =
-        this.authService.getCookieWithAccessToken(user);
-      const refreshToken = this.authService.getRefreshToken(user);
-      await this.authService.saveHashRefreshToken(refreshToken, email);
+    const user = await this.authService.validateUser(email, plainPassword);
+    const { token: accessToken, ...accessTokenCookieOptions } =
+      this.authService.getCookieWithAccessToken(user);
+    const refreshToken = this.authService.getRefreshToken(user);
+    await this.authService.saveHashRefreshToken(refreshToken, email);
 
-      res.cookie('accessToken', accessToken, {
-        ...accessTokenCookieOptions,
-      });
-      return {
-        statusCode: 200,
-        message: '로그인에 성공하였습니다!',
-        user,
-        refreshToken,
-      };
-    } catch (err) {
-      console.log(err);
-      throw new InternalServerErrorException('서버 에러가 발생했습니다.');
-    }
+    res.cookie('accessToken', accessToken, {
+      ...accessTokenCookieOptions,
+    });
+    return {
+      statusCode: 200,
+      message: '로그인에 성공하였습니다!',
+      user,
+      refreshToken,
+    };
   }
 
   /**
@@ -101,7 +94,7 @@ class AuthController {
   }
 
   /**
-   * @desc refresh-token 을 갱신하여 반환합니다.
+   * @returns refresh-token 을 갱신하여 반환합니다.
    */
   @Get('/refresh-token')
   @HttpCode(201)
@@ -127,14 +120,18 @@ class AuthController {
    */
   @UseGuards(NonAuthGuard)
   @Post()
-  async join(@Body(ParseJoinPipe) user: CreateUserDto) {
-    const message = await this.authService.join(user);
-    return message;
+  async join(@Body(ParseJoinPipe) user: CreateUserDto, @Res({ passthrough: true }) res: Response) {
+    const { accessTokenObject, statusCode, message, refreshToken } = await this.authService.join(
+      user,
+    );
+    res.cookie('accessToken', accessTokenObject.accessToken, {
+      ...accessTokenObject.accessTokenCookieOptions,
+    });
+    return { statusCode, message, refreshToken };
   }
 
   /**
-   * @desc 사용자가 회원가입 전에, 인증 메일을 거쳐가는 단계 입니다.
-   * @param email required. ex ) galaxyhi4276@gmail.com
+   * @returns 이메일 전송 여부에 대한 객체를 반환한다.
    */
   @Post('/send-token/before-register')
   @HttpCode(200)
@@ -154,6 +151,9 @@ class AuthController {
     };
   }
 
+  /**
+   * @redirect 이메일 인증 검증 여부와 함께 회원가입 페이지로 리다이렉션한다.
+   */
   // TODO: Domain ( Production ) Required
   @Get('/verify-email/before-register')
   @Redirect(`http://localhost:3000/signup`, 302)
@@ -171,6 +171,9 @@ class AuthController {
     return { url: `${redirection}?email=${email}&success=true` };
   }
 
+  /**
+   * @returns 사용자가 이메일인증을 수행했는지에 대한 여부를 반환한다.
+   */
   @Get('/is-verified/before-register')
   @HttpCode(200)
   async lastCheckingBeforeRegister(@Query('email') email: string) {
@@ -185,25 +188,6 @@ class AuthController {
     return {
       statusCode: 200,
       message: verification.isVerified,
-    };
-  }
-
-  /**
-   * @desc 사용자 정보를 반환합니다.
-   */
-  @Post('/account')
-  @UseGuards(JwtAuthGuard)
-  async account(@Req() req: Request) {
-    const { email } = req.user as any;
-    const user = await this.userService.findUserByEmail(email);
-    if (!user) {
-      throw new UnauthorizedException();
-    }
-    const { password, hashedRefreshToken, ...props } = user;
-    return {
-      message: 'Authenticated',
-      statusCode: HttpStatus.OK,
-      user: props,
     };
   }
 }

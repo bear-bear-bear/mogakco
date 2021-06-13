@@ -1,8 +1,9 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Connection } from 'typeorm';
 import UserFieldEntity from '@models/entities/user-field.entity';
 import UserJobEntity from '@models/entities/users-job.entity';
+import UserFieldRepository from '@models/repositories/user-field.repository';
+import UserJobRepository from '@models/repositories/ user-job.reposity';
 import UserRepository from '../models/repositories/user.repository';
 
 @Injectable()
@@ -10,7 +11,8 @@ class UserService {
   constructor(
     @InjectRepository(UserRepository)
     private userRepository: UserRepository,
-    private connection: Connection,
+    private fieldRepository: UserFieldRepository,
+    private jobRepository: UserJobRepository,
   ) {}
 
   async findUserOne(id: number) {
@@ -37,30 +39,28 @@ class UserService {
     return this.userRepository.findUserByIdForLogin(id);
   }
 
+  /**
+   * @return 분야정보 리스트를 반환합니다.
+   */
   async findAllFields(): Promise<UserFieldEntity[]> {
-    const fieldList = await this.connection
-      .getRepository(UserFieldEntity)
-      .createQueryBuilder('users-field')
-      .getMany();
-
-    if (!fieldList) {
-      throw new HttpException('필드 정보를 불러올 수 없습니다.', HttpStatus.INTERNAL_SERVER_ERROR);
+    try {
+      const fieldList = await this.fieldRepository.find();
+      return fieldList;
+    } catch (err) {
+      throw new InternalServerErrorException(`필드 정보를 불러올 수 없습니다.`);
     }
-
-    return fieldList;
   }
 
+  /**
+   * @return 직업정보 리스트를 반환합니다.
+   */
   async findAllJobs(): Promise<UserJobEntity[]> {
-    const jobList = await this.connection
-      .getRepository(UserJobEntity)
-      .createQueryBuilder('users-job')
-      .getMany();
-
-    if (!jobList) {
-      throw new HttpException('필드 정보를 불러올 수 없습니다.', HttpStatus.INTERNAL_SERVER_ERROR);
+    try {
+      const jobList = await this.jobRepository.find();
+      return jobList;
+    } catch (err) {
+      throw new InternalServerErrorException(`직업 정보를 불러올 수 없습니다.`);
     }
-
-    return jobList;
   }
 }
 

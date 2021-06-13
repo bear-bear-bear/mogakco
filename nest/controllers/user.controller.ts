@@ -5,11 +5,6 @@ import UserService from '@services/user.service';
 class UserController {
   constructor(private userService: UserService) {}
 
-  @Get('/test')
-  test() {
-    return 'test';
-  }
-
   @Get('/skills')
   async getAllFields() {
     const fieldList = await this.userService.findAllFields();
