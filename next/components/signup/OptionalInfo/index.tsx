@@ -1,6 +1,6 @@
 import React, { useCallback, useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import Select from 'react-select';
+import Select from '~/components/common/Select';
 
 import {
   saveOptionalInfoRequest,
@@ -33,13 +33,6 @@ const OptionalInfo = () => {
     ({ signup }) => signup.saveOptionalInfoDone,
   );
 
-  useEffect(() => {
-    // 회원가입 마지막 단계가 끝나면 입력받은 정보로 회원가입
-    if (saveOptionalInfoDone) {
-      dispatch(signUpRequest(userInfo));
-    }
-  }, [dispatch, saveOptionalInfoDone, userInfo]);
-
   // react-select에서 onChange는 해당 Select에서 선택되어 있는 현재 데이터를 반환합니다.
   const onChangeSkills = useCallback((data) => {
     setIsShowSkillOptions(data.length < SKILLS_LIMIT);
@@ -66,6 +59,13 @@ const OptionalInfo = () => {
     );
   };
 
+  useEffect(() => {
+    // 회원가입 마지막 단계가 끝나면 입력받은 정보로 회원가입
+    if (saveOptionalInfoDone) {
+      dispatch(signUpRequest(userInfo));
+    }
+  }, [dispatch, saveOptionalInfoDone, userInfo]);
+
   return (
     <>
       <Desc>아래 항목들은 선택 사항입니다.</Desc>
@@ -78,8 +78,6 @@ const OptionalInfo = () => {
           <Select
             id="skills"
             closeMenuOnSelect={false}
-            isMulti
-            isClearable
             options={isShowSkillOptions ? skillOptions : []}
             placeholder="관심 분야를 선택해 주세요... (5개까지 선택 가능)"
             onChange={onChangeSkills}
@@ -90,6 +88,7 @@ const OptionalInfo = () => {
             직업
           </Label>
           <Select
+            isMulti={false}
             id="job"
             isClearable
             options={jobOptions}
