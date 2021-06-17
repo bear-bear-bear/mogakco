@@ -9,8 +9,7 @@ const selectJobs = ({ signup }) => signup.jobs;
  */
 const toSelectOptions = (arrayOfObject) =>
   arrayOfObject.map(({ id, name }) => ({
-    id,
-    value: name,
+    value: id,
     label: name,
   }));
 
