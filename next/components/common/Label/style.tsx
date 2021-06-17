@@ -28,7 +28,7 @@ const labelSizeStyles = ({ size }) => {
   `;
 };
 
-export const Label = styled.label`
+export const Label = styled.label<{ size: string; direction: string }>`
   display: block;
   color: var(--color-gray-4);
 

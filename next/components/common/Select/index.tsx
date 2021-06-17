@@ -52,7 +52,7 @@ const Select: VFC<ComponentProps<typeof ReactSelect>> = (props) => {
       ...base,
       ':hover': {
         backgroundColor: '#f23f31',
-        color: '#f0f  6fc',
+        color: '#f0f6fc',
       },
     }),
   };
