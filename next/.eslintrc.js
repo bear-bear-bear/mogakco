@@ -70,6 +70,7 @@ module.exports = {
         endOfLine: 'auto',
       },
     ],
+    'consistent-return': 'warn',
     'no-shadow': 'warn',
     'no-shadow-restricted-names': 'warn',
     'class-methods-use-this': 'off', // 클래스 메서드에 무조건 this 사용
