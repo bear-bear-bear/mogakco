@@ -23,20 +23,20 @@ export interface ISignUpState {
   sendEmailError: string | null;
   verifyEmailLoading: boolean;
   verifyEmailDone: boolean;
-  verifyEmailError: string | null;
+  verifyEmailError: any;
   verifySocialLoading: boolean;
   verifySocialDone: boolean;
-  verifySocialError: string | null;
+  verifySocialError: any;
   loadSkillsLoading: boolean;
   loadSkillsDone: boolean;
-  loadSkillsError: string | null;
+  loadSkillsError: any;
   loadJobsLoading: boolean;
   loadJobsDone: boolean;
-  loadJobsError: string | null;
+  loadJobsError: any;
   saveRequiredInfoDone: boolean;
   signUpLoading: boolean;
   signUpDone: boolean;
-  signUpError: string | null;
+  signUpError: any;
   skills: number[];
   jobs: string;
 }

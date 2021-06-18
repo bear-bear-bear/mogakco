@@ -6,10 +6,10 @@ interface IUserState {
   me: IUserProps | null;
   logInLoading: boolean;
   logInDone: boolean;
-  logInError: string;
+  logInError: any;
   logOutLoading: boolean;
   logOutDone: boolean;
-  logOutError: string;
+  logOutError: any;
 }
 
 const initialState: IUserState = {

@@ -23,19 +23,16 @@ const OptionalInfo = () => {
   const dispatch = useTypedDispatch();
   const signUpLoading = useTypedSelector(({ signup }) => signup.signUpLoading);
   const skillOptions = useTypedSelector(getSkillOptions);
-  const [skillValue, setSkillValue] = useState<SelectProps[]>();
   const [skillIds, setSkillIds] = useState<number[]>([]);
+  const [isShowSkillOptions, setIsShowSkillOptions] = useState<boolean>(true);
   const [jobId, setJobId] = useState<number>();
   const jobOptions = useTypedSelector(getJobOptions);
   const userInfo = useTypedSelector(({ signup }) => signup.userInfo);
 
   // react-select 에서 onChange 는 해당 Select 에서 선택되어 있는 현재 데이터를 반환합니다.
   const onChangeSkills = useCallback((list: SelectProps[]) => {
-    if (list.length > SKILLS_LIMIT) {
-      return window.alert('5개 이상 선택하실 수 없습니다.');
-    }
+    setIsShowSkillOptions(list.length < SKILLS_LIMIT);
     const ids = list.map(({ value }) => value);
-    setSkillValue(list);
     setSkillIds(ids);
   }, []);
 
@@ -64,8 +61,7 @@ const OptionalInfo = () => {
           <Select
             id="skills"
             closeMenuOnSelect={false}
-            value={skillValue}
-            options={skillOptions}
+            options={isShowSkillOptions ? skillOptions : []}
             placeholder="관심 분야를 선택해 주세요... (5개까지 선택 가능)"
             onChange={onChangeSkills}
           />
