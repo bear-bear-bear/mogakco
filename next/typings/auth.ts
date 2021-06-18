@@ -34,7 +34,6 @@ export interface ISignUpState {
   loadJobsDone: boolean;
   loadJobsError: string | null;
   saveRequiredInfoDone: boolean;
-  saveOptionalInfoDone: boolean;
   signUpLoading: boolean;
   signUpDone: boolean;
   signUpError: string | null;

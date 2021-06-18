@@ -29,9 +29,6 @@ const SignUp = () => {
   const saveRequiredInfoDone = useAppSelector(
     ({ signup }) => signup.saveRequiredInfoDone,
   );
-  const saveOptionalInfoDone = useAppSelector(
-    ({ signup }) => signup.saveOptionalInfoDone,
-  );
   const signUpDone = useAppSelector(({ signup }) => signup.signUpDone);
   const fill = [verifyEmailDone, saveRequiredInfoDone, signUpDone];
 
@@ -42,7 +39,6 @@ const SignUp = () => {
     };
   }, [dispatch]);
 
-  console.log({ saveOptionalInfoDone });
   return (
     <>
       <CustomHead {...pageProps} />
@@ -50,7 +46,7 @@ const SignUp = () => {
         {(!verifyEmailDone || !verifySocialDone) && <Start />}
         {verifyEmailDone && !saveRequiredInfoDone && <RequiredInfo />}
         {saveRequiredInfoDone && !signUpDone && <OptionalInfo />}
-        {saveOptionalInfoDone && signUpDone && <End />}
+        {signUpDone && <End />}
       </AuthContainer>
     </>
   );
