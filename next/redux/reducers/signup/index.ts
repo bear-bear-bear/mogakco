@@ -1,7 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
 import fromActionTypes from '~/lib/fromActionTypes';
+import { ISignUpState } from '~/typings/auth';
 
-const initialState = {
+const initialState: ISignUpState = {
   userInfo: {
     email: null,
     username: null,
@@ -30,7 +31,7 @@ const initialState = {
   signUpDone: false,
   signUpError: null,
   skills: [], // 서버에서 내려주는 skills 목록
-  jobs: [], // 서버에서 내려주는 jobs 목록
+  jobs: '', // 서버에서 내려주는 jobs 목록
 };
 
 const signUpSlice = createSlice({
@@ -120,7 +121,8 @@ const signUpSlice = createSlice({
       state.userInfo.job = job;
       state.saveOptionalInfoDone = true;
     },
-    SIGN_UP_REQUEST: (state) => {
+    SIGN_UP_REQUEST: (state, action) => {
+      // TODO: 여기 확인해주세요. action (userInfo) 인자는 왜받고 어디서 쓰이는가. writen by galaxy4276
       state.signUpLoading = true;
       state.signUpDone = false;
       state.signUpError = null;
