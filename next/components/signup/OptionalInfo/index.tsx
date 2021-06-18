@@ -28,7 +28,6 @@ const OptionalInfo = () => {
   const [jobId, setJobId] = useState<number>();
   const jobOptions = useAppSelector(getJobOptions);
   const userInfo = useAppSelector(({ signup }) => signup.userInfo);
-  console.log({ userInfo });
 
   // react-select 에서 onChange 는 해당 Select 에서 선택되어 있는 현재 데이터를 반환합니다.
   const onChangeSkills = useCallback((list: SelectProps[]) => {
