@@ -9,7 +9,7 @@ import RequiredInfo from '~/components/signup/RequiredInfo';
 import OptionalInfo from '~/components/signup/OptionalInfo';
 import End from '~/components/signup/End';
 import { resetSignUp } from '~/redux/reducers/signup';
-import useAppSelector from '~/hooks/useAppSelector';
+import useTypedSelector from '~/hooks/useTypedSelector';
 
 const pageProps = {
   title: '회원가입 - Mogakco',
@@ -20,16 +20,16 @@ const pageProps = {
 
 const SignUp = () => {
   const dispatch = useDispatch();
-  const verifyEmailDone = useAppSelector(
+  const verifyEmailDone = useTypedSelector(
     ({ signup }) => signup.verifyEmailDone,
   );
-  const verifySocialDone = useAppSelector(
+  const verifySocialDone = useTypedSelector(
     ({ signup }) => signup.verifySocialDone,
   );
-  const saveRequiredInfoDone = useAppSelector(
+  const saveRequiredInfoDone = useTypedSelector(
     ({ signup }) => signup.saveRequiredInfoDone,
   );
-  const signUpDone = useAppSelector(({ signup }) => signup.signUpDone);
+  const signUpDone = useTypedSelector(({ signup }) => signup.signUpDone);
   const fill = [verifyEmailDone, saveRequiredInfoDone, signUpDone];
 
   useEffect(() => {

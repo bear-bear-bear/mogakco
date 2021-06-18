@@ -9,8 +9,8 @@ import InputWrapper from '~/components/common/InputWrapper';
 import Label from '~/components/common/Label';
 
 import * as CS from '../common/styles';
-import useAppDispatch from '~/hooks/useAppDispatch';
-import useAppSelector from '~/hooks/useAppSelector';
+import useTypedDispatch from '~/hooks/useTypedDispatch';
+import useTypedSelector from '~/hooks/useTypedSelector';
 
 type SelectProps = {
   value: number;
@@ -20,14 +20,14 @@ type SelectProps = {
 const SKILLS_LIMIT = 5;
 
 const OptionalInfo = () => {
-  const dispatch = useAppDispatch();
-  const signUpLoading = useAppSelector(({ signup }) => signup.signUpLoading);
-  const skillOptions = useAppSelector(getSkillOptions);
+  const dispatch = useTypedDispatch();
+  const signUpLoading = useTypedSelector(({ signup }) => signup.signUpLoading);
+  const skillOptions = useTypedSelector(getSkillOptions);
   const [skillValue, setSkillValue] = useState<SelectProps[]>();
   const [skillIds, setSkillIds] = useState<number[]>([]);
   const [jobId, setJobId] = useState<number>();
-  const jobOptions = useAppSelector(getJobOptions);
-  const userInfo = useAppSelector(({ signup }) => signup.userInfo);
+  const jobOptions = useTypedSelector(getJobOptions);
+  const userInfo = useTypedSelector(({ signup }) => signup.userInfo);
 
   // react-select 에서 onChange 는 해당 Select 에서 선택되어 있는 현재 데이터를 반환합니다.
   const onChangeSkills = useCallback((list: SelectProps[]) => {
