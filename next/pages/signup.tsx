@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 import CustomHead from '~/components/common/CustomHead';
 import AuthContainer from '~/components/common/AuthContainer';
@@ -9,6 +9,7 @@ import RequiredInfo from '~/components/signup/RequiredInfo';
 import OptionalInfo from '~/components/signup/OptionalInfo';
 import End from '~/components/signup/End';
 import { resetSignUp } from '~/redux/reducers/signup';
+import useTypedSelector from '~/hooks/useTypedSelector';
 
 const pageProps = {
   title: '회원가입 - Mogakco',
@@ -19,19 +20,16 @@ const pageProps = {
 
 const SignUp = () => {
   const dispatch = useDispatch();
-  const verifyEmailDone = useSelector(
-    ({ signup }: any) => signup.verifyEmailDone,
+  const verifyEmailDone = useTypedSelector(
+    ({ signup }) => signup.verifyEmailDone,
   );
-  const verifySocialDone = useSelector(
-    ({ signup }: any) => signup.verifySocialDone,
+  const verifySocialDone = useTypedSelector(
+    ({ signup }) => signup.verifySocialDone,
   );
-  const saveRequiredInfoDone = useSelector(
-    ({ signup }: any) => signup.saveRequiredInfoDone,
+  const saveRequiredInfoDone = useTypedSelector(
+    ({ signup }) => signup.saveRequiredInfoDone,
   );
-  const saveOptionalInfoDone = useSelector(
-    ({ signup }: any) => signup.saveOptionalInfoDone,
-  );
-  const signUpDone = useSelector(({ signup }: any) => signup.signUpDone);
+  const signUpDone = useTypedSelector(({ signup }) => signup.signUpDone);
   const fill = [verifyEmailDone, saveRequiredInfoDone, signUpDone];
 
   useEffect(() => {
@@ -48,7 +46,7 @@ const SignUp = () => {
         {(!verifyEmailDone || !verifySocialDone) && <Start />}
         {verifyEmailDone && !saveRequiredInfoDone && <RequiredInfo />}
         {saveRequiredInfoDone && !signUpDone && <OptionalInfo />}
-        {saveOptionalInfoDone && signUpDone && <End />}
+        {signUpDone && <End />}
       </AuthContainer>
     </>
   );

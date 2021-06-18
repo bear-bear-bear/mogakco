@@ -1,7 +1,18 @@
 import { createSlice } from '@reduxjs/toolkit';
 import fromActionTypes from '~/lib/fromActionTypes';
+import { IUserProps } from '~/typings/auth';
 
-const initialState = {
+interface IUserState {
+  me: IUserProps | null;
+  logInLoading: boolean;
+  logInDone: boolean;
+  logInError: any;
+  logOutLoading: boolean;
+  logOutDone: boolean;
+  logOutError: any;
+}
+
+const initialState: IUserState = {
   me: null,
   logInLoading: false,
   logInDone: false,

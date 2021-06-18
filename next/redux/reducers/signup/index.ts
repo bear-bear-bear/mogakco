@@ -1,7 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
 import fromActionTypes from '~/lib/fromActionTypes';
+import { ISignUpState } from '~/typings/auth';
 
-const initialState = {
+const initialState: ISignUpState = {
   userInfo: {
     email: null,
     username: null,
@@ -25,12 +26,11 @@ const initialState = {
   loadJobsDone: false,
   loadJobsError: null,
   saveRequiredInfoDone: false, // 필수 정보 저장 완료 여부
-  saveOptionalInfoDone: false, // 미 필수 정보 저장 완료 여부
   signUpLoading: false, // 회원가입 요청 중
   signUpDone: false,
   signUpError: null,
   skills: [], // 서버에서 내려주는 skills 목록
-  jobs: [], // 서버에서 내려주는 jobs 목록
+  jobs: '', // 서버에서 내려주는 jobs 목록
 };
 
 const signUpSlice = createSlice({
@@ -114,13 +114,11 @@ const signUpSlice = createSlice({
       state.userInfo.password = password;
       state.saveRequiredInfoDone = true;
     },
-    SAVE_OPTIONAL_INFO: (state, action) => {
+    SIGN_UP_REQUEST: (state, action) => {
+      // TODO: 여기 확인해주세요. action (userInfo) 인자는 왜받고 어디서 쓰이는가. writen by galaxy4276
       const { skills, job } = action.payload;
       state.userInfo.skills = skills;
       state.userInfo.job = job;
-      state.saveOptionalInfoDone = true;
-    },
-    SIGN_UP_REQUEST: (state) => {
       state.signUpLoading = true;
       state.signUpDone = false;
       state.signUpError = null;
@@ -167,7 +165,6 @@ export const {
   LOAD_SKILLS_REQUEST: loadSkillsRequest,
   LOAD_JOBS_REQUEST: loadJobsRequest,
   SAVE_REQUIRED_INFO: saveRequiredInfo,
-  SAVE_OPTIONAL_INFO: saveOptionalInfoRequest,
   SIGN_UP_REQUEST: signUpRequest,
   RESET_SIGN_UP: resetSignUp,
 } = signUpSlice.actions;

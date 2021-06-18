@@ -1,70 +1,53 @@
-import React, { useCallback, useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useCallback, useState, SyntheticEvent } from 'react';
 import Select from '~/components/common/Select';
 
-import {
-  saveOptionalInfoRequest,
-  signUpRequest,
-} from '~/redux/reducers/signup';
-import {
-  getSkillOptions,
-  getJobOptions,
-  getUserInfo,
-} from '~/redux/selectors/signup';
+import { signUpRequest } from '~/redux/reducers/signup';
+import { getSkillOptions, getJobOptions } from '~/redux/selectors/signup';
 import Desc from '~/components/common/Desc';
 import Form from '~/components/common/Form';
 import InputWrapper from '~/components/common/InputWrapper';
 import Label from '~/components/common/Label';
 
 import * as CS from '../common/styles';
+import useTypedDispatch from '~/hooks/useTypedDispatch';
+import useTypedSelector from '~/hooks/useTypedSelector';
+
+type SelectProps = {
+  value: number;
+  label: string;
+};
 
 const SKILLS_LIMIT = 5;
 
 const OptionalInfo = () => {
-  const dispatch = useDispatch();
-  const [skillIds, setSkillIds] = useState([]);
-  const [jobId, setJobId] = useState(0);
-  const signUpLoading = useSelector(({ signup }) => signup.signUpLoading);
-  const skillOptions = useSelector(getSkillOptions);
-  const [isShowSkillOptions, setIsShowSkillOptions] = useState(true);
-  const jobOptions = useSelector(getJobOptions);
-  const userInfo = useSelector(getUserInfo);
-  const saveOptionalInfoDone = useSelector(
-    ({ signup }) => signup.saveOptionalInfoDone,
-  );
+  const dispatch = useTypedDispatch();
+  const signUpLoading = useTypedSelector(({ signup }) => signup.signUpLoading);
+  const skillOptions = useTypedSelector(getSkillOptions);
+  const [skillIds, setSkillIds] = useState<number[]>([]);
+  const [isShowSkillOptions, setIsShowSkillOptions] = useState<boolean>(true);
+  const [jobId, setJobId] = useState<number>();
+  const jobOptions = useTypedSelector(getJobOptions);
+  const userInfo = useTypedSelector(({ signup }) => signup.userInfo);
 
-  // react-select에서 onChange는 해당 Select에서 선택되어 있는 현재 데이터를 반환합니다.
-  const onChangeSkills = useCallback((data) => {
-    setIsShowSkillOptions(data.length < SKILLS_LIMIT);
-
-    const isData = !!data[0];
-    if (!isData) return;
-
-    const nextSkillIds = data.map(({ id }) => id);
-    setSkillIds(nextSkillIds);
+  // react-select 에서 onChange 는 해당 Select 에서 선택되어 있는 현재 데이터를 반환합니다.
+  const onChangeSkills = useCallback((list: SelectProps[]) => {
+    setIsShowSkillOptions(list.length < SKILLS_LIMIT);
+    const ids = list.map(({ value }) => value);
+    setSkillIds(ids);
   }, []);
-  const onChangeJob = (data) => {
-    if (!data) return;
 
-    setJobId(data.id);
-  };
+  const onChangeJob = (job: SelectProps) => setJobId(job.value);
 
-  const onSubmit = async (e) => {
+  const onSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
     dispatch(
-      saveOptionalInfoRequest({
-        skills: skillIds.length !== 0 ? skillIds : null, // 백단으로 보내기 전, 빈 값은 null 처리
-        job: jobId !== 0 ? jobId : null,
+      signUpRequest({
+        ...userInfo,
+        skills: skillIds,
+        job: jobId,
       }),
     );
   };
-
-  useEffect(() => {
-    // 회원가입 마지막 단계가 끝나면 입력받은 정보로 회원가입
-    if (saveOptionalInfoDone) {
-      dispatch(signUpRequest(userInfo));
-    }
-  }, [dispatch, saveOptionalInfoDone, userInfo]);
 
   return (
     <>
@@ -90,7 +73,6 @@ const OptionalInfo = () => {
           <Select
             isMulti={false}
             id="job"
-            isClearable
             options={jobOptions}
             placeholder="직업을 선택해 주세요..."
             onChange={onChangeJob}

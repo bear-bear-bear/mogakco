@@ -90,6 +90,7 @@ function* loadJobs() {
   }
 }
 
+// TODO: 함수명, ApI 수정해주세요. verify 는 데이터를 검증 및 확인하는 함수에 더 맞는 것 같습니다.
 function* verifySignUp(action) {
   try {
     const result = yield call(signUpApI, action.payload);
