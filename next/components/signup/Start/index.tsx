@@ -1,11 +1,9 @@
 import React, { useState, useEffect, useRef, SyntheticEvent } from 'react';
-import { useRouter } from 'next/router';
 import log from 'loglevel';
 
 import useInput from '~/hooks/useInput';
 import { emailRule } from '~/lib/regex';
-import { sendEmailRequest, verifyEmailRequest } from '~/redux/reducers/signup';
-import { saveEmail as saveLandingEmail } from '~/redux/reducers/landing';
+import { sendEmailRequest } from '~/redux/reducers/signup';
 import Warning from '~/components/common/Warning';
 import Desc from '~/components/common/Desc';
 import Form from '~/components/common/Form';
@@ -17,17 +15,16 @@ import * as CS from '../common/styles';
 import * as S from './style';
 import useTypedSelector from '~/hooks/useTypedSelector';
 import useTypedDispatch from '~/hooks/useTypedDispatch';
+import useEffectSignUpStart from '~/components/signup/Start/useEffectSignUpStart';
 
 const Auth = () => {
   const dispatch = useTypedDispatch();
-  const router = useRouter();
   const [email, onChangeEmail, setEmail] = useInput();
   const [emailTestError, setEmailTestError] = useState(false);
   const sendEmailLoading = useTypedSelector(
     ({ signup }) => signup.sendEmailLoading,
   );
   const sendEmailDone = useTypedSelector(({ signup }) => signup.sendEmailDone);
-  const landingEmail = useTypedSelector(({ landing }) => landing.email);
   const emailEl = useRef(null);
   const submitButtonEl = useRef(null);
 
@@ -52,27 +49,7 @@ const Auth = () => {
     submitButtonEl.current.focus();
   }, []);
 
-  useEffect(() => {
-    // 랜딩에서 이메일 입력 후 버튼을 눌렀다면, 해당 이메일을 자동 입력
-    if (landingEmail === null) return;
-
-    setEmail(landingEmail);
-    dispatch(saveLandingEmail(null));
-  }, [landingEmail, setEmail, dispatch]);
-
-  useEffect(() => {
-    const { success, email: verifiedEmail } = router.query;
-
-    const isQuery = Boolean(success);
-    if (!isQuery) {
-      return;
-    }
-
-    if (success === 'true') {
-      dispatch(verifyEmailRequest(verifiedEmail));
-    }
-    router.push('/signup', undefined, { shallow: true });
-  }, [dispatch, router]);
+  useEffectSignUpStart(setEmail);
 
   return (
     <>
