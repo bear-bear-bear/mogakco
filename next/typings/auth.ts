@@ -1,4 +1,4 @@
-import { IGeneralServerResponse } from '~/typings/common';
+import { IGeneralServerResponse, ErrorPayload } from '~/typings/common';
 
 // 로그인 유저 정보
 export interface ILoginProps {
@@ -9,7 +9,7 @@ export interface ILoginProps {
 // 유저 정보
 export interface IUserProps {
   id: number;
-  username: string | null;
+  username: string;
   skills: number[] | null;
   job: number | null;
 }
@@ -19,10 +19,10 @@ export interface IUserState {
   me: IUserProps | null;
   logInLoading: boolean;
   logInDone: boolean;
-  logInError: any;
+  logInError: ErrorPayload;
   logOutLoading: boolean;
   logOutDone: boolean;
-  logOutError: any;
+  logOutError: ErrorPayload;
 }
 
 // 회원가입에 필요한 리덕스 state
@@ -68,6 +68,6 @@ export interface ISignUpState {
   signUpLoading: boolean;
   signUpDone: boolean;
   signUpError: IGeneralServerResponse;
-  skills: IOptionalInfoProps[];
-  jobs: IOptionalInfoProps[];
+  skills: IOptionalInfoProps[] | null;
+  jobs: IOptionalInfoProps[] | null;
 }
