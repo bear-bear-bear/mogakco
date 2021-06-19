@@ -44,7 +44,7 @@ function* verifyEmail(action) {
     yield call(verifyEmailAPI, action.payload);
     yield put({
       type: VERIFY_EMAIL_SUCCESS,
-      email: action.payload,
+      payload: action.payload,
     });
   } catch (err) {
     yield put({
@@ -59,7 +59,7 @@ function* loadSkills() {
     const result = yield call(loadSkillsAPI);
     yield put({
       type: LOAD_SKILLS_SUCCESS,
-      skills: result.data,
+      payload: result.data,
     });
   } catch (err) {
     yield put({
@@ -74,7 +74,7 @@ function* loadJobs() {
     const result = yield call(loadJobsAPI);
     yield put({
       type: LOAD_JOBS_SUCCESS,
-      jobs: result.data,
+      payload: result.data,
     });
   } catch (err) {
     yield put({
