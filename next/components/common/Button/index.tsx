@@ -13,7 +13,7 @@ export interface IButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   loading: boolean;
 }
 
-const Button = forwardRef<HTMLButtonElement | null, IButtonProps>(
+const Button = forwardRef<HTMLButtonElement | null, Partial<IButtonProps>>(
   (
     {
       children,
