@@ -17,7 +17,7 @@ type Props = {
 const EmailInput = React.forwardRef<
   HTMLInputElement,
   Props & InputHTMLAttributes<HTMLInputElement>
->(({ size, value, setValue, ...rest }, ref) => (
+>(({ size = 'medium', value, setValue, ...rest }, ref) => (
   <S.EmailWrapper>
     <TextInput ref={ref} size={size} value={value} {...rest} />
     {value && <S.DeleteButton onClick={() => setValue('')} />}
@@ -25,8 +25,5 @@ const EmailInput = React.forwardRef<
 ));
 
 EmailInput.displayName = 'EmailInput';
-// EmailInput.defaultProps = {
-//   size: 'medium',
-// };
 
 export default EmailInput;
