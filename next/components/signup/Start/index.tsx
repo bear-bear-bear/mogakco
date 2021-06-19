@@ -1,5 +1,4 @@
-import React, { useCallback, useState, useEffect, useRef } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useState, useEffect, useRef, SyntheticEvent } from 'react';
 import { useRouter } from 'next/router';
 import log from 'loglevel';
 
@@ -16,17 +15,38 @@ import Label from '~/components/common/Label';
 
 import * as CS from '../common/styles';
 import * as S from './style';
+import useTypedSelector from '~/hooks/useTypedSelector';
+import useTypedDispatch from '~/hooks/useTypedDispatch';
 
 const Auth = () => {
-  const dispatch = useDispatch();
+  const dispatch = useTypedDispatch();
   const router = useRouter();
-  const [email, onChangeEmail, setEmail] = useInput('');
+  const [email, onChangeEmail, setEmail] = useInput();
   const [emailTestError, setEmailTestError] = useState(false);
-  const sendEmailLoading = useSelector(({ signup }) => signup.sendEmailLoading);
-  const sendEmailDone = useSelector(({ signup }) => signup.sendEmailDone);
-  const landingEmail = useSelector(({ landing }) => landing.email);
+  const sendEmailLoading = useTypedSelector(
+    ({ signup }) => signup.sendEmailLoading,
+  );
+  const sendEmailDone = useTypedSelector(({ signup }) => signup.sendEmailDone);
+  const landingEmail = useTypedSelector(({ landing }) => landing.email);
   const emailEl = useRef(null);
   const submitButtonEl = useRef(null);
+
+  // TODO: Type 수정 예정 writen by galaxy4276
+  const onSubmitEmail = (e: SyntheticEvent) => {
+    e.preventDefault();
+    if (!emailRule.test(email as string)) {
+      setEmailTestError(true);
+      return;
+    }
+
+    dispatch(sendEmailRequest(email));
+  };
+
+  const onClickSocial = () => {
+    log.setLevel('debug');
+    log.warn('미구현 기능입니다.');
+    // dispatch(verifySocialRequest());
+  };
 
   useEffect(() => {
     submitButtonEl.current.focus();
@@ -54,27 +74,9 @@ const Auth = () => {
     router.push('/signup', undefined, { shallow: true });
   }, [dispatch, router]);
 
-  const onSubmitEmail = useCallback(
-    (e) => {
-      e.preventDefault();
-      if (!emailRule.test(email)) {
-        setEmailTestError(true);
-        return;
-      }
-      dispatch(sendEmailRequest(email));
-    },
-    [dispatch, email],
-  );
-
-  const onClickSocial = () => {
-    log.setLevel('debug');
-    log.warn('미구현 기능입니다.');
-    // dispatch(verifySocialRequest());
-  };
-
   return (
     <>
-      {!sendEmailDone ? (
+      {!sendEmailDone && (
         <>
           <CS.Title>회원가입</CS.Title>
           <S.SocialLoginWrapper>
@@ -113,7 +115,9 @@ const Auth = () => {
             </S.SubmitButton>
           </Form>
         </>
-      ) : (
+      )}
+
+      {sendEmailDone && (
         <>
           <CS.Title>메일함을 확인하세요</CS.Title>
           <Desc>
