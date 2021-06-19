@@ -34,7 +34,7 @@ function* sendEmail({ payload: email }: SimpleStringPayload) {
   } catch (err) {
     yield put({
       type: SEND_EMAIL_FAILURE,
-      error: getAxiosError(err),
+      payload: getAxiosError(err),
     });
   }
 }
@@ -49,7 +49,7 @@ function* verifyEmail(action) {
   } catch (err) {
     yield put({
       type: VERIFY_EMAIL_FAILURE,
-      error: getAxiosError(err),
+      payload: getAxiosError(err),
     });
   }
 }
@@ -64,7 +64,7 @@ function* loadSkills() {
   } catch (err) {
     yield put({
       type: LOAD_SKILLS_FAILURE,
-      error: getAxiosError(err),
+      payload: getAxiosError(err),
     });
   }
 }
@@ -79,7 +79,7 @@ function* loadJobs() {
   } catch (err) {
     yield put({
       type: LOAD_JOBS_FAILURE,
-      error: getAxiosError(err),
+      payload: getAxiosError(err),
     });
   }
 }
