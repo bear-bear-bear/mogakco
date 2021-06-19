@@ -1,7 +1,19 @@
 import Head from 'next/head';
-import PropTypes from 'prop-types';
+import { FC } from 'react';
 
-const CustomHead = ({ title, description, url, locale }) => {
+interface IProps {
+  title: string;
+  description: string;
+  url: string;
+  locale: string;
+}
+
+const CustomHead: FC<IProps> = ({
+  title = '모여서 각자 코딩 - Mogakco',
+  description = 'Free online video chat for developers',
+  url = '',
+  locale = 'ko_KR',
+}) => {
   // TODO: favicon 제작하여 추가하기
   // html <head>에 들어갈 정보: https://github.com/joshbuchea/HEAD
   const logoUrl =
@@ -30,19 +42,6 @@ const CustomHead = ({ title, description, url, locale }) => {
       <meta name="twitter:image:src" content={logoUrl} />
     </Head>
   );
-};
-
-CustomHead.propTypes = {
-  title: PropTypes.string.isRequired,
-  description: PropTypes.string.isRequired,
-  url: PropTypes.string.isRequired,
-  locale: PropTypes.string.isRequired,
-};
-CustomHead.defalutProps = {
-  title: '모여서 각자 코딩 - Mogakco',
-  description: 'Free online video chat for developers',
-  url: '',
-  locale: 'ko_KR',
 };
 
 export default CustomHead;

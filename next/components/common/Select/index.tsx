@@ -1,5 +1,5 @@
 import React, { ComponentProps, VFC } from 'react';
-import ReactSelect, { StylesConfig } from 'react-select';
+import ReactSelect, { OptionTypeBase, StylesConfig } from 'react-select';
 import makeAnimated from 'react-select/animated';
 
 const animatedComponents = makeAnimated();
@@ -9,7 +9,7 @@ interface IForwardProps {
 }
 
 type Styles = {
-  colourStyles: StylesConfig<any, any>;
+  colourStyles: StylesConfig<OptionTypeBase, true>;
 };
 
 // TODO: GlobalVariables 적용

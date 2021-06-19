@@ -1,12 +1,18 @@
-import React from 'react';
+import React, { FC, ReactElement } from 'react';
 import { useRouter } from 'next/router';
-import PropTypes from 'prop-types';
-
 import Image from '~/components/common/Image';
 
 import * as S from './style';
 
-const AuthContainer = ({ progressBar, children, ...rest }) => {
+interface IProps {
+  progressBar: ReactElement;
+}
+
+const AuthContainer: FC<IProps> = ({
+  progressBar = null,
+  children,
+  ...rest
+}) => {
   const router = useRouter();
 
   const onClickLogo = () => {
@@ -24,13 +30,6 @@ const AuthContainer = ({ progressBar, children, ...rest }) => {
       <S.InnerContainer>{children}</S.InnerContainer>
     </S.OuterContainer>
   );
-};
-
-AuthContainer.propTypes = {
-  progressBar: PropTypes.element,
-};
-AuthContainer.defaultProps = {
-  progressBar: null,
 };
 
 export default AuthContainer;

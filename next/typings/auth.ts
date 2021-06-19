@@ -71,3 +71,23 @@ export interface ISignUpState {
   skills: IOptionalInfoProps[] | null;
   jobs: IOptionalInfoProps[] | null;
 }
+
+// 회원가입 성공 응답 스키마
+export interface ISignUpResponse {
+  statusCode: number;
+  message: string;
+  refreshToken: string;
+}
+
+// 로그인 성공 응답 스키마
+type UserOptionalProps = { id: number; name: string };
+export interface ILoginSuccessResponse extends ISignUpResponse {
+  user: {
+    id: number;
+    username: string;
+    email: string;
+    skills: UserOptionalProps[];
+    job: UserOptionalProps;
+  };
+  refreshToken: string;
+}

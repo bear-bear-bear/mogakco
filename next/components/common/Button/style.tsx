@@ -2,8 +2,24 @@ import styled from '@emotion/styled';
 import { css, keyframes } from '@emotion/react';
 import { VscLoading } from 'react-icons/vsc';
 import { darken, lighten } from 'polished';
+import { IButtonProps } from '~/components/common/Button/index';
 
-const colorStyles = ({ theme, color, outline, underline, disabled }) => {
+// TODO: theme 해결해주세요. writen by galaxy4276
+interface IColorStyleProps {
+  theme: any;
+  color: 'white' | 'black' | 'yellow' | 'blue';
+  outline: boolean;
+  underline: boolean;
+  disabled: boolean;
+}
+
+const colorStyles = ({
+  theme,
+  color,
+  outline,
+  underline,
+  disabled,
+}: IColorStyleProps) => {
   const mainColor = theme.palette[color];
   const subColors = {
     white: '#000',
@@ -69,7 +85,7 @@ const colorStyles = ({ theme, color, outline, underline, disabled }) => {
   `;
 };
 
-const sizeStyles = ({ size }) => {
+const sizeStyles = ({ size }: { size: 'large' | 'medium' | 'small' }) => {
   const sizes = {
     large: {
       height: '2.25rem',
@@ -92,7 +108,7 @@ const sizeStyles = ({ size }) => {
   `;
 };
 
-const fullWidthStyle = ({ fullWidth }) =>
+const fullWidthStyle = ({ fullWidth }: { fullWidth: boolean }) =>
   fullWidth &&
   css`
     width: 100%;
@@ -103,9 +119,9 @@ const fullWidthStyle = ({ fullWidth }) =>
     }
   `;
 
-export const Button = styled.button`
+export const Button = styled.button<IColorStyleProps & IButtonProps>`
   /* 공통 스타일 */
-  min-width: ${({ loading }) => loading && '8.1rem'};
+  min-width: ${({ loading }: { loading: boolean }) => loading && '8.1rem'};
   position: relative;
   display: inline-flex;
   align-items: center;
@@ -118,15 +134,15 @@ export const Button = styled.button`
   word-break: keep-all;
   transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
 
-  /* 컬러 스타일 */
-  ${colorStyles}
-
-  /* 사이즈 스타일*/
-  ${sizeStyles}
-
   &:not(:first-of-type) {
     margin-left: 0.66rem;
   }
+
+  /* 컬러 스타일 */
+  ${colorStyles}
+
+  /* 사이즈 스타일 */
+  ${sizeStyles}
 
   /* fullWidth */
   ${fullWidthStyle}

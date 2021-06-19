@@ -1,21 +1,30 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { ButtonHTMLAttributes, forwardRef } from 'react';
 import { ThemeProvider } from '@emotion/react';
 
 import * as S from './style';
 
-const Button = React.forwardRef(
+// TODO: size 해결해주세요. writen by galaxy4276
+export interface IButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+  color: 'white' | 'yellow' | 'black' | 'blue';
+  size: 'small' | 'medium' | 'large';
+  fullWidth: boolean;
+  outline: boolean;
+  underline: boolean;
+  loading: boolean;
+}
+
+const Button = forwardRef<HTMLButtonElement | null, Partial<IButtonProps>>(
   (
     {
       children,
-      color,
-      size,
-      fullWidth,
-      outline,
-      underline,
-      loading,
+      color = 'blue',
+      size = 'medium',
+      fullWidth = false,
+      outline = false,
+      underline = false,
+      loading = false,
       ...rest
-    }: any,
+    },
     ref,
   ) => {
     const theme = {
@@ -47,22 +56,5 @@ const Button = React.forwardRef(
 );
 
 Button.displayName = 'Button';
-Button.propTypes = {
-  children: PropTypes.node.isRequired,
-  color: PropTypes.oneOf(['blue', 'yellow', 'white', 'black']),
-  size: PropTypes.oneOf(['small', 'medium', 'large']),
-  fullWidth: PropTypes.bool,
-  outline: PropTypes.bool,
-  underline: PropTypes.bool,
-  loading: PropTypes.bool,
-};
-Button.defaultProps = {
-  color: 'blue',
-  size: 'medium',
-  fullWidth: false,
-  outline: false,
-  underline: false,
-  loading: false,
-};
 
 export default Button;
