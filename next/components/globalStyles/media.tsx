@@ -1,4 +1,13 @@
-const media = {
+interface IMedia {
+  xs: string;
+  sm: string;
+  md: string;
+  lg: string;
+  xl: string;
+  xxl: string;
+}
+
+const media: IMedia = {
   xs: `@media only screen and (max-width: 576px)`,
   sm: `@media only screen and (min-width: 576px)`,
   md: `@media only screen and (min-width: 768px)`,
