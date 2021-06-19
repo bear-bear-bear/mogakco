@@ -1,29 +1,29 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { Dispatch, InputHTMLAttributes, SetStateAction } from 'react';
 
 import TextInput from '~/components/common/Input/TextInput';
 import * as S from './style';
+
+type Props = {
+  size?: 'small' | 'medium';
+  setValue: Dispatch<SetStateAction<string>>;
+};
 
 /**
  * @desc 현재 입력 중인 값을 취소할 수 있는 버튼을 가진 email input입니다.
  * useState hook의 리턴값인 value, setValue 를 인자로 받습니다.
  */
-const EmailInput = React.forwardRef(
-  ({ size, value, setValue, ...rest }, ref) => (
-    <S.EmailWrapper>
-      <TextInput ref={ref} size={size} value={value} {...rest} />
-      {value && <S.DeleteButton onClick={() => setValue('')} />}
-    </S.EmailWrapper>
-  ),
-);
+
+// TODO: 이 부분 구조 복잡하네요. 원 작성자분이 수정해주세요. ( 타입 작업해놓음 ) writen by galaxy4276
+const EmailInput = React.forwardRef<
+  HTMLInputElement,
+  Props & InputHTMLAttributes<HTMLInputElement>
+>(({ size = 'medium', value, setValue, ...rest }, ref) => (
+  <S.EmailWrapper>
+    <TextInput ref={ref} size={size} value={value} {...rest} />
+    {value && <S.DeleteButton onClick={() => setValue('')} />}
+  </S.EmailWrapper>
+));
 
 EmailInput.displayName = 'EmailInput';
-EmailInput.propTypes = {
-  size: PropTypes.oneOf(['small', 'medium']),
-  setValue: PropTypes.func.isRequired,
-};
-EmailInput.defaultProps = {
-  size: 'medium',
-};
 
 export default EmailInput;

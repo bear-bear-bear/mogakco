@@ -1,5 +1,4 @@
 import { put, takeLatest, all, fork, call } from 'redux-saga/effects';
-
 import {
   SEND_EMAIL_REQUEST,
   SEND_EMAIL_SUCCESS,
@@ -21,26 +20,21 @@ import { LOG_IN_SUCCESS } from '~/redux/reducers/common/user';
 
 import { signupAPIs } from '~/lib/APIs';
 import { getAxiosError } from '~/lib/apiClient';
+import { SimpleStringPayload } from '~/typings/auth';
 
-const {
-  //
-  sendEmailAPI,
-  verifyEmailAPI,
-  loadSkillsAPI,
-  loadJobsAPI,
-  signUpApI,
-} = signupAPIs;
+const { sendEmailAPI, verifyEmailAPI, loadSkillsAPI, loadJobsAPI, signUpApI } =
+  signupAPIs;
 
-function* sendEmail(action) {
+function* sendEmail({ payload: email }: SimpleStringPayload) {
   try {
-    yield call(sendEmailAPI, action.payload);
+    yield call(sendEmailAPI, email);
     yield put({
       type: SEND_EMAIL_SUCCESS,
     });
   } catch (err) {
     yield put({
       type: SEND_EMAIL_FAILURE,
-      error: getAxiosError(err),
+      payload: getAxiosError(err),
     });
   }
 }
@@ -50,12 +44,12 @@ function* verifyEmail(action) {
     yield call(verifyEmailAPI, action.payload);
     yield put({
       type: VERIFY_EMAIL_SUCCESS,
-      email: action.payload,
+      payload: action.payload,
     });
   } catch (err) {
     yield put({
       type: VERIFY_EMAIL_FAILURE,
-      error: getAxiosError(err),
+      payload: getAxiosError(err),
     });
   }
 }
@@ -65,12 +59,12 @@ function* loadSkills() {
     const result = yield call(loadSkillsAPI);
     yield put({
       type: LOAD_SKILLS_SUCCESS,
-      skills: result.data,
+      payload: result.data,
     });
   } catch (err) {
     yield put({
       type: LOAD_SKILLS_FAILURE,
-      error: getAxiosError(err),
+      payload: getAxiosError(err),
     });
   }
 }
@@ -80,12 +74,12 @@ function* loadJobs() {
     const result = yield call(loadJobsAPI);
     yield put({
       type: LOAD_JOBS_SUCCESS,
-      jobs: result.data,
+      payload: result.data,
     });
   } catch (err) {
     yield put({
       type: LOAD_JOBS_FAILURE,
-      error: getAxiosError(err),
+      payload: getAxiosError(err),
     });
   }
 }

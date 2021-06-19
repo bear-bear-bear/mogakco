@@ -1,12 +1,9 @@
-import React, { useCallback, useState, useEffect, useRef } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { useRouter } from 'next/router';
+import React, { useState, useEffect, useRef, SyntheticEvent } from 'react';
 import log from 'loglevel';
 
 import useInput from '~/hooks/useInput';
 import { emailRule } from '~/lib/regex';
-import { sendEmailRequest, verifyEmailRequest } from '~/redux/reducers/signup';
-import { saveEmail as saveLandingEmail } from '~/redux/reducers/landing';
+import { sendEmailRequest } from '~/redux/reducers/signup';
 import Warning from '~/components/common/Warning';
 import Desc from '~/components/common/Desc';
 import Form from '~/components/common/Form';
@@ -16,55 +13,31 @@ import Label from '~/components/common/Label';
 
 import * as CS from '../common/styles';
 import * as S from './style';
+import useTypedSelector from '~/hooks/useTypedSelector';
+import useTypedDispatch from '~/hooks/useTypedDispatch';
+import useEffectSignUpStart from '~/components/signup/Start/useEffectSignUpStart';
 
 const Auth = () => {
-  const dispatch = useDispatch();
-  const router = useRouter();
-  const [email, onChangeEmail, setEmail] = useInput('');
+  const dispatch = useTypedDispatch();
+  const [email, onChangeEmail, setEmail] = useInput();
   const [emailTestError, setEmailTestError] = useState(false);
-  const sendEmailLoading = useSelector(({ signup }) => signup.sendEmailLoading);
-  const sendEmailDone = useSelector(({ signup }) => signup.sendEmailDone);
-  const landingEmail = useSelector(({ landing }) => landing.email);
+  const sendEmailLoading = useTypedSelector(
+    ({ signup }) => signup.sendEmailLoading,
+  );
+  const sendEmailDone = useTypedSelector(({ signup }) => signup.sendEmailDone);
   const emailEl = useRef(null);
   const submitButtonEl = useRef(null);
 
-  useEffect(() => {
-    submitButtonEl.current.focus();
-  }, []);
-
-  useEffect(() => {
-    // 랜딩에서 이메일 입력 후 버튼을 눌렀다면, 해당 이메일을 자동 입력
-    if (landingEmail === null) return;
-
-    setEmail(landingEmail);
-    dispatch(saveLandingEmail(null));
-  }, [landingEmail, setEmail, dispatch]);
-
-  useEffect(() => {
-    const { success, email: verifiedEmail } = router.query;
-
-    const isQuery = Boolean(success);
-    if (!isQuery) {
+  // TODO: Type 수정 예정 writen by galaxy4276
+  const onSubmitEmail = (e: SyntheticEvent) => {
+    e.preventDefault();
+    if (!emailRule.test(email as string)) {
+      setEmailTestError(true);
       return;
     }
 
-    if (success === 'true') {
-      dispatch(verifyEmailRequest(verifiedEmail));
-    }
-    router.push('/signup', undefined, { shallow: true });
-  }, [dispatch, router]);
-
-  const onSubmitEmail = useCallback(
-    (e) => {
-      e.preventDefault();
-      if (!emailRule.test(email)) {
-        setEmailTestError(true);
-        return;
-      }
-      dispatch(sendEmailRequest(email));
-    },
-    [dispatch, email],
-  );
+    dispatch(sendEmailRequest(email));
+  };
 
   const onClickSocial = () => {
     log.setLevel('debug');
@@ -72,9 +45,15 @@ const Auth = () => {
     // dispatch(verifySocialRequest());
   };
 
+  useEffect(() => {
+    submitButtonEl.current.focus();
+  }, []);
+
+  useEffectSignUpStart(setEmail);
+
   return (
     <>
-      {!sendEmailDone ? (
+      {!sendEmailDone && (
         <>
           <CS.Title>회원가입</CS.Title>
           <S.SocialLoginWrapper>
@@ -113,7 +92,9 @@ const Auth = () => {
             </S.SubmitButton>
           </Form>
         </>
-      ) : (
+      )}
+
+      {sendEmailDone && (
         <>
           <CS.Title>메일함을 확인하세요</CS.Title>
           <Desc>

@@ -1,7 +1,10 @@
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import log from 'loglevel';
+import { IGeneralServerResponse } from '~/typings/common';
 
-export const getAxiosError = (axiosError) => {
+export const getAxiosError = (
+  axiosError: AxiosError<IGeneralServerResponse>,
+) => {
   if (process.env.NODE_ENV === 'production') {
     return '배포 모드에선 로그를 표시하지 않습니다.';
   }
@@ -10,14 +13,13 @@ export const getAxiosError = (axiosError) => {
 
   if (!axiosError.isAxiosError) {
     log.warn(
-      'axios 에러가 아닙니다. getAxiosError는 axios에러만을 로깅합니다.',
+      'axios 에러가 아닙니다. getAxiosError 는 axios 에러만을 로깅합니다.',
     );
     log.error(axiosError);
     return axiosError;
   }
 
   const { response, request, message, config } = axiosError;
-
   if (response) {
     const { data, headers } = response;
     log.error(
@@ -39,7 +41,7 @@ export const getAxiosError = (axiosError) => {
 
   log.debug('Axios config:', config);
 
-  return response?.data || request || { message, axiosConfig: config };
+  return response.data;
 };
 
 /**
