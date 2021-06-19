@@ -1,36 +1,38 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Row, Col } from 'antd';
 import Fade from 'react-reveal/Fade';
 
 import * as S from './style';
 
-const MiddleBlock = ({ subtitle, title, content, onClickButton }) => {
-  return (
-    <S.MiddleBlockContainer>
-      <Row justify="center" align="middle">
-        <Col>
-          <Fade bottom>
-            <S.ContentWrapper>
-              <h3>[ {subtitle} ]</h3>
-              <h1>{title}</h1>
-              <p>{content}</p>
-              <S.StartButton color="blue" onClick={onClickButton}>
-                시작하기
-              </S.StartButton>
-            </S.ContentWrapper>
-          </Fade>
-        </Col>
-      </Row>
-    </S.MiddleBlockContainer>
-  );
-};
+interface IMiddleBlock {
+  subtitle: string;
+  title: string;
+  content: string;
+  onClickButton: () => void;
+}
 
-MiddleBlock.propTypes = {
-  subtitle: PropTypes.string.isRequired,
-  title: PropTypes.string.isRequired,
-  content: PropTypes.string.isRequired,
-  onClickButton: PropTypes.func.isRequired,
-};
+const MiddleBlock = ({
+  subtitle,
+  title,
+  content,
+  onClickButton,
+}: IMiddleBlock) => (
+  <S.MiddleBlockContainer>
+    <Row justify="center" align="middle">
+      <Col>
+        <Fade bottom>
+          <S.ContentWrapper>
+            <h3>[ {subtitle} ]</h3>
+            <h1>{title}</h1>
+            <p>{content}</p>
+            <S.StartButton color="blue" onClick={onClickButton}>
+              시작하기
+            </S.StartButton>
+          </S.ContentWrapper>
+        </Fade>
+      </Col>
+    </Row>
+  </S.MiddleBlockContainer>
+);
 
 export default MiddleBlock;

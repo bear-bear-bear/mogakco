@@ -28,9 +28,7 @@ const LeftContentBlock = ({
     if (!isFirstBlock) {
       return;
     }
-    if (emailEl.current) {
-      emailEl.current.focus();
-    }
+    emailEl.current?.focus();
   }, [emailEl, isFirstBlock]);
 
   const toSignUp = (e: SyntheticEvent) => {

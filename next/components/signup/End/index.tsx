@@ -5,10 +5,10 @@ import * as CS from '../common/styles';
 
 const Complete = () => {
   const router = useRouter();
-  const buttonEl = useRef(null);
+  const buttonEl = useRef<HTMLButtonElement>();
 
   useEffect(() => {
-    buttonEl.current.focus();
+    buttonEl.current?.focus();
   }, []);
 
   const onClickButton = () => {
