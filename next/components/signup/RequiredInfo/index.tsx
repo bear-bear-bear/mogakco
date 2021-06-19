@@ -149,7 +149,7 @@ const RequiredInfo = () => {
           <TextInput
             type="text"
             id="username"
-            size="small"
+            scale="small"
             value={username}
             onChange={onChangeUsername}
             ref={usernameEl}
@@ -158,7 +158,7 @@ const RequiredInfo = () => {
           />
         </InputWrapper>
         <S.DescWrapper>
-          <Desc size="small">
+          <Desc scale="small">
             ※ 한글, 영문, 숫자, 마침표를 사용할 수 있습니다
           </Desc>
         </S.DescWrapper>
@@ -173,7 +173,7 @@ const RequiredInfo = () => {
             onChange={onChangePassword}
             onFocus={flipIsTypingPassword}
             onBlur={flipIsTypingPassword}
-            size="small"
+            scale="small"
             ref={passwordInputEl}
             onClickEye={onClickEye}
             isVisible={isVisiblePassword}
@@ -189,7 +189,7 @@ const RequiredInfo = () => {
             id="passwordConfirm"
             value={passwordConfirm}
             onChange={onChangePasswordConfirm}
-            size="small"
+            scale="small"
             ref={passwordConfirmInputEl}
             onClickEye={onClickEye}
             isVisible={isVisiblePassword}
@@ -197,7 +197,7 @@ const RequiredInfo = () => {
           />
         </InputWrapper>
         <S.DescWrapper>
-          <Desc size="small">
+          <Desc scale="small">
             ※ 비밀번호는 영문, 숫자, 기호를 조합하여 8자 이상을 사용하세요
           </Desc>
         </S.DescWrapper>

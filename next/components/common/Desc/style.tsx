@@ -1,8 +1,8 @@
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 
-const descSizeStyles = ({ size }) => {
-  const sizes = {
+const descSizeStyles = ({ scale }) => {
+  const scales = {
     small: {
       fontSize: '0.95rem',
       lineHeight: '1.2',
@@ -14,7 +14,7 @@ const descSizeStyles = ({ size }) => {
       gap: '1rem',
     },
   };
-  const { fontSize, lineHeight, gap } = sizes[size];
+  const { fontSize, lineHeight, gap } = scales[scale];
 
   return css`
     font-size: ${fontSize};
@@ -29,6 +29,6 @@ const descSizeStyles = ({ size }) => {
 export const Desc = styled.p`
   color: var(--color-gray-4);
 
-  // size style
+  // scale style
   ${descSizeStyles}
 `;

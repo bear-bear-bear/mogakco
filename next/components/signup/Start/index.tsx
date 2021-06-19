@@ -77,7 +77,7 @@ const Auth = () => {
                 onChange={onChangeEmail}
                 placeholder="이메일 입력"
                 ref={emailEl}
-                size="medium"
+                scale="medium"
                 spellCheck="false"
               />
             </InputWrapper>

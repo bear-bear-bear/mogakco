@@ -9,8 +9,8 @@ const labelMarginStyles = ({ direction }) => {
   `;
 };
 
-const labelSizeStyles = ({ size }) => {
-  const sizes = {
+const labelSizeStyles = ({ scale }) => {
+  const scales = {
     small: {
       fontSize: '1.05rem',
       lineHeight: '1.1',
@@ -20,7 +20,7 @@ const labelSizeStyles = ({ size }) => {
       lineHeight: '1.3',
     },
   };
-  const { fontSize, lineHeight } = sizes[size];
+  const { fontSize, lineHeight } = scales[scale];
 
   return css`
     font-size: ${fontSize};
@@ -28,7 +28,7 @@ const labelSizeStyles = ({ size }) => {
   `;
 };
 
-export const Label = styled.label<{ size: string; direction: string }>`
+export const Label = styled.label<{ scale: string; direction: string }>`
   display: block;
   color: var(--color-gray-4);
 
