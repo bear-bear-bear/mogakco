@@ -1,6 +1,6 @@
-import { createSlice } from '@reduxjs/toolkit';
-import fromActionTypes from '~/lib/fromActionTypes';
-import { ISignUpState } from '~/typings/auth';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { ISignUpState, SimpleStringPayload } from '~/typings/auth';
+import { ErrorPayload } from '~/typings/common';
 
 const initialState: ISignUpState = {
   userInfo: {
@@ -30,28 +30,29 @@ const initialState: ISignUpState = {
   signUpDone: false,
   signUpError: null,
   skills: [], // 서버에서 내려주는 skills 목록
-  jobs: '', // 서버에서 내려주는 jobs 목록
+  jobs: null, // 서버에서 내려주는 jobs 목록
 };
 
 const signUpSlice = createSlice({
   name: 'signup',
   initialState,
   reducers: {
-    SEND_EMAIL_REQUEST: (state, action) => {
+    SEND_EMAIL_REQUEST: (state, { payload: email }: SimpleStringPayload) => {
       state.sendEmailLoading = true;
       state.sendEmailDone = false;
       state.sendEmailError = null;
-      localStorage.setItem('email', action.payload);
+      localStorage.setItem('email', email);
     },
     SEND_EMAIL_SUCCESS: (state) => {
       state.sendEmailLoading = false;
       state.sendEmailDone = true;
     },
-    SEND_EMAIL_FAILURE: (state, action) => {
+    SEND_EMAIL_FAILURE: (state, { payload: { error } }: ErrorPayload) => {
+      // TODO: 이메일 전송 실패해도 해당 액션 발생안함. writen by galaxy4276
       state.sendEmailLoading = false;
-      state.sendEmailError = action.error;
+      state.sendEmailError = error;
     },
-    VERIFY_EMAIL_REQUEST: (state) => {
+    VERIFY_EMAIL_REQUEST: (state, action) => {
       state.verifyEmailLoading = true;
       state.verifyEmailDone = false;
       state.verifyEmailError = null;
@@ -60,11 +61,11 @@ const signUpSlice = createSlice({
       state.verifyEmailLoading = false;
       state.verifyEmailDone = true;
       state.verifySocialDone = true;
-      state.userInfo.email = action.email;
+      state.userInfo.email = action.payload.email;
     },
-    VERIFY_EMAIL_FAILURE: (state, action) => {
+    VERIFY_EMAIL_FAILURE: (state, { payload: { error } }: ErrorPayload) => {
       state.verifyEmailLoading = false;
-      state.verifyEmailError = action.error;
+      state.verifyEmailError = error;
     },
     VERIFY_SOCIAL_REQUEST: (state) => {
       state.verifySocialLoading = true;
@@ -76,37 +77,40 @@ const signUpSlice = createSlice({
       state.verifySocialDone = true;
       state.verifyEmailDone = true;
     },
-    VERIFY_SOCIAL_FAILURE: (state, action) => {
+    VERIFY_SOCIAL_FAILURE: (state, { payload: { error } }: ErrorPayload) => {
       state.verifySocialLoading = false;
-      state.verifySocialError = action.error;
+      state.verifySocialError = error;
     },
     LOAD_SKILLS_REQUEST: (state) => {
       state.loadSkillsLoading = true;
       state.loadSkillsDone = false;
       state.loadSkillsError = null;
     },
-    LOAD_SKILLS_SUCCESS: (state, action) => {
+    LOAD_SKILLS_SUCCESS: (
+      state,
+      { payload: skills }: PayloadAction<number[]>,
+    ) => {
       state.loadSkillsLoading = false;
       state.loadSkillsDone = true;
-      state.skills = action.skills;
+      state.skills = skills;
     },
-    LOAD_SKILLS_FAILURE: (state, action) => {
+    LOAD_SKILLS_FAILURE: (state, { payload: { error } }: ErrorPayload) => {
       state.loadSkillsLoading = false;
-      state.loadSkillsError = action.error;
+      state.loadSkillsError = error;
     },
     LOAD_JOBS_REQUEST: (state) => {
       state.loadJobsLoading = true;
       state.loadJobsDone = false;
       state.loadJobsError = null;
     },
-    LOAD_JOBS_SUCCESS: (state, action) => {
+    LOAD_JOBS_SUCCESS: (state, { payload: jobs }: PayloadAction<number>) => {
       state.loadJobsLoading = false;
       state.loadJobsDone = true;
-      state.jobs = action.jobs;
+      state.jobs = jobs;
     },
-    LOAD_JOBS_FAILURE: (state, action) => {
+    LOAD_JOBS_FAILURE: (state, { payload: { error } }: ErrorPayload) => {
       state.loadJobsLoading = false;
-      state.loadJobsError = action.error;
+      state.loadJobsError = error;
     },
     SAVE_REQUIRED_INFO: (state, action) => {
       const { username, password } = action.payload;
@@ -127,9 +131,9 @@ const signUpSlice = createSlice({
       state.signUpLoading = false;
       state.signUpDone = true;
     },
-    SIGN_UP_FAILURE: (state, action) => {
+    SIGN_UP_FAILURE: (state, { payload: { error } }: ErrorPayload) => {
       state.signUpLoading = false;
-      state.signUpError = action.error;
+      state.signUpError = error;
     },
     RESET_SIGN_UP: () => initialState,
   },
@@ -155,7 +159,7 @@ export const {
   SIGN_UP_REQUEST,
   SIGN_UP_SUCCESS,
   SIGN_UP_FAILURE,
-} = fromActionTypes(signUpSlice.actions);
+} = signUpSlice.actions;
 
 // 액션 크리에이터
 export const {
