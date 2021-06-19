@@ -34,9 +34,7 @@ function* sendEmail({ payload: email }: SimpleStringPayload) {
   } catch (err) {
     yield put({
       type: SEND_EMAIL_FAILURE,
-      payload: {
-        error: getAxiosError(err),
-      },
+      error: getAxiosError(err),
     });
   }
 }
