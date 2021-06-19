@@ -85,8 +85,8 @@ const colorStyles = ({
   `;
 };
 
-const sizeStyles = ({ size }: { size: 'large' | 'medium' | 'small' }) => {
-  const sizes = {
+const scaleStyles = ({ scale }: { scale: 'large' | 'medium' | 'small' }) => {
+  const scales = {
     large: {
       height: '2.25rem',
       fontSize: '1.25rem',
@@ -100,7 +100,7 @@ const sizeStyles = ({ size }: { size: 'large' | 'medium' | 'small' }) => {
       fontSize: '0.875rem',
     },
   };
-  const { height, fontSize } = sizes[size];
+  const { height, fontSize } = scales[scale];
 
   return css`
     height: ${height};
@@ -142,7 +142,7 @@ export const Button = styled.button<IColorStyleProps & IButtonProps>`
   ${colorStyles}
 
   /* 사이즈 스타일 */
-  ${sizeStyles}
+  ${scaleStyles}
 
   /* fullWidth */
   ${fullWidthStyle}

@@ -1,8 +1,8 @@
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 
-const sizeStyles = ({ size }) => {
-  const sizes = {
+const scaleStyles = ({ scale }) => {
+  const scales = {
     small: {
       fontSize: '1rem',
       padding: '0.5rem 0.4rem',
@@ -12,7 +12,7 @@ const sizeStyles = ({ size }) => {
       padding: '0.75rem 0.66rem',
     },
   };
-  const { fontSize, padding } = sizes[size];
+  const { fontSize, padding } = scales[scale];
 
   return css`
     font-size: ${fontSize};
@@ -23,5 +23,5 @@ const sizeStyles = ({ size }) => {
 export const TextInput = styled.input`
   width: 100%;
 
-  ${sizeStyles}
+  ${scaleStyles}
 `;

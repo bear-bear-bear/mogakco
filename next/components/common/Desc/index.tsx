@@ -3,11 +3,11 @@ import React, { FC } from 'react';
 import * as S from './style';
 
 interface Props {
-  size?: 'small' | 'medium';
+  scale?: 'small' | 'medium';
 }
 
-const Desc: FC<Props> = ({ size = 'medium', children, ...rest }) => (
-  <S.Desc size={size} {...rest}>
+const Desc: FC<Props> = ({ scale = 'medium', children, ...rest }) => (
+  <S.Desc scale={scale} {...rest}>
     {children}
   </S.Desc>
 );

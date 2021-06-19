@@ -9,11 +9,11 @@ import * as S from './style';
  * 컴포넌트를 관리할 isVisible, onClickEye은 부모 컴포넌트에서 props로 부여합니다.
  */
 const PasswordInput = React.forwardRef(
-  ({ size, isVisible, onClickEye, type, ...rest }, ref) => (
+  ({ scale, isVisible, onClickEye, type, ...rest }, ref) => (
     <S.PasswordWrapper>
       <TextInput
         ref={ref}
-        size={size}
+        scale={scale}
         type={isVisible ? 'text' : 'password'}
         {...rest}
       />
@@ -28,13 +28,13 @@ const PasswordInput = React.forwardRef(
 
 PasswordInput.displayName = 'PasswordInput';
 PasswordInput.propTypes = {
-  size: PropTypes.oneOf(['small', 'medium']),
+  scale: PropTypes.oneOf(['small', 'medium']),
   type: PropTypes.string.isRequired,
   isVisible: PropTypes.bool.isRequired,
   onClickEye: PropTypes.func.isRequired,
 };
 PasswordInput.defaultProps = {
-  size: 'medium',
+  scale: 'medium',
 };
 
 export default PasswordInput;

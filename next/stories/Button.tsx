@@ -13,7 +13,7 @@ export interface ButtonProps {
   /**
    * How large should the button be?
    */
-  size?: 'small' | 'medium' | 'large';
+  scale?: 'small' | 'medium' | 'large';
   /**
    * Button contents
    */
@@ -29,7 +29,7 @@ export interface ButtonProps {
  */
 export const Button: React.FC<ButtonProps> = ({
   primary = false,
-  size = 'medium',
+  scale = 'medium',
   backgroundColor,
   label,
   ...props
@@ -40,7 +40,7 @@ export const Button: React.FC<ButtonProps> = ({
   return (
     <button
       type="button"
-      className={['storybook-button', `storybook-button--${size}`, mode].join(
+      className={['storybook-button', `storybook-button--${scale}`, mode].join(
         ' ',
       )}
       style={{ backgroundColor }}

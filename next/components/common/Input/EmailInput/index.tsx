@@ -4,7 +4,7 @@ import TextInput from '~/components/common/Input/TextInput';
 import * as S from './style';
 
 type Props = {
-  size?: 'small' | 'medium';
+  scale?: 'small' | 'medium';
   setValue: Dispatch<SetStateAction<string>>;
 };
 
@@ -17,9 +17,9 @@ type Props = {
 const EmailInput = React.forwardRef<
   HTMLInputElement,
   Props & InputHTMLAttributes<HTMLInputElement>
->(({ size = 'medium', value, setValue, ...rest }, ref) => (
+>(({ scale = 'medium', value, setValue, ...rest }, ref) => (
   <S.EmailWrapper>
-    <TextInput ref={ref} size={size} value={value} {...rest} />
+    <TextInput ref={ref} scale={scale} value={value} {...rest} />
     {value && <S.DeleteButton onClick={() => setValue('')} />}
   </S.EmailWrapper>
 ));
