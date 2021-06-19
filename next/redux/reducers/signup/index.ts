@@ -2,6 +2,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { ISignUpState, IOptionalInfoProps } from '~/typings/auth';
 import { ErrorPayload } from '~/typings/common';
+import fromActionTypes from '~/lib/fromActionTypes';
 
 const initialState: ISignUpState = {
   userInfo: {
@@ -141,6 +142,7 @@ const signUpSlice = createSlice({
   },
 });
 
+type ActionListType = typeof signUpSlice.actions;
 // 액션 타입
 export const {
   SEND_EMAIL_REQUEST,
@@ -161,7 +163,7 @@ export const {
   SIGN_UP_REQUEST,
   SIGN_UP_SUCCESS,
   SIGN_UP_FAILURE,
-} = signUpSlice.actions;
+} = fromActionTypes<ActionListType>(signUpSlice.actions);
 
 // 액션 크리에이터
 export const {

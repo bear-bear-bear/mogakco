@@ -23,7 +23,7 @@ import { LOG_IN_SUCCESS } from '~/redux/reducers/common/user';
 import { signupAPIs } from '~/lib/APIs';
 import { getAxiosError } from '~/lib/apiClient';
 
-const { sendEmailAPI, verifyEmailAPI, loadSkillsAPI, loadJobsAPI, signUpApI } =
+const { sendEmailAPI, verifyEmailAPI, loadSkillsAPI, loadJobsAPI, signUpAPI } =
   signupAPIs;
 
 function* sendEmail({ payload: email }: PayloadAction<string>) {
@@ -87,7 +87,7 @@ function* loadJobs() {
 
 function* signUp({ payload: userInfo }: PayloadAction<ISignUpUserProps>) {
   try {
-    const result = yield call(signUpApI, userInfo);
+    const result = yield call(signUpAPI, userInfo);
     yield put({ type: SIGN_UP_SUCCESS });
     yield put({
       type: LOG_IN_SUCCESS,
