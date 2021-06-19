@@ -23,7 +23,7 @@ const Landing = () => {
   return (
     <>
       <CustomHead {...pageProps} />
-      <Header isLoggedIn={false} />
+      <Header />
       <Container>
         <ScrollTop verticalAlign="bottom" horizonAlign="right" />
         <ContentBlock
