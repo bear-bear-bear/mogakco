@@ -8,6 +8,17 @@ export interface IUserProps {
   job: number | null;
 }
 
+// 유저 상태 타입
+export interface IUserState {
+  me: IUserProps | null;
+  logInLoading: boolean;
+  logInDone: boolean;
+  logInError: any;
+  logOutLoading: boolean;
+  logOutDone: boolean;
+  logOutError: any;
+}
+
 // 회원가입에 필요한 유저 정보
 export interface ISignUpUserProps {
   email: string | null;
