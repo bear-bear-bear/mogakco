@@ -47,7 +47,7 @@ const signUpSlice = createSlice({
       state.sendEmailLoading = false;
       state.sendEmailDone = true;
     },
-    SEND_EMAIL_FAILURE: (state, { payload: { error } }: ErrorPayload) => {
+    SEND_EMAIL_FAILURE: (state, { payload: error }: ErrorPayload) => {
       // TODO: 이메일 전송 실패해도 해당 액션 발생안함. writen by galaxy4276
       state.sendEmailLoading = false;
       state.sendEmailError = error;
@@ -57,13 +57,16 @@ const signUpSlice = createSlice({
       state.verifyEmailDone = false;
       state.verifyEmailError = null;
     },
-    VERIFY_EMAIL_SUCCESS: (state, action) => {
+    VERIFY_EMAIL_SUCCESS: (
+      state,
+      { payload: email }: PayloadAction<string>,
+    ) => {
       state.verifyEmailLoading = false;
       state.verifyEmailDone = true;
       state.verifySocialDone = true;
-      state.userInfo.email = action.payload.email;
+      state.userInfo.email = email;
     },
-    VERIFY_EMAIL_FAILURE: (state, { payload: { error } }: ErrorPayload) => {
+    VERIFY_EMAIL_FAILURE: (state, { payload: error }: ErrorPayload) => {
       state.verifyEmailLoading = false;
       state.verifyEmailError = error;
     },
@@ -77,7 +80,7 @@ const signUpSlice = createSlice({
       state.verifySocialDone = true;
       state.verifyEmailDone = true;
     },
-    VERIFY_SOCIAL_FAILURE: (state, { payload: { error } }: ErrorPayload) => {
+    VERIFY_SOCIAL_FAILURE: (state, { payload: error }: ErrorPayload) => {
       state.verifySocialLoading = false;
       state.verifySocialError = error;
     },
@@ -94,7 +97,7 @@ const signUpSlice = createSlice({
       state.loadSkillsDone = true;
       state.skills = skills;
     },
-    LOAD_SKILLS_FAILURE: (state, { payload: { error } }: ErrorPayload) => {
+    LOAD_SKILLS_FAILURE: (state, { payload: error }: ErrorPayload) => {
       state.loadSkillsLoading = false;
       state.loadSkillsError = error;
     },
@@ -108,7 +111,7 @@ const signUpSlice = createSlice({
       state.loadJobsDone = true;
       state.jobs = jobs;
     },
-    LOAD_JOBS_FAILURE: (state, { payload: { error } }: ErrorPayload) => {
+    LOAD_JOBS_FAILURE: (state, { payload: error }: ErrorPayload) => {
       state.loadJobsLoading = false;
       state.loadJobsError = error;
     },
@@ -131,7 +134,7 @@ const signUpSlice = createSlice({
       state.signUpLoading = false;
       state.signUpDone = true;
     },
-    SIGN_UP_FAILURE: (state, { payload: { error } }: ErrorPayload) => {
+    SIGN_UP_FAILURE: (state, { payload: error }: ErrorPayload) => {
       state.signUpLoading = false;
       state.signUpError = error;
     },

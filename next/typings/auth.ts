@@ -1,4 +1,4 @@
-import { IGetAxiosError } from '~/typings/common';
+import { IGeneralServerResponse, IGetAxiosError } from '~/typings/common';
 
 // 유저 정보
 export interface IUserProps {
@@ -22,23 +22,23 @@ export interface ISignUpState {
   userInfo: ISignUpUserProps;
   sendEmailLoading: boolean;
   sendEmailDone: boolean;
-  sendEmailError: IGetAxiosError;
+  sendEmailError: IGeneralServerResponse;
   verifyEmailLoading: boolean;
   verifyEmailDone: boolean;
-  verifyEmailError: IGetAxiosError;
+  verifyEmailError: IGeneralServerResponse;
   verifySocialLoading: boolean;
   verifySocialDone: boolean;
-  verifySocialError: IGetAxiosError;
+  verifySocialError: IGeneralServerResponse;
   loadSkillsLoading: boolean;
   loadSkillsDone: boolean;
-  loadSkillsError: IGetAxiosError;
+  loadSkillsError: IGeneralServerResponse;
   loadJobsLoading: boolean;
   loadJobsDone: boolean;
-  loadJobsError: IGetAxiosError;
+  loadJobsError: IGeneralServerResponse;
   saveRequiredInfoDone: boolean;
   signUpLoading: boolean;
   signUpDone: boolean;
-  signUpError: IGetAxiosError;
+  signUpError: IGeneralServerResponse;
   skills: number[] | null;
   jobs: number | null;
 }

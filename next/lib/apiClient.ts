@@ -41,7 +41,7 @@ export const getAxiosError = (
 
   log.debug('Axios config:', config);
 
-  return response?.data || request || { message, axiosConfig: config };
+  return response.data;
 };
 
 /**
