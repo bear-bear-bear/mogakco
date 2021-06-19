@@ -1,6 +1,6 @@
 import { createSelector } from '@reduxjs/toolkit';
 import { RootState } from '~/redux/store/configureStore';
-import { IOptionalInfoProp } from '~/typings/auth';
+import { IOptionalInfoProps } from '~/typings/auth';
 
 const selectUserInfo = ({ signup }: RootState) => signup.userInfo;
 const selectSkills = ({ signup }: RootState) => signup.skills;
@@ -9,7 +9,7 @@ const selectJobs = ({ signup }: RootState) => signup.jobs;
 /**
  * @desc Select 라이브러리 props 형식에 맞게 skills와 jobs 데이터를 가공해주는 함수
  */
-const toSelectOptions = (list: IOptionalInfoProp[]) =>
+const toSelectOptions = (list: IOptionalInfoProps[]) =>
   list.map(({ id, name }) => ({
     value: id,
     label: name,
@@ -17,12 +17,12 @@ const toSelectOptions = (list: IOptionalInfoProp[]) =>
 
 export const getSkillOptions = createSelector(
   selectSkills,
-  (value: IOptionalInfoProp[]) => toSelectOptions(value),
+  (value: IOptionalInfoProps[]) => toSelectOptions(value),
 );
 
 export const getJobOptions = createSelector(
   selectJobs,
-  (value: IOptionalInfoProp[]) => toSelectOptions(value),
+  (value: IOptionalInfoProps[]) => toSelectOptions(value),
 );
 
 export const getUserInfo = createSelector(selectUserInfo, (value) => value);

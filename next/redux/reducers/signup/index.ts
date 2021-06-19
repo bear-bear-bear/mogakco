@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { ISignUpState, IOptionalInfoProp } from '~/typings/auth';
+import { ISignUpState, IOptionalInfoProps } from '~/typings/auth';
 import { ErrorPayload } from '~/typings/common';
 
 const initialState: ISignUpState = {
@@ -91,7 +91,7 @@ const signUpSlice = createSlice({
     },
     LOAD_SKILLS_SUCCESS: (
       state,
-      { payload: skills }: PayloadAction<IOptionalInfoProp[]>,
+      { payload: skills }: PayloadAction<IOptionalInfoProps[]>,
     ) => {
       state.loadSkillsLoading = false;
       state.loadSkillsDone = true;
@@ -108,7 +108,7 @@ const signUpSlice = createSlice({
     },
     LOAD_JOBS_SUCCESS: (
       state,
-      { payload: jobs }: PayloadAction<IOptionalInfoProp[]>,
+      { payload: jobs }: PayloadAction<IOptionalInfoProps[]>,
     ) => {
       state.loadJobsLoading = false;
       state.loadJobsDone = true;

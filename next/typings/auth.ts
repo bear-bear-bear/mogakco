@@ -39,7 +39,7 @@ export interface ISignUpUserProps extends ISignUpUserReduxProps {
 }
 
 // 회원가입 유저 선택정보 타입
-export interface IOptionalInfoProp {
+export interface IOptionalInfoProps {
   id: number;
   name: string;
   createdAt: Date;
@@ -68,6 +68,6 @@ export interface ISignUpState {
   signUpLoading: boolean;
   signUpDone: boolean;
   signUpError: IGeneralServerResponse;
-  skills: IOptionalInfoProp[];
-  jobs: IOptionalInfoProp[];
+  skills: IOptionalInfoProps[];
+  jobs: IOptionalInfoProps[];
 }
