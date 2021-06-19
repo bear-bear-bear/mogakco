@@ -1,7 +1,6 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, SyntheticEvent } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useRouter } from 'next/router';
-import PropTypes from 'prop-types';
 import { Row, Col } from 'antd';
 import Fade from 'react-reveal/Fade';
 
@@ -9,42 +8,50 @@ import useInput from '~/hooks/useInput';
 import { saveEmail } from '~/redux/reducers/landing';
 import { meSelector } from '~/redux/selectors/common/user';
 import Image from '~/components/common/Image';
+import { ILeftContentBlockProps } from '~/components/landing/ContentBlock';
 
 import * as S from './style';
 
-const LeftContentBlock = ({ title, content, imgName, firstBlock, emailEl }) => {
+const LeftContentBlock = ({
+  title,
+  content,
+  imgName,
+  isFirstBlock,
+  emailEl,
+}: ILeftContentBlockProps) => {
   const dispatch = useDispatch();
   const router = useRouter();
   const me = useSelector(meSelector);
   const [email, onChangeEmail, setEmail] = useInput('');
 
   useEffect(() => {
-    if (!firstBlock) return;
-    if (!emailEl) return;
-    emailEl.current.focus();
-  }, [emailEl, firstBlock]);
+    if (!isFirstBlock) {
+      return;
+    }
+    emailEl.current?.focus();
+  }, [emailEl, isFirstBlock]);
 
-  const toSignUp = (e) => {
+  const toSignUp = (e: SyntheticEvent) => {
     e.preventDefault();
     dispatch(saveEmail(emailEl.current.value));
     router.push('/signup');
   };
 
   return (
-    <S.LeftBlockContainer firstBlock={firstBlock}>
+    <S.LeftBlockContainer isFirstBlock={isFirstBlock}>
       <Row justify="center" align="middle" gutter={20}>
         <Col xs={{ span: 24, order: 1 }} lg={{ span: 12, order: 0 }}>
           <Fade left>
-            <S.ContentWrapper firstBlock={firstBlock}>
+            <S.ContentWrapper isFirstBlock={isFirstBlock}>
               <h1>{title}</h1>
               <p>{content}</p>
-              {firstBlock &&
+              {isFirstBlock &&
                 (me ? (
                   <S.FirstBlockStartButton color="blue" fullWidth>
                     시작하기
                   </S.FirstBlockStartButton>
                 ) : (
-                  <S.FirstBlockForm onSubmit={toSignUp} spellcheck="false">
+                  <S.FirstBlockForm onSubmit={toSignUp} spellCheck="false">
                     <S.FirstBlockInput
                       ref={emailEl}
                       type="email"
@@ -65,27 +72,12 @@ const LeftContentBlock = ({ title, content, imgName, firstBlock, emailEl }) => {
         </Col>
         <Col xs={{ span: 16, order: 0 }} lg={{ span: 12, order: 1 }}>
           <Fade right>
-            <Image name={imgName} width="100%" heigth="100%" />
+            <Image name={imgName} width="100%" height="100%" />
           </Fade>
         </Col>
       </Row>
     </S.LeftBlockContainer>
   );
-};
-
-LeftContentBlock.propTypes = {
-  title: PropTypes.string.isRequired,
-  content: PropTypes.string.isRequired,
-  imgName: PropTypes.string.isRequired,
-  firstBlock: PropTypes.bool,
-  emailEl: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.shape({ current: PropTypes.elementType }),
-  ]), // emailEl = React.useRef()
-};
-LeftContentBlock.defaultProps = {
-  firstBlock: false,
-  emailEl: null,
 };
 
 export default LeftContentBlock;

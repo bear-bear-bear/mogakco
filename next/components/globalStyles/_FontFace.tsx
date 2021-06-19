@@ -2,6 +2,7 @@ import { css } from '@emotion/react';
 
 const ROBOTO_DIR = '/assets/fonts/Roboto-subset';
 const NOTOSANS_DIR = '/assets/fonts/NotoSans-subset';
+const NOTOSANS_REMOTE = '//fonts.gstatic.com/ea/notosanskr/v2';
 
 const FontFace = css`
   /* ---------------------------------------------------------------------------------------- */
@@ -76,12 +77,9 @@ const FontFace = css`
     src: url(${NOTOSANS_DIR}/NotoSans-Thin.woff2) format('woff2'),
       url(${NOTOSANS_DIR}/NotoSans-Thin.woff) format('woff'),
       url(${NOTOSANS_DIR}/NotoSans-Thin.otf) format('opentype'),
-      url(//fonts.gstatic.com/ea/notosanskr/v2/NotoSansKR-Thin.woff2)
-        format('woff2'),
-      url(//fonts.gstatic.com/ea/notosanskr/v2/NotoSansKR-Thin.woff)
-        format('woff'),
-      url(//fonts.gstatic.com/ea/notosanskr/v2/NotoSansKR-Thin.otf)
-        format('opentype');
+      url(${NOTOSANS_REMOTE}/NotoSansKR-Thin.woff2) format('woff2'),
+      url(${NOTOSANS_REMOTE}/NotoSansKR-Thin.woff) format('woff'),
+      url(${NOTOSANS_REMOTE}/NotoSansKR-Thin.otf) format('opentype');
     unicode-range: U+1100-11FF, U+3130-318F, U+A960-A97F, U+AC00-D7A3,
       U+D7B0-D7FF;
   }
@@ -92,12 +90,9 @@ const FontFace = css`
     src: url(${NOTOSANS_DIR}/NotoSans-Light.woff2) format('woff2'),
       url(${NOTOSANS_DIR}/NotoSans-Light.woff) format('woff'),
       url(${NOTOSANS_DIR}/NotoSans-Light.otf) format('opentype'),
-      url(//fonts.gstatic.com/ea/notosanskr/v2/NotoSansKR-Light.woff2)
-        format('woff2'),
-      url(//fonts.gstatic.com/ea/notosanskr/v2/NotoSansKR-Light.woff)
-        format('woff'),
-      url(//fonts.gstatic.com/ea/notosanskr/v2/NotoSansKR-Light.otf)
-        format('opentype');
+      url(${NOTOSANS_REMOTE}/NotoSansKR-Light.woff2) format('woff2'),
+      url(${NOTOSANS_REMOTE}/NotoSansKR-Light.woff) format('woff'),
+      url(${NOTOSANS_REMOTE}/NotoSansKR-Light.otf) format('opentype');
     unicode-range: U+1100-11FF, U+3130-318F, U+A960-A97F, U+AC00-D7A3,
       U+D7B0-D7FF;
   }
@@ -108,12 +103,9 @@ const FontFace = css`
     src: url(${NOTOSANS_DIR}/NotoSans-Regular.woff2) format('woff2'),
       url(${NOTOSANS_DIR}/NotoSans-Regular.woff) format('woff'),
       url(${NOTOSANS_DIR}/NotoSans-Regular.otf) format('opentype'),
-      url(//fonts.gstatic.com/ea/notosanskr/v2/NotoSansKR-Regular.woff2)
-        format('woff2'),
-      url(//fonts.gstatic.com/ea/notosanskr/v2/NotoSansKR-Regular.woff)
-        format('woff'),
-      url(//fonts.gstatic.com/ea/notosanskr/v2/NotoSansKR-Regular.otf)
-        format('opentype');
+      url(${NOTOSANS_REMOTE}/NotoSansKR-Regular.woff2) format('woff2'),
+      url(${NOTOSANS_REMOTE}/NotoSansKR-Regular.woff) format('woff'),
+      url(${NOTOSANS_REMOTE}/NotoSansKR-Regular.otf) format('opentype');
     unicode-range: U+1100-11FF, U+3130-318F, U+A960-A97F, U+AC00-D7A3,
       U+D7B0-D7FF;
   }
@@ -124,12 +116,9 @@ const FontFace = css`
     src: url(${NOTOSANS_DIR}/NotoSans-Medium.woff2) format('woff2'),
       url(${NOTOSANS_DIR}/NotoSans-Medium.woff) format('woff'),
       url(${NOTOSANS_DIR}/NotoSans-Medium.otf) format('opentype'),
-      url(//fonts.gstatic.com/ea/notosanskr/v2/NotoSansKR-Medium.woff2)
-        format('woff2'),
-      url(//fonts.gstatic.com/ea/notosanskr/v2/NotoSansKR-Medium.woff)
-        format('woff'),
-      url(//fonts.gstatic.com/ea/notosanskr/v2/NotoSansKR-Medium.otf)
-        format('opentype');
+      url(${NOTOSANS_REMOTE}/NotoSansKR-Medium.woff2) format('woff2'),
+      url(${NOTOSANS_REMOTE}/NotoSansKR-Medium.woff) format('woff'),
+      url(${NOTOSANS_REMOTE}/NotoSansKR-Medium.otf) format('opentype');
     unicode-range: U+1100-11FF, U+3130-318F, U+A960-A97F, U+AC00-D7A3,
       U+D7B0-D7FF;
   }
@@ -140,12 +129,9 @@ const FontFace = css`
     src: url(${NOTOSANS_DIR}/NotoSans-Bold.woff2) format('woff2'),
       url(${NOTOSANS_DIR}/NotoSans-Bold.woff) format('woff'),
       url(${NOTOSANS_DIR}/NotoSans-Bold.otf) format('opentype'),
-      url(//fonts.gstatic.com/ea/notosanskr/v2/NotoSansKR-Bold.woff2)
-        format('woff2'),
-      url(//fonts.gstatic.com/ea/notosanskr/v2/NotoSansKR-Bold.woff)
-        format('woff'),
-      url(//fonts.gstatic.com/ea/notosanskr/v2/NotoSansKR-Bold.otf)
-        format('opentype');
+      url(${NOTOSANS_REMOTE}/NotoSansKR-Bold.woff2) format('woff2'),
+      url(${NOTOSANS_REMOTE}/NotoSansKR-Bold.woff) format('woff'),
+      url(${NOTOSANS_REMOTE}/NotoSansKR-Bold.otf) format('opentype');
     unicode-range: U+1100-11FF, U+3130-318F, U+A960-A97F, U+AC00-D7A3,
       U+D7B0-D7FF;
   }
@@ -156,12 +142,9 @@ const FontFace = css`
     src: url(${NOTOSANS_DIR}/NotoSans-Black.woff2) format('woff2'),
       url(${NOTOSANS_DIR}/NotoSans-Black.woff) format('woff'),
       url(${NOTOSANS_DIR}/NotoSans-Black.otf) format('opentype'),
-      url(//fonts.gstatic.com/ea/notosanskr/v2/NotoSansKR-Black.woff2)
-        format('woff2'),
-      url(//fonts.gstatic.com/ea/notosanskr/v2/NotoSansKR-Black.woff)
-        format('woff'),
-      url(//fonts.gstatic.com/ea/notosanskr/v2/NotoSansKR-Black.otf)
-        format('opentype');
+      url(${NOTOSANS_REMOTE}/NotoSansKR-Black.woff2) format('woff2'),
+      url(${NOTOSANS_REMOTE}/NotoSansKR-Black.woff) format('woff'),
+      url(${NOTOSANS_REMOTE}/NotoSansKR-Black.otf) format('opentype');
     unicode-range: U+1100-11FF, U+3130-318F, U+A960-A97F, U+AC00-D7A3,
       U+D7B0-D7FF;
   }

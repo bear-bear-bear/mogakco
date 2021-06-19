@@ -5,13 +5,15 @@ import Button from '~/components/common/Button';
 import EmailInput from '~/components/common/Input/EmailInput';
 import media from '~/components/globalStyles/media';
 
-export const LeftBlockContainer = styled.article(({ firstBlock }) => ({
-  paddingTop: firstBlock ? '5rem' : '9rem',
+export const LeftBlockContainer = styled.article(
+  ({ isFirstBlock }: { isFirstBlock: boolean }) => ({
+    paddingTop: isFirstBlock ? '5rem' : '9rem',
 
-  [media.lg]: {
-    paddingLeft: firstBlock ? '2.8rem' : '1.5rem',
-  },
-}));
+    [media.lg]: {
+      paddingLeft: isFirstBlock ? '2.8rem' : '1.5rem',
+    },
+  }),
+);
 
 export const FirstBlockForm = styled.form`
   width: 100%;
@@ -90,7 +92,7 @@ const firstBlockFontStyles = () => {
       p: '1.6rem',
     },
   };
-  const mediaFontSizes = (screenSize) =>
+  const mediaFontSizes = (screenSize: string) =>
     `
       ${media[screenSize]} {
         h1 {
@@ -176,5 +178,6 @@ export const ContentWrapper = styled.section`
     padding-right: 4.5rem;
   }
 
-  ${({ firstBlock }) => firstBlock && firstBlockFontStyles}
+  ${({ isFirstBlock }: { isFirstBlock: boolean }) =>
+    isFirstBlock && firstBlockFontStyles}
 `;
