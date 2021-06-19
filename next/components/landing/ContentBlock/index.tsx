@@ -1,11 +1,25 @@
+import React, { MutableRefObject } from 'react';
 import LeftContentBlock from './LeftContentBlock';
 import RightContentBlock from './RightContentBlock';
 
-const ContentBlock = (props) => {
-  /* eslint-disable react/destructuring-assignment */
-  // 컴포넌트로 props를 그대로 넘기기 위한 eslint-disable입니다.
-  if (props.type === 'left') return <LeftContentBlock {...props} />;
-  if (props.type === 'right') return <RightContentBlock {...props} />;
+interface IContentBlockProps {
+  type: 'left' | 'right';
+  title: string;
+  content: string;
+  imgName: string;
+  isFirstBlock?: boolean;
+  emailEl?: MutableRefObject<HTMLInputElement | undefined>;
+}
+
+export type ILeftContentBlockProps = Omit<IContentBlockProps, 'type'>;
+export type IRightContentBlockProps = Omit<
+  IContentBlockProps,
+  'type' | 'isFirstBlock' | 'emailEl'
+>;
+
+const ContentBlock = ({ type, ...restProps }: IContentBlockProps) => {
+  if (type === 'left') return <LeftContentBlock {...restProps} />;
+  if (type === 'right') return <RightContentBlock {...restProps} />;
   return null;
 };
 
