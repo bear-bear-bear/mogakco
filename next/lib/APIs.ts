@@ -1,5 +1,10 @@
 import apiClient from './apiClient';
 import { IGeneralServerResponse } from '~/typings/common';
+import {
+  ILoginSuccessResponse,
+  IOptionalInfoProps,
+  ISignUpResponse,
+} from '~/typings/auth';
 
 /**
  * @desc redux/sagas 디렉터리 구성 기준으로 작성됩니다.
@@ -9,7 +14,11 @@ import { IGeneralServerResponse } from '~/typings/common';
 // common/user
 export const userAPIs = {
   // 로그인
-  logInAPI: (data) => apiClient.post('/api/auth/login', data),
+  logInAPI: (data) =>
+    apiClient.post<ILoginSuccessResponse | IGeneralServerResponse>(
+      '/api/auth/login',
+      data,
+    ),
   // 로그아웃
   logOutAPI: () => apiClient.get('/api/auth/logout'),
 };
@@ -24,11 +33,14 @@ export const signupAPIs = {
     ),
   // 이메일 검증에 성공시 나타나는 쿼리의 이메일에 대해 다시 한 번 검증
   verifyEmailAPI: (email: string) =>
-    apiClient.get(`/api/auth/is-verified/before-register?email=${email}`),
+    apiClient.get<IGeneralServerResponse>(
+      `/api/auth/is-verified/before-register?email=${email}`,
+    ),
   // 개발 분야 목록 불러오기
-  loadSkillsAPI: () => apiClient.get(`/api/user/skills`),
+  loadSkillsAPI: () => apiClient.get<IOptionalInfoProps>(`/api/user/skills`),
   // 직업 목록 불러오기
-  loadJobsAPI: () => apiClient.get(`/api/user/jobs`),
+  loadJobsAPI: () => apiClient.get<IOptionalInfoProps>(`/api/user/jobs`),
   // 회원가입
-  signUpApI: (data) => apiClient.post('/api/auth', data),
+  signUpAPI: (data) =>
+    apiClient.post<ISignUpResponse | IGeneralServerResponse>('/api/auth', data),
 };
