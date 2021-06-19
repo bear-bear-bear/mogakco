@@ -1,4 +1,4 @@
-import { IGeneralServerResponse, IGetAxiosError } from '~/typings/common';
+import { IGeneralServerResponse } from '~/typings/common';
 
 // 유저 정보
 export interface IUserProps {
@@ -13,8 +13,16 @@ export interface ISignUpUserProps {
   email: string | null;
   username: string | null;
   password: string | null;
-  skills: number[] | null;
-  job: number | null;
+  // skills: number[] | null;
+  // job: number | null;
+}
+
+// 회원가입 유저 선택정보 타입
+export interface IOptionalInfoProp {
+  id: number;
+  name: string;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 // 회원가입 페이지 상태 타입
@@ -39,16 +47,6 @@ export interface ISignUpState {
   signUpLoading: boolean;
   signUpDone: boolean;
   signUpError: IGeneralServerResponse;
-  skills: number[] | null;
-  jobs: number | null;
+  skills: IOptionalInfoProp[];
+  jobs: IOptionalInfoProp[];
 }
-
-// 회원가입 유저 선택정보 타입
-export interface IOptionalInfoProps {
-  id: number;
-  name: string;
-  createdAt: Date;
-  updatedAt: Date;
-}
-
-export type SimpleStringPayload = { payload: string };
