@@ -1,4 +1,7 @@
 import { put, takeLatest, all, fork, call } from 'redux-saga/effects';
+import { PayloadAction } from '@reduxjs/toolkit';
+
+import { ISignUpUserProps } from '~/typings/auth';
 import {
   SEND_EMAIL_REQUEST,
   SEND_EMAIL_SUCCESS,
@@ -17,15 +20,13 @@ import {
   SIGN_UP_FAILURE,
 } from '~/redux/reducers/signup';
 import { LOG_IN_SUCCESS } from '~/redux/reducers/common/user';
-
 import { signupAPIs } from '~/lib/APIs';
 import { getAxiosError } from '~/lib/apiClient';
-import { SimpleStringPayload } from '~/typings/auth';
 
 const { sendEmailAPI, verifyEmailAPI, loadSkillsAPI, loadJobsAPI, signUpApI } =
   signupAPIs;
 
-function* sendEmail({ payload: email }: SimpleStringPayload) {
+function* sendEmail({ payload: email }: PayloadAction<string>) {
   try {
     yield call(sendEmailAPI, email);
     yield put({
@@ -39,12 +40,12 @@ function* sendEmail({ payload: email }: SimpleStringPayload) {
   }
 }
 
-function* verifyEmail(action) {
+function* verifyEmail({ payload: email }: PayloadAction<string>) {
   try {
-    yield call(verifyEmailAPI, action.payload);
+    yield call(verifyEmailAPI, email);
     yield put({
       type: VERIFY_EMAIL_SUCCESS,
-      payload: action.payload,
+      payload: email,
     });
   } catch (err) {
     yield put({
@@ -84,10 +85,9 @@ function* loadJobs() {
   }
 }
 
-// TODO: 함수명, ApI 수정해주세요. verify 는 데이터를 검증 및 확인하는 함수에 더 맞는 것 같습니다.
-function* verifySignUp(action) {
+function* signUp({ payload: userInfo }: PayloadAction<ISignUpUserProps>) {
   try {
-    const result = yield call(signUpApI, action.payload);
+    const result = yield call(signUpApI, userInfo);
     yield put({ type: SIGN_UP_SUCCESS });
     yield put({
       type: LOG_IN_SUCCESS,
@@ -115,7 +115,7 @@ function* watchLoadJobs() {
 }
 
 function* watchSignUp() {
-  yield takeLatest(SIGN_UP_REQUEST, verifySignUp);
+  yield takeLatest(SIGN_UP_REQUEST, signUp);
 }
 
 export default function* signUpSaga() {

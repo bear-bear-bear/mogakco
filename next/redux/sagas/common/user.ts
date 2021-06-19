@@ -1,5 +1,7 @@
 import { all, fork, call, takeLatest, put } from 'redux-saga/effects';
+import { PayloadAction } from '@reduxjs/toolkit';
 
+import { ILoginProps } from '~/typings/auth';
 import { getAxiosError } from '~/lib/apiClient';
 import { userAPIs } from '~/lib/APIs';
 import {
@@ -13,9 +15,9 @@ import {
 
 const { logInAPI, logOutAPI } = userAPIs;
 
-function* logIn(action) {
+function* logIn(action: PayloadAction<ILoginProps>) {
   try {
-    const result = yield call(logInAPI, action.data);
+    const result = yield call(logInAPI, action.payload);
     yield put({
       type: LOG_IN_SUCCESS,
       data: result.data,
