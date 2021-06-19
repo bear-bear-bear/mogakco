@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 const initialState = {
   email: null,
@@ -8,8 +8,8 @@ const landingSlice = createSlice({
   name: 'landing',
   initialState,
   reducers: {
-    SAVE_EMAIL: (state, action) => {
-      state.email = action.payload;
+    SAVE_EMAIL: (state, { payload: email }: PayloadAction<string>) => {
+      state.email = email;
     },
   },
 });

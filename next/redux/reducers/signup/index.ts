@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { ISignUpState, SimpleStringPayload } from '~/typings/auth';
+import { ISignUpState, IOptionalInfoProps } from '~/typings/auth';
 import { ErrorPayload } from '~/typings/common';
 
 const initialState: ISignUpState = {
@@ -7,8 +8,8 @@ const initialState: ISignUpState = {
     email: null,
     username: null,
     password: null,
-    skills: null, // 사용자가 선택한 skills
-    job: null, // 사용자가 선택한 job
+    // skills: null, // 사용자가 선택한 skills, 상태로 저장되지 않고 컴포넌트에서 1회성 정보로 처리됩니다.
+    // job: null, // 사용자가 선택한 job, 상태로 저장되지 않고 컴포넌트에서 1회성 정보로 처리됩니다.
   },
   sendEmailLoading: false, // 이메일 전송 요청 중
   sendEmailDone: false,
@@ -30,14 +31,14 @@ const initialState: ISignUpState = {
   signUpDone: false,
   signUpError: null,
   skills: [], // 서버에서 내려주는 skills 목록
-  jobs: null, // 서버에서 내려주는 jobs 목록
+  jobs: [], // 서버에서 내려주는 jobs 목록
 };
 
 const signUpSlice = createSlice({
   name: 'signup',
   initialState,
   reducers: {
-    SEND_EMAIL_REQUEST: (state, { payload: email }: SimpleStringPayload) => {
+    SEND_EMAIL_REQUEST: (state, { payload: email }: PayloadAction<string>) => {
       state.sendEmailLoading = true;
       state.sendEmailDone = false;
       state.sendEmailError = null;
@@ -48,7 +49,6 @@ const signUpSlice = createSlice({
       state.sendEmailDone = true;
     },
     SEND_EMAIL_FAILURE: (state, { payload: error }: ErrorPayload) => {
-      // TODO: 이메일 전송 실패해도 해당 액션 발생안함. writen by galaxy4276
       state.sendEmailLoading = false;
       state.sendEmailError = error;
     },
@@ -91,7 +91,7 @@ const signUpSlice = createSlice({
     },
     LOAD_SKILLS_SUCCESS: (
       state,
-      { payload: skills }: PayloadAction<number[]>,
+      { payload: skills }: PayloadAction<IOptionalInfoProps[]>,
     ) => {
       state.loadSkillsLoading = false;
       state.loadSkillsDone = true;
@@ -106,7 +106,10 @@ const signUpSlice = createSlice({
       state.loadJobsDone = false;
       state.loadJobsError = null;
     },
-    LOAD_JOBS_SUCCESS: (state, { payload: jobs }: PayloadAction<number>) => {
+    LOAD_JOBS_SUCCESS: (
+      state,
+      { payload: jobs }: PayloadAction<IOptionalInfoProps[]>,
+    ) => {
       state.loadJobsLoading = false;
       state.loadJobsDone = true;
       state.jobs = jobs;
@@ -122,10 +125,6 @@ const signUpSlice = createSlice({
       state.saveRequiredInfoDone = true;
     },
     SIGN_UP_REQUEST: (state, action) => {
-      // TODO: 여기 확인해주세요. action (userInfo) 인자는 왜받고 어디서 쓰이는가. writen by galaxy4276
-      const { skills, job } = action.payload;
-      state.userInfo.skills = skills;
-      state.userInfo.job = job;
       state.signUpLoading = true;
       state.signUpDone = false;
       state.signUpError = null;
