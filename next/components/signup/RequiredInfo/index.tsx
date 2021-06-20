@@ -83,19 +83,16 @@ const RequiredInfo = () => {
 
   const onSubmit = useCallback(() => {
     setInitSubmitDone(true);
-    const values = getValues();
-    console.log(values);
-
     const isAllPass = hardVerifyInputs();
     if (!isAllPass) return;
 
     dispatch(
       saveRequiredInfo({
-        username: getValues('username'),
-        password: getValues('password'),
+        username,
+        password,
       }),
     );
-  }, [dispatch, getValues, hardVerifyInputs]);
+  }, [dispatch, hardVerifyInputs, password, username]);
 
   const onError = () => {
     setInitSubmitDone(true);
@@ -105,14 +102,13 @@ const RequiredInfo = () => {
   const onClickEye = () => setIsVisiblePassword((prev) => !prev);
   const flipIsTypingPassword = () => setIsTypingPassword((prev) => !prev);
 
-  // TODO: 정확히 어떤 역할을 수행해내는 코드인지 모르겠습니다. 알려주시면 감사하겠습니다. 의도대로 작동되나요?
-  // TODO: 검토 포인트
   useEffect(() => {
     // 처음 화면이 렌더링 됐을 땐 오류를 표시하지 않음
     if (!initSubmitDone) return;
 
     // 타이핑에 대해 디바운싱
     if (debouncingTimer.current !== 0) {
+      // TODO: 검토 포인트 if 구간 발생 안하는 중 왜? 내가 코드를 망쳐서 writen by galaxy4276
       clearTimeout(debouncingTimer.current);
     }
     setTimeout(() => hardVerifyInputs(), 200);
@@ -125,19 +121,12 @@ const RequiredInfo = () => {
     dispatch(loadJobsRequest());
   }, [dispatch, setFocus]);
 
-  // 폼 입력 시 Validation 수행
-  useEffect(() => {
-    if (initSubmitDone) {
-      hardVerifyInputs();
-    }
-  }, [hardVerifyInputs, initSubmitDone, watch]);
-
   // TODO: 검토 포인트
   useEffect(() => {
     // 사용자가 비밀번호를 수정하는 도중에는 비밀번호 확인 input 으론 focus 가 발생하지 않도록 설정
-    // TODO: 위 주석에서 의미하는 케이스가 방지되고 있는 지 확인한 번 부탁드립니다.
+    // TODO: 위 주석에 의미 확인 부탁드립니다.
     if (passwordMatchError && !isTypingPassword) {
-      setFocus('passwordConfirm');
+      setFocus('passwordConfirm'); // 비밀번호 확인 input 으로 focus 가 발생하지 않게 한다고 했는데 발생되게 함.
     }
   }, [passwordMatchError, isTypingPassword, setFocus]);
 
@@ -168,16 +157,17 @@ const RequiredInfo = () => {
             * 비밀번호
           </Label>
           <PasswordInput
-            type="password"
-            id="password"
-            onFocus={flipIsTypingPassword}
-            scale="small"
-            onClickEye={onClickEye}
-            isVisible={isVisiblePassword}
             {...register('password', {
               pattern: passwordRule,
               minLength: 8,
             })}
+            type="password"
+            id="password"
+            onFocus={flipIsTypingPassword}
+            onBlur={flipIsTypingPassword}
+            scale="small"
+            onClickEye={onClickEye}
+            isVisible={isVisiblePassword}
           />
         </InputWrapper>
         <InputWrapper>
