@@ -142,6 +142,12 @@ const RequiredInfo = () => {
           password={password}
           flipIsTypingPassword={flipIsTypingPassword}
         />
+        <S.DescWrapper>
+          <Desc scale="small">
+            ※ 비밀번호는 영문, 숫자, 기호를 조합하여 8자 이상을 사용하세요
+          </Desc>
+        </S.DescWrapper>
+        <TermForm term={term} onChangeTerm={onChangeTerm} />
         <Error
           isUsernameError={usernameError}
           username={username}
@@ -149,12 +155,6 @@ const RequiredInfo = () => {
           isPasswordMatchError={passwordMatchError}
           isTermError={termError}
         />
-        <S.DescWrapper>
-          <Desc scale="small">
-            ※ 비밀번호는 영문, 숫자, 기호를 조합하여 8자 이상을 사용하세요
-          </Desc>
-        </S.DescWrapper>
-        <TermForm term={term} onChangeTerm={onChangeTerm} />
         <S.CustomSubmitButton
           type="submit"
           complete={false}
