@@ -19,8 +19,11 @@ import Error from './Error';
 
 import * as CS from '../common/styles';
 import * as S from './style';
+import UserNameForm from '~/components/signup/RequiredInfo/FormContent/UserNameForm';
+import PasswordForm from '~/components/signup/RequiredInfo/FormContent/PasswordForm';
+import TermForm from '~/components/signup/RequiredInfo/FormContent/TermForm';
 
-type FormInputs = {
+export type FormInputs = {
   username: string;
   password: string;
   passwordConfirm: string;
@@ -43,7 +46,6 @@ const RequiredInfo = () => {
   const [passwordMatchError, setPasswordMatchError] = useState(false);
   const [termError, setTermError] = useState(false);
   const [isTypingPassword, setIsTypingPassword] = useState(false);
-  const [isVisiblePassword, setIsVisiblePassword] = useState(false);
   const debouncingTimer = useRef<number>(0);
 
   const { register, handleSubmit, getValues, setFocus, setValue, watch } =
@@ -99,7 +101,6 @@ const RequiredInfo = () => {
     hardVerifyInputs();
   };
 
-  const onClickEye = () => setIsVisiblePassword((prev) => !prev);
   const flipIsTypingPassword = () => setIsTypingPassword((prev) => !prev);
 
   useEffect(() => {
@@ -108,7 +109,7 @@ const RequiredInfo = () => {
 
     // 타이핑에 대해 디바운싱
     if (debouncingTimer.current !== 0) {
-      // TODO: 검토 포인트 if 구간 발생 안하는 중 왜? 내가 코드를 망쳐서 writen by galaxy4276
+      // TODO: 검토 포인트 if 구간 발생 안하는 중 "왜? galaxy4276이 코드를 망쳐서" writen by galaxy4276
       clearTimeout(debouncingTimer.current);
     }
     setTimeout(() => hardVerifyInputs(), 200);
@@ -135,80 +136,25 @@ const RequiredInfo = () => {
       <CS.Title>별명과 비밀번호를 입력하세요</CS.Title>
       <Desc>설정한 별명은 나중에 수정할 수 있어요.</Desc>
       <Form action="" onSubmit={handleSubmit(onSubmit, onError)}>
-        <InputWrapper>
-          <Label htmlFor="username" direction="bottom">
-            * 별명
-          </Label>
-          <TextInput
-            type="text"
-            id="username"
-            scale="small"
-            spellCheck={false}
-            {...register('username', { pattern: usernameRule, maxLength: 12 })}
-          />
-        </InputWrapper>
-        <S.DescWrapper>
-          <Desc scale="small">
-            ※ 한글, 영문, 숫자, 마침표를 사용할 수 있습니다
-          </Desc>
-        </S.DescWrapper>
-        <InputWrapper>
-          <Label htmlFor="password" direction="bottom">
-            * 비밀번호
-          </Label>
-          <PasswordInput
-            {...register('password', {
-              pattern: passwordRule,
-              minLength: 8,
-            })}
-            type="password"
-            id="password"
-            onFocus={flipIsTypingPassword}
-            onBlur={flipIsTypingPassword}
-            scale="small"
-            onClickEye={onClickEye}
-            isVisible={isVisiblePassword}
-          />
-        </InputWrapper>
-        <InputWrapper>
-          <Label htmlFor="passwordConfirm" direction="bottom">
-            * 비밀번호 확인
-          </Label>
-          <PasswordInput
-            type="password"
-            id="passwordConfirm"
-            scale="small"
-            onClickEye={onClickEye}
-            isVisible={isVisiblePassword}
-            required
-            {...register('passwordConfirm', {
-              validate: (value) => value === password,
-            })}
-          />
-          <Error
-            isUsernameError={usernameError}
-            username={username}
-            isPasswordError={passwordTestError}
-            isPasswordMatchError={passwordMatchError}
-            isTermError={termError}
-          />
-        </InputWrapper>
+        <UserNameForm register={register} />
+        <PasswordForm
+          register={register}
+          password={password}
+          flipIsTypingPassword={flipIsTypingPassword}
+        />
+        <Error
+          isUsernameError={usernameError}
+          username={username}
+          isPasswordError={passwordTestError}
+          isPasswordMatchError={passwordMatchError}
+          isTermError={termError}
+        />
         <S.DescWrapper>
           <Desc scale="small">
             ※ 비밀번호는 영문, 숫자, 기호를 조합하여 8자 이상을 사용하세요
           </Desc>
         </S.DescWrapper>
-        <S.TermWrapper>
-          <CheckboxInput
-            id="policy"
-            type="checkbox"
-            value={term}
-            onChange={onChangeTerm}
-          />
-          <Label htmlFor="policy" direction="left">
-            (필수)개인정보 수집 및 이용에 동의하겠습니다.
-          </Label>
-        </S.TermWrapper>
+        <TermForm term={term} onChangeTerm={onChangeTerm} />
         <S.CustomSubmitButton
           type="submit"
           complete={false}
