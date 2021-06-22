@@ -5,7 +5,6 @@ import * as S from './style';
 
 type Props = {
   scale?: 'small' | 'medium';
-  setValue: Dispatch<SetStateAction<string>>;
 };
 
 /**
