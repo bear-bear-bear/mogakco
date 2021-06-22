@@ -31,7 +31,7 @@ export const DefaultInput = styled.input`
 
 export const RelativeWrapper = styled.div`
   // 상호작용하는 버튼이 있다면 Input과 묶어두기 위해 사용
-  /* width: 100%; */
+  width: 100%;
   position: relative;
 `;
 

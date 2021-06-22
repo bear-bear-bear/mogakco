@@ -2,17 +2,24 @@ import { IDefaultProps, IPasswordProps, IEmailProps } from './typings';
 
 import * as S from './style';
 
+const DEFAULT_SCALE = 'medium';
+
 /**
  * @desc input(type="checkbox") 컴포넌트입니다.
  * 체크박스의 크기가 커져 사용자 편의성이 올라갑니다.
  */
-export const DefaultInput = ({ forwardedRef, ...rest }: IDefaultProps) => (
-  <S.DefaultInput ref={forwardedRef} {...rest} />
+export const DefaultInput = ({
+  forwardedRef,
+  scale = DEFAULT_SCALE,
+  ...rest
+}: IDefaultProps) => (
+  <S.DefaultInput ref={forwardedRef} scale={scale} {...rest} />
 );
 
 /**
  * @desc input(type="checkbox") 컴포넌트입니다.
  * 체크박스의 크기가 커져 사용자 편의성이 올라갑니다.
+ * scale prop이 없음에 주의하세요.
  */
 export const CheckboxInput = ({ forwardedRef, ...rest }: IDefaultProps) => (
   <S.CheckboxInput ref={forwardedRef} {...rest} />
@@ -25,6 +32,7 @@ export const CheckboxInput = ({ forwardedRef, ...rest }: IDefaultProps) => (
  */
 export const PasswordInput = ({
   forwardedRef,
+  scale = DEFAULT_SCALE,
   isVisible,
   onClickEye,
   type,
@@ -33,6 +41,7 @@ export const PasswordInput = ({
   <S.RelativeWrapper>
     <S.DefaultInput
       ref={forwardedRef}
+      scale={scale}
       type={isVisible ? 'text' : type}
       {...rest}
     />
@@ -48,12 +57,13 @@ export const PasswordInput = ({
  */
 export const EmailInput = ({
   forwardedRef,
+  scale = DEFAULT_SCALE,
   value,
   setValue,
   ...rest
 }: IEmailProps) => (
   <S.RelativeWrapper>
-    <S.DefaultInput ref={forwardedRef} value={value} {...rest} />
+    <S.DefaultInput ref={forwardedRef} scale={scale} value={value} {...rest} />
     {value && <S.DeleteButton onClick={() => setValue('')} />}
   </S.RelativeWrapper>
 );

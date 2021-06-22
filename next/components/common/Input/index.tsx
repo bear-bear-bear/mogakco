@@ -1,4 +1,4 @@
-import React from 'react';
+import { forwardRef, Ref } from 'react';
 import {
   IDefaultProps,
   IPasswordProps,
@@ -12,7 +12,7 @@ import {
   EmailInput,
 } from './components';
 
-function Input(props: TotalProps, ref: React.Ref<HTMLInputElement>) {
+function Input(props: TotalProps, ref: Ref<HTMLInputElement>) {
   switch (props.type) {
     case 'text':
       return <DefaultInput forwardedRef={ref} {...(props as IDefaultProps)} />;
@@ -30,4 +30,4 @@ function Input(props: TotalProps, ref: React.Ref<HTMLInputElement>) {
 }
 Input.displayName = 'Input';
 
-export default React.forwardRef<HTMLInputElement, TotalProps>(Input);
+export default forwardRef<HTMLInputElement, TotalProps>(Input);
