@@ -36,10 +36,7 @@ const Auth = () => {
     setEmailTestError(false);
     dispatch(sendEmailRequest(email as string));
   };
-
-  const onError = () => {
-    setEmailTestError(true);
-  };
+  const onError = () => setEmailTestError(true);
 
   const onClickSocial = () => {
     log.setLevel('debug');
