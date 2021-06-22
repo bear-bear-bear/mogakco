@@ -1,4 +1,4 @@
-import React, { useState, useEffect, createRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import log from 'loglevel';
 
 import { UnpackNestedValue, useForm } from 'react-hook-form';
@@ -28,7 +28,7 @@ const Auth = () => {
     ({ signup }) => signup.sendEmailLoading,
   );
   const sendEmailDone = useTypedSelector(({ signup }) => signup.sendEmailDone);
-  const submitButtonEl = createRef<HTMLButtonElement>();
+  const submitButtonEl = useRef<HTMLButtonElement>();
 
   const { register, handleSubmit, setValue, getValues } = useForm<FormInputs>();
 

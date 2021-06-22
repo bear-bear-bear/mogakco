@@ -3,10 +3,11 @@ import { css, keyframes } from '@emotion/react';
 import { VscLoading } from 'react-icons/vsc';
 import { darken, lighten } from 'polished';
 import { IButtonProps } from '~/components/common/Button/index';
+import { Theme } from '~/typings/common';
 
 // TODO: theme 해결해주세요. writen by galaxy4276
 interface IColorStyleProps {
-  theme: any;
+  theme: Theme;
   color: 'white' | 'black' | 'yellow' | 'blue';
   outline: boolean;
   underline: boolean;

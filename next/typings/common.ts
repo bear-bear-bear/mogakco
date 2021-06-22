@@ -8,3 +8,12 @@ export interface IGeneralServerResponse {
 }
 
 export type ErrorPayload = PayloadAction<IGeneralServerResponse>;
+
+export type Theme = {
+  palette: {
+    white: string;
+    black: string;
+    yellow: string;
+    blue: string;
+  };
+};
