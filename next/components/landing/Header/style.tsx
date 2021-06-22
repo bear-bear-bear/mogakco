@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 
-import Logo from 'assets/svg/logo.svg';
+import Logo from '@assets/svg/logo.svg';
 import media from '~/components/globalStyles/media';
 
 export const HeaderContainer = styled.header`
