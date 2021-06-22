@@ -8,13 +8,11 @@ import {
   loadJobsRequest,
 } from '~/redux/reducers/signup';
 import { usernameRule, passwordRule } from '~/lib/regex';
-import CheckboxInput from '~/components/common/Input/CheckboxInput';
 import Warning from '~/components/common/Warning';
 import Desc from '~/components/common/Desc';
 import Form from '~/components/common/Form';
+import Input from '~/components/common/Input';
 import InputWrapper from '~/components/common/InputWrapper';
-import TextInput from '~/components/common/Input/TextInput';
-import PasswordInput from '~/components/common/Input/PasswordInput';
 import Label from '~/components/common/Label';
 
 import * as CS from '../common/styles';
@@ -146,14 +144,14 @@ const RequiredInfo = () => {
           <Label htmlFor="username" direction="bottom">
             * 별명
           </Label>
-          <TextInput
+          <Input
             type="text"
             id="username"
             scale="small"
             value={username}
             onChange={onChangeUsername}
             ref={usernameEl}
-            spellCheck={false}
+            spellCheck="false"
             required
           />
         </InputWrapper>
@@ -166,7 +164,7 @@ const RequiredInfo = () => {
           <Label htmlFor="password" direction="bottom">
             * 비밀번호
           </Label>
-          <PasswordInput
+          <Input
             type="password"
             id="password"
             value={password}
@@ -184,7 +182,7 @@ const RequiredInfo = () => {
           <Label htmlFor="passwordConfirm" direction="bottom">
             * 비밀번호 확인
           </Label>
-          <PasswordInput
+          <Input
             type="password"
             id="passwordConfirm"
             value={passwordConfirm}
@@ -202,10 +200,10 @@ const RequiredInfo = () => {
           </Desc>
         </S.DescWrapper>
         <S.TermWrapper>
-          <CheckboxInput
+          <Input
             id="policy"
             type="checkbox"
-            value={term}
+            value={Number(term)}
             onChange={onChangeTerm}
           />
           <Label htmlFor="policy" direction="left">
