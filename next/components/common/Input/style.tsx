@@ -5,7 +5,7 @@ import { VscEye, VscEyeClosed, VscClose } from 'react-icons/vsc';
 /* ********************* */
 /* default */
 /* ********************* */
-const scaleStyles = ({ scale }: { scale: 'small' | 'medium' }) => {
+const defaultInputStyles = ({ scale }: { scale: 'small' | 'medium' }) => {
   const scales = {
     small: {
       fontSize: '1rem',
@@ -19,15 +19,14 @@ const scaleStyles = ({ scale }: { scale: 'small' | 'medium' }) => {
   const { fontSize, padding } = scales[scale];
 
   return css`
+    width: 100%;
     font-size: ${fontSize};
     padding: ${padding};
   `;
 };
 
 export const DefaultInput = styled.input`
-  width: 100%;
-
-  ${scaleStyles}
+  ${defaultInputStyles}
 `;
 
 export const RelativeWrapper = styled.div`
@@ -60,7 +59,7 @@ export const OpenEye = styled(VscEye)`
 `;
 
 /* ********************* */
-/* type = password */
+/* type = email */
 /* ********************* */
 export const DeleteButton = styled(VscClose)`
   ${buttonStyles};
