@@ -14,7 +14,14 @@
     "@emotion/babel-plugin",
     ["module-resolver", {
       "~": "./",
-      "assets": "./public/assets"
+      "@assets": "./public/assets",
+      "@components": "./components",
+      "@hooks": "./hooks",
+      "@lib": "./lib",
+      "@pages":  "./pages",
+      "@public":  "./public",
+      "@redux": "./redux",
+      "@test": "./test"
     }]
   ]
 }
