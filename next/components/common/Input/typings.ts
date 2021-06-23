@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, InputHTMLAttributes } from 'react';
+import React, { InputHTMLAttributes } from 'react';
 import { UseFormSetValue } from 'react-hook-form';
 
 import { FormInputs } from '@components/signup/Start';
