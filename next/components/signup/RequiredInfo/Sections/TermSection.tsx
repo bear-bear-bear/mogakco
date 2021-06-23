@@ -1,4 +1,5 @@
 import React from 'react';
+
 import * as S from '~/components/signup/RequiredInfo/style';
 import Input from '~/components/common/Input';
 import Label from '~/components/common/Label';
@@ -8,7 +9,7 @@ type Props = {
   onChangeTerm: () => void;
 };
 
-const TermForm = ({ term, onChangeTerm }: Props) => {
+const TermSection = ({ term, onChangeTerm }: Props) => {
   return (
     <>
       <S.TermWrapper>
@@ -26,4 +27,4 @@ const TermForm = ({ term, onChangeTerm }: Props) => {
   );
 };
 
-export default TermForm;
+export default TermSection;

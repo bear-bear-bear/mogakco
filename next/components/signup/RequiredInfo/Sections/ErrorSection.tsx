@@ -1,21 +1,21 @@
 import React from 'react';
 import Warning from '~/components/common/Warning';
 
+import { InputErrorStates } from '../typings';
+
 interface IProps {
-  isUsernameError: boolean;
   username: string;
-  isPasswordError: boolean;
-  isPasswordMatchError: boolean;
-  isTermError: boolean;
+  errorStates: InputErrorStates;
 }
 
-const Error = ({
-  isUsernameError,
-  username,
-  isPasswordError,
-  isPasswordMatchError,
-  isTermError,
-}: IProps) => {
+const ErrorSection = ({ username, errorStates }: IProps) => {
+  const {
+    isUsernameError,
+    isPasswordTestError,
+    isPasswordMatchError,
+    isTermError,
+  } = errorStates;
+
   return (
     <>
       {isUsernameError &&
@@ -24,11 +24,13 @@ const Error = ({
         ) : (
           <Warning>형식에 맞는 별명을 입력하세요.</Warning>
         ))}
-      {isPasswordError && <Warning>형식에 맞는 비밀번호를 입력하세요.</Warning>}
+      {isPasswordTestError && (
+        <Warning>형식에 맞는 비밀번호를 입력하세요.</Warning>
+      )}
       {isPasswordMatchError && <Warning>비밀번호가 일치하지 않습니다.</Warning>}
       {isTermError && <Warning>약관에 동의하셔야 합니다.</Warning>}
     </>
   );
 };
 
-export default Error;
+export default ErrorSection;

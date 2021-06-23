@@ -1,31 +1,27 @@
-import React, { useCallback, useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useLayoutEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
-import useTypedDispatch from '~/hooks/useTypedDispatch';
 
+import useTypedDispatch from '~/hooks/useTypedDispatch';
 import {
   saveRequiredInfo,
   loadSkillsRequest,
   loadJobsRequest,
 } from '~/redux/reducers/signup';
 import { usernameRule, passwordRule } from '~/lib/regex';
+import isAllPropertyTruthy from '~/lib/isAllPropertyTruthy';
 import Desc from '~/components/common/Desc';
 import Form from '~/components/common/Form';
-import Error from './Error';
+
+import { InputValues, InputErrorStates } from './typings';
+import UsernameSection from './Sections/UsernameSection';
+import PasswordSection from './Sections/PasswordSection';
+import TermSection from './Sections/TermSection';
+import ErrorSection from './Sections/ErrorSection';
 
 import * as CS from '../common/styles';
 import * as S from './style';
-import UserNameForm from '~/components/signup/RequiredInfo/FormContent/UserNameForm';
-import PasswordForm from '~/components/signup/RequiredInfo/FormContent/PasswordForm';
-import TermForm from '~/components/signup/RequiredInfo/FormContent/TermForm';
 
-export type FormInputs = {
-  username: string;
-  password: string;
-  passwordConfirm: string;
-  term: boolean;
-};
-
-const initialState: FormInputs = {
+const initialState: InputValues = {
   username: '',
   password: '',
   passwordConfirm: '',
@@ -35,53 +31,30 @@ const initialState: FormInputs = {
 const RequiredInfo = () => {
   const dispatch = useTypedDispatch();
   const [initSubmitDone, setInitSubmitDone] = useState(false);
-  const [isSoftVerificationPass, setIsSoftVerificationPass] = useState(false);
-  const [usernameError, setUsernameError] = useState(false);
-  const [passwordTestError, setPasswordTestError] = useState(false);
-  const [passwordMatchError, setPasswordMatchError] = useState(false);
-  const [termError, setTermError] = useState(false);
-  const [isTypingPassword, setIsTypingPassword] = useState(false);
+  const [isAllValues, setIsAllValues] = useState(false);
+  const [errorStates, setErrorStates] = useState<InputErrorStates>({
+    isUsernameError: false,
+    isPasswordTestError: false,
+    isPasswordMatchError: false,
+    isTermError: false,
+  });
   const debouncingTimer = useRef<number>(0);
 
   const { register, handleSubmit, getValues, setFocus, setValue, watch } =
-    useForm<FormInputs>({
+    useForm<InputValues>({
       defaultValues: initialState,
     });
 
-  const { username, password, passwordConfirm, term } = watch();
-
-  const hardVerifyInputs = useCallback(() => {
-    // input 모두 검증 후 전체 테스트 통과여부 반환
-    const isUsernameError = usernameRule.test(username) === false; // 기존 regex 검사;
-    setUsernameError(isUsernameError);
-
-    const isPasswordTestError = passwordRule.test(password) === false; // 기존 regex 검사;
-    setPasswordTestError(isPasswordTestError);
-
-    const isPasswordMatchError = passwordConfirm !== password; // 임시
-    setPasswordMatchError(isPasswordMatchError);
-
-    const isTermError = term === false;
-    setTermError(isTermError);
-
-    return [
-      isUsernameError,
-      isTermError,
-      isPasswordTestError,
-      isPasswordMatchError,
-    ].every((isError) => isError === false);
-  }, [password, passwordConfirm, term, username]);
+  const inputValues: InputValues = watch(); // inputValues를 useEffect deps에 넣기 위해 바로 destructuring 하지 않음
+  const { username, password, term } = inputValues;
 
   const onChangeTerm = () => {
-    setIsSoftVerificationPass((prev) => !prev);
     const prevTerm = getValues('term');
     setValue('term', !prevTerm);
   };
 
-  const onSubmit = useCallback(() => {
+  const onValid = () => {
     setInitSubmitDone(true);
-    const isAllPass = hardVerifyInputs();
-    if (!isAllPass) return;
 
     dispatch(
       saveRequiredInfo({
@@ -89,68 +62,62 @@ const RequiredInfo = () => {
         password,
       }),
     );
-  }, [dispatch, hardVerifyInputs, password, username]);
-
-  const onError = () => {
-    setInitSubmitDone(true);
-    hardVerifyInputs();
   };
+  const onInvalid = () => setInitSubmitDone(true);
 
-  const flipIsTypingPassword = () => setIsTypingPassword((prev) => !prev);
-
-  useEffect(() => {
-    // 처음 화면이 렌더링 됐을 땐 오류를 표시하지 않음
-    if (!initSubmitDone) return;
-
-    // 타이핑에 대해 디바운싱
-    if (debouncingTimer.current !== 0) {
-      // TODO: 검토 포인트 if 구간 발생 안하는 중 "왜? galaxy4276이 코드를 망쳐서" writen by galaxy4276
-      clearTimeout(debouncingTimer.current);
-    }
-    setTimeout(() => hardVerifyInputs(), 200);
-  }, [hardVerifyInputs, initSubmitDone]);
-
-  useEffect(() => {
+  useLayoutEffect(() => {
     setFocus('username');
+  }, [setFocus]);
+
+  useEffect(() => {
     // 필수 정보 입력 페이지 진입 시 다음 단계인 추가 정보 페이지의 데이터 프리로딩
     dispatch(loadSkillsRequest());
     dispatch(loadJobsRequest());
   }, [dispatch, setFocus]);
 
-  // TODO: 검토 포인트
   useEffect(() => {
-    // 사용자가 비밀번호를 수정하는 도중에는 비밀번호 확인 input 으론 focus 가 발생하지 않도록 설정
-    // TODO: 위 주석에 의미 확인 부탁드립니다.
-    if (passwordMatchError && !isTypingPassword) {
-      setFocus('passwordConfirm'); // 비밀번호 확인 input 으로 focus 가 발생하지 않게 한다고 했는데 발생되게 함.
+    // inputValues의 값이 변경될 때마다 Input 값 중 빈 값이 없는지 확인하고, 값이 모두 있다면 submit 버튼 활성화
+    // 즉, 버튼 활성화는 정규식 검사와는 무관합니다.
+    setIsAllValues(isAllPropertyTruthy(inputValues));
+  }, [inputValues]);
+
+  useEffect(() => {
+    // inputValues의 값이 변경될 때마다 Input 전체 입력값에 대한 Validation 수행
+    // 즉, 키보드 입력이 있을 때마다 Validation 수행. 디바운싱(0.2s)으로 최적화되어 있습니다.
+
+    // 첫 submit을 수행하기 전에는 Validation을 수행하지 않음 (UX)
+    if (!initSubmitDone) return;
+
+    const verifyAllInputs = (values: InputValues) => {
+      setErrorStates({
+        isUsernameError: usernameRule.test(values.username) === false,
+        isPasswordTestError: passwordRule.test(values.password) === false,
+        isPasswordMatchError: values.passwordConfirm !== values.password,
+        isTermError: values.term === false,
+      });
+    };
+
+    if (debouncingTimer.current !== 0) {
+      clearTimeout(debouncingTimer.current);
     }
-  }, [passwordMatchError, isTypingPassword, setFocus]);
+    setTimeout(() => verifyAllInputs(inputValues), 200);
+  }, [inputValues, initSubmitDone]);
 
   return (
     <>
       <CS.Title>별명과 비밀번호를 입력하세요</CS.Title>
       <Desc>설정한 별명은 나중에 수정할 수 있어요.</Desc>
-      <Form action="" onSubmit={handleSubmit(onSubmit, onError)}>
-        <UserNameForm register={register} />
-        <PasswordForm
-          register={register}
-          password={password}
-          flipIsTypingPassword={flipIsTypingPassword}
-        />
+      <Form action="" onSubmit={handleSubmit(onValid, onInvalid)}>
+        <UsernameSection register={register} />
+        <PasswordSection register={register} password={password} />
         <S.DescWrapper>
           <Desc scale="small">
             ※ 비밀번호는 영문, 숫자, 기호를 조합하여 8자 이상을 사용하세요
           </Desc>
         </S.DescWrapper>
-        <TermForm term={term} onChangeTerm={onChangeTerm} />
-        <Error
-          isUsernameError={usernameError}
-          username={username}
-          isPasswordError={passwordTestError}
-          isPasswordMatchError={passwordMatchError}
-          isTermError={termError}
-        />
-        <S.CustomSubmitButton type="submit" disabled={!isSoftVerificationPass}>
+        <TermSection term={term} onChangeTerm={onChangeTerm} />
+        <ErrorSection username={username} errorStates={errorStates} />
+        <S.CustomSubmitButton type="submit" disabled={!isAllValues}>
           계속
         </S.CustomSubmitButton>
       </Form>

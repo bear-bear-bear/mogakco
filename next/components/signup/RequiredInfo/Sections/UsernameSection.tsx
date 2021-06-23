@@ -1,18 +1,21 @@
 import React from 'react';
 import { UseFormRegister } from 'react-hook-form';
+
 import Desc from '~/components/common/Desc';
 import InputWrapper from '~/components/common/InputWrapper';
 import Label from '~/components/common/Label';
 import Input from '~/components/common/Input';
 import { usernameRule } from '~/lib/regex';
-import * as S from '~/components/signup/RequiredInfo/style';
-import { FormInputs } from '~/components/signup/RequiredInfo';
+
+import { InputValues } from '../typings';
+
+import * as S from '../style';
 
 type Props = {
-  register: UseFormRegister<FormInputs>;
+  register: UseFormRegister<InputValues>;
 };
 
-const UserNameForm = ({ register }: Props) => {
+const UsernameSection = ({ register }: Props) => {
   return (
     <>
       <InputWrapper>
@@ -36,4 +39,4 @@ const UserNameForm = ({ register }: Props) => {
   );
 };
 
-export default UserNameForm;
+export default UsernameSection;

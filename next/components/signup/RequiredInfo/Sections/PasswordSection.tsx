@@ -1,18 +1,19 @@
 import React, { useState } from 'react';
 import { UseFormRegister } from 'react-hook-form';
-import { FormInputs } from '~/components/signup/RequiredInfo';
+
 import InputWrapper from '~/components/common/InputWrapper';
 import Label from '~/components/common/Label';
 import Input from '~/components/common/Input';
 import { passwordRule } from '~/lib/regex';
 
+import { InputValues } from '../typings';
+
 type Props = {
-  register: UseFormRegister<FormInputs>;
+  register: UseFormRegister<InputValues>;
   password: string;
-  flipIsTypingPassword: () => void;
 };
 
-const PasswordForm = ({ register, flipIsTypingPassword, password }: Props) => {
+const PasswordSection = ({ register, password }: Props) => {
   const [isVisiblePassword, setIsVisiblePassword] = useState(false);
   const onClickEye = () => setIsVisiblePassword((prev) => !prev);
 
@@ -29,8 +30,6 @@ const PasswordForm = ({ register, flipIsTypingPassword, password }: Props) => {
           })}
           type="password"
           id="password"
-          onFocus={flipIsTypingPassword}
-          onBlur={flipIsTypingPassword}
           scale="small"
           onClickEye={onClickEye}
           isVisible={isVisiblePassword}
@@ -56,4 +55,4 @@ const PasswordForm = ({ register, flipIsTypingPassword, password }: Props) => {
   );
 };
 
-export default PasswordForm;
+export default PasswordSection;
