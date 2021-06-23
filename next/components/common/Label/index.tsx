@@ -1,4 +1,4 @@
-import React, { FC, HTMLAttributes, LabelHTMLAttributes } from 'react';
+import React, { FC, LabelHTMLAttributes } from 'react';
 
 import * as S from './style';
 

@@ -1,8 +1,4 @@
-import React, {
-  Dispatch,
-  SetStateAction,
-  InputHTMLAttributes,
-} from 'react';
+import React, { Dispatch, SetStateAction, InputHTMLAttributes } from 'react';
 
 export interface IDefaultProps extends InputHTMLAttributes<HTMLInputElement> {
   type: 'checkbox' | 'text' | 'password' | 'email';
