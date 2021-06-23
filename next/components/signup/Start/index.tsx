@@ -7,7 +7,7 @@ import { sendEmailRequest } from '~/redux/reducers/signup';
 import Warning from '~/components/common/Warning';
 import Desc from '~/components/common/Desc';
 import Form from '~/components/common/Form';
-import EmailInput from '~/components/common/Input/EmailInput';
+import Input from '~/components/common/Input';
 import InputWrapper from '~/components/common/InputWrapper';
 import Label from '~/components/common/Label';
 
@@ -69,7 +69,7 @@ const Auth = () => {
           <Form action="" onSubmit={handleSubmit(onSubmitEmail, onError)}>
             <InputWrapper>
               <Label direction="bottom">이메일</Label>
-              <EmailInput
+              <Input
                 type="email"
                 placeholder="이메일 입력"
                 scale="medium"
