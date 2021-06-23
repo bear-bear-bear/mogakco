@@ -78,7 +78,7 @@ const OptionalInfo = () => {
             onChange={onChangeJob}
           />
         </InputWrapper>
-        <CS.SubmitButton type="submit" complete={false} loading={signUpLoading}>
+        <CS.SubmitButton type="submit" loading={signUpLoading}>
           완료
         </CS.SubmitButton>
       </Form>
