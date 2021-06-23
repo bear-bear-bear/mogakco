@@ -1,22 +1,12 @@
 import React, {
   Dispatch,
   SetStateAction,
-  ChangeEvent,
   InputHTMLAttributes,
 } from 'react';
 
-// FIXME: HTMLInputElement를 extend 할 시 emotion 컴포넌트에 의해 거부됨.. 사용한 html 속성을 다 직접 정의해야 할 것 같은데 다른 방법은 없을지 ㅠ
 export interface IDefaultProps extends InputHTMLAttributes<HTMLInputElement> {
   type: 'checkbox' | 'text' | 'password' | 'email';
   scale?: 'small' | 'medium';
-  name?: string;
-  id?: string;
-  disabled?: boolean;
-  required?: boolean;
-  placeholder?: string;
-  onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
-  onFocus?: (e: ChangeEvent<HTMLInputElement>) => void;
-  onBlur?: (e: ChangeEvent<HTMLInputElement>) => void;
   forwardedRef?: React.Ref<HTMLInputElement>;
 }
 
