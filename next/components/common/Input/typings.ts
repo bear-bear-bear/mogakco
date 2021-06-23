@@ -1,8 +1,6 @@
 import React, { Dispatch, SetStateAction, InputHTMLAttributes } from 'react';
 import { UseFormSetValue } from 'react-hook-form';
 
-import { FormInputs } from '@components/signup/Start';
-
 export interface IDefaultProps extends InputHTMLAttributes<HTMLInputElement> {
   type: 'checkbox' | 'text' | 'password' | 'email';
   scale?: 'small' | 'medium';
@@ -17,7 +15,7 @@ export type IPasswordProps = IDefaultProps & IPasswordUniqueProps;
 
 export interface IEmailUniqueProps {
   value: string | number;
-  setValue: UseFormSetValue<FormInputs>;
+  setValue: UseFormSetValue<{ email: string | null }>;
 }
 export type IEmailProps = IDefaultProps & IEmailUniqueProps;
 
