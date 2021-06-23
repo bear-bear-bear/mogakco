@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-const initialState = {
+const initialState: { email: string | null } = {
   email: null,
 };
 
@@ -8,7 +8,7 @@ const landingSlice = createSlice({
   name: 'landing',
   initialState,
   reducers: {
-    SAVE_EMAIL: (state, { payload: email }: PayloadAction<string>) => {
+    SAVE_EMAIL: (state, { payload: email }: PayloadAction<string | null>) => {
       state.email = email;
     },
   },

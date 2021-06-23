@@ -1,11 +1,13 @@
-import { Dispatch, SetStateAction, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useRouter } from 'next/router';
+import { UseFormSetValue } from 'react-hook-form';
 import useTypedDispatch from '~/hooks/useTypedDispatch';
 import useTypedSelector from '~/hooks/useTypedSelector';
 import { saveEmail as saveLandingEmail } from '~/redux/reducers/landing';
 import { verifyEmailRequest } from '~/redux/reducers/signup';
+import { FormInputs } from '.';
 
-const useEffectSignUpStart = (setEmail: Dispatch<SetStateAction<string>>) => {
+const useEffectSignUpStart = (setEmail: UseFormSetValue<FormInputs>) => {
   const router = useRouter();
   const dispatch = useTypedDispatch();
   const landingEmail = useTypedSelector(({ landing }) => landing.email);
@@ -13,7 +15,7 @@ const useEffectSignUpStart = (setEmail: Dispatch<SetStateAction<string>>) => {
   useEffect(() => {
     if (landingEmail === null) return;
 
-    setEmail(landingEmail);
+    setEmail('email', landingEmail);
     dispatch(saveLandingEmail(null));
   }, [dispatch, landingEmail, setEmail]);
 

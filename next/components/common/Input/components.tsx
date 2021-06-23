@@ -64,6 +64,6 @@ export const EmailInput = ({
 }: IEmailProps) => (
   <S.RelativeWrapper>
     <S.DefaultInput ref={forwardedRef} scale={scale} value={value} {...rest} />
-    {value && <S.DeleteButton onClick={() => setValue('')} />}
+    {value && <S.DeleteButton onClick={() => setValue('email', '')} />}
   </S.RelativeWrapper>
 );

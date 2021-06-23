@@ -2,16 +2,17 @@ import styled from '@emotion/styled';
 import { css, keyframes } from '@emotion/react';
 import { VscLoading } from 'react-icons/vsc';
 import { darken, lighten } from 'polished';
-import { IButtonProps } from '~/components/common/Button/index';
+import { IButtonProps } from '@components/common/Button/index';
 
-// TODO: theme 해결해주세요. writen by galaxy4276
-interface IColorStyleProps {
-  theme: any;
-  color: 'white' | 'black' | 'yellow' | 'blue';
-  outline: boolean;
-  underline: boolean;
-  disabled: boolean;
-}
+type ButtonColor = 'white' | 'black' | 'yellow' | 'blue';
+type Theme = {
+  palette: Record<ButtonColor, string>;
+};
+
+type ButtonColorPropNames = 'color' | 'outline' | 'underline' | 'disabled';
+type IColorStyleProps = Pick<IButtonProps, ButtonColorPropNames> & {
+  theme: Theme;
+};
 
 const colorStyles = ({
   theme,
@@ -20,14 +21,14 @@ const colorStyles = ({
   underline,
   disabled,
 }: IColorStyleProps) => {
-  const mainColor = theme.palette[color];
+  const mainColor = theme.palette[color as ButtonColor];
   const subColors = {
     white: '#000',
     black: '#fff',
     yellow: '#000',
     blue: '#fff',
   };
-  const subColor = subColors[color];
+  const subColor = subColors[color as ButtonColor];
 
   return css`
     color: ${subColor};
@@ -119,7 +120,7 @@ const fullWidthStyle = ({ fullWidth }: { fullWidth: boolean }) =>
     }
   `;
 
-export const Button = styled.button<IColorStyleProps & IButtonProps>`
+export const Button = styled.button<IButtonProps>`
   /* 공통 스타일 */
   min-width: ${({ loading }: { loading: boolean }) => loading && '8.1rem'};
   position: relative;

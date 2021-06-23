@@ -3,7 +3,6 @@ import { ThemeProvider } from '@emotion/react';
 
 import * as S from './style';
 
-// TODO: scale 해결해주세요. writen by galaxy4276
 export interface IButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   color: 'white' | 'yellow' | 'black' | 'blue';
   scale: 'small' | 'medium' | 'large';
@@ -13,7 +12,7 @@ export interface IButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   loading: boolean;
 }
 
-const Button = forwardRef<HTMLButtonElement | null, Partial<IButtonProps>>(
+const Button = forwardRef<HTMLButtonElement, Partial<IButtonProps>>(
   (
     {
       children,
@@ -45,6 +44,7 @@ const Button = forwardRef<HTMLButtonElement | null, Partial<IButtonProps>>(
           fullWidth={fullWidth}
           outline={outline}
           underline={underline}
+          loading={loading}
           {...rest}
         >
           {children}

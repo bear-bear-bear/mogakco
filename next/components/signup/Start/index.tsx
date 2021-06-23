@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useRef, SyntheticEvent } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import log from 'loglevel';
 
-import useInput from '~/hooks/useInput';
+import { UnpackNestedValue, useForm } from 'react-hook-form';
 import { emailRule } from '~/lib/regex';
 import { sendEmailRequest } from '~/redux/reducers/signup';
 import Warning from '~/components/common/Warning';
@@ -17,27 +17,26 @@ import useTypedSelector from '~/hooks/useTypedSelector';
 import useTypedDispatch from '~/hooks/useTypedDispatch';
 import useEffectSignUpStart from '~/components/signup/Start/useEffectSignUpStart';
 
+export type FormInputs = {
+  email: string | null;
+};
+
 const Auth = () => {
   const dispatch = useTypedDispatch();
-  const [email, onChangeEmail, setEmail] = useInput();
   const [emailTestError, setEmailTestError] = useState(false);
   const sendEmailLoading = useTypedSelector(
     ({ signup }) => signup.sendEmailLoading,
   );
   const sendEmailDone = useTypedSelector(({ signup }) => signup.sendEmailDone);
-  const emailEl = useRef(null);
-  const submitButtonEl = useRef(null);
+  const submitButtonEl = useRef<HTMLButtonElement>(null);
 
-  // TODO: Type 수정 예정 writen by galaxy4276
-  const onSubmitEmail = (e: SyntheticEvent) => {
-    e.preventDefault();
-    if (!emailRule.test(email as string)) {
-      setEmailTestError(true);
-      return;
-    }
+  const { register, handleSubmit, setValue, getValues } = useForm<FormInputs>();
 
-    dispatch(sendEmailRequest(email));
+  const onSubmitEmail = ({ email }: UnpackNestedValue<FormInputs>) => {
+    setEmailTestError(false);
+    dispatch(sendEmailRequest(email as string));
   };
+  const onError = () => setEmailTestError(true);
 
   const onClickSocial = () => {
     log.setLevel('debug');
@@ -46,10 +45,10 @@ const Auth = () => {
   };
 
   useEffect(() => {
-    submitButtonEl.current.focus();
-  }, []);
+    submitButtonEl.current?.focus();
+  }, [submitButtonEl]);
 
-  useEffectSignUpStart(setEmail);
+  useEffectSignUpStart(setValue);
 
   return (
     <>
@@ -67,18 +66,16 @@ const Auth = () => {
             </S.SocialAnchor>
           </S.SocialLoginWrapper>
           <S.DevideLine />
-          <Form action="" onSubmit={onSubmitEmail}>
+          <Form action="" onSubmit={handleSubmit(onSubmitEmail, onError)}>
             <InputWrapper>
               <Label direction="bottom">이메일</Label>
               <Input
                 type="email"
-                value={email}
-                setValue={setEmail}
-                onChange={onChangeEmail}
                 placeholder="이메일 입력"
-                ref={emailEl}
                 scale="medium"
+                setValue={setValue}
                 spellCheck="false"
+                {...register('email', { pattern: emailRule })}
               />
             </InputWrapper>
             {emailTestError && <Warning>정확한 이메일을 입력해주세요!</Warning>}
@@ -98,7 +95,8 @@ const Auth = () => {
         <>
           <CS.Title>메일함을 확인하세요</CS.Title>
           <Desc>
-            <b>{email}</b>로 인증 링크가 전송되었습니다. 메일함을 확인해주세요.
+            <b>{getValues('email')}</b>로 인증 링크가 전송되었습니다. 메일함을
+            확인해주세요.
           </Desc>
         </>
       )}
