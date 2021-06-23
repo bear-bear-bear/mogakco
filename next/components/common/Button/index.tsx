@@ -1,21 +1,15 @@
-import React, {
-  ButtonHTMLAttributes,
-  forwardRef,
-  MutableRefObject,
-  RefObject,
-} from 'react';
+import React, { ButtonHTMLAttributes, forwardRef } from 'react';
 import { ThemeProvider } from '@emotion/react';
 
 import * as S from './style';
 
-// TODO: scale 해결해주세요. writen by galaxy4276
 export interface IButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  color?: 'white' | 'yellow' | 'black' | 'blue';
-  scale?: 'small' | 'medium' | 'large';
-  fullWidth?: boolean;
-  outline?: boolean;
-  underline?: boolean;
-  loading?: boolean;
+  color: 'white' | 'yellow' | 'black' | 'blue';
+  scale: 'small' | 'medium' | 'large';
+  fullWidth: boolean;
+  outline: boolean;
+  underline: boolean;
+  loading: boolean;
 }
 
 const Button = forwardRef<HTMLButtonElement, Partial<IButtonProps>>(
@@ -50,6 +44,7 @@ const Button = forwardRef<HTMLButtonElement, Partial<IButtonProps>>(
           fullWidth={fullWidth}
           outline={outline}
           underline={underline}
+          loading={loading}
           {...rest}
         >
           {children}

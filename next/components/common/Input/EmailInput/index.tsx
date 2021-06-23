@@ -1,10 +1,13 @@
 import React, { Dispatch, InputHTMLAttributes, SetStateAction } from 'react';
 
+import { UseFormSetValue } from 'react-hook-form';
+import { FormInputs } from '@components/signup/Start';
 import TextInput from '~/components/common/Input/TextInput';
 import * as S from './style';
 
 type Props = {
   scale?: 'small' | 'medium';
+  setValue: UseFormSetValue<FormInputs>;
 };
 
 /**
@@ -19,7 +22,7 @@ const EmailInput = React.forwardRef<
 >(({ scale = 'medium', value, setValue, ...rest }, ref) => (
   <S.EmailWrapper>
     <TextInput ref={ref} scale={scale} value={value} {...rest} />
-    {value && <S.DeleteButton onClick={() => setValue('')} />}
+    {value && <S.DeleteButton onClick={() => setValue('email', '')} />}
   </S.EmailWrapper>
 ));
 

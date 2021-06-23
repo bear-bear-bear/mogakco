@@ -2,16 +2,14 @@ import styled from '@emotion/styled';
 import { css, keyframes } from '@emotion/react';
 import { VscLoading } from 'react-icons/vsc';
 import { darken, lighten } from 'polished';
-import { IButtonProps } from '~/components/common/Button/index';
+import { IButtonProps } from '@components/common/Button/index';
 import { Theme } from '~/typings/common';
 
-// TODO: theme 해결해주세요. writen by galaxy4276
 interface IColorStyleProps {
-  theme: Theme;
-  color: 'white' | 'black' | 'yellow' | 'blue';
-  outline: boolean;
-  underline: boolean;
-  disabled: boolean;
+  color?: 'white' | 'black' | 'yellow' | 'blue';
+  outline?: boolean;
+  underline?: boolean;
+  disabled?: boolean;
 }
 
 const colorStyles = ({
@@ -20,15 +18,16 @@ const colorStyles = ({
   outline,
   underline,
   disabled,
-}: IColorStyleProps) => {
-  const mainColor = theme.palette[color];
+}: IColorStyleProps & { theme: Theme }) => {
+  const mainColor =
+    theme.palette[color as 'white' | 'black' | 'blue' | 'yellow'];
   const subColors = {
     white: '#000',
     black: '#fff',
     yellow: '#000',
     blue: '#fff',
   };
-  const subColor = subColors[color];
+  const subColor = subColors[color as 'white' | 'black' | 'blue' | 'yellow'];
 
   return css`
     color: ${subColor};

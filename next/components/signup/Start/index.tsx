@@ -28,7 +28,7 @@ const Auth = () => {
     ({ signup }) => signup.sendEmailLoading,
   );
   const sendEmailDone = useTypedSelector(({ signup }) => signup.sendEmailDone);
-  const submitButtonEl = useRef<HTMLButtonElement>();
+  const submitButtonEl = useRef<HTMLButtonElement>(null);
 
   const { register, handleSubmit, setValue, getValues } = useForm<FormInputs>();
 
@@ -73,6 +73,7 @@ const Auth = () => {
                 type="email"
                 placeholder="이메일 입력"
                 scale="medium"
+                setValue={setValue}
                 spellCheck="false"
                 {...register('email', { pattern: emailRule })}
               />
