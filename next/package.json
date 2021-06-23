@@ -12,7 +12,7 @@
     "test:unit": "jest --config test/unit/frontend/test-config.json test/unit/frontend/**/*.jsx",
     "stylelint": "stylelint styles/**/*.js",
     "stylelint-check": "stylelint-config-prettier-check",
-    "test:cypress": "cypress open",
+    "test": "cypress open",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook"
   },
