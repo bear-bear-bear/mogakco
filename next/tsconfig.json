@@ -21,8 +21,17 @@
     "jsxImportSource": "@emotion/react",
     "baseUrl": ".",
     "paths": {
-      "~/*": ["./*"]
-    }
+      "~/*": ["./*"],
+      "@assets/*": ["./public/assets/*"],
+      "@components/*": ["./components/*"],
+      "@hooks/*": ["./hooks/*"],
+      "@lib/*": ["./lib/*"],
+      "@pages/*":  ["./pages/*"],
+      "@public/*":  ["./public/*"],
+      "@redux/*": ["./redux/*"],
+      "@test/*": ["./test/*"]
+    },
+    "typeRoots": ["./node_modules/@types", "./typings"]
   },
   "include": [
     "next-env.d.ts",

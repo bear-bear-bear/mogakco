@@ -3,7 +3,7 @@ import { UseFormRegister } from 'react-hook-form';
 import Desc from '~/components/common/Desc';
 import InputWrapper from '~/components/common/InputWrapper';
 import Label from '~/components/common/Label';
-import TextInput from '~/components/common/Input/TextInput';
+import Input from '~/components/common/Input';
 import { usernameRule } from '~/lib/regex';
 import * as S from '~/components/signup/RequiredInfo/style';
 import { FormInputs } from '~/components/signup/RequiredInfo';
@@ -19,7 +19,7 @@ const UserNameForm = ({ register }: Props) => {
         <Label htmlFor="username" direction="bottom">
           * 별명
         </Label>
-        <TextInput
+        <Input
           type="text"
           id="username"
           scale="small"

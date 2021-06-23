@@ -8,13 +8,8 @@ import {
   loadJobsRequest,
 } from '~/redux/reducers/signup';
 import { usernameRule, passwordRule } from '~/lib/regex';
-import CheckboxInput from '~/components/common/Input/CheckboxInput';
 import Desc from '~/components/common/Desc';
 import Form from '~/components/common/Form';
-import InputWrapper from '~/components/common/InputWrapper';
-import TextInput from '~/components/common/Input/TextInput';
-import PasswordInput from '~/components/common/Input/PasswordInput';
-import Label from '~/components/common/Label';
 import Error from './Error';
 
 import * as CS from '../common/styles';
@@ -79,8 +74,8 @@ const RequiredInfo = () => {
 
   const onChangeTerm = () => {
     setIsSoftVerificationPass((prev) => !prev);
-    const term = getValues('term');
-    setValue('term', !term);
+    const prevTerm = getValues('term');
+    setValue('term', !prevTerm);
   };
 
   const onSubmit = useCallback(() => {
@@ -155,11 +150,7 @@ const RequiredInfo = () => {
           isPasswordMatchError={passwordMatchError}
           isTermError={termError}
         />
-        <S.CustomSubmitButton
-          type="submit"
-          complete={false}
-          disabled={!isSoftVerificationPass}
-        >
+        <S.CustomSubmitButton type="submit" disabled={!isSoftVerificationPass}>
           계속
         </S.CustomSubmitButton>
       </Form>

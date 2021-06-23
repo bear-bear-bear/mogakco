@@ -1,6 +1,6 @@
 import React from 'react';
 import * as S from '~/components/signup/RequiredInfo/style';
-import CheckboxInput from '~/components/common/Input/CheckboxInput';
+import Input from '~/components/common/Input';
 import Label from '~/components/common/Label';
 
 type Props = {
@@ -12,10 +12,10 @@ const TermForm = ({ term, onChangeTerm }: Props) => {
   return (
     <>
       <S.TermWrapper>
-        <CheckboxInput
+        <Input
           id="policy"
           type="checkbox"
-          value={term}
+          checked={term}
           onChange={onChangeTerm}
         />
         <Label htmlFor="policy" direction="left">

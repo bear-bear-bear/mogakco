@@ -3,7 +3,7 @@ import { UseFormRegister } from 'react-hook-form';
 import { FormInputs } from '~/components/signup/RequiredInfo';
 import InputWrapper from '~/components/common/InputWrapper';
 import Label from '~/components/common/Label';
-import PasswordInput from '~/components/common/Input/PasswordInput';
+import Input from '~/components/common/Input';
 import { passwordRule } from '~/lib/regex';
 
 type Props = {
@@ -22,7 +22,7 @@ const PasswordForm = ({ register, flipIsTypingPassword, password }: Props) => {
         <Label htmlFor="password" direction="bottom">
           * 비밀번호
         </Label>
-        <PasswordInput
+        <Input
           {...register('password', {
             pattern: passwordRule,
             minLength: 8,
@@ -40,7 +40,7 @@ const PasswordForm = ({ register, flipIsTypingPassword, password }: Props) => {
         <Label htmlFor="passwordConfirm" direction="bottom">
           * 비밀번호 확인
         </Label>
-        <PasswordInput
+        <Input
           type="password"
           id="passwordConfirm"
           scale="small"
