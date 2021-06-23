@@ -14,7 +14,7 @@ export const SubTitle = styled.p`
 
 export const SubmitButton = styled(Button)`
   margin-top: 2rem;
-  align-self: ${({ complete }) => (complete ? 'none' : 'flex-end')};
+  align-self: flex-end;
 
   padding: 1.5rem 1.66rem;
 `;
