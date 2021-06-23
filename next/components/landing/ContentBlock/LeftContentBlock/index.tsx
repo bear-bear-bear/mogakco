@@ -1,12 +1,11 @@
 import React, { useEffect, SyntheticEvent } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useRouter } from 'next/router';
 import { Row, Col } from 'antd';
 import Fade from 'react-reveal/Fade';
 
 import useInput from '~/hooks/useInput';
 import { saveEmail } from '~/redux/reducers/landing';
-import { meSelector } from '~/redux/selectors/common/user';
 import Image from '~/components/common/Image';
 import { ILeftContentBlockProps } from '~/components/landing/ContentBlock';
 
@@ -21,11 +20,13 @@ const LeftContentBlock = ({
 }: ILeftContentBlockProps) => {
   const dispatch = useDispatch();
   const router = useRouter();
-  const me = useSelector(meSelector);
   const [email, onChangeEmail, setEmail] = useInput('');
 
   useEffect(() => {
     if (!isFirstBlock) {
+      return;
+    }
+    if (!emailEl) {
       return;
     }
     emailEl.current?.focus();
@@ -33,7 +34,7 @@ const LeftContentBlock = ({
 
   const toSignUp = (e: SyntheticEvent) => {
     e.preventDefault();
-    dispatch(saveEmail(emailEl.current.value));
+    dispatch(saveEmail(email));
     router.push('/signup');
   };
 
@@ -45,28 +46,23 @@ const LeftContentBlock = ({
             <S.ContentWrapper isFirstBlock={isFirstBlock}>
               <h1>{title}</h1>
               <p>{content}</p>
-              {isFirstBlock &&
-                (me ? (
-                  <S.FirstBlockStartButton color="blue" fullWidth>
-                    시작하기
-                  </S.FirstBlockStartButton>
-                ) : (
-                  <S.FirstBlockForm onSubmit={toSignUp} spellCheck="false">
-                    <S.FirstBlockInput
-                      ref={emailEl}
-                      type="email"
-                      value={email}
-                      setValue={setEmail}
-                      onChange={onChangeEmail}
-                      placeholder="이메일 입력"
-                      spellCheck="false"
-                      required
-                    />
-                    <S.FirstBlockJoinButton color="blue" type="submit">
-                      회원가입
-                    </S.FirstBlockJoinButton>
-                  </S.FirstBlockForm>
-                ))}
+              {isFirstBlock && (
+                <S.FirstBlockForm onSubmit={toSignUp} spellCheck="false">
+                  <S.FirstBlockInput
+                    ref={emailEl}
+                    type="email"
+                    value={email}
+                    setValue={setEmail}
+                    onChange={onChangeEmail}
+                    placeholder="이메일 입력"
+                    spellCheck="false"
+                    required
+                  />
+                  <S.FirstBlockJoinButton color="blue" type="submit">
+                    회원가입
+                  </S.FirstBlockJoinButton>
+                </S.FirstBlockForm>
+              )}
             </S.ContentWrapper>
           </Fade>
         </Col>

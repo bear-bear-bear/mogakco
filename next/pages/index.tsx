@@ -18,7 +18,7 @@ const pageProps = {
 };
 
 const Landing = () => {
-  const emailEl = useRef<HTMLInputElement>();
+  const emailEl = useRef<HTMLInputElement>(null);
 
   return (
     <>

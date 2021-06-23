@@ -7,8 +7,8 @@ interface IContentBlockProps {
   title: string;
   content: string;
   imgName: string;
-  isFirstBlock?: boolean;
-  emailEl?: MutableRefObject<HTMLInputElement | undefined>;
+  isFirstBlock?: boolean | undefined;
+  emailEl?: MutableRefObject<HTMLInputElement | null>;
 }
 
 export type ILeftContentBlockProps = Omit<IContentBlockProps, 'type'>;
