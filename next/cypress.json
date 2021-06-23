@@ -1,3 +1,8 @@
 {
-  "baseUrl": "http://localhost:3000"
+  "baseUrl": "http://localhost:3000",
+  "fixturesFolder": "test/e2e/cypress/fixtures",
+  "integrationFolder": "test/e2e/integration",
+  "pluginsFile": false,
+  "screenshotsFolder": "test/e2e/cypress/screenshots",
+  "supportFile": false
 }
