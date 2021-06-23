@@ -3,10 +3,10 @@ import { useDispatch } from 'react-redux';
 import { useRouter } from 'next/router';
 import { Row, Col } from 'antd';
 import Fade from 'react-reveal/Fade';
+import Image from 'next/Image';
 
 import useInput from '~/hooks/useInput';
 import { saveEmail } from '~/redux/reducers/landing';
-import Image from '~/components/common/Image';
 import { ILeftContentBlockProps } from '~/components/landing/ContentBlock';
 
 import * as S from './style';
@@ -68,7 +68,12 @@ const LeftContentBlock = ({
         </Col>
         <Col xs={{ span: 16, order: 0 }} lg={{ span: 12, order: 1 }}>
           <Fade right>
-            <Image name={imgName} width="100%" height="100%" />
+            <Image
+              src={`/assets/svg/${imgName}`}
+              layout="responsive"
+              width={1000}
+              height={700}
+            />
           </Fade>
         </Col>
       </Row>
