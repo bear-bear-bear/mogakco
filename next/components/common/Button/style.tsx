@@ -3,14 +3,16 @@ import { css, keyframes } from '@emotion/react';
 import { VscLoading } from 'react-icons/vsc';
 import { darken, lighten } from 'polished';
 import { IButtonProps } from '@components/common/Button/index';
-import { Theme } from '~/typings/common';
 
-interface IColorStyleProps {
-  color?: 'white' | 'black' | 'yellow' | 'blue';
-  outline?: boolean;
-  underline?: boolean;
-  disabled?: boolean;
-}
+type ButtonColor = 'white' | 'black' | 'yellow' | 'blue';
+type Theme = {
+  palette: Record<ButtonColor, string>;
+};
+
+type ButtonColorPropNames = 'color' | 'outline' | 'underline' | 'disabled';
+type IColorStyleProps = Pick<IButtonProps, ButtonColorPropNames> & {
+  theme: Theme;
+};
 
 const colorStyles = ({
   theme,
@@ -18,16 +20,15 @@ const colorStyles = ({
   outline,
   underline,
   disabled,
-}: IColorStyleProps & { theme: Theme }) => {
-  const mainColor =
-    theme.palette[color as 'white' | 'black' | 'blue' | 'yellow'];
+}: IColorStyleProps) => {
+  const mainColor = theme.palette[color as ButtonColor];
   const subColors = {
     white: '#000',
     black: '#fff',
     yellow: '#000',
     blue: '#fff',
   };
-  const subColor = subColors[color as 'white' | 'black' | 'blue' | 'yellow'];
+  const subColor = subColors[color as ButtonColor];
 
   return css`
     color: ${subColor};
@@ -119,7 +120,7 @@ const fullWidthStyle = ({ fullWidth }: { fullWidth: boolean }) =>
     }
   `;
 
-export const Button = styled.button<IColorStyleProps & IButtonProps>`
+export const Button = styled.button<IButtonProps>`
   /* 공통 스타일 */
   min-width: ${({ loading }: { loading: boolean }) => loading && '8.1rem'};
   position: relative;
