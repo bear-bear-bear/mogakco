@@ -29,8 +29,9 @@
       "@pages/*":  ["./pages/*"],
       "@public/*":  ["./public/*"],
       "@redux/*": ["./redux/*"],
-      "@test/*": ["./test/*"],
-    }
+      "@test/*": ["./test/*"]
+    },
+    "typeRoots": ["./node_modules/@types", "./typings"]
   },
   "include": [
     "next-env.d.ts",
