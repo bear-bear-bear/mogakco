@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useLayoutEffect, useRef } from 'react';
 import log from 'loglevel';
 
 import { UnpackNestedValue, useForm } from 'react-hook-form';
@@ -44,7 +44,7 @@ const Auth = () => {
     // dispatch(verifySocialRequest());
   };
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     submitButtonEl.current?.focus();
   }, [submitButtonEl]);
 
