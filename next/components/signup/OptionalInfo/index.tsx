@@ -1,4 +1,5 @@
 import React, { useCallback, useState, SyntheticEvent } from 'react';
+import { OptionsType, OptionTypeBase } from 'react-select';
 import Select from '~/components/common/Select';
 
 import { signUpRequest } from '~/redux/reducers/signup';
@@ -30,9 +31,9 @@ const OptionalInfo = () => {
   const userInfo = useTypedSelector(({ signup }) => signup.userInfo);
 
   // react-select 에서 onChange 는 해당 Select 에서 선택되어 있는 현재 데이터를 반환합니다.
-  const onChangeSkills = useCallback((list: SelectProps[]) => {
-    setIsShowSkillOptions(list.length < SKILLS_LIMIT);
-    const ids = list.map(({ value }) => value);
+  const onChangeSkills = useCallback((list: OptionsType<SelectProps>) => {
+    setIsShowSkillOptions(list?.length < SKILLS_LIMIT);
+    const ids = list?.map(({ value }) => value);
     setSkillIds(ids);
   }, []);
 
@@ -63,7 +64,9 @@ const OptionalInfo = () => {
             closeMenuOnSelect={false}
             options={isShowSkillOptions ? skillOptions : []}
             placeholder="관심 분야를 선택해 주세요... (5개까지 선택 가능)"
-            onChange={onChangeSkills}
+            onChange={(data) => {
+              onChangeSkills(data as OptionsType<SelectProps>);
+            }}
           />
         </InputWrapper>
         <InputWrapper>
@@ -75,7 +78,9 @@ const OptionalInfo = () => {
             id="job"
             options={jobOptions}
             placeholder="직업을 선택해 주세요..."
-            onChange={onChangeJob}
+            onChange={(data) => {
+              onChangeJob(data as SelectProps);
+            }}
           />
         </InputWrapper>
         <CS.SubmitButton type="submit" complete={false} loading={signUpLoading}>
