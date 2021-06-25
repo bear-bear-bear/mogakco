@@ -7,7 +7,7 @@ interface IContentBlockProps {
   title: string;
   content: string;
   imgName: string;
-  isFirstBlock?: boolean | undefined;
+  isFirstBlock?: boolean;
   emailEl?: MutableRefObject<HTMLInputElement | null>;
 }
 
