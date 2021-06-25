@@ -1,13 +1,13 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useLayoutEffect, useRef } from 'react';
 import { useRouter } from 'next/router';
 
 import * as CS from '../common/styles';
 
 const Complete = () => {
   const router = useRouter();
-  const buttonEl = useRef<HTMLButtonElement>();
+  const buttonEl = useRef<HTMLButtonElement>(null);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     buttonEl.current?.focus();
   }, []);
 
@@ -19,12 +19,7 @@ const Complete = () => {
   return (
     <>
       <CS.Title>회원가입이 완료되었습니다!</CS.Title>
-      <CS.SubmitButton
-        type="button"
-        ref={buttonEl}
-        onClick={onClickButton}
-        complete
-      >
+      <CS.SubmitButton type="button" ref={buttonEl} onClick={onClickButton}>
         모각코 참여하러 가기
       </CS.SubmitButton>
     </>

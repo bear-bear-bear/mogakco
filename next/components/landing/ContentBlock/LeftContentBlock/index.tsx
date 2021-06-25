@@ -1,4 +1,4 @@
-import React, { useEffect, SyntheticEvent } from 'react';
+import React, { useLayoutEffect, SyntheticEvent } from 'react';
 import { useDispatch } from 'react-redux';
 import { useRouter } from 'next/router';
 import { Row, Col } from 'antd';
@@ -22,7 +22,7 @@ const LeftContentBlock = ({
   const router = useRouter();
   const [email, onChangeEmail, setEmail] = useInput('');
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!isFirstBlock) {
       return;
     }

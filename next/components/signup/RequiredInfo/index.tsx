@@ -1,231 +1,123 @@
-import React, { useCallback, useState, useEffect, useRef } from 'react';
-import { useDispatch } from 'react-redux';
+import React, { useState, useEffect, useLayoutEffect, useRef } from 'react';
+import { useForm } from 'react-hook-form';
 
-import useInput from '~/hooks/useInput';
+import useTypedDispatch from '~/hooks/useTypedDispatch';
 import {
   saveRequiredInfo,
   loadSkillsRequest,
   loadJobsRequest,
 } from '~/redux/reducers/signup';
 import { usernameRule, passwordRule } from '~/lib/regex';
-import Warning from '~/components/common/Warning';
+import isAllPropertyTruthy from '~/lib/isAllPropertyTruthy';
 import Desc from '~/components/common/Desc';
 import Form from '~/components/common/Form';
-import Input from '~/components/common/Input';
-import InputWrapper from '~/components/common/InputWrapper';
-import Label from '~/components/common/Label';
+
+import { InputValues, InputErrorStates } from './typings';
+import UsernameSection from './Sections/UsernameSection';
+import PasswordSection from './Sections/PasswordSection';
+import TermSection from './Sections/TermSection';
+import ErrorSection from './Sections/ErrorSection';
 
 import * as CS from '../common/styles';
 import * as S from './style';
 
+const initialState: InputValues = {
+  username: '',
+  password: '',
+  passwordConfirm: '',
+  term: false,
+};
+
 const RequiredInfo = () => {
-  const dispatch = useDispatch();
+  const dispatch = useTypedDispatch();
   const [initSubmitDone, setInitSubmitDone] = useState(false);
-  const [isSoftVerificationPass, setIsSoftVerificationPass] = useState(false);
-  const [username, onChangeUsername] = useInput('');
-  const [usernameError, setUsernameError] = useState(false);
-  const [password, onChangePassword] = useInput('');
-  const [passwordTestError, setPasswordTestError] = useState(false);
-  const [passwordConfirm, onChangePasswordConfirm] = useInput('');
-  const [passwordMatchError, setPasswordMatchError] = useState(false);
-  const [term, setTerm] = useState(false);
-  const [termError, setTermError] = useState(false);
-  const [isTypingPassword, setIsTypingPassword] = useState(false);
-  const [isVisiblePassword, setIsVisiblePassword] = useState(false);
-  const usernameEl = useRef(null);
-  const passwordInputEl = useRef(null);
-  const passwordConfirmInputEl = useRef(null);
-  const debouncingTimer = useRef(null);
+  const [isAllValues, setIsAllValues] = useState(false);
+  const [errorStates, setErrorStates] = useState<InputErrorStates>({
+    isUsernameError: false,
+    isPasswordTestError: false,
+    isPasswordMatchError: false,
+    isTermError: false,
+  });
+  const debouncingTimer = useRef<number>(0);
+
+  const { register, handleSubmit, getValues, setFocus, setValue, watch } =
+    useForm<InputValues>({
+      defaultValues: initialState,
+    });
+
+  const inputValues: InputValues = watch(); // inputValues를 useEffect deps에 넣기 위해 바로 destructuring 하지 않음
+  const { username, password, term } = inputValues;
+
+  const onChangeTerm = () => {
+    const prevTerm = getValues('term');
+    setValue('term', !prevTerm);
+  };
+
+  const onValid = () => {
+    setInitSubmitDone(true);
+
+    dispatch(
+      saveRequiredInfo({
+        username,
+        password,
+      }),
+    );
+  };
+  const onInvalid = () => setInitSubmitDone(true);
+
+  useLayoutEffect(() => {
+    setFocus('username');
+  }, [setFocus]);
 
   useEffect(() => {
-    usernameEl.current.focus();
     // 필수 정보 입력 페이지 진입 시 다음 단계인 추가 정보 페이지의 데이터 프리로딩
     dispatch(loadSkillsRequest());
     dispatch(loadJobsRequest());
-  }, [dispatch]);
+  }, [dispatch, setFocus]);
 
   useEffect(() => {
-    if (usernameError) {
-      usernameEl.current.focus();
-    }
-  }, [usernameError]);
+    // inputValues의 값이 변경될 때마다 Input 값 중 빈 값이 없는지 확인하고, 값이 모두 있다면 submit 버튼 활성화
+    // 즉, 버튼 활성화는 정규식 검사와는 무관합니다.
+    setIsAllValues(isAllPropertyTruthy(inputValues));
+  }, [inputValues]);
 
   useEffect(() => {
-    if (passwordTestError) {
-      passwordInputEl.current.focus();
-    }
-  }, [passwordTestError]);
+    // inputValues의 값이 변경될 때마다 Input 전체 입력값에 대한 Validation 수행
+    // 즉, 키보드 입력이 있을 때마다 Validation 수행. 디바운싱(0.2s)으로 최적화되어 있습니다.
 
-  useEffect(() => {
-    // 사용자가 비밀번호를 수정하는 도중에는 비밀번호 확인 input으론 focus가 발생하지 않도록 설정
-    if (passwordMatchError && !isTypingPassword) {
-      passwordConfirmInputEl.current.focus();
-    }
-  }, [passwordMatchError, isTypingPassword]);
-
-  useEffect(() => {
-    const isSoftPass = // input 값이 모두 있는지만 검사
-      Boolean(password) &&
-      Boolean(username) &&
-      Boolean(passwordConfirm) &&
-      Boolean(term);
-    setIsSoftVerificationPass(isSoftPass);
-  }, [username, password, passwordConfirm, term]);
-
-  const hardVerifyInputs = useCallback(() => {
-    // input 모두 검증 후 전체 테스트 통과여부 반환
-    const isUsernameError = usernameRule.test(username) === false;
-    setUsernameError(isUsernameError);
-
-    const isPasswordTestError = passwordRule.test(password) === false;
-    setPasswordTestError(isPasswordTestError);
-
-    const isPasswordMatchError = password !== passwordConfirm;
-    setPasswordMatchError(isPasswordMatchError);
-
-    const isTermError = term === false;
-    setTermError(isTermError);
-
-    return [
-      isUsernameError,
-      isTermError,
-      isPasswordTestError,
-      isPasswordMatchError,
-    ].every((isError) => isError === false);
-  }, [username, password, passwordConfirm, term]);
-
-  useEffect(() => {
-    // 처음 화면이 렌더링 됐을 땐 오류를 표시하지 않음
+    // 첫 submit을 수행하기 전에는 Validation을 수행하지 않음 (UX)
     if (!initSubmitDone) return;
 
-    // 타이핑에 대해 디바운싱
+    const verifyAllInputs = (values: InputValues) => {
+      setErrorStates({
+        isUsernameError: usernameRule.test(values.username) === false,
+        isPasswordTestError: passwordRule.test(values.password) === false,
+        isPasswordMatchError: values.passwordConfirm !== values.password,
+        isTermError: values.term === false,
+      });
+    };
+
     if (debouncingTimer.current !== 0) {
       clearTimeout(debouncingTimer.current);
     }
-    debouncingTimer.current = setTimeout(() => hardVerifyInputs(), 200);
-  }, [hardVerifyInputs, initSubmitDone]);
-
-  const flipIsTypingPassword = () => {
-    setIsTypingPassword((prev) => !prev);
-  };
-
-  const onChangeTerm = () => {
-    setTerm((prev) => !prev);
-  };
-
-  const onSubmit = useCallback(
-    (e) => {
-      e.preventDefault();
-      setInitSubmitDone(true);
-
-      const isAllPass = hardVerifyInputs();
-      if (!isAllPass) return;
-
-      dispatch(
-        saveRequiredInfo({
-          username: usernameEl.current.value,
-          password,
-        }),
-      );
-    },
-    [dispatch, hardVerifyInputs, password],
-  );
-
-  const onClickEye = () => {
-    setIsVisiblePassword((prev) => !prev);
-  };
+    setTimeout(() => verifyAllInputs(inputValues), 200);
+  }, [inputValues, initSubmitDone]);
 
   return (
     <>
       <CS.Title>별명과 비밀번호를 입력하세요</CS.Title>
       <Desc>설정한 별명은 나중에 수정할 수 있어요.</Desc>
-      <Form action="" onSubmit={onSubmit}>
-        <InputWrapper>
-          <Label htmlFor="username" direction="bottom">
-            * 별명
-          </Label>
-          <Input
-            type="text"
-            id="username"
-            scale="small"
-            value={username}
-            onChange={onChangeUsername}
-            ref={usernameEl}
-            spellCheck="false"
-            required
-          />
-        </InputWrapper>
-        <S.DescWrapper>
-          <Desc scale="small">
-            ※ 한글, 영문, 숫자, 마침표를 사용할 수 있습니다
-          </Desc>
-        </S.DescWrapper>
-        <InputWrapper>
-          <Label htmlFor="password" direction="bottom">
-            * 비밀번호
-          </Label>
-          <Input
-            type="password"
-            id="password"
-            value={password}
-            onChange={onChangePassword}
-            onFocus={flipIsTypingPassword}
-            onBlur={flipIsTypingPassword}
-            scale="small"
-            ref={passwordInputEl}
-            onClickEye={onClickEye}
-            isVisible={isVisiblePassword}
-            required
-          />
-        </InputWrapper>
-        <InputWrapper>
-          <Label htmlFor="passwordConfirm" direction="bottom">
-            * 비밀번호 확인
-          </Label>
-          <Input
-            type="password"
-            id="passwordConfirm"
-            value={passwordConfirm}
-            onChange={onChangePasswordConfirm}
-            scale="small"
-            ref={passwordConfirmInputEl}
-            onClickEye={onClickEye}
-            isVisible={isVisiblePassword}
-            required
-          />
-        </InputWrapper>
+      <Form action="" onSubmit={handleSubmit(onValid, onInvalid)}>
+        <UsernameSection register={register} />
+        <PasswordSection register={register} password={password} />
         <S.DescWrapper>
           <Desc scale="small">
             ※ 비밀번호는 영문, 숫자, 기호를 조합하여 8자 이상을 사용하세요
           </Desc>
         </S.DescWrapper>
-        <S.TermWrapper>
-          <Input
-            id="policy"
-            type="checkbox"
-            value={Number(term)}
-            onChange={onChangeTerm}
-          />
-          <Label htmlFor="policy" direction="left">
-            (필수)개인정보 수집 및 이용에 동의하겠습니다.
-          </Label>
-        </S.TermWrapper>
-        {usernameError &&
-          (username.length > 12 ? (
-            <Warning>별명은 12자를 넘을 수 없습니다.</Warning>
-          ) : (
-            <Warning>형식에 맞는 별명을 입력하세요.</Warning>
-          ))}
-        {passwordTestError && (
-          <Warning>형식에 맞는 비밀번호를 입력하세요.</Warning>
-        )}
-        {passwordMatchError && <Warning>비밀번호가 일치하지 않습니다.</Warning>}
-        {termError && <Warning>약관에 동의하셔야 합니다.</Warning>}
-        <S.CustomSubmitButton
-          type="submit"
-          complete={false}
-          disabled={!isSoftVerificationPass}
-        >
+        <TermSection term={term} onChangeTerm={onChangeTerm} />
+        <ErrorSection username={username} errorStates={errorStates} />
+        <S.CustomSubmitButton type="submit" disabled={!isAllValues}>
           계속
         </S.CustomSubmitButton>
       </Form>
