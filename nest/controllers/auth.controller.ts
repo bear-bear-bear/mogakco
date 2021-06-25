@@ -24,6 +24,7 @@ import EmailService from '@services/email.service';
 import ParseJoinPipe from '@controllers/pipe/parse-join-pipe';
 import { ConfigService } from '@nestjs/config';
 import { CreateUserDto, LoginUserDto } from '@typing/auth';
+import { millisecondsToMinutes } from 'date-fns';
 import JwtAuthGuard from '../guard/jwt-auth.guard';
 import NonAuthGuard from '../guard/non-auth.guard';
 
@@ -66,15 +67,18 @@ class AuthController {
       this.authService.getCookieWithAccessToken(user);
     const refreshToken = this.authService.getRefreshToken(user);
     await this.authService.saveHashRefreshToken(refreshToken, email);
-
     res.cookie('accessToken', accessToken, {
       ...accessTokenCookieOptions,
     });
+    const minutes = millisecondsToMinutes(accessTokenCookieOptions.maxAge);
+    const accessExpiredDate = new Date(new Date().setMinutes(minutes));
+
     return {
       statusCode: 200,
       message: '로그인에 성공하였습니다!',
       user,
       refreshToken,
+      accessExpiredDate,
     };
   }
 
