@@ -1,5 +1,7 @@
-import CustomHead from '~/components/common/CustomHead';
-import Video from '~/components/video-chat/Video';
+import CustomHead from '@components/common/CustomHead';
+import Container from '@components/video-chat/Container';
+import CamSection from '@components/video-chat/CamSection';
+import ChatSection from '@components/video-chat/ChatSection';
 
 const pageProps = {
   title: '화상채팅 - Mogakco',
@@ -12,7 +14,10 @@ const VideoChat = () => {
   return (
     <>
       <CustomHead {...pageProps} />
-      <Video />
+      <Container>
+        <CamSection />
+        <ChatSection />
+      </Container>
     </>
   );
 };

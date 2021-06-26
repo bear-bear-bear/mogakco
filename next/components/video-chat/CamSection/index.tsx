@@ -1,7 +1,7 @@
 import Container from './Container';
 import Cam from './Cam';
 
-const Video = () => {
+const CamSection = () => {
   return (
     <Container>
       <Cam />
@@ -14,4 +14,4 @@ const Video = () => {
   );
 };
 
-export default Video;
+export default CamSection;

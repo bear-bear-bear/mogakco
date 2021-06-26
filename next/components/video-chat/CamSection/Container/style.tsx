@@ -10,4 +10,14 @@ export const Container = styled.article`
   grid-auto-rows: ${CAM_SIZE};
   grid-auto-flow: row dense;
   background: var(--color-gray-8);
+  overflow-y: scroll;
+
+  &::-webkit-scrollbar {
+    width: 0.5rem;
+    background: var(--color-gray-9);
+
+    &-thumb {
+      background: var(--color-gray-3);
+    }
+  }
 `;
