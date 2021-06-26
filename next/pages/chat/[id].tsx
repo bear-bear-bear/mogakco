@@ -25,6 +25,7 @@ const ChatRoom = () => {
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
+  console.log(context.req);
   const { data: chatAvailable } = await apiClient.get<{
     message: boolean;
     statusCode: number;
@@ -37,7 +38,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       },
     };
   }
-  return { props: { isChatRoom } };
+
+  return {};
 };
 
 export default ChatRoom;
