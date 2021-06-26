@@ -83,7 +83,7 @@ const OptionalInfo = () => {
             }}
           />
         </InputWrapper>
-        <CS.SubmitButton type="submit" loading={signUpLoading}>
+        <CS.SubmitButton type="submit" $loading={signUpLoading}>
           완료
         </CS.SubmitButton>
       </Form>

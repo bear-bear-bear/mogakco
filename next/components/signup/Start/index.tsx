@@ -83,7 +83,7 @@ const Auth = () => {
               ref={submitButtonEl}
               type="submit"
               fullWidth
-              loading={sendEmailLoading}
+              $loading={sendEmailLoading}
             >
               이메일로 계속하기
             </S.SubmitButton>

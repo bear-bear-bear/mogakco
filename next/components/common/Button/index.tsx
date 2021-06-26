@@ -9,7 +9,7 @@ export interface IButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   fullWidth: boolean;
   outline: boolean;
   underline: boolean;
-  loading: boolean;
+  $loading: boolean;
 }
 
 const Button = forwardRef<HTMLButtonElement, Partial<IButtonProps>>(
@@ -21,7 +21,7 @@ const Button = forwardRef<HTMLButtonElement, Partial<IButtonProps>>(
       fullWidth = false,
       outline = false,
       underline = false,
-      loading = false,
+      $loading = false,
       ...rest
     },
     ref,
@@ -44,11 +44,11 @@ const Button = forwardRef<HTMLButtonElement, Partial<IButtonProps>>(
           fullWidth={fullWidth}
           outline={outline}
           underline={underline}
-          loading={loading}
+          $loading={$loading}
           {...rest}
         >
           {children}
-          {loading && <S.Loading />}
+          {$loading && <S.Loading />}
         </S.Button>
       </ThemeProvider>
     );
