@@ -3,6 +3,7 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import Joi from 'joi';
 import { join } from 'path';
+import ChatModule from '@modules/chat.module';
 import AuthModule from './auth.module';
 import MailModule from './mail.module';
 
@@ -48,6 +49,7 @@ import MailModule from './mail.module';
     }),
     AuthModule,
     MailModule,
+    ChatModule,
   ],
   controllers: [],
   providers: [],

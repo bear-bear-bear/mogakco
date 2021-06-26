@@ -2,6 +2,8 @@ import CustomHead from '@components/common/CustomHead';
 import Container from '@components/video-chat/Container';
 import CamSection from '@components/video-chat/CamSection';
 import ChatSection from '@components/video-chat/ChatSection';
+import { GetServerSideProps } from 'next';
+import apiClient from '@lib/apiClient';
 
 const pageProps = {
   title: '화상채팅 - Mogakco',
@@ -10,7 +12,7 @@ const pageProps = {
   locale: 'ko_KR',
 };
 
-const VideoChat = () => {
+const ChatRoom = () => {
   return (
     <>
       <CustomHead {...pageProps} />
@@ -22,4 +24,22 @@ const VideoChat = () => {
   );
 };
 
-export default VideoChat;
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  console.log(context.req);
+  const { data: chatAvailable } = await apiClient.get<{
+    message: boolean;
+    statusCode: number;
+  }>(`/api/chat/available/${context.query.id}`);
+  const isChatRoom = chatAvailable.message;
+  if (!isChatRoom) {
+    return {
+      redirect: {
+        destination: context.req.headers.referer ?? '/',
+      },
+    };
+  }
+
+  return {};
+};
+
+export default ChatRoom;
