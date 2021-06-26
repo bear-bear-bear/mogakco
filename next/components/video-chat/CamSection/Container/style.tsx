@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 
 const CAM_SIZE = '30rem';
-export const Container = styled.article`
+export const Container = styled.section`
   width: 100%;
   height: 100vh;
   display: grid;

@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import { HiOutlineChevronDown } from 'react-icons/hi';
 
-export const Container = styled.article`
+export const Container = styled.section`
   /* display: none; */
   display: grid;
   grid-template-rows: [Header] max-content [chatList] 1fr [InputBox] max-content;
