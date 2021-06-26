@@ -1,9 +1,17 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Req, Request, UseGuards } from '@nestjs/common';
 import UserService from '@services/user.service';
+import JwtAuthGuard from '@guard/jwt-auth.guard';
 
 @Controller('user')
 class UserController {
   constructor(private userService: UserService) {}
+
+  @Get('/')
+  @UseGuards(JwtAuthGuard)
+  async getUserSelfInfo(@Req() req: Request & { user: { id: number; username: string } }) {
+    const userInfo = await this.userService.findUserForLogin(req.user.id);
+    return userInfo;
+  }
 
   @Get('/skills')
   async getAllFields() {
@@ -17,4 +25,5 @@ class UserController {
     return jobList;
   }
 }
+
 export default UserController;
