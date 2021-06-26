@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import * as S from './style';
 
-const Announcement = ({ type, nickname }) => {
+const Announcement = ({ type, nickname }: any) => {
   const announce = useCallback((announceType, name) => {
     const explains: { [AnnounceType: string]: string } = {
       enter: '입장하셨습니다.',

@@ -1,7 +1,7 @@
 import React from 'react';
 import * as S from './style';
 
-const FileChat = ({ nickname, content }) => {
+const FileChat = ({ nickname, content }: any) => {
   const { filename, size, url } = content;
 
   const onClickFileContent = () => {

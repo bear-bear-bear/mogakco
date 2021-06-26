@@ -11,7 +11,7 @@ export const ChatWrapper = styled.section`
   }
 `;
 
-const announcementColorStyles = ({ type }) => {
+const announcementColorStyles = ({ type }: any) => {
   const colors: { [AnnounceType: string]: string } = {
     enter: 'var(--color-gray-5)',
     exit: 'var(--color-gray-5)',

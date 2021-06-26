@@ -4,7 +4,7 @@ import Announcement from './Announcement';
 import TextChat from './TextChat';
 import FileChat from './FileChat';
 
-const Chat = ({ nickname, content, type }) => {
+const Chat = ({ nickname, content, type }: any) => {
   switch (type) {
     case 'chat':
       return <TextChat nickname={nickname} content={content} />;
