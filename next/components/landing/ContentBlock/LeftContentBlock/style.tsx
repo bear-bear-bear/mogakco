@@ -5,8 +5,12 @@ import Button from '~/components/common/Button';
 import Input from '~/components/common/Input';
 import media from '~/components/globalStyles/media';
 
+import { ILeftContentBlockProps } from '../index';
+
+type IFirstBlock = Pick<ILeftContentBlockProps, 'isFirstBlock'>;
+
 export const LeftBlockContainer = styled.article(
-  ({ isFirstBlock }: { isFirstBlock: boolean }) => ({
+  ({ isFirstBlock }: IFirstBlock) => ({
     paddingTop: isFirstBlock ? '5rem' : '9rem',
 
     [media.lg]: {
@@ -74,7 +78,13 @@ export const FirstBlockStartButton = styled(Button)`
 `;
 
 const firstBlockFontStyles = () => {
-  const fontSizes = {
+  interface IFirstBlockFontSizes {
+    [screenSize: string]: {
+      h1: string;
+      p: string;
+    };
+  }
+  const fontSizes: IFirstBlockFontSizes = {
     xs: {
       h1: '2.3rem',
       p: '1.5rem',
@@ -178,6 +188,5 @@ export const ContentWrapper = styled.section`
     padding-right: 4.5rem;
   }
 
-  ${({ isFirstBlock }: { isFirstBlock: boolean }) =>
-    isFirstBlock && firstBlockFontStyles}
+  ${({ isFirstBlock }: IFirstBlock) => isFirstBlock && firstBlockFontStyles}
 `;

@@ -2,7 +2,7 @@ import React from 'react';
 import { Row, Col } from 'antd';
 import Fade from 'react-reveal/Fade';
 
-import Image from '~/components/common/Image';
+import Image from 'next/Image';
 import { IRightContentBlockProps } from '~/components/landing/ContentBlock';
 
 import * as S from './style';
@@ -17,7 +17,12 @@ const RightContentBlock = ({
       <Row justify="center" align="middle" gutter={20}>
         <Col xs={{ span: 16 }} lg={{ span: 12 }}>
           <Fade left>
-            <Image name={imgName} width="100%" height="100%" />
+            <Image
+              src={`/assets/svg/${imgName}`}
+              layout="responsive"
+              width={1000}
+              height={700}
+            />
           </Fade>
         </Col>
         <Col xs={{ span: 24 }} lg={{ span: 12 }}>

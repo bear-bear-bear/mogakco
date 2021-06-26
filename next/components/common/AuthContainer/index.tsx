@@ -1,6 +1,6 @@
 import React, { FC, ReactElement } from 'react';
 import { useRouter } from 'next/router';
-import Image from '~/components/common/Image';
+import Image from 'next/Image';
 
 import * as S from './style';
 
@@ -23,7 +23,12 @@ const AuthContainer: FC<IProps> = ({
     <S.OuterContainer {...rest}>
       <S.Header>
         <S.LogoWrapper onClick={onClickLogo}>
-          <Image name="logo.svg" />
+          <Image
+            src="/assets/svg/logo.svg"
+            layout="responsive"
+            width={200}
+            height={80}
+          />
         </S.LogoWrapper>
       </S.Header>
       {progressBar}

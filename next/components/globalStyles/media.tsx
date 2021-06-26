@@ -1,10 +1,5 @@
 interface IMedia {
-  xs: string;
-  sm: string;
-  md: string;
-  lg: string;
-  xl: string;
-  xxl: string;
+  [screenSize: string]: string;
 }
 
 const media: IMedia = {
