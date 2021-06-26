@@ -11,6 +11,7 @@ import {
 } from 'class-validator';
 import UserJobEntity from '@models/entities/users-job.entity';
 import UserFieldEntity from '@models/entities/user-field.entity';
+import RoomUserEntity from '@models/entities/room-user.entity';
 
 /** @interface Types of Data Object & Properties  */
 export interface ICookieProps {
@@ -39,15 +40,16 @@ export interface IValueProps {
 
 // TODO: 타입 값이 데이터와 정확한 지 점검 필요 2021-06-10
 export interface JwtUserProps {
-  skills: UserFieldEntity[];
+  skills: UserFieldEntity[] | null;
   job: UserJobEntity | undefined;
   username: string;
   email: string;
   hashedRefreshToken?: string | null | undefined;
   id: number;
-  createdAt?: Date | undefined;
-  updatedAt?: Date | undefined;
-  deletedAt?: Date | undefined;
+  createdAt: Date;
+  updatedAt: Date;
+  deletedAt?: Date;
+  roomUser?: RoomUserEntity;
 }
 
 /** @typing Types of Data Object & Properties with Utilities Class */
