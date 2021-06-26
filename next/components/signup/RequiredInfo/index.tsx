@@ -1,6 +1,7 @@
-import React, { useState, useEffect, useLayoutEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 
+import useIsomorphicLayoutEffect from '~/hooks/useIsomorphicLayoutEffect';
 import useTypedDispatch from '~/hooks/useTypedDispatch';
 import {
   saveRequiredInfo,
@@ -65,7 +66,7 @@ const RequiredInfo = () => {
   };
   const onInvalid = () => setInitSubmitDone(true);
 
-  useLayoutEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     setFocus('username');
   }, [setFocus]);
 

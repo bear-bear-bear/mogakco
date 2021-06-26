@@ -122,7 +122,7 @@ const fullWidthStyle = ({ fullWidth }: { fullWidth: boolean }) =>
 
 export const Button = styled.button<IButtonProps>`
   /* 공통 스타일 */
-  min-width: ${({ loading }: { loading: boolean }) => loading && '8.1rem'};
+  min-width: ${({ $loading }: { $loading: boolean }) => $loading && '8.1rem'};
   position: relative;
   display: inline-flex;
   align-items: center;

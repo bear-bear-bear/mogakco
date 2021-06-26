@@ -7,7 +7,7 @@ import media from '~/components/globalStyles/media';
 
 import { ILeftContentBlockProps } from '../index';
 
-type IFirstBlock = Pick<ILeftContentBlockProps, 'isFirstBlock'>;
+type IFirstBlock = Partial<Pick<ILeftContentBlockProps, 'isFirstBlock'>>;
 
 export const LeftBlockContainer = styled.article(
   ({ isFirstBlock }: IFirstBlock) => ({

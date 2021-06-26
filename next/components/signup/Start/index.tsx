@@ -1,7 +1,11 @@
-import React, { useState, useLayoutEffect, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import log from 'loglevel';
-
 import { UnpackNestedValue, useForm } from 'react-hook-form';
+
+import useIsomorphicLayoutEffect from '~/hooks/useIsomorphicLayoutEffect';
+import useTypedSelector from '~/hooks/useTypedSelector';
+import useTypedDispatch from '~/hooks/useTypedDispatch';
+import useEffectSignUpStart from '~/components/signup/Start/useEffectSignUpStart';
 import { emailRule } from '~/lib/regex';
 import { sendEmailRequest } from '~/redux/reducers/signup';
 import Warning from '~/components/common/Warning';
@@ -13,9 +17,6 @@ import Label from '~/components/common/Label';
 
 import * as CS from '../common/styles';
 import * as S from './style';
-import useTypedSelector from '~/hooks/useTypedSelector';
-import useTypedDispatch from '~/hooks/useTypedDispatch';
-import useEffectSignUpStart from '~/components/signup/Start/useEffectSignUpStart';
 
 export type FormInputs = {
   email: string | null;
@@ -44,7 +45,7 @@ const Auth = () => {
     // dispatch(verifySocialRequest());
   };
 
-  useLayoutEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     submitButtonEl.current?.focus();
   }, [submitButtonEl]);
 
@@ -83,7 +84,7 @@ const Auth = () => {
               ref={submitButtonEl}
               type="submit"
               fullWidth
-              loading={sendEmailLoading}
+              $loading={sendEmailLoading}
             >
               이메일로 계속하기
             </S.SubmitButton>

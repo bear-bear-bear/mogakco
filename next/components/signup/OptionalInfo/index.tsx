@@ -1,5 +1,5 @@
 import React, { useCallback, useState, SyntheticEvent } from 'react';
-import { OptionsType, OptionTypeBase } from 'react-select';
+import { OptionsType } from 'react-select';
 import Select from '~/components/common/Select';
 
 import { signUpRequest } from '~/redux/reducers/signup';
@@ -83,7 +83,7 @@ const OptionalInfo = () => {
             }}
           />
         </InputWrapper>
-        <CS.SubmitButton type="submit" loading={signUpLoading}>
+        <CS.SubmitButton type="submit" $loading={signUpLoading}>
           완료
         </CS.SubmitButton>
       </Form>
