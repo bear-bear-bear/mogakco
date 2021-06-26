@@ -6,7 +6,7 @@ const FileChat = ({ nickname, content }) => {
 
   const onClickFileContent = () => {
     // File download logic with content.url
-  }
+  };
 
   return (
     <S.ChatWrapper>
