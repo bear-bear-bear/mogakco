@@ -67,10 +67,12 @@ class UserRepository extends Repository<UserEntity> {
     if (user === undefined) return null;
 
     // TODO: Relation Column 개선 필요
-    const skillIds = user.skills!.map(s => Number(s));
-    const skills = await UserFieldEntity.findByIds(skillIds, {
-      select: ['id', 'name'],
-    });
+    const skillIds = user.skills;
+    const skills =
+      skillIds &&
+      (await UserFieldEntity.findByIds(skillIds, {
+        select: ['id', 'name'],
+      }));
     const job = await UserJobEntity.findOne({
       select: ['id', 'name'],
       where: { id: user.id },
@@ -90,10 +92,12 @@ class UserRepository extends Repository<UserEntity> {
     if (user === undefined) return null;
 
     // TODO: Relation Column 개선 필요
-    const skillIds = user.skills!.map(s => Number(s));
-    const skills = await UserFieldEntity.findByIds(skillIds, {
-      select: ['id', 'name'],
-    });
+    const skillIds = user.skills;
+    const skills =
+      skillIds &&
+      (await UserFieldEntity.findByIds(skillIds, {
+        select: ['id', 'name'],
+      }));
     const job = await UserJobEntity.findOne({
       select: ['id', 'name'],
       where: { id: user.id },
