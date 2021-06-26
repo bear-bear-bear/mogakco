@@ -33,6 +33,7 @@ export const TempTextArea = styled.textarea`
   font-size: 0.9rem;
   font-weight: 700;
   letter-spacing: -0.01rem;
+  color: var(--color-gray-9);
 
   &::placeholder {
     font-size: inherit;

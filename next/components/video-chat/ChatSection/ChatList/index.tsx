@@ -6,23 +6,23 @@ import * as S from './style';
 const dummyChatData: IChatProps[] = [
   {
     id: 1,
-    name: '용감한 너구리',
+    nickname: '용감한 너구리',
     type: 'enter',
   },
   {
     id: 2,
-    name: '풋풋한 강아지',
+    nickname: '풋풋한 강아지',
     type: 'enter',
   },
   {
     id: 3,
-    name: '용감한 너구리',
+    nickname: '용감한 너구리',
     content: '안녕하세요!',
     type: 'chat',
   },
   {
     id: 4,
-    name: '용감한 너구리',
+    nickname: '용감한 너구리',
     content: {
       filename: '최신 기술 트렌드.png',
       size: '29200', // byte
@@ -32,9 +32,14 @@ const dummyChatData: IChatProps[] = [
   },
   {
     id: 5,
-    name: '깜찍한 달팽이',
+    nickname: '깜찍한 달팽이',
     content: '안녕하세요!',
     type: 'chat',
+  },
+  {
+    id: 6,
+    nickname: '깜찍한 달팽이',
+    type: 'kick',
   },
 ];
 
