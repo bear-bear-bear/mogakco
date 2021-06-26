@@ -8,6 +8,7 @@ import UserFieldEntity from '../models/entities/user-field.entity';
 import UserEntity from '../models/entities/user.entity';
 import UserRepository from '../models/repositories/user.repository';
 import { getRandomFieldList, getRandomJob } from '../lib/test-support';
+import RoomRepository from '../models/repositories/room.repository';
 
 export default class CreateUserProps implements Seeder {
   async run(factory: Factory) {
@@ -32,5 +33,7 @@ export default class CreateUserProps implements Seeder {
         return returnUser;
       })
       .createMany(30);
+
+    await getCustomRepository(RoomRepository).createRoom(1);
   }
 }
