@@ -1,5 +1,5 @@
 import React, { useCallback, useState, SyntheticEvent } from 'react';
-import { OptionsType, OptionTypeBase } from 'react-select';
+import { OptionsType } from 'react-select';
 import Select from '~/components/common/Select';
 
 import { signUpRequest } from '~/redux/reducers/signup';
