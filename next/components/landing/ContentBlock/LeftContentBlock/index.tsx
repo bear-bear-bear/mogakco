@@ -1,10 +1,11 @@
-import React, { useLayoutEffect, SyntheticEvent } from 'react';
+import React, { SyntheticEvent } from 'react';
 import { useDispatch } from 'react-redux';
 import { useRouter } from 'next/router';
 import { Row, Col } from 'antd';
 import Fade from 'react-reveal/Fade';
 import Image from 'next/Image';
 
+import useIsomorphicLayoutEffect from '~/hooks/useIsomorphicLayoutEffect';
 import useInput from '~/hooks/useInput';
 import { saveEmail } from '~/redux/reducers/landing';
 import { ILeftContentBlockProps } from '~/components/landing/ContentBlock';
@@ -22,14 +23,11 @@ const LeftContentBlock = ({
   const router = useRouter();
   const [email, onChangeEmail, setEmail] = useInput('');
 
-  useLayoutEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     if (!isFirstBlock) {
       return;
     }
-    if (!emailEl) {
-      return;
-    }
-    emailEl.current?.focus();
+    emailEl?.current?.focus();
   }, [emailEl, isFirstBlock]);
 
   const toSignUp = (e: SyntheticEvent) => {
