@@ -25,21 +25,30 @@ const ChatRoom = () => {
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  console.log(context.req);
-  const { data: chatAvailable } = await apiClient.get<{
-    message: boolean;
-    statusCode: number;
-  }>(`/api/chat/available/${context.query.id}`);
-  const isChatRoom = chatAvailable.message;
-  if (!isChatRoom) {
+  try {
+    const { data: chatAvailable } = await apiClient.get<{
+      message: boolean;
+      statusCode: number;
+    }>(`/api/chat/available/${context.query.id}`);
+    const isChatRoom = chatAvailable.message;
+
+    return isChatRoom
+      ? { props: {} }
+      : {
+          redirect: {
+            destination: context.req.headers.referer ?? '/',
+            permanent: false,
+          },
+        };
+  } catch (error) {
+    console.dir(error);
     return {
       redirect: {
-        destination: context.req.headers.referer ?? '/',
+        destination: '/',
+        permanent: false,
       },
     };
   }
-
-  return {};
 };
 
 export default ChatRoom;
