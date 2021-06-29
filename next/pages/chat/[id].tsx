@@ -4,6 +4,12 @@ import CamSection from '@components/video-chat/CamSection';
 import ChatSection from '@components/video-chat/ChatSection';
 import { GetServerSideProps } from 'next';
 import apiClient from '@lib/apiClient';
+import io from 'socket.io-client';
+import { useEffect } from 'react';
+import log from 'loglevel';
+import { isDevelopment } from '@lib/enviroment';
+
+export const END_POINT = 'http://localhost:8001/chat';
 
 const pageProps = {
   title: '화상채팅 - Mogakco',
@@ -13,6 +19,18 @@ const pageProps = {
 };
 
 const ChatRoom = () => {
+  const socketServer = io(END_POINT, {
+    autoConnect: true,
+    reconnection: true,
+  });
+
+  useEffect(() => {
+    socketServer.emit('connection');
+    socketServer.on('connect', () => {
+      console.log('connected');
+    });
+  }, [socketServer]);
+
   return (
     <>
       <CustomHead {...pageProps} />
@@ -25,23 +43,23 @@ const ChatRoom = () => {
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
+  log.setLevel('debug');
+
   try {
-    const { data: chatAvailable } = await apiClient.get<{
+    const { data } = await apiClient.get<{
       message: boolean;
       statusCode: number;
     }>(`/api/chat/available/${context.query.id}`);
-    const isChatRoom = chatAvailable.message;
+    if (isDevelopment) {
+      log.debug(`Server Response Message: ${data.message}`);
+      log.debug(`Response Status Code: ${data.statusCode}`);
+    }
 
-    return isChatRoom
-      ? { props: {} }
-      : {
-          redirect: {
-            destination: context.req.headers.referer ?? '/',
-            permanent: false,
-          },
-        };
+    return { props: {} };
   } catch (error) {
-    console.dir(error);
+    if (isDevelopment) {
+      log.error(error);
+    }
     return {
       redirect: {
         destination: '/',
