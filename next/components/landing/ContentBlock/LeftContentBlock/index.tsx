@@ -1,9 +1,9 @@
 import React, { SyntheticEvent } from 'react';
 import { useDispatch } from 'react-redux';
 import { useRouter } from 'next/router';
-import { Row, Col } from 'antd';
 import Fade from 'react-reveal/Fade';
 import Image from 'next/Image';
+import { Box, Flex } from '@chakra-ui/react';
 
 import useIsomorphicLayoutEffect from '~/hooks/useIsomorphicLayoutEffect';
 import useInput from '~/hooks/useInput';
@@ -38,8 +38,12 @@ const LeftContentBlock = ({
 
   return (
     <S.LeftBlockContainer isFirstBlock={isFirstBlock}>
-      <Row justify="center" align="middle" gutter={20}>
-        <Col xs={{ span: 24, order: 1 }} lg={{ span: 12, order: 0 }}>
+      <Flex
+        direction={{ base: 'column', lg: 'row' }}
+        justify="center"
+        align="center"
+      >
+        <Box w={{ base: 'full', lg: '50%' }} order={{ base: 1, lg: 0 }}>
           <Fade left>
             <S.ContentWrapper isFirstBlock={isFirstBlock}>
               <h1>{title}</h1>
@@ -63,8 +67,8 @@ const LeftContentBlock = ({
               )}
             </S.ContentWrapper>
           </Fade>
-        </Col>
-        <Col xs={{ span: 16, order: 0 }} lg={{ span: 12, order: 1 }}>
+        </Box>
+        <Box w={{ base: '75%', lg: '50%' }} order={{ base: 0, lg: 1 }}>
           <Fade right>
             <Image
               src={`/assets/svg/${imgName}`}
@@ -73,8 +77,8 @@ const LeftContentBlock = ({
               height={700}
             />
           </Fade>
-        </Col>
-      </Row>
+        </Box>
+      </Flex>
     </S.LeftBlockContainer>
   );
 };
