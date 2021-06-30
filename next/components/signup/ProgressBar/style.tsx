@@ -1,4 +1,6 @@
 import styled from '@emotion/styled';
+import { css } from '@emotion/react';
+import type { ProgressBarProps } from './index';
 
 export const ProgressBarWrapper = styled.div`
   height: 0.625rem;
@@ -8,23 +10,20 @@ export const ProgressBarWrapper = styled.div`
   margin-top: 0.66rem;
 `;
 
-const detectProgress = (progress) => {
-  if (progress[2]) {
-    return 100;
-  }
-  if (progress[1]) {
-    return 60;
-  }
-  if (progress[0]) {
-    return 20;
-  }
-  return 0;
+const fillStyles = ({ fill }: ProgressBarProps) => {
+  // 진행도 = (진행 완료된 절차 갯수 / 전체 절차 갯수) * 100
+  const progress = (fill.filter((v) => v === true).length / fill.length) * 100;
+
+  return css`
+    width: ${progress.toFixed(2)}%;
+  `;
 };
 
-export const ProgressBarFiller = styled.div(({ fill }: any) => ({
-  height: '100%',
-  width: `${detectProgress(fill)}%`,
-  backgroundColor: 'var(--color-blue-1)',
-  borderRadius: 'inherit',
-  transition: '1s width ease-in-out',
-}));
+export const ProgressBarFiller = styled.div`
+  height: 100%;
+  background-color: var(--color-blue-1);
+  border-radius: inherit;
+  transition: 1s width ease-in-out;
+
+  ${fillStyles}
+`;

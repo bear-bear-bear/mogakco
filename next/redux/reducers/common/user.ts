@@ -65,4 +65,4 @@ export const {
   LOG_OUT_FAILURE,
 } = fromActionTypes(userSlice.actions);
 
-export default userSlice.reducer;
+export default userSlice;

@@ -39,11 +39,10 @@ const signUpSlice = createSlice({
   name: 'signup',
   initialState,
   reducers: {
-    SEND_EMAIL_REQUEST: (state, { payload: email }: PayloadAction<string>) => {
+    SEND_EMAIL_REQUEST: (state, action) => {
       state.sendEmailLoading = true;
       state.sendEmailDone = false;
       state.sendEmailError = null;
-      localStorage.setItem('email', email);
     },
     SEND_EMAIL_SUCCESS: (state) => {
       state.sendEmailLoading = false;
@@ -54,18 +53,14 @@ const signUpSlice = createSlice({
       state.sendEmailError = error;
     },
     VERIFY_EMAIL_REQUEST: (state, action) => {
+      // SSR로 1회성 실행되므로 done과 error에 대한 초기화 X
+      // done과 error에 대한 초기화 적용 시 SSR 에서 saga(SUCCESS | FAILURE)에 의해 저장된 state를 이 액션이 덮어 씌움
       state.verifyEmailLoading = true;
-      state.verifyEmailDone = false;
-      state.verifyEmailError = null;
     },
-    VERIFY_EMAIL_SUCCESS: (
-      state,
-      { payload: email }: PayloadAction<string>,
-    ) => {
+    VERIFY_EMAIL_SUCCESS: (state, action) => {
       state.verifyEmailLoading = false;
       state.verifyEmailDone = true;
       state.verifySocialDone = true;
-      state.userInfo.email = email;
     },
     VERIFY_EMAIL_FAILURE: (state, { payload: error }: ErrorPayload) => {
       state.verifyEmailLoading = false;
@@ -177,4 +172,4 @@ export const {
   RESET_SIGN_UP: resetSignUp,
 } = signUpSlice.actions;
 
-export default signUpSlice.reducer;
+export default signUpSlice;

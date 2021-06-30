@@ -1,13 +1,32 @@
-import { combineReducers } from 'redux';
+import { HYDRATE } from 'next-redux-wrapper';
+import type { ReducersMapObject, AnyAction } from 'redux';
+import { Slice, combineReducers } from '@reduxjs/toolkit';
 
-import user from './common/user';
-import signup from './signup';
-import landing from './landing';
+import userSlice from './common/user';
+import signUpSlice from './signup';
+import landingSlice from './landing';
 
-const rootReducer = combineReducers({
-  user,
-  landing,
-  signup,
-});
+const getReducerMapObject = (...slices: Slice[]) =>
+  slices.reduce((acc: ReducersMapObject, currSlice) => {
+    acc[currSlice.name] = currSlice.reducer;
+    return acc;
+  }, {});
 
-export default rootReducer;
+const reducerMapObject = getReducerMapObject(
+  userSlice,
+  signUpSlice,
+  landingSlice,
+);
+
+export const reducer = (state = {}, action: AnyAction) => {
+  if (action.type === HYDRATE) {
+    return {
+      ...state,
+      ...action.payload,
+    };
+  }
+
+  return combineReducers(reducerMapObject)(state, action);
+};
+
+export default reducer;

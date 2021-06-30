@@ -17,4 +17,4 @@ const landingSlice = createSlice({
 // 액션 크리에이터
 export const { SAVE_EMAIL: saveEmail } = landingSlice.actions;
 
-export default landingSlice.reducer;
+export default landingSlice;

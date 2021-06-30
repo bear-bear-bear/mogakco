@@ -67,7 +67,7 @@ export interface ISignUpState {
   saveRequiredInfoDone: boolean;
   signUpLoading: boolean;
   signUpDone: boolean;
-  signUpError: IGeneralServerResponse;
+  signUpError: IGeneralServerResponse | null;
   skills: IOptionalInfoProps[] | null;
   jobs: IOptionalInfoProps[] | null;
 }
