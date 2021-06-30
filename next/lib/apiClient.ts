@@ -2,9 +2,9 @@ import axios, { AxiosError } from 'axios';
 import log from 'loglevel';
 import { IGeneralServerResponse } from '~/typings/common';
 
-export const getAxiosError = (
-  axiosError: AxiosError<IGeneralServerResponse>,
-) => {
+export type Error = AxiosError<IGeneralServerResponse>;
+
+export const getAxiosError = (axiosError: Error) => {
   if (process.env.NODE_ENV === 'production') {
     return '배포 모드에선 로그를 표시하지 않습니다.';
   }
@@ -41,7 +41,7 @@ export const getAxiosError = (
 
   log.debug('Axios config:', config);
 
-  return response.data;
+  return response?.data;
 };
 
 /**
