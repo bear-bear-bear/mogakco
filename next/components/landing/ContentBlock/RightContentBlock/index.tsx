@@ -1,6 +1,6 @@
 import React from 'react';
-import { Row, Col } from 'antd';
 import Fade from 'react-reveal/Fade';
+import { Box, Flex } from '@chakra-ui/react';
 
 import Image from 'next/Image';
 import { IRightContentBlockProps } from '~/components/landing/ContentBlock';
@@ -14,8 +14,12 @@ const RightContentBlock = ({
 }: IRightContentBlockProps) => {
   return (
     <S.RightBlockContainer>
-      <Row justify="center" align="middle" gutter={20}>
-        <Col xs={{ span: 16 }} lg={{ span: 12 }}>
+      <Flex
+        direction={{ base: 'column', lg: 'row' }}
+        justify="center"
+        align="center"
+      >
+        <Box w={{ base: '75%', lg: '50%' }}>
           <Fade left>
             <Image
               src={`/assets/svg/${imgName}`}
@@ -24,16 +28,16 @@ const RightContentBlock = ({
               height={700}
             />
           </Fade>
-        </Col>
-        <Col xs={{ span: 24 }} lg={{ span: 12 }}>
+        </Box>
+        <Box w={{ base: 'full', lg: '50%' }}>
           <Fade right>
             <S.ContentWrapper>
               <h1>{title}</h1>
               <p>{content}</p>
             </S.ContentWrapper>
           </Fade>
-        </Col>
-      </Row>
+        </Box>
+      </Flex>
     </S.RightBlockContainer>
   );
 };

@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import { Row, Col } from 'antd';
+import { Box, Flex } from '@chakra-ui/react';
 
 import Button from '~/components/common/Button';
 
@@ -10,11 +10,11 @@ import * as S from './style';
 
 const Header = () => (
   <S.HeaderContainer>
-    <Row justify="space-between">
-      <Col flex="fit-content">
+    <Flex justify="space-between">
+      <Box w="fit-content">
         <S.MainLogo />
-      </Col>
-      <Col flex="auto">
+      </Box>
+      <Box w="auto">
         <S.ButtonsWrapper>
           <Link href="/login">
             <Button color="black" underline>
@@ -27,8 +27,8 @@ const Header = () => (
             </Button>
           </Link>
         </S.ButtonsWrapper>
-      </Col>
-    </Row>
+      </Box>
+    </Flex>
   </S.HeaderContainer>
 );
 
