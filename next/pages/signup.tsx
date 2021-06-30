@@ -48,7 +48,6 @@ const SignUp = ({ isQuery }: Props) => {
     };
   }, [dispatch]);
 
-  console.log('isQuery', isQuery);
   useEffect(() => {
     // 이메일 링크를 타고 들어와 관련 쿼리가 주소창에 남아있다면, 해당 쿼리 clear
     if (isQuery) {

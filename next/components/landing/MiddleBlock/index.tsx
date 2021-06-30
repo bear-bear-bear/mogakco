@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Col } from 'antd';
+import { Flex } from '@chakra-ui/react';
 import Fade from 'react-reveal/Fade';
 
 import * as S from './style';
@@ -18,20 +18,18 @@ const MiddleBlock = ({
   onClickButton,
 }: IMiddleBlock) => (
   <S.MiddleBlockContainer>
-    <Row justify="center" align="middle">
-      <Col>
-        <Fade bottom>
-          <S.ContentWrapper>
-            <h3>[ {subtitle} ]</h3>
-            <h1>{title}</h1>
-            <p>{content}</p>
-            <S.StartButton color="blue" onClick={onClickButton}>
-              시작하기
-            </S.StartButton>
-          </S.ContentWrapper>
-        </Fade>
-      </Col>
-    </Row>
+    <Flex justify="center" align="center">
+      <Fade bottom>
+        <S.ContentWrapper>
+          <h3>[ {subtitle} ]</h3>
+          <h1>{title}</h1>
+          <p>{content}</p>
+          <S.StartButton color="blue" onClick={onClickButton}>
+            시작하기
+          </S.StartButton>
+        </S.ContentWrapper>
+      </Fade>
+    </Flex>
   </S.MiddleBlockContainer>
 );
 
