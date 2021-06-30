@@ -6,7 +6,7 @@ import Label from '@components/common/Label';
 import Input from '@components/common/Input';
 import { passwordRule } from '@lib/regex';
 
-import { InputValues } from '../typings';
+import type { InputValues } from '../typings';
 
 type Props = {
   register: UseFormRegister<InputValues>;

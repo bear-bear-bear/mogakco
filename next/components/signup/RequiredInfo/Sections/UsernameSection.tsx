@@ -7,7 +7,7 @@ import Label from '@components/common/Label';
 import Input from '@components/common/Input';
 import { usernameRule } from '@lib/regex';
 
-import { InputValues } from '../typings';
+import type { InputValues } from '../typings';
 
 import * as S from '../style';
 

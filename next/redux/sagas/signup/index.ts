@@ -1,7 +1,7 @@
 import { put, takeLatest, all, fork, call } from 'redux-saga/effects';
 import { PayloadAction } from '@reduxjs/toolkit';
 
-import { ISignUpUserProps } from '@typings/auth';
+import type { ISignUpUserProps } from '@typings/auth';
 import {
   SEND_EMAIL_REQUEST,
   SEND_EMAIL_SUCCESS,

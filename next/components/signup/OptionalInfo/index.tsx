@@ -1,17 +1,17 @@
 import React, { useCallback, useState, SyntheticEvent } from 'react';
 import { OptionsType } from 'react-select';
-import Select from '@components/common/Select';
 
+import useTypedDispatch from '@hooks/useTypedDispatch';
+import useTypedSelector from '@hooks/useTypedSelector';
 import { signUpRequest } from '@redux/reducers/signup';
 import { getSkillOptions, getJobOptions } from '@redux/selectors/signup';
+import Select from '@components/common/Select';
 import Desc from '@components/common/Desc';
 import Form from '@components/common/Form';
 import InputWrapper from '@components/common/InputWrapper';
 import Label from '@components/common/Label';
 
 import * as CS from '../common/styles';
-import useTypedDispatch from '@hooks/useTypedDispatch';
-import useTypedSelector from '@hooks/useTypedSelector';
 
 type SelectProps = {
   value: number;

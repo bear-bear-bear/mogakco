@@ -1,7 +1,7 @@
 import React from 'react';
 import Warning from '@components/common/Warning';
 
-import { InputErrorStates } from '../typings';
+import type { InputErrorStates } from '../typings';
 
 interface IProps {
   username: string;

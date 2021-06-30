@@ -1,6 +1,6 @@
-import apiClient from './apiClient';
-import { IGeneralServerResponse } from '@typings/common';
-import {
+import apiClient from '@lib/apiClient';
+import type { IGeneralServerResponse } from '@typings/common';
+import type {
   ILoginSuccessResponse,
   IOptionalInfoProps,
   ISignUpResponse,
