@@ -3,7 +3,11 @@ import PropTypes from 'prop-types';
 
 import * as S from './style';
 
-const ProgressBar = ({ fill }: any) => {
+export interface ProgressBarProps {
+  fill: boolean[];
+}
+
+const ProgressBar = ({ fill }: ProgressBarProps) => {
   return (
     <S.ProgressBarWrapper>
       <S.ProgressBarFiller fill={fill} />
