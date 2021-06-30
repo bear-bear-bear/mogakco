@@ -1,6 +1,7 @@
 import { createWrapper } from 'next-redux-wrapper';
 import { configureStore } from '@reduxjs/toolkit';
 import createSagaMiddleware from 'redux-saga';
+
 import reducer from '../reducers';
 import rootSaga from '../sagas';
 
@@ -9,8 +10,9 @@ const sagaMiddleware = createSagaMiddleware();
 
 const store = configureStore({
   reducer,
-  middleware: [sagaMiddleware],
   devTools: isDev,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(sagaMiddleware),
 });
 store.sagaTask = sagaMiddleware.run(rootSaga);
 
