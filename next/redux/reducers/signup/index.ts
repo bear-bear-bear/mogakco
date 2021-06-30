@@ -177,4 +177,4 @@ export const {
   RESET_SIGN_UP: resetSignUp,
 } = signUpSlice.actions;
 
-export default signUpSlice.reducer;
+export default signUpSlice;
