@@ -1,11 +1,11 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import log from 'loglevel';
 import { UnpackNestedValue, useForm } from 'react-hook-form';
 
 import useIsomorphicLayoutEffect from '~/hooks/useIsomorphicLayoutEffect';
 import useTypedSelector from '~/hooks/useTypedSelector';
 import useTypedDispatch from '~/hooks/useTypedDispatch';
-import useEffectSignUpStart from '~/components/signup/Start/useEffectSignUpStart';
+import { saveEmail as saveLandingEmail } from '~/redux/reducers/landing';
 import { emailRule } from '~/lib/regex';
 import { sendEmailRequest } from '~/redux/reducers/signup';
 import Warning from '~/components/common/Warning';
@@ -25,6 +25,7 @@ export type FormInputs = {
 const Auth = () => {
   const dispatch = useTypedDispatch();
   const [emailTestError, setEmailTestError] = useState(false);
+  const landingEmail = useTypedSelector(({ landing }) => landing.email);
   const sendEmailLoading = useTypedSelector(
     ({ signup }) => signup.sendEmailLoading,
   );
@@ -49,7 +50,12 @@ const Auth = () => {
     submitButtonEl.current?.focus();
   }, [submitButtonEl]);
 
-  useEffectSignUpStart(setValue);
+  useEffect(() => {
+    if (landingEmail === null) return;
+
+    setValue('email', landingEmail);
+    dispatch(saveLandingEmail(null));
+  }, [dispatch, landingEmail, setValue]);
 
   return (
     <>

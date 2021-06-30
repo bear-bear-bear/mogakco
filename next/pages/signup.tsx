@@ -1,8 +1,7 @@
 import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { useDispatch } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 import { END } from 'redux-saga';
-import log from 'loglevel';
 
 import wrapper from '~/redux/store/configureStore';
 import { resetSignUp, verifyEmailRequest } from '~/redux/reducers/signup';
@@ -17,7 +16,7 @@ import End from '~/components/signup/End';
 
 interface Props {
   isQuery: boolean;
-};
+}
 
 const pageProps = {
   title: '회원가입 - Mogakco',
@@ -51,7 +50,7 @@ const SignUp = ({ isQuery }: Props) => {
   useEffect(() => {
     // 이메일 링크를 타고 들어와 관련 쿼리가 주소창에 남아있다면, 해당 쿼리 clear
     if (isQuery) {
-      router.push('/signup', undefined, { shallow: true });
+      router.replace('/signup');
     }
   }, [isQuery, router]);
 
@@ -68,26 +67,21 @@ const SignUp = ({ isQuery }: Props) => {
   );
 };
 
+// 이메일 검증 링크를 타고 이 페이지로 들어와 관련 쿼리가 있다면,
+// 해당 쿼리로 이후의 로직 실행
 export const getServerSideProps = wrapper.getServerSideProps(
   async ({ query, store }) => {
-    log.setLevel('debug');
-
     const { success, email: verifiedEmail } = query;
     const isQuery = Boolean(success);
-
-    log.debug('-------------------------------------');
-    log.debug('query', query);
-    log.debug('isQuery', isQuery);
-    log.debug('-------------------------------------');
 
     if (isQuery) {
       if (success === 'true') {
         store.dispatch(verifyEmailRequest(verifiedEmail));
+
+        store.dispatch(END);
+        await store.sagaTask?.toPromise();
       }
     }
-
-    store.dispatch(END);
-    await store.sagaTask?.toPromise();
 
     return {
       props: {
@@ -97,4 +91,4 @@ export const getServerSideProps = wrapper.getServerSideProps(
   },
 );
 
-export default SignUp;
+export default connect((state) => state)(SignUp);
