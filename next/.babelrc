@@ -21,6 +21,7 @@
       "@pages":  "./pages",
       "@public":  "./public",
       "@redux": "./redux",
+      "@typings": "./typings",
       "@test": "./test"
     }]
   ]
