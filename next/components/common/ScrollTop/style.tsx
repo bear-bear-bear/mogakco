@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import { FaChevronUp } from 'react-icons/fa';
 
-import media from '~/components/globalStyles/media';
+import media from '@components/globalStyles/media';
 
 export const ScrollTop = styled.div`
   width: 2rem;

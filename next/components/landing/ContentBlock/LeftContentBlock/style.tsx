@@ -1,11 +1,11 @@
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 
-import Button from '~/components/common/Button';
-import Input from '~/components/common/Input';
-import media from '~/components/globalStyles/media';
+import Button from '@components/common/Button';
+import Input from '@components/common/Input';
+import media from '@components/globalStyles/media';
 
-import { ILeftContentBlockProps } from '../index';
+import type { ILeftContentBlockProps } from '../index';
 
 type IFirstBlock = Partial<Pick<ILeftContentBlockProps, 'isFirstBlock'>>;
 

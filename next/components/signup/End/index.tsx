@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import { useRouter } from 'next/router';
 
-import useIsomorphicLayoutEffect from '~/hooks/useIsomorphicLayoutEffect';
+import useIsomorphicLayoutEffect from '@hooks/useIsomorphicLayoutEffect';
 import * as CS from '../common/styles';
 
 const Complete = () => {

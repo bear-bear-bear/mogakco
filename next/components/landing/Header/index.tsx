@@ -2,7 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import { Box, Flex } from '@chakra-ui/react';
 
-import Button from '~/components/common/Button';
+import Button from '@components/common/Button';
 
 import * as S from './style';
 

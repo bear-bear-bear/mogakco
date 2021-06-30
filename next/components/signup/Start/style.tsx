@@ -3,7 +3,7 @@ import styled from '@emotion/styled';
 import { FcGoogle } from 'react-icons/fc';
 import { VscGithubInverted } from 'react-icons/vsc';
 
-import Button from '~/components/common/Button';
+import Button from '@components/common/Button';
 
 export const SocialLoginWrapper = styled.div`
   width: 100%;

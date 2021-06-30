@@ -1,7 +1,7 @@
 import { put, takeLatest, all, fork, call } from 'redux-saga/effects';
 import { PayloadAction } from '@reduxjs/toolkit';
 
-import { ISignUpUserProps } from '~/typings/auth';
+import type { ISignUpUserProps } from '@typings/auth';
 import {
   SEND_EMAIL_REQUEST,
   SEND_EMAIL_SUCCESS,
@@ -18,11 +18,11 @@ import {
   SIGN_UP_REQUEST,
   SIGN_UP_SUCCESS,
   SIGN_UP_FAILURE,
-} from '~/redux/reducers/signup';
-import { LOG_IN_SUCCESS } from '~/redux/reducers/common/user';
-import { signupAPIs } from '~/lib/APIs';
-import { getAxiosError } from '~/lib/apiClient';
-import type { Error } from '~/lib/apiClient';
+} from '@redux/reducers/signup';
+import { LOG_IN_SUCCESS } from '@redux/reducers/common/user';
+import { signupAPIs } from '@lib/APIs';
+import { getAxiosError } from '@lib/apiClient';
+import type { Error } from '@lib/apiClient';
 
 const { sendEmailAPI, verifyEmailAPI, loadSkillsAPI, loadJobsAPI, signUpAPI } =
   signupAPIs;

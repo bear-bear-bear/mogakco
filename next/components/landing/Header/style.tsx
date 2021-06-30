@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 
 import Logo from '@assets/svg/logo.svg';
-import media from '~/components/globalStyles/media';
+import media from '@components/globalStyles/media';
 
 export const HeaderContainer = styled.header`
   max-width: 1280px;

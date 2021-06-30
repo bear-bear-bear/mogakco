@@ -5,10 +5,10 @@ import Fade from 'react-reveal/Fade';
 import Image from 'next/Image';
 import { Box, Flex } from '@chakra-ui/react';
 
-import useIsomorphicLayoutEffect from '~/hooks/useIsomorphicLayoutEffect';
-import useInput from '~/hooks/useInput';
-import { saveEmail } from '~/redux/reducers/landing';
-import { ILeftContentBlockProps } from '~/components/landing/ContentBlock';
+import useIsomorphicLayoutEffect from '@hooks/useIsomorphicLayoutEffect';
+import useInput from '@hooks/useInput';
+import { saveEmail } from '@redux/reducers/landing';
+import type { ILeftContentBlockProps } from '@components/landing/ContentBlock';
 
 import * as S from './style';
 
