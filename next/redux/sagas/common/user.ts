@@ -1,9 +1,9 @@
 import { all, fork, call, takeLatest, put } from 'redux-saga/effects';
 import { PayloadAction } from '@reduxjs/toolkit';
 
-import { ILoginProps } from '~/typings/auth';
-import { getAxiosError } from '~/lib/apiClient';
-import { userAPIs } from '~/lib/APIs';
+import { ILoginProps } from '@typings/auth';
+import { getAxiosError } from '@lib/apiClient';
+import { userAPIs } from '@lib/APIs';
 import {
   LOG_IN_REQUEST,
   LOG_IN_SUCCESS,
@@ -11,7 +11,7 @@ import {
   LOG_OUT_REQUEST,
   LOG_OUT_SUCCESS,
   LOG_OUT_FAILURE,
-} from '~/redux/reducers/common/user';
+} from '@redux/reducers/common/user';
 
 const { logInAPI, logOutAPI } = userAPIs;
 

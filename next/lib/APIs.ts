@@ -1,10 +1,10 @@
 import apiClient from './apiClient';
-import { IGeneralServerResponse } from '~/typings/common';
+import { IGeneralServerResponse } from '@typings/common';
 import {
   ILoginSuccessResponse,
   IOptionalInfoProps,
   ISignUpResponse,
-} from '~/typings/auth';
+} from '@typings/auth';
 
 /**
  * @desc redux/sagas 디렉터리 구성 기준으로 작성됩니다.

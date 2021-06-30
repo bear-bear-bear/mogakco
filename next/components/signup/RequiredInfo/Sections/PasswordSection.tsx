@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { UseFormRegister } from 'react-hook-form';
 
-import InputWrapper from '~/components/common/InputWrapper';
-import Label from '~/components/common/Label';
-import Input from '~/components/common/Input';
-import { passwordRule } from '~/lib/regex';
+import InputWrapper from '@components/common/InputWrapper';
+import Label from '@components/common/Label';
+import Input from '@components/common/Input';
+import { passwordRule } from '@lib/regex';
 
 import { InputValues } from '../typings';
 

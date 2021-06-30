@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
-import fromActionTypes from '~/lib/fromActionTypes';
-import { IUserState } from '~/typings/auth';
-import { ErrorPayload } from '~/typings/common';
+import fromActionTypes from '@lib/fromActionTypes';
+import { IUserState } from '@typings/auth';
+import { ErrorPayload } from '@typings/common';
 
 const initialState: IUserState = {
   me: null,

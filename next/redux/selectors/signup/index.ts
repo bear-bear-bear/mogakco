@@ -1,6 +1,6 @@
 import { createSelector } from '@reduxjs/toolkit';
-import { RootState } from '~/redux/store/configureStore';
-import { IOptionalInfoProps } from '~/typings/auth';
+import { RootState } from '@redux/store/configureStore';
+import { IOptionalInfoProps } from '@typings/auth';
 
 const selectUserInfo = ({ signup }: RootState) => signup.userInfo;
 const selectSkills = ({ signup }: RootState) => signup.skills;

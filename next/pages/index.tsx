@@ -1,12 +1,12 @@
 import { useRef } from 'react';
 
-import CustomHead from '~/components/common/CustomHead';
-import Container from '~/components/landing/Container';
-import Header from '~/components/landing/Header';
-import ContentBlock from '~/components/landing/ContentBlock';
-import MiddleBlock from '~/components/landing/MiddleBlock';
-import Footer from '~/components/landing/Footer';
-import ScrollTop from '~/components/common/ScrollTop';
+import CustomHead from '@components/common/CustomHead';
+import Container from '@components/landing/Container';
+import Header from '@components/landing/Header';
+import ContentBlock from '@components/landing/ContentBlock';
+import MiddleBlock from '@components/landing/MiddleBlock';
+import Footer from '@components/landing/Footer';
+import ScrollTop from '@components/common/ScrollTop';
 
 const pageProps = {
   title: '모여서 각자 코딩 - Mogakco',

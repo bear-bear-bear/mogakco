@@ -1,5 +1,5 @@
 import React from 'react';
-import Warning from '~/components/common/Warning';
+import Warning from '@components/common/Warning';
 
 import { InputErrorStates } from '../typings';
 

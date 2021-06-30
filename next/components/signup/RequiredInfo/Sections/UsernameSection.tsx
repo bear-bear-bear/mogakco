@@ -1,11 +1,11 @@
 import React from 'react';
 import { UseFormRegister } from 'react-hook-form';
 
-import Desc from '~/components/common/Desc';
-import InputWrapper from '~/components/common/InputWrapper';
-import Label from '~/components/common/Label';
-import Input from '~/components/common/Input';
-import { usernameRule } from '~/lib/regex';
+import Desc from '@components/common/Desc';
+import InputWrapper from '@components/common/InputWrapper';
+import Label from '@components/common/Label';
+import Input from '@components/common/Input';
+import { usernameRule } from '@lib/regex';
 
 import { InputValues } from '../typings';
 

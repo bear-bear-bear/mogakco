@@ -1,6 +1,6 @@
 import axios, { AxiosError } from 'axios';
 import log from 'loglevel';
-import { IGeneralServerResponse } from '~/typings/common';
+import { IGeneralServerResponse } from '@typings/common';
 
 export type Error = AxiosError<IGeneralServerResponse>;
 
