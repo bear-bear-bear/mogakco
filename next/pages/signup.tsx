@@ -34,7 +34,7 @@ const pageProps = {
 const SignUp = ({ isQuery, initialProps }: Props) => {
   const [isSuccess, setIsSuccess] = useState<boolean>(isQuery);
   const {
-    data: { isSaveRequiredInfo, isSignUpDone, isVerifyEmail } = initialProps,
+    data: { isSaveRequiredInfo, isSignUpDone, isVerifyEmail } = initialData,
   } = useSWR<InitialType>(SIGN_UP_KEY, () => initialProps);
 
   const router = useRouter();
