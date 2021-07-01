@@ -24,7 +24,7 @@ export const userAPIs = {
 };
 
 // signup
-export const signupAPIs = {
+export const signUpAPIs = {
   // 검증 이메일 전송
   sendEmailAPI: (email: string) =>
     apiClient.post<IGeneralServerResponse>(

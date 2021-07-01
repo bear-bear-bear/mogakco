@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { UnpackNestedValue, useForm } from 'react-hook-form';
 
-import { signupAPIs } from '@lib/APIs';
+import { signUpAPIs } from '@lib/APIs';
 import { logAxiosError } from '@lib/apiClient';
 import useLanding from '@hooks/useLanding';
 import useDebugLog from '@hooks/useDebugLog';
@@ -21,7 +21,7 @@ export type FormInputs = {
   email: string | null;
 };
 
-const { sendEmailAPI } = signupAPIs;
+const { sendEmailAPI } = signUpAPIs;
 
 const Auth = () => {
   const { email: landingEmail, updateLanding } = useLanding();

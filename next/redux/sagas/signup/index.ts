@@ -20,12 +20,12 @@ import {
   SIGN_UP_FAILURE,
 } from '@redux/reducers/signup';
 import { LOG_IN_SUCCESS } from '@redux/reducers/common/user';
-import { signupAPIs } from '@lib/APIs';
+import { signUpAPIs } from '@lib/APIs';
 import { logAxiosError } from '@lib/apiClient';
 import type { Error } from '@lib/apiClient';
 
 const { sendEmailAPI, verifyEmailAPI, loadSkillsAPI, loadJobsAPI, signUpAPI } =
-  signupAPIs;
+  signUpAPIs;
 
 function* sendEmail({ payload: email }: PayloadAction<string>) {
   try {
