@@ -1,19 +1,19 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 
-import useIsomorphicLayoutEffect from '~/hooks/useIsomorphicLayoutEffect';
-import useTypedDispatch from '~/hooks/useTypedDispatch';
+import useIsomorphicLayoutEffect from '@hooks/useIsomorphicLayoutEffect';
+import useTypedDispatch from '@hooks/useTypedDispatch';
 import {
   saveRequiredInfo,
   loadSkillsRequest,
   loadJobsRequest,
-} from '~/redux/reducers/signup';
-import { usernameRule, passwordRule } from '~/lib/regex';
-import isAllPropertyTruthy from '~/lib/isAllPropertyTruthy';
-import Desc from '~/components/common/Desc';
-import Form from '~/components/common/Form';
+} from '@redux/reducers/signup';
+import { usernameRule, passwordRule } from '@lib/regex';
+import isAllPropertyTruthy from '@lib/isAllPropertyTruthy';
+import Desc from '@components/common/Desc';
+import Form from '@components/common/Form';
 
-import { InputValues, InputErrorStates } from './typings';
+import type { InputValues, InputErrorStates } from './typings';
 import UsernameSection from './Sections/UsernameSection';
 import PasswordSection from './Sections/PasswordSection';
 import TermSection from './Sections/TermSection';

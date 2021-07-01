@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import media from '~/components/globalStyles/media';
+import media from '@components/globalStyles/media';
 
 export const Container = styled.div`
   position: relative;

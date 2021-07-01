@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import { css, keyframes } from '@emotion/react';
 import { VscLoading } from 'react-icons/vsc';
 import { darken, lighten } from 'polished';
-import { IButtonProps } from '@components/common/Button/index';
+import type { IButtonProps } from '@components/common/Button/index';
 
 type ButtonColor = 'white' | 'black' | 'yellow' | 'blue';
 type Theme = {

@@ -43,6 +43,7 @@ const dummyChatData = [
     type: 'kick',
   },
 ];
+
 const ChatList = () => {
   useEffect(() => {
     socketServer.on('joinSuccess', () => {

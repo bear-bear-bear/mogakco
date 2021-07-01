@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 
-import media from '~/components/globalStyles/media';
+import media from '@components/globalStyles/media';
 
 export const RightBlockContainer = styled.article`
   padding-top: 9rem;

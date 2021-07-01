@@ -1,4 +1,4 @@
-import { IDefaultProps, IPasswordProps, IEmailProps } from './typings';
+import type { IDefaultProps, IPasswordProps, IEmailProps } from './typings';
 
 import * as S from './style';
 

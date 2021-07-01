@@ -1,4 +1,4 @@
-import { IGeneralServerResponse, ErrorPayload } from '~/typings/common';
+import type { IGeneralServerResponse, ErrorPayload } from '@typings/common';
 
 // 로그인 유저 정보
 export interface ILoginProps {

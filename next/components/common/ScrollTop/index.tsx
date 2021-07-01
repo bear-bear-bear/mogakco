@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 
-import scrollToTop from '~/lib/scrollToTop';
+import scrollToTop from '@lib/scrollToTop';
 
 import * as S from './style';
 
