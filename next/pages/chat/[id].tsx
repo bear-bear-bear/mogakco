@@ -8,6 +8,7 @@ import io from 'socket.io-client';
 import { useEffect } from 'react';
 import log from 'loglevel';
 import { isDevelopment } from '@lib/enviroment';
+import { useRouter } from 'next/router';
 
 export const END_POINT = 'http://localhost:8001/chat';
 
@@ -18,18 +19,22 @@ const pageProps = {
   locale: 'ko_KR',
 };
 
+export const socketServer = io.connect(END_POINT, {
+  autoConnect: true,
+  reconnection: true,
+});
+
 const ChatRoom = () => {
-  const socketServer = io(END_POINT, {
-    autoConnect: true,
-    reconnection: true,
-  });
+  const router = useRouter();
+  const { id } = router.query;
+  console.log({ id });
 
   useEffect(() => {
-    socketServer.emit('connection');
     socketServer.on('connect', () => {
       console.log('connected');
+      socketServer.emit('joinChatRoom', id);
     });
-  }, [socketServer]);
+  }, [id]);
 
   return (
     <>
@@ -58,7 +63,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     return { props: {} };
   } catch (error) {
     if (isDevelopment) {
-      log.error(error);
+      log.error(error.response?.data ?? error);
     }
     return {
       redirect: {

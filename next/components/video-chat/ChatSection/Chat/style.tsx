@@ -51,7 +51,7 @@ export const FileContent = styled.article`
 
   & > p {
     // filename
-    &:first-child {
+    &:first-of-type {
       color: var(--color-gray-0);
     }
 

@@ -1,51 +1,36 @@
 import {
-  MessageBody,
   OnGatewayConnection,
+  OnGatewayDisconnect,
   SubscribeMessage,
   WebSocketGateway,
   WebSocketServer,
-  WsResponse,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { Logger } from '@nestjs/common';
-import { Observable, from } from 'rxjs';
-import { map } from 'rxjs/operators';
+import ChatService from '@services/chat.service';
 
 @WebSocketGateway({ namespace: 'chat' })
-class ChatGateway implements OnGatewayConnection {
+class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @WebSocketServer()
   server!: Server;
 
   private logger = new Logger('Chat');
 
-  async handleConnection(client: Socket) {
-    this.logger.log('client connection!');
-    this.logger.log(client);
-    return client;
+  constructor(private readonly chatService: ChatService) {}
+
+  handleConnection(client: Socket) {
+    this.logger.debug(`client ${client.id} connection!`);
   }
 
-  @SubscribeMessage('connection')
-  async handleConnect(client: Socket) {
-    this.logger.log('client connection!');
-    this.logger.log(client);
-    return client;
+  handleDisconnect(client: Socket) {
+    client.disconnect(true);
+    this.logger.debug(`client ${client.id} disconnected`);
   }
 
-  @SubscribeMessage('events')
-  async handleEvent(@MessageBody() data: string) {
-    this.logger.log(data);
-    return data;
-  }
-
-  @SubscribeMessage('eventTest')
-  findAll(@MessageBody() data: any): Observable<WsResponse<number>> {
-    console.log(data);
-    return from([4, 5, 6]).pipe(map(item => ({ event: 'events', data: item })));
-  }
-
-  @SubscribeMessage('identity')
-  async identity(@MessageBody() data: number) {
-    return data + 5;
+  @SubscribeMessage('joinChatRoom')
+  async joinChatRoom(client: Socket, roomId: string) {
+    client.join(roomId);
+    client.emit('joinSuccess');
   }
 }
 

@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
-import Chat, { IChatProps } from '../Chat';
+import { socketServer } from '@pages/chat/[id]';
+
+import Chat from '../Chat';
 import * as S from './style';
 
-const dummyChatData: IChatProps[] = [
+const dummyChatData = [
   {
     id: 1,
     nickname: '용감한 너구리',
@@ -44,6 +46,11 @@ const dummyChatData: IChatProps[] = [
 ];
 
 const ChatList = () => {
+  useEffect(() => {
+    socketServer.on('joinSuccess', () => {
+      window.alert('채팅방에 참여하셨습니다.');
+    });
+  }, []);
   return (
     <S.ChatList>
       {dummyChatData.map((chat) => (
