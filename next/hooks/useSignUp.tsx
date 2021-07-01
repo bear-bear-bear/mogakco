@@ -1,6 +1,6 @@
 import useSWR from 'swr';
 
-type State = {
+export type State = {
   isVerifyEmail: boolean;
   isSaveRequiredInfo: boolean;
   isSignUpDone: boolean;
@@ -8,13 +8,13 @@ type State = {
 
 export const SIGN_UP_KEY = 'pages/signup';
 
-const useSignUp = () => {
-  const initialData: State = {
-    isVerifyEmail: false,
-    isSaveRequiredInfo: false,
-    isSignUpDone: false,
-  };
+export const initialData: State = {
+  isVerifyEmail: false,
+  isSaveRequiredInfo: false,
+  isSignUpDone: false,
+};
 
+const useSignUp = () => {
   const {
     data: { isSaveRequiredInfo, isSignUpDone, isVerifyEmail } = initialData,
     mutate: updateSignUp,
