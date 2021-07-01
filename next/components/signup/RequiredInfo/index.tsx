@@ -26,6 +26,7 @@ const initialState: InputValues = {
   term: false,
 };
 
+// FIXME: 타이핑마다 2번 렌더링 되는거 확인
 const RequiredInfo = () => {
   const { updateSignUp } = useSignUp();
   const [initSubmitDone, setInitSubmitDone] = useState(false);
@@ -67,8 +68,7 @@ const RequiredInfo = () => {
           isSaveRequiredInfo: true,
         };
       }
-      return undefined;
-    });
+    }, false);
   };
   const onInvalid = () => setInitSubmitDone(true);
 
@@ -135,8 +135,7 @@ const RequiredInfo = () => {
             },
           };
         }
-        return undefined;
-      });
+      }, false);
     });
   }, [updateSignUp]);
 

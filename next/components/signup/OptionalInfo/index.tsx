@@ -53,8 +53,7 @@ const OptionalInfo = () => {
               isSignUpDone: true,
             };
           }
-          return undefined;
-        });
+        }, false);
       })
       .catch((err) => {
         setSignUpLoading(false);
