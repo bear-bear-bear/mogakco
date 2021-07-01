@@ -1,7 +1,7 @@
 import { all, fork, call, takeLatest, put } from 'redux-saga/effects';
 import { PayloadAction } from '@reduxjs/toolkit';
 
-import type { ILoginProps } from '@typings/auth';
+import type { ILoginProps } from 'typings/auth';
 import { getAxiosError } from '@lib/apiClient';
 import { userAPIs } from '@lib/APIs';
 import {

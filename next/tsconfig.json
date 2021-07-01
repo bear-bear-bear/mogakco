@@ -29,7 +29,6 @@
       "@pages/*":  ["./pages/*"],
       "@public/*":  ["./public/*"],
       "@redux/*": ["./redux/*"],
-      "@typings": ["./typings/*"],
       "@test/*": ["./test/*"]
     },
     "typeRoots": ["./node_modules/@types", "./typings"]

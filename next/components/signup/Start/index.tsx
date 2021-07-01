@@ -3,9 +3,8 @@ import log from 'loglevel';
 import { UnpackNestedValue, useForm } from 'react-hook-form';
 
 import { signupAPIs } from '@lib/APIs';
+import useLanding from '@hooks/useLanding';
 import useIsomorphicLayoutEffect from '~/hooks/useIsomorphicLayoutEffect';
-import useTypedDispatch from '~/hooks/useTypedDispatch';
-import { saveEmail as saveLandingEmail } from '~/redux/reducers/landing';
 import { emailRule } from '~/lib/regex';
 import Warning from '~/components/common/Warning';
 import Desc from '~/components/common/Desc';
@@ -24,16 +23,11 @@ export type FormInputs = {
 const { sendEmailAPI } = signupAPIs;
 
 const Auth = () => {
+  const { email: landingEmail, updateLanding } = useLanding();
   const [sendEmailDone, setSendEmailDone] = useState(false);
   const [sendEmailLoading, setSendEmailLoading] = useState(false);
-
-  const dispatch = useTypedDispatch();
   const [emailTestError, setEmailTestError] = useState(false);
-  // TODO: LadingEmail 작업
-  const landingEmail = 'asd@asd.com';
-
   const submitButtonEl = useRef<HTMLButtonElement>(null);
-
   const { register, handleSubmit, setValue, getValues } = useForm<FormInputs>();
 
   const onSubmitEmail = ({ email }: UnpackNestedValue<FormInputs>) => {
@@ -66,8 +60,10 @@ const Auth = () => {
     if (landingEmail === null) return;
 
     setValue('email', landingEmail);
-    dispatch(saveLandingEmail(null));
-  }, [dispatch, landingEmail, setValue]);
+    updateLanding({
+      email: landingEmail,
+    });
+  }, [landingEmail, setValue, updateLanding]);
 
   return (
     <>
