@@ -1,21 +1,27 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { connect, useDispatch } from 'react-redux';
-import { END } from 'redux-saga';
 
-import wrapper from '@redux/store/configureStore';
-import { resetSignUp, verifyEmailRequest } from '@redux/reducers/signup';
-import useTypedSelector from '@hooks/useTypedSelector';
-import CustomHead from '@components/common/CustomHead';
-import AuthContainer from '@components/common/AuthContainer';
-import ProgressBar from '@components/signup/ProgressBar';
-import Start from '@components/signup/Start';
-import RequiredInfo from '@components/signup/RequiredInfo';
-import OptionalInfo from '@components/signup/OptionalInfo';
-import End from '@components/signup/End';
+import {
+  initialData,
+  State as InitialType,
+  SIGN_UP_KEY,
+} from '@hooks/useSignUp';
+import { GetServerSideProps } from 'next';
+import { signupAPIs } from '@lib/APIs';
+import { getAxiosError } from '@lib/apiClient';
+import { isDevelopment } from '@lib/enviroment';
+import useSWR from 'swr';
+import CustomHead from '~/components/common/CustomHead';
+import AuthContainer from '~/components/common/AuthContainer';
+import ProgressBar from '~/components/signup/ProgressBar';
+import Start from '~/components/signup/Start';
+import RequiredInfo from '~/components/signup/RequiredInfo';
+import OptionalInfo from '~/components/signup/OptionalInfo';
+import End from '~/components/signup/End';
 
 interface Props {
   isQuery: boolean;
+  initialProps: InitialType;
 }
 
 const pageProps = {
@@ -25,43 +31,32 @@ const pageProps = {
   locale: 'ko_KR',
 };
 
-const SignUp = ({ isQuery }: Props) => {
-  const router = useRouter();
-  const dispatch = useDispatch();
-  const verifyEmailDone = useTypedSelector(
-    ({ signup }) => signup.verifyEmailDone,
-  );
-  const verifySocialDone = useTypedSelector(
-    ({ signup }) => signup.verifySocialDone,
-  );
-  const saveRequiredInfoDone = useTypedSelector(
-    ({ signup }) => signup.saveRequiredInfoDone,
-  );
-  const signUpDone = useTypedSelector(({ signup }) => signup.signUpDone);
-  const fill = [verifyEmailDone, saveRequiredInfoDone, signUpDone];
+const SignUp = ({ isQuery, initialProps }: Props) => {
+  const [isSuccess, setIsSuccess] = useState<boolean>(isQuery);
+  const {
+    data: { isSaveRequiredInfo, isSignUpDone, isVerifyEmail } = initialProps,
+  } = useSWR<InitialType>(SIGN_UP_KEY, () => initialProps);
 
-  useEffect(() => {
-    // 페이지 떠날 때 모든 state 초기화
-    return () => {
-      dispatch(resetSignUp());
-    };
-  }, [dispatch]);
+  const router = useRouter();
+
+  const fill = [isVerifyEmail, isSaveRequiredInfo, isSignUpDone];
 
   useEffect(() => {
     // 이메일 링크를 타고 들어와 관련 쿼리가 주소창에 남아있다면, 해당 쿼리 clear
-    if (isQuery) {
-      router.replace('/signup');
+    if (isSuccess) {
+      router.replace(`/signup`, undefined, { shallow: true });
     }
-  }, [isQuery, router]);
+    setIsSuccess(false);
+  }, [isSuccess, router]);
 
   return (
     <>
       <CustomHead {...pageProps} />
       <AuthContainer progressBar={<ProgressBar fill={fill} />}>
-        {(!verifyEmailDone || !verifySocialDone) && <Start />}
-        {verifyEmailDone && !saveRequiredInfoDone && <RequiredInfo />}
-        {saveRequiredInfoDone && !signUpDone && <OptionalInfo />}
-        {signUpDone && <End />}
+        {!isVerifyEmail && <Start />}
+        {isVerifyEmail && !isSaveRequiredInfo && <RequiredInfo />}
+        {isSaveRequiredInfo && !isSignUpDone && <OptionalInfo />}
+        {isSignUpDone && <End />}
       </AuthContainer>
     </>
   );
@@ -69,26 +64,38 @@ const SignUp = ({ isQuery }: Props) => {
 
 // 이메일 검증 링크를 타고 이 페이지로 들어와 관련 쿼리가 있다면,
 // 해당 쿼리로 이후의 로직 실행
-export const getServerSideProps = wrapper.getServerSideProps(
-  async ({ query, store }) => {
-    const { success, email: verifiedEmail } = query;
-    const isQuery = Boolean(success);
+export const getServerSideProps: GetServerSideProps = async ({ query }) => {
+  const { success, email } = query;
+  const isQuery = Boolean(success);
+  const { verifyEmailAPI } = signupAPIs;
 
-    if (isQuery) {
-      if (success === 'true') {
-        store.dispatch(verifyEmailRequest(verifiedEmail));
-
-        store.dispatch(END);
-        await store.sagaTask?.toPromise();
-      }
-    }
+  if (isQuery) {
+    const initialProps = await verifyEmailAPI(email as string)
+      .then(() => ({
+        ...initialData,
+        isVerifyEmail: true,
+      }))
+      .catch((err) => {
+        if (isDevelopment) {
+          getAxiosError(err);
+        }
+        return {
+          ...initialData,
+          isVerifyEmail: false,
+        };
+      });
 
     return {
       props: {
         isQuery,
+        initialProps,
       },
     };
-  },
-);
+  }
 
-export default connect((state) => state)(SignUp);
+  return {
+    props: {},
+  };
+};
+
+export default SignUp;
