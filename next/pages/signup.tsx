@@ -9,8 +9,8 @@ import {
   SIGN_UP_KEY,
 } from '@hooks/useSignUp';
 import { signupAPIs } from '@lib/APIs';
-import { getAxiosError } from '@lib/apiClient';
 import { isDevelopment } from '@lib/enviroment';
+import { logAxiosError } from '@lib/apiClient';
 import CustomHead from '@components/common/CustomHead';
 import AuthContainer from '@components/common/AuthContainer';
 import ProgressBar from '@components/signup/ProgressBar';
@@ -77,7 +77,7 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
       }))
       .catch((err) => {
         if (isDevelopment) {
-          getAxiosError(err);
+          logAxiosError(err);
         }
         return {
           ...initialData,
