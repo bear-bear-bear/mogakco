@@ -1,23 +1,23 @@
 import React, { useEffect, useState } from 'react';
+import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
+import useSWR from 'swr';
 
 import {
   initialData,
   State as InitialType,
   SIGN_UP_KEY,
 } from '@hooks/useSignUp';
-import { GetServerSideProps } from 'next';
 import { signupAPIs } from '@lib/APIs';
 import { getAxiosError } from '@lib/apiClient';
 import { isDevelopment } from '@lib/enviroment';
-import useSWR from 'swr';
-import CustomHead from '~/components/common/CustomHead';
-import AuthContainer from '~/components/common/AuthContainer';
-import ProgressBar from '~/components/signup/ProgressBar';
-import Start from '~/components/signup/Start';
-import RequiredInfo from '~/components/signup/RequiredInfo';
-import OptionalInfo from '~/components/signup/OptionalInfo';
-import End from '~/components/signup/End';
+import CustomHead from '@components/common/CustomHead';
+import AuthContainer from '@components/common/AuthContainer';
+import ProgressBar from '@components/signup/ProgressBar';
+import Start from '@components/signup/Start';
+import RequiredInfo from '@components/signup/RequiredInfo';
+import OptionalInfo from '@components/signup/OptionalInfo';
+import End from '@components/signup/End';
 
 interface Props {
   isQuery: boolean;
