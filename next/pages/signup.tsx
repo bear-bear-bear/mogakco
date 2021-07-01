@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { connect, useDispatch } from 'react-redux';
+import { connect } from 'react-redux';
 import { END } from 'redux-saga';
 
 import useSignUp from '@hooks/useSignUp';
@@ -25,6 +25,14 @@ const pageProps = {
   locale: 'ko_KR',
 };
 
+const initialData = {
+  isVerifyEmail: false,
+  isSaveRequiredInfo: false,
+  isSignUpDone: false,
+};
+
+const SIGN_UP_KEY = 'pages/signup';
+
 const SignUp = ({ isQuery }: Props) => {
   const { isSaveRequiredInfo, isSignUpDone, isVerifyEmail, updateSignUp } =
     useSignUp();
@@ -35,9 +43,13 @@ const SignUp = ({ isQuery }: Props) => {
   useEffect(() => {
     // 페이지 떠날 때 모든 state 초기화
     return () => {
-      dispatch(resetSignUp());
+      updateSignUp({
+        isSaveRequiredInfo: false,
+        isSignUpDone: false,
+        isVerifyEmail: false,
+      });
     };
-  }, [dispatch]);
+  }, [updateSignUp]);
 
   useEffect(() => {
     // 이메일 링크를 타고 들어와 관련 쿼리가 주소창에 남아있다면, 해당 쿼리 clear
@@ -50,38 +62,37 @@ const SignUp = ({ isQuery }: Props) => {
     <>
       <CustomHead {...pageProps} />
       <AuthContainer progressBar={<ProgressBar fill={fill} />}>
-        {(!verifyEmailDone || !verifySocialDone) && <Start />}
-        {verifyEmailDone && !saveRequiredInfoDone && <RequiredInfo />}
-        {saveRequiredInfoDone && !signUpDone && <OptionalInfo />}
-        {signUpDone && <End />}
+        {!isVerifyEmail && <Start />}
+        {isVerifyEmail && !isSaveRequiredInfo && <RequiredInfo />}
+        {isSaveRequiredInfo && !isSignUpDone && <OptionalInfo />}
+        {isSignUpDone && <End />}
       </AuthContainer>
     </>
   );
 };
 
 // 이메일 검증 링크를 타고 이 페이지로 들어와 관련 쿼리가 있다면,
-// 해당 쿼리로 이후의 로직 실행\
-// TODO: 리덕스 로직 분리
-export const getServerSideProps = wrapper.getServerSideProps(
-  async ({ query, store }) => {
-    const { success, email: verifiedEmail } = query;
-    const isQuery = Boolean(success);
-
-    if (isQuery) {
-      if (success === 'true') {
-        store.dispatch(verifyEmailRequest(verifiedEmail));
-
-        store.dispatch(END);
-        await store.sagaTask?.toPromise();
-      }
-    }
-
-    return {
-      props: {
-        isQuery,
-      },
-    };
-  },
-);
+// 해당 쿼리로 이후의 로직 실행
+// export const getServerSideProps = wrapper.getServerSideProps(
+//   async ({ query, store }) => {
+//     const { success, email: verifiedEmail } = query;
+//     const isQuery = Boolean(success);
+//
+//     if (isQuery) {
+//       if (success === 'true') {
+//         store.dispatch(verifyEmailRequest(verifiedEmail));
+//
+//         store.dispatch(END);
+//         await store.sagaTask?.toPromise();
+//       }
+//     }
+//
+//     return {
+//       props: {
+//         isQuery,
+//       },
+//     };
+//   },
+// );
 
 export default connect((state) => state)(SignUp);
