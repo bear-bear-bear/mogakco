@@ -8,7 +8,7 @@ import {
   State as InitialType,
   SIGN_UP_KEY,
 } from '@hooks/useSignUp';
-import { signupAPIs } from '@lib/APIs';
+import { signUpAPIs } from '@lib/APIs';
 import { isDevelopment } from '@lib/enviroment';
 import { logAxiosError } from '@lib/apiClient';
 import CustomHead from '@components/common/CustomHead';
@@ -67,7 +67,7 @@ const SignUp = ({ isQuery, initialProps }: Props) => {
 export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   const { success, email } = query;
   const isQuery = Boolean(success);
-  const { verifyEmailAPI } = signupAPIs;
+  const { verifyEmailAPI } = signUpAPIs;
 
   if (isQuery) {
     const initialProps = await verifyEmailAPI(email as string)
