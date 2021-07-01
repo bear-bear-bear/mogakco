@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import type { ISignUpState, IOptionalInfoProps } from '@typings/auth';
-import type { ErrorPayload } from '@typings/common';
+import type { ISignUpState, IOptionalInfoProps } from 'typings/auth';
+import type { ErrorPayload } from 'typings/common';
 import fromActionTypes from '@lib/fromActionTypes';
 
 const initialState: ISignUpState = {
