@@ -32,7 +32,7 @@ const Auth = () => {
   const [emailTestError, setEmailTestError] = useState(false);
   const submitButtonEl = useRef<HTMLButtonElement>(null);
   const { register, handleSubmit, setValue, getValues } = useForm<FormInputs>();
-  const { debugLog } = useDebugLog();
+  const debugLog = useDebugLog();
 
   const onSubmitEmail = ({ email }: UnpackNestedValue<FormInputs>) => {
     setEmailTestError(false);

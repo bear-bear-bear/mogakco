@@ -5,7 +5,7 @@ const useDebugLog = () => {
     log.setLevel('debug');
   }
 
-  return { debugLog: log.debug };
+  return log.debug;
 };
 
 export default useDebugLog;
