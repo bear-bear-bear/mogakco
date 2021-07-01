@@ -4,15 +4,15 @@ import { connect } from 'react-redux';
 import { END } from 'redux-saga';
 
 import useSignUp from '@hooks/useSignUp';
-import wrapper from '~/redux/store/configureStore';
-import { verifyEmailRequest } from '~/redux/reducers/signup';
-import CustomHead from '~/components/common/CustomHead';
-import AuthContainer from '~/components/common/AuthContainer';
-import ProgressBar from '~/components/signup/ProgressBar';
-import Start from '~/components/signup/Start';
-import RequiredInfo from '~/components/signup/RequiredInfo';
-import OptionalInfo from '~/components/signup/OptionalInfo';
-import End from '~/components/signup/End';
+import wrapper from '@redux/store/configureStore';
+import { verifyEmailRequest } from '@redux/reducers/signup';
+import CustomHead from '@components/common/CustomHead';
+import AuthContainer from '@components/common/AuthContainer';
+import ProgressBar from '@components/signup/ProgressBar';
+import Start from '@components/signup/Start';
+import RequiredInfo from '@components/signup/RequiredInfo';
+import OptionalInfo from '@components/signup/OptionalInfo';
+import End from '@components/signup/End';
 
 interface Props {
   isQuery: boolean;
