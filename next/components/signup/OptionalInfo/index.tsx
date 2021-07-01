@@ -1,10 +1,10 @@
 import React, { useCallback, useState, SyntheticEvent } from 'react';
 import { OptionsType } from 'react-select';
 
-import useTypedDispatch from '@hooks/useTypedDispatch';
-import useTypedSelector from '@hooks/useTypedSelector';
-import { signUpRequest } from '@redux/reducers/signup';
-import { getSkillOptions, getJobOptions } from '@redux/selectors/signup';
+import useSignUp from '@hooks/useSignUp';
+import { signUpFetcher } from '@lib/fetchers';
+import { logAxiosError } from '@lib/apiClient';
+import toSelectOptions from '@lib/toSelectOptions';
 import Select from '@components/common/Select';
 import Desc from '@components/common/Desc';
 import Form from '@components/common/Form';
@@ -21,14 +21,11 @@ type SelectProps = {
 const SKILLS_LIMIT = 5;
 
 const OptionalInfo = () => {
-  const dispatch = useTypedDispatch();
-  const signUpLoading = useTypedSelector(({ signup }) => signup.signUpLoading);
-  const skillOptions = useTypedSelector(getSkillOptions);
-  const [skillIds, setSkillIds] = useState<number[]>([]);
+  const [signUpLoading, setSignUpLoading] = useState<boolean>(false);
   const [isShowSkillOptions, setIsShowSkillOptions] = useState<boolean>(true);
-  const [jobId, setJobId] = useState<number>();
-  const jobOptions = useTypedSelector(getJobOptions);
-  const userInfo = useTypedSelector(({ signup }) => signup.userInfo);
+  const [skillIds, setSkillIds] = useState<number[] | null>(null);
+  const [jobId, setJobId] = useState<number | null>(null);
+  const { userInfo, skills, jobs, updateSignUp } = useSignUp();
 
   // react-select 에서 onChange 는 해당 Select 에서 선택되어 있는 현재 데이터를 반환합니다.
   const onChangeSkills = useCallback((list: OptionsType<SelectProps>) => {
@@ -41,13 +38,28 @@ const OptionalInfo = () => {
 
   const onSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
-    dispatch(
-      signUpRequest({
-        ...userInfo,
-        skills: skillIds,
-        job: jobId,
-      }),
-    );
+    setSignUpLoading(true);
+    signUpFetcher({
+      ...userInfo,
+      skills: skillIds,
+      job: jobId,
+    })
+      .then(() => {
+        setSignUpLoading(false);
+        updateSignUp((prevState) => {
+          if (prevState) {
+            return {
+              ...prevState,
+              isSignUpDone: true,
+            };
+          }
+          return undefined;
+        });
+      })
+      .catch((err) => {
+        setSignUpLoading(false);
+        logAxiosError(err);
+      });
   };
 
   return (
@@ -62,7 +74,7 @@ const OptionalInfo = () => {
           <Select
             id="skills"
             closeMenuOnSelect={false}
-            options={isShowSkillOptions ? skillOptions : []}
+            options={isShowSkillOptions ? toSelectOptions(skills) : []}
             placeholder="관심 분야를 선택해 주세요... (5개까지 선택 가능)"
             onChange={(data) => {
               onChangeSkills(data as OptionsType<SelectProps>);
@@ -76,7 +88,7 @@ const OptionalInfo = () => {
           <Select
             isMulti={false}
             id="job"
-            options={jobOptions}
+            options={toSelectOptions(jobs)}
             placeholder="직업을 선택해 주세요..."
             onChange={(data) => {
               onChangeJob(data as SelectProps);

@@ -31,22 +31,21 @@ const pageProps = {
 };
 
 const SignUp = ({ isQuery, initialProps }: Props) => {
-  const [isSuccess, setIsSuccess] = useState<boolean>(isQuery);
+  const router = useRouter();
+  const [isVerifiedQuery, setIsVerifiedQuery] = useState<boolean>(isQuery);
   const {
     data: { isSaveRequiredInfo, isSignUpDone, isVerifyEmail } = initialData,
   } = useSWR<InitialType>(SIGN_UP_KEY, () => initialProps);
-
-  const router = useRouter();
 
   const fill = [isVerifyEmail, isSaveRequiredInfo, isSignUpDone];
 
   useEffect(() => {
     // 이메일 링크를 타고 들어와 관련 쿼리가 주소창에 남아있다면, 해당 쿼리 clear
-    if (isSuccess) {
+    if (isVerifiedQuery) {
       router.replace(`/signup`, undefined, { shallow: true });
     }
-    setIsSuccess(false);
-  }, [isSuccess, router]);
+    setIsVerifiedQuery(false);
+  }, [isVerifiedQuery, router]);
 
   return (
     <>
@@ -76,6 +75,10 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
       .then(() => {
         return {
           ...initialData,
+          userInfo: {
+            ...initialData.userInfo,
+            email,
+          },
           isVerifyEmail: true,
         };
       })

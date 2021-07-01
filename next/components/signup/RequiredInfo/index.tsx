@@ -1,15 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 
+import type { IOptionalInfoProps } from 'typings/auth';
 import useIsomorphicLayoutEffect from '@hooks/useIsomorphicLayoutEffect';
-import useTypedDispatch from '@hooks/useTypedDispatch';
-import {
-  saveRequiredInfo,
-  loadSkillsRequest,
-  loadJobsRequest,
-} from '@redux/reducers/signup';
+import useSignUp from '@hooks/useSignUp';
 import { usernameRule, passwordRule } from '@lib/regex';
 import isAllPropertyTruthy from '@lib/isAllPropertyTruthy';
+import apiClient, { logAxiosError } from '@lib/apiClient';
 import Desc from '@components/common/Desc';
 import Form from '@components/common/Form';
 
@@ -30,7 +27,7 @@ const initialState: InputValues = {
 };
 
 const RequiredInfo = () => {
-  const dispatch = useTypedDispatch();
+  const { updateSignUp } = useSignUp();
   const [initSubmitDone, setInitSubmitDone] = useState(false);
   const [isAllValues, setIsAllValues] = useState(false);
   const [errorStates, setErrorStates] = useState<InputErrorStates>({
@@ -57,24 +54,27 @@ const RequiredInfo = () => {
   const onValid = () => {
     setInitSubmitDone(true);
 
-    dispatch(
-      saveRequiredInfo({
-        username,
-        password,
-      }),
-    );
+    updateSignUp((prevState) => {
+      // TODO: 타입 단언할 방법은 없을지 알아보기
+      if (prevState) {
+        return {
+          ...prevState,
+          userInfo: {
+            ...prevState.userInfo,
+            username,
+            password,
+          },
+          isSaveRequiredInfo: true,
+        };
+      }
+      return undefined;
+    });
   };
   const onInvalid = () => setInitSubmitDone(true);
 
   useIsomorphicLayoutEffect(() => {
     setFocus('username');
   }, [setFocus]);
-
-  useEffect(() => {
-    // 필수 정보 입력 페이지 진입 시 다음 단계인 추가 정보 페이지의 데이터 프리로딩
-    dispatch(loadSkillsRequest());
-    dispatch(loadJobsRequest());
-  }, [dispatch, setFocus]);
 
   useEffect(() => {
     // inputValues의 값이 변경될 때마다 Input 값 중 빈 값이 없는지 확인하고, 값이 모두 있다면 submit 버튼 활성화
@@ -103,6 +103,42 @@ const RequiredInfo = () => {
     }
     setTimeout(() => verifyAllInputs(inputValues), 200);
   }, [inputValues, initSubmitDone]);
+
+  useEffect(() => {
+    // 다음 단계인 optionalInfo 페이지의 데이터 프리패치
+    // TODO: fetcher 모듈로 분리 (재사용 가능한 모듈로 분리할 수 있는지 생각해보기)
+    // TODO: API들 모듈로 분리
+    // TODO: 데이터 프리렌더링에 대해 더 좋은 방안이 있는지 찾아보기
+    const getSkillsAPI = '/api/user/skills';
+    const getJobsAPI = '/api/user/jobs';
+    const optionalInfoListFetcher = (url: string) =>
+      apiClient
+        .get<IOptionalInfoProps[] | null>(url)
+        .then((res) => res.data)
+        .catch((err) => {
+          logAxiosError(err);
+          return null; // TODO: 타입 응급처치 - 수정하기
+        });
+
+    Promise.all([
+      optionalInfoListFetcher(getSkillsAPI),
+      optionalInfoListFetcher(getJobsAPI),
+    ]).then(([skills, jobs]) => {
+      updateSignUp((prevState) => {
+        if (prevState) {
+          return {
+            ...prevState,
+            userInfo: {
+              ...prevState.userInfo,
+              skills,
+              jobs,
+            },
+          };
+        }
+        return undefined;
+      });
+    });
+  }, [updateSignUp]);
 
   return (
     <>
