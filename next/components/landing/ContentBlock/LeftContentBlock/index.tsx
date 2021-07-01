@@ -1,13 +1,12 @@
 import React, { SyntheticEvent } from 'react';
-import { useDispatch } from 'react-redux';
 import { useRouter } from 'next/router';
 import Fade from 'react-reveal/Fade';
 import Image from 'next/Image';
 import { Box, Flex } from '@chakra-ui/react';
 
+import useLanding from '@hooks/useLanding';
 import useIsomorphicLayoutEffect from '@hooks/useIsomorphicLayoutEffect';
 import useInput from '@hooks/useInput';
-import { saveEmail } from '@redux/reducers/landing';
 import type { ILeftContentBlockProps } from '@components/landing/ContentBlock';
 
 import * as S from './style';
@@ -19,7 +18,7 @@ const LeftContentBlock = ({
   isFirstBlock,
   emailEl,
 }: ILeftContentBlockProps) => {
-  const dispatch = useDispatch();
+  const { updateLanding } = useLanding();
   const router = useRouter();
   const [email, onChangeEmail, setEmail] = useInput('');
 
@@ -32,7 +31,9 @@ const LeftContentBlock = ({
 
   const toSignUp = (e: SyntheticEvent) => {
     e.preventDefault();
-    dispatch(saveEmail(email));
+    updateLanding({
+      email,
+    });
     router.push('/signup');
   };
 
