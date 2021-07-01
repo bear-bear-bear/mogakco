@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 
 import { socketServer } from '@pages/chat/[id]';
-
 import Chat from '../Chat';
 import * as S from './style';
 

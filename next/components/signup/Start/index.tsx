@@ -2,18 +2,17 @@ import React, { useState, useRef, useEffect } from 'react';
 import log from 'loglevel';
 import { UnpackNestedValue, useForm } from 'react-hook-form';
 
-import useIsomorphicLayoutEffect from '@hooks/useIsomorphicLayoutEffect';
-import useTypedSelector from '@hooks/useTypedSelector';
-import useTypedDispatch from '@hooks/useTypedDispatch';
-import { saveEmail as saveLandingEmail } from '@redux/reducers/landing';
-import { emailRule } from '@lib/regex';
-import { sendEmailRequest } from '@redux/reducers/signup';
-import Warning from '@components/common/Warning';
-import Desc from '@components/common/Desc';
-import Form from '@components/common/Form';
-import Input from '@components/common/Input';
-import InputWrapper from '@components/common/InputWrapper';
-import Label from '@components/common/Label';
+import { signupAPIs } from '@lib/APIs';
+import useIsomorphicLayoutEffect from '~/hooks/useIsomorphicLayoutEffect';
+import useTypedDispatch from '~/hooks/useTypedDispatch';
+import { saveEmail as saveLandingEmail } from '~/redux/reducers/landing';
+import { emailRule } from '~/lib/regex';
+import Warning from '~/components/common/Warning';
+import Desc from '~/components/common/Desc';
+import Form from '~/components/common/Form';
+import Input from '~/components/common/Input';
+import InputWrapper from '~/components/common/InputWrapper';
+import Label from '~/components/common/Label';
 
 import * as CS from '../common/styles';
 import * as S from './style';
@@ -22,28 +21,41 @@ export type FormInputs = {
   email: string | null;
 };
 
+const { sendEmailAPI } = signupAPIs;
+
 const Auth = () => {
+  const [sendEmailDone, setSendEmailDone] = useState(false);
+  const [sendEmailLoading, setSendEmailLoading] = useState(false);
+
   const dispatch = useTypedDispatch();
   const [emailTestError, setEmailTestError] = useState(false);
-  const landingEmail = useTypedSelector(({ landing }) => landing.email);
-  const sendEmailLoading = useTypedSelector(
-    ({ signup }) => signup.sendEmailLoading,
-  );
-  const sendEmailDone = useTypedSelector(({ signup }) => signup.sendEmailDone);
+  // TODO: LadingEmail 작업
+  const landingEmail = 'asd@asd.com';
+
   const submitButtonEl = useRef<HTMLButtonElement>(null);
 
   const { register, handleSubmit, setValue, getValues } = useForm<FormInputs>();
 
   const onSubmitEmail = ({ email }: UnpackNestedValue<FormInputs>) => {
+    setSendEmailLoading(true);
     setEmailTestError(false);
-    dispatch(sendEmailRequest(email as string));
+    if (email === null) {
+      return;
+    }
+
+    sendEmailAPI(email)
+      .then(() => {
+        setSendEmailDone(true);
+        setSendEmailLoading(false);
+      })
+      .catch(() => setSendEmailLoading(false));
   };
+
   const onError = () => setEmailTestError(true);
 
   const onClickSocial = () => {
     log.setLevel('debug');
     log.warn('미구현 기능입니다.');
-    // dispatch(verifySocialRequest());
   };
 
   useIsomorphicLayoutEffect(() => {
