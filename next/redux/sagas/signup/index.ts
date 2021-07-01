@@ -21,7 +21,7 @@ import {
 } from '@redux/reducers/signup';
 import { LOG_IN_SUCCESS } from '@redux/reducers/common/user';
 import { signupAPIs } from '@lib/APIs';
-import { getAxiosError } from '@lib/apiClient';
+import { logAxiosError } from '@lib/apiClient';
 import type { Error } from '@lib/apiClient';
 
 const { sendEmailAPI, verifyEmailAPI, loadSkillsAPI, loadJobsAPI, signUpAPI } =
@@ -36,7 +36,7 @@ function* sendEmail({ payload: email }: PayloadAction<string>) {
   } catch (err) {
     yield put({
       type: SEND_EMAIL_FAILURE,
-      payload: getAxiosError(err as Error),
+      payload: logAxiosError(err as Error),
     });
   }
 }
@@ -51,7 +51,7 @@ function* verifyEmail({ payload: email }: PayloadAction<string>) {
   } catch (err) {
     yield put({
       type: VERIFY_EMAIL_FAILURE,
-      payload: getAxiosError(err as Error),
+      payload: logAxiosError(err as Error),
     });
   }
 }
@@ -66,7 +66,7 @@ function* loadSkills() {
   } catch (err) {
     yield put({
       type: LOAD_SKILLS_FAILURE,
-      payload: getAxiosError(err as Error),
+      payload: logAxiosError(err as Error),
     });
   }
 }
@@ -81,7 +81,7 @@ function* loadJobs() {
   } catch (err) {
     yield put({
       type: LOAD_JOBS_FAILURE,
-      payload: getAxiosError(err as Error),
+      payload: logAxiosError(err as Error),
     });
   }
 }
@@ -95,7 +95,7 @@ function* signUp({ payload: userInfo }: PayloadAction<ISignUpUserProps>) {
       token: result.token,
     });
   } catch (err) {
-    yield put({ type: SIGN_UP_FAILURE, error: getAxiosError(err) });
+    yield put({ type: SIGN_UP_FAILURE, error: logAxiosError(err) });
   }
 }
 

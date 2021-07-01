@@ -2,7 +2,7 @@ import { all, fork, call, takeLatest, put } from 'redux-saga/effects';
 import { PayloadAction } from '@reduxjs/toolkit';
 
 import type { ILoginProps } from 'typings/auth';
-import { getAxiosError } from '@lib/apiClient';
+import { logAxiosError } from '@lib/apiClient';
 import { userAPIs } from '@lib/APIs';
 import {
   LOG_IN_REQUEST,
@@ -26,7 +26,7 @@ function* logIn(action: PayloadAction<ILoginProps>) {
     // console.error(err);
     yield put({
       type: LOG_IN_FAILURE,
-      error: getAxiosError(err),
+      error: logAxiosError(err),
     });
   }
 }
@@ -42,7 +42,7 @@ function* logOut() {
     // console.error(err);
     yield put({
       type: LOG_OUT_FAILURE,
-      error: getAxiosError(err),
+      error: logAxiosError(err),
     });
   }
 }

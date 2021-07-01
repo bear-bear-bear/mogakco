@@ -14,7 +14,7 @@ export const logAxiosError = (axiosError: Error) => {
 
   if (!axiosError.isAxiosError) {
     log.warn(
-      'axios 에러가 아닙니다. getAxiosError 는 axios 에러만을 로깅합니다.',
+      'axios 에러가 아닙니다. logAxiosError 는 axios 에러만을 로깅합니다.',
     );
     log.error(axiosError);
   }

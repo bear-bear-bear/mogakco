@@ -13,7 +13,6 @@
   "plugins": [
     "@emotion/babel-plugin",
     ["module-resolver", {
-      "~": "./",
       "@assets": "./public/assets",
       "@components": "./components",
       "@hooks": "./hooks",
