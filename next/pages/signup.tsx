@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { connect, useDispatch } from 'react-redux';
+import { connect } from 'react-redux';
 import { END } from 'redux-saga';
 
+import useSWR from 'swr';
 import wrapper from '~/redux/store/configureStore';
-import { resetSignUp, verifyEmailRequest } from '~/redux/reducers/signup';
-import useTypedSelector from '~/hooks/useTypedSelector';
+import { verifyEmailRequest } from '~/redux/reducers/signup';
 import CustomHead from '~/components/common/CustomHead';
 import AuthContainer from '~/components/common/AuthContainer';
 import ProgressBar from '~/components/signup/ProgressBar';
@@ -25,27 +25,48 @@ const pageProps = {
   locale: 'ko_KR',
 };
 
+const initialData = {
+  isVerifyEmail: false,
+  isSaveRequiredInfo: false,
+  isSignUpDone: false,
+};
+
+const SIGN_UP_KEY = 'pages/signup';
+
 const SignUp = ({ isQuery }: Props) => {
+  const {
+    data: { isSaveRequiredInfo, isSignUpDone, isVerifyEmail } = initialData,
+    mutate: updateSignUp,
+  } =
+    useSWR<{
+      isSaveRequiredInfo: boolean;
+      isSignUpDone: boolean;
+      isVerifyEmail: boolean;
+    }>(SIGN_UP_KEY);
+
   const router = useRouter();
-  const dispatch = useDispatch();
-  const verifyEmailDone = useTypedSelector(
-    ({ signup }) => signup.verifyEmailDone,
-  );
-  const verifySocialDone = useTypedSelector(
-    ({ signup }) => signup.verifySocialDone,
-  );
-  const saveRequiredInfoDone = useTypedSelector(
-    ({ signup }) => signup.saveRequiredInfoDone,
-  );
-  const signUpDone = useTypedSelector(({ signup }) => signup.signUpDone);
-  const fill = [verifyEmailDone, saveRequiredInfoDone, signUpDone];
+
+  // const verifyEmailDone = useTypedSelector(
+  //   ({ signup }) => signup.verifyEmailDone,
+  // );
+  //
+  // const saveRequiredInfoDone = useTypedSelector(
+  //   ({ signup }) => signup.saveRequiredInfoDone,
+  // );
+  // const signUpDone = useTypedSelector(({ signup }) => signup.signUpDone);
+
+  const fill = [isVerifyEmail, isSaveRequiredInfo, isSignUpDone];
 
   useEffect(() => {
     // 페이지 떠날 때 모든 state 초기화
     return () => {
-      dispatch(resetSignUp());
+      updateSignUp({
+        isSaveRequiredInfo: false,
+        isSignUpDone: false,
+        isVerifyEmail: false,
+      });
     };
-  }, [dispatch]);
+  }, [updateSignUp]);
 
   useEffect(() => {
     // 이메일 링크를 타고 들어와 관련 쿼리가 주소창에 남아있다면, 해당 쿼리 clear
@@ -58,10 +79,10 @@ const SignUp = ({ isQuery }: Props) => {
     <>
       <CustomHead {...pageProps} />
       <AuthContainer progressBar={<ProgressBar fill={fill} />}>
-        {(!verifyEmailDone || !verifySocialDone) && <Start />}
-        {verifyEmailDone && !saveRequiredInfoDone && <RequiredInfo />}
-        {saveRequiredInfoDone && !signUpDone && <OptionalInfo />}
-        {signUpDone && <End />}
+        {!isVerifyEmail && <Start />}
+        {isVerifyEmail && !isSaveRequiredInfo && <RequiredInfo />}
+        {isSaveRequiredInfo && !isSignUpDone && <OptionalInfo />}
+        {isSignUpDone && <End />}
       </AuthContainer>
     </>
   );
@@ -69,26 +90,26 @@ const SignUp = ({ isQuery }: Props) => {
 
 // 이메일 검증 링크를 타고 이 페이지로 들어와 관련 쿼리가 있다면,
 // 해당 쿼리로 이후의 로직 실행
-export const getServerSideProps = wrapper.getServerSideProps(
-  async ({ query, store }) => {
-    const { success, email: verifiedEmail } = query;
-    const isQuery = Boolean(success);
-
-    if (isQuery) {
-      if (success === 'true') {
-        store.dispatch(verifyEmailRequest(verifiedEmail));
-
-        store.dispatch(END);
-        await store.sagaTask?.toPromise();
-      }
-    }
-
-    return {
-      props: {
-        isQuery,
-      },
-    };
-  },
-);
+// export const getServerSideProps = wrapper.getServerSideProps(
+//   async ({ query, store }) => {
+//     const { success, email: verifiedEmail } = query;
+//     const isQuery = Boolean(success);
+//
+//     if (isQuery) {
+//       if (success === 'true') {
+//         store.dispatch(verifyEmailRequest(verifiedEmail));
+//
+//         store.dispatch(END);
+//         await store.sagaTask?.toPromise();
+//       }
+//     }
+//
+//     return {
+//       props: {
+//         isQuery,
+//       },
+//     };
+//   },
+// );
 
 export default connect((state) => state)(SignUp);
