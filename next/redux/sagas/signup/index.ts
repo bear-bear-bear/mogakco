@@ -20,16 +20,19 @@ import {
   SIGN_UP_FAILURE,
 } from '@redux/reducers/signup';
 import { LOG_IN_SUCCESS } from '@redux/reducers/common/user';
-import { signUpAPIs } from '@lib/APIs';
+import {
+  sendEmailFetcher,
+  verifyEmailFetcher,
+  loadSkillsFetcher,
+  loadJobsFetcher,
+  signUpFetcher,
+} from '@lib/fetchers';
 import { logAxiosError } from '@lib/apiClient';
 import type { Error } from '@lib/apiClient';
 
-const { sendEmailAPI, verifyEmailAPI, loadSkillsAPI, loadJobsAPI, signUpAPI } =
-  signUpAPIs;
-
 function* sendEmail({ payload: email }: PayloadAction<string>) {
   try {
-    yield call(sendEmailAPI, email);
+    yield call(sendEmailFetcher, email);
     yield put({
       type: SEND_EMAIL_SUCCESS,
     });
@@ -43,7 +46,7 @@ function* sendEmail({ payload: email }: PayloadAction<string>) {
 
 function* verifyEmail({ payload: email }: PayloadAction<string>) {
   try {
-    yield call(verifyEmailAPI, email);
+    yield call(verifyEmailFetcher, email);
     yield put({
       type: VERIFY_EMAIL_SUCCESS,
       payload: email,
@@ -58,7 +61,7 @@ function* verifyEmail({ payload: email }: PayloadAction<string>) {
 
 function* loadSkills() {
   try {
-    const result = yield call(loadSkillsAPI);
+    const result = yield call(loadSkillsFetcher);
     yield put({
       type: LOAD_SKILLS_SUCCESS,
       payload: result.data,
@@ -73,7 +76,7 @@ function* loadSkills() {
 
 function* loadJobs() {
   try {
-    const result = yield call(loadJobsAPI);
+    const result = yield call(loadJobsFetcher);
     yield put({
       type: LOAD_JOBS_SUCCESS,
       payload: result.data,
@@ -88,7 +91,7 @@ function* loadJobs() {
 
 function* signUp({ payload: userInfo }: PayloadAction<ISignUpUserProps>) {
   try {
-    const result = yield call(signUpAPI, userInfo);
+    const result = yield call(signUpFetcher, userInfo);
     yield put({ type: SIGN_UP_SUCCESS });
     yield put({
       type: LOG_IN_SUCCESS,

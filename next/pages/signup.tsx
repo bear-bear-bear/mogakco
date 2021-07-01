@@ -8,8 +8,7 @@ import {
   State as InitialType,
   SIGN_UP_KEY,
 } from '@hooks/useSignUp';
-import { signUpAPIs } from '@lib/APIs';
-import { isDevelopment } from '@lib/enviroment';
+import { verifyEmailFetcher } from '@lib/fetchers';
 import { logAxiosError } from '@lib/apiClient';
 import CustomHead from '@components/common/CustomHead';
 import AuthContainer from '@components/common/AuthContainer';
@@ -64,21 +63,24 @@ const SignUp = ({ isQuery, initialProps }: Props) => {
 
 // 이메일 검증 링크를 타고 이 페이지로 들어와 관련 쿼리가 있다면,
 // 해당 쿼리로 이후의 로직 실행
+interface ResQuery {
+  success?: 'true' | 'false';
+  email?: string;
+}
 export const getServerSideProps: GetServerSideProps = async ({ query }) => {
-  const { success, email } = query;
+  const { success, email }: ResQuery = query;
   const isQuery = Boolean(success);
-  const { verifyEmailAPI } = signUpAPIs;
 
   if (isQuery) {
-    const initialProps = await verifyEmailAPI(email as string)
-      .then(() => ({
-        ...initialData,
-        isVerifyEmail: true,
-      }))
+    const initialProps = await verifyEmailFetcher(email as string)
+      .then(() => {
+        return {
+          ...initialData,
+          isVerifyEmail: true,
+        };
+      })
       .catch((err) => {
-        if (isDevelopment) {
-          logAxiosError(err);
-        }
+        logAxiosError(err);
         return {
           ...initialData,
           isVerifyEmail: false,

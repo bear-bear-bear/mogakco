@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { UnpackNestedValue, useForm } from 'react-hook-form';
 
-import { signUpAPIs } from '@lib/APIs';
+import { sendEmailFetcher } from '@lib/fetchers';
 import { logAxiosError } from '@lib/apiClient';
 import useLanding from '@hooks/useLanding';
 import useDebugLog from '@hooks/useDebugLog';
@@ -20,8 +20,6 @@ import * as S from './style';
 export type FormInputs = {
   email: string | null;
 };
-
-const { sendEmailAPI } = signUpAPIs;
 
 const Auth = () => {
   const { email: landingEmail, updateLanding } = useLanding();
@@ -46,7 +44,7 @@ const Auth = () => {
       done: false,
     });
 
-    sendEmailAPI(email)
+    sendEmailFetcher(email)
       .then(() => {
         setSendEmailState({
           loading: false,

@@ -3,7 +3,7 @@ import { PayloadAction } from '@reduxjs/toolkit';
 
 import type { ILoginProps } from 'typings/auth';
 import { logAxiosError } from '@lib/apiClient';
-import { userAPIs } from '@lib/APIs';
+import { logInFetcher, logOutFetcher } from '@lib/fetchers';
 import {
   LOG_IN_REQUEST,
   LOG_IN_SUCCESS,
@@ -13,11 +13,9 @@ import {
   LOG_OUT_FAILURE,
 } from '@redux/reducers/common/user';
 
-const { logInAPI, logOutAPI } = userAPIs;
-
 function* logIn(action: PayloadAction<ILoginProps>) {
   try {
-    const result = yield call(logInAPI, action.payload);
+    const result = yield call(logInFetcher, action.payload);
     yield put({
       type: LOG_IN_SUCCESS,
       data: result.data,
@@ -33,7 +31,7 @@ function* logIn(action: PayloadAction<ILoginProps>) {
 
 function* logOut() {
   try {
-    const result = yield call(logOutAPI);
+    const result = yield call(logOutFetcher);
     yield put({
       type: LOG_OUT_SUCCESS,
       data: result.data,
