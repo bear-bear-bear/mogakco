@@ -31,9 +31,12 @@ const LeftContentBlock = ({
 
   const toSignUp = (e: SyntheticEvent) => {
     e.preventDefault();
-    updateLanding({
-      email,
-    });
+    updateLanding(
+      {
+        email,
+      },
+      false,
+    );
     router.push('/signup');
   };
 
