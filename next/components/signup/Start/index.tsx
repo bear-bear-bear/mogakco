@@ -1,9 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
-import log from 'loglevel';
 import { UnpackNestedValue, useForm } from 'react-hook-form';
 
 import { signupAPIs } from '@lib/APIs';
+import { logAxiosError } from '@lib/apiClient';
 import useLanding from '@hooks/useLanding';
+import useDebugLog from '~/hooks/useDebugLog';
 import useIsomorphicLayoutEffect from '~/hooks/useIsomorphicLayoutEffect';
 import { emailRule } from '~/lib/regex';
 import Warning from '~/components/common/Warning';
@@ -24,32 +25,47 @@ const { sendEmailAPI } = signupAPIs;
 
 const Auth = () => {
   const { email: landingEmail, updateLanding } = useLanding();
-  const [sendEmailDone, setSendEmailDone] = useState(false);
-  const [sendEmailLoading, setSendEmailLoading] = useState(false);
+  const [sendEmailState, setSendEmailState] = useState({
+    loading: false,
+    done: false,
+  });
   const [emailTestError, setEmailTestError] = useState(false);
   const submitButtonEl = useRef<HTMLButtonElement>(null);
   const { register, handleSubmit, setValue, getValues } = useForm<FormInputs>();
+  const { debugLog } = useDebugLog();
 
   const onSubmitEmail = ({ email }: UnpackNestedValue<FormInputs>) => {
-    setSendEmailLoading(true);
     setEmailTestError(false);
+
     if (email === null) {
       return;
     }
 
+    setSendEmailState({
+      loading: true,
+      done: false,
+    });
+
     sendEmailAPI(email)
       .then(() => {
-        setSendEmailDone(true);
-        setSendEmailLoading(false);
+        setSendEmailState({
+          loading: false,
+          done: true,
+        });
       })
-      .catch(() => setSendEmailLoading(false));
+      .catch((err) => {
+        setSendEmailState({
+          loading: false,
+          done: false,
+        });
+        logAxiosError(err);
+      });
   };
 
   const onError = () => setEmailTestError(true);
 
   const onClickSocial = () => {
-    log.setLevel('debug');
-    log.warn('미구현 기능입니다.');
+    debugLog('미구현 기능입니다.');
   };
 
   useIsomorphicLayoutEffect(() => {
@@ -57,17 +73,21 @@ const Auth = () => {
   }, [submitButtonEl]);
 
   useEffect(() => {
+    // 랜딩페이지에서 이메일 입력으로 회원가입 페이지로 넘어왔다면
+    // 이메일 입력창에 랜딩페이지에서 입력한 이메일을 자동 입력
     if (landingEmail === null) return;
 
     setValue('email', landingEmail);
+
+    // 자동 입력 후 랜딩페이지 이메일 상태 초기화
     updateLanding({
-      email: landingEmail,
+      email: null,
     });
   }, [landingEmail, setValue, updateLanding]);
 
   return (
     <>
-      {!sendEmailDone && (
+      {!sendEmailState.done && (
         <>
           <CS.Title>회원가입</CS.Title>
           <S.SocialLoginWrapper>
@@ -98,7 +118,7 @@ const Auth = () => {
               ref={submitButtonEl}
               type="submit"
               fullWidth
-              $loading={sendEmailLoading}
+              $loading={sendEmailState.loading}
             >
               이메일로 계속하기
             </S.SubmitButton>
@@ -106,7 +126,7 @@ const Auth = () => {
         </>
       )}
 
-      {sendEmailDone && (
+      {sendEmailState.done && (
         <>
           <CS.Title>메일함을 확인하세요</CS.Title>
           <Desc>
