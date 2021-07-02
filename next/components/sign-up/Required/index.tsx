@@ -1,12 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
+import { useRouter } from 'next/router';
 
-import type { IOptionalInfoProps } from 'typings/auth';
 import useIsomorphicLayoutEffect from '@hooks/useIsomorphicLayoutEffect';
-import useSignUp, { initialData } from '@hooks/useSignUp';
 import { usernameRule, passwordRule } from '@lib/regex';
 import isAllPropertyTruthy from '@lib/isAllPropertyTruthy';
-import apiClient, { logAxiosError } from '@lib/apiClient';
 import Desc from '@components/common/Desc';
 import Form from '@components/common/Form';
 
@@ -27,8 +25,8 @@ const initialState: InputValues = {
 };
 
 // FIXME: 타이핑마다 2번 렌더링 되는거 확인
-const RequiredInfo = () => {
-  const { updateSignUp } = useSignUp();
+const Required = () => {
+  const router = useRouter();
   const [initSubmitDone, setInitSubmitDone] = useState(false);
   const [isAllValues, setIsAllValues] = useState(false);
   const [errorStates, setErrorStates] = useState<InputErrorStates>({
@@ -55,18 +53,9 @@ const RequiredInfo = () => {
   const onValid = () => {
     setInitSubmitDone(true);
 
-    updateSignUp(
-      (prevState = initialData) => ({
-        ...prevState,
-        userInfo: {
-          ...prevState.userInfo,
-          username,
-          password,
-        },
-        isSaveRequiredInfo: true,
-      }),
-      false,
-    );
+    window.sessionStorage.setItem('username', username);
+    window.sessionStorage.setItem('password', password);
+    router.push('/sign-up/optional');
   };
   const onInvalid = () => setInitSubmitDone(true);
 
@@ -79,6 +68,15 @@ const RequiredInfo = () => {
     // 즉, 버튼 활성화는 정규식 검사와는 무관합니다.
     setIsAllValues(isAllPropertyTruthy(inputValues));
   }, [inputValues]);
+
+  useEffect(() => {
+    // optional 페이지 prefetch
+    router.prefetch('/sign-up/optional');
+
+    // 쿼리 이메일 저장 후 해당 쿼리 삭제
+    const { email } = router.query;
+    window.sessionStorage.setItem('email', email as string);
+  }, [router]);
 
   useEffect(() => {
     // inputValues의 값이 변경될 때마다 Input 전체 입력값에 대한 Validation 수행
@@ -102,41 +100,6 @@ const RequiredInfo = () => {
     setTimeout(() => verifyAllInputs(inputValues), 200);
   }, [inputValues, initSubmitDone]);
 
-  useEffect(() => {
-    // 다음 단계인 optionalInfo 페이지의 데이터 프리패치
-    // TODO: fetcher 모듈로 분리 (재사용 가능한 모듈로 분리할 수 있는지 생각해보기)
-    // TODO: API들 모듈로 분리
-    // TODO: 데이터 프리렌더링에 대해 더 좋은 방안이 있는지 찾아보기 -> Next.js Prefetch
-    const getSkillsAPI = '/api/user/skills';
-    const getJobsAPI = '/api/user/jobs';
-    const optionalInfoListFetcher = (url: string) =>
-      apiClient
-        .get<IOptionalInfoProps[] | null>(url)
-        .then((res) => res.data)
-        .catch((err) => {
-          logAxiosError(err);
-          return null; // TODO: 타입 응급처치 - 수정하기
-        });
-
-    Promise.all([
-      optionalInfoListFetcher(getSkillsAPI),
-      optionalInfoListFetcher(getJobsAPI),
-    ]).then(([skills, jobs]) => {
-      updateSignUp((prevState) => {
-        if (prevState) {
-          return {
-            ...prevState,
-            userInfo: {
-              ...prevState.userInfo,
-              skills,
-              jobs,
-            },
-          };
-        }
-      }, false);
-    });
-  }, [updateSignUp]);
-
   return (
     <>
       <CS.Title>별명과 비밀번호를 입력하세요</CS.Title>
@@ -159,4 +122,4 @@ const RequiredInfo = () => {
   );
 };
 
-export default RequiredInfo;
+export default Required;

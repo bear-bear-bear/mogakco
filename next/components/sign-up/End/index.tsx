@@ -1,15 +1,20 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useRouter } from 'next/router';
 
 import useIsomorphicLayoutEffect from '@hooks/useIsomorphicLayoutEffect';
 import * as CS from '../common/styles';
 
-const Complete = () => {
+const End = () => {
   const router = useRouter();
   const buttonEl = useRef<HTMLButtonElement>(null);
 
   useIsomorphicLayoutEffect(() => {
     buttonEl.current?.focus();
+  }, []);
+
+  useEffect(() => {
+    // 회원가입 과정에서 사용자가 입력했던 정보 삭제
+    window.sessionStorage.clear();
   }, []);
 
   const onClickButton = () => {
@@ -27,4 +32,4 @@ const Complete = () => {
   );
 };
 
-export default Complete;
+export default End;

@@ -1,8 +1,9 @@
 import React from 'react';
 
-import * as S from '@components/signup/RequiredInfo/style';
 import Input from '@components/common/Input';
 import Label from '@components/common/Label';
+
+import * as S from '@components/sign-up/Required/style';
 
 type Props = {
   term: boolean;

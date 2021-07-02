@@ -1,10 +1,9 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
 import * as S from './style';
 
 export interface ProgressBarProps {
-  fill: boolean[];
+  fill: number;
 }
 
 const ProgressBar = ({ fill }: ProgressBarProps) => {
@@ -13,10 +12,6 @@ const ProgressBar = ({ fill }: ProgressBarProps) => {
       <S.ProgressBarFiller fill={fill} />
     </S.ProgressBarWrapper>
   );
-};
-
-ProgressBar.propTypes = {
-  fill: PropTypes.arrayOf(PropTypes.bool).isRequired,
 };
 
 export default ProgressBar;

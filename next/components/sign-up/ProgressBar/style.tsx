@@ -10,20 +10,11 @@ export const ProgressBarWrapper = styled.div`
   margin-top: 0.66rem;
 `;
 
-const fillStyles = ({ fill }: ProgressBarProps) => {
-  // 진행도 = (진행 완료된 절차 갯수 / 전체 절차 갯수) * 100
-  const progress = (fill.filter((v) => v === true).length / fill.length) * 100;
-
-  return css`
-    width: ${progress.toFixed(2)}%;
-  `;
-};
-
 export const ProgressBarFiller = styled.div`
   height: 100%;
   background-color: var(--color-blue-1);
   border-radius: inherit;
   transition: 1s width ease-in-out;
 
-  ${fillStyles}
+  width: ${({ fill }: ProgressBarProps) => `${fill}%`};
 `;

@@ -33,13 +33,16 @@ export interface ISignUpUserReduxProps {
 }
 
 // 회원가입 요청에 필요한 정보
-export interface ISignUpUserProps extends ISignUpUserReduxProps {
+export interface ISignUpUserProps {
+  email: string | null;
+  username: string | null;
+  password: string | null;
   skills: number[] | null;
   job: number | null;
 }
 
 // 회원가입 유저 선택정보 타입
-export interface IOptionalInfoProps {
+export interface IOptionalProps {
   id: number;
   name: string;
   createdAt: Date;
@@ -64,12 +67,12 @@ export interface ISignUpState {
   loadJobsLoading: boolean;
   loadJobsDone: boolean;
   loadJobsError: IGeneralServerResponse | null;
-  saveRequiredInfoDone: boolean;
+  saveRequiredDone: boolean;
   signUpLoading: boolean;
   signUpDone: boolean;
   signUpError: IGeneralServerResponse | null;
-  skills: IOptionalInfoProps[] | null;
-  jobs: IOptionalInfoProps[] | null;
+  skills: IOptionalProps[] | null;
+  jobs: IOptionalProps[] | null;
 }
 
 // 회원가입 성공 응답 스키마

@@ -21,7 +21,7 @@ const Header = () => (
               로그인
             </Button>
           </Link>
-          <Link href="/signup">
+          <Link href="/sign-up">
             <Button color="black" underline>
               회원가입
             </Button>

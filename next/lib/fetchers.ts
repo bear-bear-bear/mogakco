@@ -3,7 +3,7 @@ import type { IGeneralServerResponse } from 'typings/common';
 import type {
   ILoginProps,
   ILoginSuccessResponse,
-  IOptionalInfoProps,
+  IOptionalProps,
   ISignUpResponse,
   ISignUpUserProps,
 } from 'typings/auth';
@@ -23,7 +23,7 @@ export const logInFetcher = (data: ILoginProps) =>
 export const logOutFetcher = () => apiClient.get('/api/auth/logout');
 
 // ********************************************************************************************************************
-// signup
+// sign-up
 // ********************************************************************************************************************
 // 검증 이메일 전송
 export const sendEmailFetcher = (email: string) =>
@@ -38,10 +38,10 @@ export const verifyEmailFetcher = (email: string) =>
   );
 // 개발 분야 목록 불러오기
 export const loadSkillsFetcher = () =>
-  apiClient.get<IOptionalInfoProps>(`/api/user/skills`);
+  apiClient.get<IOptionalProps>(`/api/user/skills`);
 // 직업 목록 불러오기
 export const loadJobsFetcher = () =>
-  apiClient.get<IOptionalInfoProps>(`/api/user/jobs`);
+  apiClient.get<IOptionalProps>(`/api/user/jobs`);
 // 회원가입
 export const signUpFetcher = (data: ISignUpUserProps) =>
   apiClient.post<ISignUpResponse | IGeneralServerResponse>('/api/auth', data);

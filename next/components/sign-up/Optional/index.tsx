@@ -1,31 +1,27 @@
 import React, { useCallback, useState, SyntheticEvent } from 'react';
 import { OptionsType } from 'react-select';
+import { useRouter } from 'next/router';
 
-import useSignUp from '@hooks/useSignUp';
 import { signUpFetcher } from '@lib/fetchers';
 import { logAxiosError } from '@lib/apiClient';
-import toSelectOptions from '@lib/toSelectOptions';
+import getSessionStorageValues from '@lib/getSessionStorageValues';
 import Select from '@components/common/Select';
 import Desc from '@components/common/Desc';
 import Form from '@components/common/Form';
 import InputWrapper from '@components/common/InputWrapper';
 import Label from '@components/common/Label';
+import type { SelectProps, IOptionalPageProps } from '@pages/sign-up/optional';
 
 import * as CS from '../common/styles';
 
-type SelectProps = {
-  value: number;
-  label: string;
-};
-
 const SKILLS_LIMIT = 5;
 
-const OptionalInfo = () => {
+const Optional = ({ skillOptions, jobOptions }: IOptionalPageProps) => {
+  const router = useRouter();
   const [signUpLoading, setSignUpLoading] = useState<boolean>(false);
   const [isShowSkillOptions, setIsShowSkillOptions] = useState<boolean>(true);
   const [skillIds, setSkillIds] = useState<number[] | null>(null);
   const [jobId, setJobId] = useState<number | null>(null);
-  const { userInfo, skills, jobs, updateSignUp } = useSignUp();
 
   // react-select 에서 onChange 는 해당 Select 에서 선택되어 있는 현재 데이터를 반환합니다.
   const onChangeSkills = useCallback((list: OptionsType<SelectProps>) => {
@@ -39,21 +35,22 @@ const OptionalInfo = () => {
   const onSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
     setSignUpLoading(true);
+
+    const { email, username, password } = getSessionStorageValues(
+      'email',
+      'username',
+      'password',
+    );
     signUpFetcher({
-      ...userInfo,
+      email,
+      username,
+      password,
       skills: skillIds,
       job: jobId,
     })
       .then(() => {
         setSignUpLoading(false);
-        updateSignUp((prevState) => {
-          if (prevState) {
-            return {
-              ...prevState,
-              isSignUpDone: true,
-            };
-          }
-        }, false);
+        router.push('/sign-up/end');
       })
       .catch((err) => {
         setSignUpLoading(false);
@@ -73,7 +70,7 @@ const OptionalInfo = () => {
           <Select
             id="skills"
             closeMenuOnSelect={false}
-            options={isShowSkillOptions ? toSelectOptions(skills) : []}
+            options={isShowSkillOptions ? skillOptions : []}
             placeholder="관심 분야를 선택해 주세요... (5개까지 선택 가능)"
             onChange={(data) => {
               onChangeSkills(data as OptionsType<SelectProps>);
@@ -87,7 +84,7 @@ const OptionalInfo = () => {
           <Select
             isMulti={false}
             id="job"
-            options={toSelectOptions(jobs)}
+            options={jobOptions}
             placeholder="직업을 선택해 주세요..."
             onChange={(data) => {
               onChangeJob(data as SelectProps);
@@ -102,4 +99,4 @@ const OptionalInfo = () => {
   );
 };
 
-export default OptionalInfo;
+export default Optional;
