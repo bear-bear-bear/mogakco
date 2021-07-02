@@ -4,13 +4,16 @@ const useInput = (
   initialValue = '',
 ): [
   string,
-  (e: ChangeEvent<HTMLInputElement>) => void,
+  (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void,
   (value: ((prevState: string) => string) | string) => void,
 ] => {
   const [value, setValue] = useState<string>(initialValue);
-  const handler = useCallback((e: ChangeEvent<HTMLInputElement>) => {
-    setValue(e.target.value);
-  }, []);
+  const handler = useCallback(
+    (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+      setValue(e.target.value);
+    },
+    [],
+  );
   return [value, handler, setValue];
 };
 
