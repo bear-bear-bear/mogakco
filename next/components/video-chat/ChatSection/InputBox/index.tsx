@@ -6,21 +6,11 @@ import * as S from './style';
 
 log.setLevel('DEBUG');
 
-const resize = (ref?: HTMLTextAreaElement): void => {
-  if (ref) {
-    ref.style.height = '1px';
-    ref.style.height = `${12 + ref.scrollHeight}px`;
-  }
-};
-
 const InputBox = () => {
   const [chat, onChangeChat, setChat] = useInput('');
-  const textAreaRef = useRef<HTMLTextAreaElement>();
-
   const handleChat = (e: KeyboardEvent<HTMLTextAreaElement>) => {
     if (chat.trim() !== '') {
       if (e.code === 'Enter' && !e.altKey) {
-        resize(textAreaRef.current);
         socketServer.emit('chat', chat);
         setChat('');
       }
@@ -36,6 +26,7 @@ const InputBox = () => {
         <S.FileAddButton />
       </S.Header>
       <S.TempTextArea
+        maxRows={10}
         value={chat}
         onKeyDown={handleChat}
         onChange={onChangeChat}

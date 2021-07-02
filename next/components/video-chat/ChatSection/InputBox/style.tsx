@@ -1,6 +1,7 @@
 import styled from '@emotion/styled';
 import { BsFileEarmarkArrowUp } from 'react-icons/bs';
 import { AiOutlineSend } from 'react-icons/ai';
+import TextareaAutosize from 'react-textarea-autosize';
 
 export const InputBox = styled.div`
   border-top: 1px solid var(--color-gray-3);
@@ -25,7 +26,7 @@ export const TempEditorForm = styled.form`
   border-top: 1px solid var(--color-gray-3);
 `;
 
-export const TempTextArea = styled.textarea`
+export const TempTextArea = styled(TextareaAutosize)`
   width: 100%;
   height: 100%;
   padding: 0.5rem;
