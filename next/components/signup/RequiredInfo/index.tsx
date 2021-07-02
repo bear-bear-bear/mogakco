@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 
 import type { IOptionalInfoProps } from 'typings/auth';
 import useIsomorphicLayoutEffect from '@hooks/useIsomorphicLayoutEffect';
-import useSignUp from '@hooks/useSignUp';
+import useSignUp, { initialData } from '@hooks/useSignUp';
 import { usernameRule, passwordRule } from '@lib/regex';
 import isAllPropertyTruthy from '@lib/isAllPropertyTruthy';
 import apiClient, { logAxiosError } from '@lib/apiClient';
@@ -55,20 +55,18 @@ const RequiredInfo = () => {
   const onValid = () => {
     setInitSubmitDone(true);
 
-    updateSignUp((prevState) => {
-      // TODO: 타입 단언할 방법은 없을지 알아보기
-      if (prevState) {
-        return {
-          ...prevState,
-          userInfo: {
-            ...prevState.userInfo,
-            username,
-            password,
-          },
-          isSaveRequiredInfo: true,
-        };
-      }
-    }, false);
+    updateSignUp(
+      (prevState = initialData) => ({
+        ...prevState,
+        userInfo: {
+          ...prevState.userInfo,
+          username,
+          password,
+        },
+        isSaveRequiredInfo: true,
+      }),
+      false,
+    );
   };
   const onInvalid = () => setInitSubmitDone(true);
 
@@ -108,7 +106,7 @@ const RequiredInfo = () => {
     // 다음 단계인 optionalInfo 페이지의 데이터 프리패치
     // TODO: fetcher 모듈로 분리 (재사용 가능한 모듈로 분리할 수 있는지 생각해보기)
     // TODO: API들 모듈로 분리
-    // TODO: 데이터 프리렌더링에 대해 더 좋은 방안이 있는지 찾아보기
+    // TODO: 데이터 프리렌더링에 대해 더 좋은 방안이 있는지 찾아보기 -> Next.js Prefetch
     const getSkillsAPI = '/api/user/skills';
     const getJobsAPI = '/api/user/jobs';
     const optionalInfoListFetcher = (url: string) =>
