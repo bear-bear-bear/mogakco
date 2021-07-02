@@ -31,6 +31,7 @@ export const TempTextArea = styled.textarea`
   padding: 0.5rem;
   border: none;
   font-size: 0.9rem;
+  resize: none;
   font-weight: 700;
   letter-spacing: -0.01rem;
   color: var(--color-gray-9);
