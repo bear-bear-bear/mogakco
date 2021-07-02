@@ -18,7 +18,7 @@ import * as CS from '../common/styles';
 import * as S from './style';
 
 export type FormInputs = {
-  email: string | null;
+  email: string;
 };
 
 const Start = () => {
@@ -29,8 +29,11 @@ const Start = () => {
   });
   const [emailTestError, setEmailTestError] = useState(false);
   const submitButtonEl = useRef<HTMLButtonElement>(null);
-  const { register, handleSubmit, setValue, getValues } = useForm<FormInputs>();
+  const { register, handleSubmit, setValue, getValues, watch } =
+    useForm<FormInputs>();
   const debugLog = useDebugLog();
+
+  const { email: watchedEmail } = watch();
 
   const onSubmitEmail = ({ email }: UnpackNestedValue<FormInputs>) => {
     setEmailTestError(false);
@@ -101,12 +104,16 @@ const Start = () => {
           <S.DevideLine />
           <Form action="" onSubmit={handleSubmit(onSubmitEmail, onError)}>
             <InputWrapper>
-              <Label direction="bottom">이메일</Label>
+              <Label htmlFor="email" direction="bottom">
+                이메일
+              </Label>
               <Input
                 type="email"
+                id="email"
                 placeholder="이메일 입력"
                 scale="medium"
-                setValue={setValue}
+                isEmail={Boolean(watchedEmail)}
+                resetEmail={() => setValue('email', '')}
                 spellCheck="false"
                 {...register('email', { pattern: emailRule })}
               />

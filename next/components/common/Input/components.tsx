@@ -53,17 +53,18 @@ export const PasswordInput = ({
 /**
  * @desc input(type="email") 컴포넌트입니다.
  * 현재 입력 중인 값을 취소할 수 있는 버튼을 가졌습니다.
- * useState hook의 리턴값인 value, setValue 를 인자로 받습니다.
+ * @param isEmail: 이메일 값 존재 여부를 알 수 있는 boolean. 값을 Boolean형식으로 변경해서 넣어주세요.
+ * @param resetEmail: 이메일을 빈 문자열로 세팅할 수 있는 콜백 함수
  */
 export const EmailInput = ({
   forwardedRef,
   scale = DEFAULT_SCALE,
-  value,
-  setValue,
+  isEmail,
+  resetEmail,
   ...rest
 }: IEmailProps) => (
   <S.RelativeWrapper>
-    <S.DefaultInput ref={forwardedRef} scale={scale} value={value} {...rest} />
-    {value && <S.DeleteButton onClick={() => setValue('email', '')} />}
+    <S.DefaultInput ref={forwardedRef} scale={scale} {...rest} />
+    {isEmail && <S.DeleteButton onClick={() => resetEmail()} />}
   </S.RelativeWrapper>
 );

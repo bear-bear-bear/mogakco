@@ -53,7 +53,8 @@ const LeftContentBlock = ({
                     ref={emailEl}
                     type="email"
                     value={email}
-                    setValue={setEmail}
+                    isEmail={Boolean(email)}
+                    resetEmail={() => setEmail('')}
                     onChange={onChangeEmail}
                     placeholder="이메일 입력"
                     spellCheck="false"

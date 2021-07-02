@@ -16,7 +16,7 @@ const Header = () => (
       </Box>
       <Box w="auto">
         <S.ButtonsWrapper>
-          <Link href="/login">
+          <Link href="/sign-in">
             <Button color="black" underline>
               로그인
             </Button>

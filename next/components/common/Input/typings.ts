@@ -1,4 +1,4 @@
-import React, { InputHTMLAttributes } from 'react';
+import React, { InputHTMLAttributes, Dispatch, SetStateAction } from 'react';
 import { UseFormSetValue } from 'react-hook-form';
 
 export interface IDefaultProps extends InputHTMLAttributes<HTMLInputElement> {
@@ -14,8 +14,8 @@ export interface IPasswordUniqueProps {
 export type IPasswordProps = IDefaultProps & IPasswordUniqueProps;
 
 export interface IEmailUniqueProps {
-  value: string | number;
-  setValue: UseFormSetValue<{ email: string | null }>;
+  isEmail: boolean;
+  resetEmail: () => void;
 }
 export type IEmailProps = IDefaultProps & IEmailUniqueProps;
 
