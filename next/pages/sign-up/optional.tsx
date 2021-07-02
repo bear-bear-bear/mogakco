@@ -15,13 +15,9 @@ const pageProps = {
   locale: 'ko_KR',
 };
 
-export type SelectProps = {
-  value: number;
-  label: string;
-};
 export interface IOptionalPageProps {
-  skillOptions: SelectProps[];
-  jobOptions: SelectProps[];
+  skillOptions: ReturnType<typeof toSelectOptions>;
+  jobOptions: ReturnType<typeof toSelectOptions>;
 }
 
 const SignUpOptional = (props: IOptionalPageProps) => {

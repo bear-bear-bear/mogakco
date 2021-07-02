@@ -1,35 +1,15 @@
-import type { IGeneralServerResponse, ErrorPayload } from 'typings/common';
-
-// 로그인 유저 정보
+// 로그인 요청에 필요한 정보
 export interface ILoginProps {
   email: string;
   password: string;
 }
 
-// 유저 정보
+// 유저가 가지고 있는 정보
 export interface IUserProps {
   id: number;
   username: string;
   skills: number[] | null;
   job: number | null;
-}
-
-// 유저 상태 타입
-export interface IUserState {
-  me: IUserProps | null;
-  logInLoading: boolean;
-  logInDone: boolean;
-  logInError: ErrorPayload;
-  logOutLoading: boolean;
-  logOutDone: boolean;
-  logOutError: ErrorPayload;
-}
-
-// 회원가입에 필요한 리덕스 state
-export interface ISignUpUserReduxProps {
-  email: string | null;
-  username: string | null;
-  password: string | null;
 }
 
 // 회원가입 요청에 필요한 정보
@@ -41,38 +21,12 @@ export interface ISignUpUserProps {
   job: number | null;
 }
 
-// 회원가입 유저 선택정보 타입
+// 회원가입 optional 페이지에서 서버로부터 받는 선택 옵션들의 타입
 export interface IOptionalProps {
   id: number;
   name: string;
   createdAt: Date;
   updatedAt: Date;
-}
-
-// 회원가입 페이지 상태 타입
-export interface ISignUpState {
-  userInfo: ISignUpUserReduxProps;
-  sendEmailLoading: boolean;
-  sendEmailDone: boolean;
-  sendEmailError: IGeneralServerResponse | null;
-  verifyEmailLoading: boolean;
-  verifyEmailDone: boolean;
-  verifyEmailError: IGeneralServerResponse | null;
-  verifySocialLoading: boolean;
-  verifySocialDone: boolean;
-  verifySocialError: IGeneralServerResponse | null;
-  loadSkillsLoading: boolean;
-  loadSkillsDone: boolean;
-  loadSkillsError: IGeneralServerResponse | null;
-  loadJobsLoading: boolean;
-  loadJobsDone: boolean;
-  loadJobsError: IGeneralServerResponse | null;
-  saveRequiredDone: boolean;
-  signUpLoading: boolean;
-  signUpDone: boolean;
-  signUpError: IGeneralServerResponse | null;
-  skills: IOptionalProps[] | null;
-  jobs: IOptionalProps[] | null;
 }
 
 // 회원가입 성공 응답 스키마

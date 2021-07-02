@@ -10,7 +10,8 @@ import Desc from '@components/common/Desc';
 import Form from '@components/common/Form';
 import InputWrapper from '@components/common/InputWrapper';
 import Label from '@components/common/Label';
-import type { SelectProps, IOptionalPageProps } from '@pages/sign-up/optional';
+import type { IOptionalPageProps } from '@pages/sign-up/optional';
+import type { SelectProps } from '@lib/toSelectOptions';
 
 import * as CS from '../common/styles';
 
