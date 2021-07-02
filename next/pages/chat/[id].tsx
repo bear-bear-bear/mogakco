@@ -19,20 +19,19 @@ const pageProps = {
   locale: 'ko_KR',
 };
 
-export const socketServer = io.connect(END_POINT, {
-  autoConnect: true,
-  reconnection: true,
-});
+export const socketServer = io.connect(END_POINT);
 
 const ChatRoom = () => {
   const router = useRouter();
   const { id } = router.query;
-  console.log({ id });
 
   useEffect(() => {
     socketServer.on('connect', () => {
       console.log('connected');
       socketServer.emit('joinChatRoom', id);
+      socketServer.on('joinUserMessage', (clientId: string) => {
+        console.log(`${clientId} 유저가 접속하였다고 응답 되었음.`);
+      });
     });
   }, [id]);
 
