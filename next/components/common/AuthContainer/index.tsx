@@ -5,14 +5,10 @@ import Image from 'next/Image';
 import * as S from './style';
 
 interface IProps {
-  progressBar: ReactElement;
+  progressBar?: ReactElement;
 }
 
-const AuthContainer: FC<IProps> = ({
-  progressBar = null,
-  children,
-  ...rest
-}) => {
+const AuthContainer: FC<IProps> = ({ progressBar, children, ...rest }) => {
   const router = useRouter();
 
   const onClickLogo = () => {
