@@ -29,8 +29,11 @@ const Start = () => {
   });
   const [emailTestError, setEmailTestError] = useState(false);
   const submitButtonEl = useRef<HTMLButtonElement>(null);
-  const { register, handleSubmit, setValue, getValues } = useForm<FormInputs>();
+  const { register, handleSubmit, setValue, getValues, watch } =
+    useForm<FormInputs>();
   const debugLog = useDebugLog();
+
+  const { email: watchedEmail } = watch();
 
   const onSubmitEmail = ({ email }: UnpackNestedValue<FormInputs>) => {
     setEmailTestError(false);
@@ -109,7 +112,7 @@ const Start = () => {
                 id="email"
                 placeholder="이메일 입력"
                 scale="medium"
-                isEmail={Boolean(getValues('email'))}
+                isEmail={Boolean(watchedEmail)}
                 resetEmail={() => setValue('email', '')}
                 spellCheck="false"
                 {...register('email', { pattern: emailRule })}

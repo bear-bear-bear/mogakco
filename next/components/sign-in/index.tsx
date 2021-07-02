@@ -1,40 +1,71 @@
 import React, { useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { useRouter } from 'next/router';
+import { UnpackNestedValue, useForm } from 'react-hook-form';
 
+import type { ILoginProps } from 'typings/auth';
 import Form from '@components/common/Form';
 import Input from '@components/common/Input';
 import InputWrapper from '@components/common/InputWrapper';
 import Label from '@components/common/Label';
+import useDebugLog from '@hooks/useDebugLog';
+import { logInFetcher } from '@lib/fetchers';
+import { logAxiosError } from '@lib/apiClient';
+import { emailRule, passwordRule } from '@lib/regex';
 
+// TODO: 회원가입 컴포넌트 스타일 그대로 갖다쓰는데, 해당 스타일 공용화 시키기
 import * as CS from '@components/sign-up/common/styles';
 import * as S from '@components/sign-up/Start/style';
+import isAllPropertyTruthy from '@lib/isAllPropertyTruthy';
 
 export type FormInputs = {
   email: string | null;
+  password: string | null;
 };
 
 const SignInForm = () => {
+  const router = useRouter();
   const [loginLoading, setLoginLoading] = useState<boolean>(false);
   const [isVisiblePassword, setIsVisiblePassword] = useState(false);
   const onClickEye = () => setIsVisiblePassword((prev) => !prev);
+  const debugLog = useDebugLog();
+  const { watch, register, handleSubmit, setValue } = useForm<FormInputs>();
 
-  const { getValues, setValue } = useForm<FormInputs>();
+  const { email } = watch();
+
+  const onClickSocial = () => {
+    debugLog('미구현 기능입니다');
+  };
+
+  const onSubmit = (loginInfo: UnpackNestedValue<FormInputs>) => {
+    console.log('loginInfo', loginInfo);
+    setLoginLoading(true);
+    logInFetcher(loginInfo as ILoginProps)
+      .then(() => {
+        // TODO: 서비스 페이지로 이동하기
+        setLoginLoading(false);
+        router.push('/');
+      })
+      .catch((err) => {
+        setLoginLoading(false);
+        logAxiosError(err);
+      });
+  };
 
   return (
     <>
       <CS.Title>로그인</CS.Title>
       <S.SocialLoginWrapper>
-        <S.SocialAnchor service="google" href="#">
+        <S.SocialAnchor service="google" href="#" onClick={onClickSocial}>
           <S.GoogleIcon />
           <span>Google을 사용하여 로그인</span>
         </S.SocialAnchor>
-        <S.SocialAnchor service="github" href="##">
+        <S.SocialAnchor service="github" href="##" onClick={onClickSocial}>
           <S.GithunIcon />
           <span>Github을 사용하여 로그인</span>
         </S.SocialAnchor>
       </S.SocialLoginWrapper>
       <S.DevideLine />
-      <Form action="">
+      <Form action="" onSubmit={handleSubmit(onSubmit)}>
         <InputWrapper>
           <Label htmlFor="email" direction="bottom">
             이메일
@@ -44,9 +75,10 @@ const SignInForm = () => {
             id="email"
             placeholder="이메일 입력"
             scale="small"
-            isEmail={Boolean(getValues('email'))}
+            isEmail={Boolean(email)}
             resetEmail={() => setValue('email', '')}
             spellCheck="false"
+            {...register('email', { required: true })}
           />
         </InputWrapper>
         <InputWrapper>
@@ -56,14 +88,16 @@ const SignInForm = () => {
           <Input
             type="password"
             id="password"
+            placeholder="비밀번호 입력"
             scale="small"
             onClickEye={onClickEye}
             isVisible={isVisiblePassword}
+            {...register('password', { required: true })}
           />
         </InputWrapper>
-        <S.SubmitButton type="submit" fullWidth $loading={loginLoading}>
+        <CS.SubmitButton type="submit" fullWidth $loading={loginLoading}>
           이메일로 로그인
-        </S.SubmitButton>
+        </CS.SubmitButton>
       </Form>
     </>
   );
