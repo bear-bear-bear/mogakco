@@ -21,7 +21,7 @@ export type FormInputs = {
   email: string | null;
 };
 
-const Auth = () => {
+const Start = () => {
   const { email: landingEmail, updateLanding } = useLanding();
   const [sendEmailState, setSendEmailState] = useState({
     loading: false,
@@ -137,4 +137,4 @@ const Auth = () => {
   );
 };
 
-export default Auth;
+export default Start;

@@ -13,7 +13,10 @@ export const SocialLoginWrapper = styled.div`
   margin-bottom: 1rem;
 `;
 
-const socialAnchorColorStyles = ({ service }) => {
+interface ISocialAnchorColorStyles {
+  service: 'google' | 'github';
+}
+const socialAnchorColorStyles = ({ service }: ISocialAnchorColorStyles) => {
   const styles = {
     google: css`
       color: var(--color-black);
