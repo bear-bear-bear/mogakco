@@ -101,12 +101,16 @@ const Start = () => {
           <S.DevideLine />
           <Form action="" onSubmit={handleSubmit(onSubmitEmail, onError)}>
             <InputWrapper>
-              <Label direction="bottom">이메일</Label>
+              <Label htmlFor="email" direction="bottom">
+                이메일
+              </Label>
               <Input
                 type="email"
+                id="email"
                 placeholder="이메일 입력"
                 scale="medium"
-                setValue={setValue}
+                isEmail={Boolean(getValues('email'))}
+                resetEmail={() => setValue('email', '')}
                 spellCheck="false"
                 {...register('email', { pattern: emailRule })}
               />
