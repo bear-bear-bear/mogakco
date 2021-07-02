@@ -10,6 +10,7 @@ import Label from '@components/common/Label';
 import useDebugLog from '@hooks/useDebugLog';
 import { logInFetcher } from '@lib/fetchers';
 import { logAxiosError } from '@lib/apiClient';
+import { isDevelopment } from '@lib/enviroment';
 
 // TODO: 회원가입 컴포넌트 스타일 그대로 갖다쓰는데, 해당 스타일 공용화 시키기
 import * as CS from '@components/sign-up/common/styles';
@@ -73,6 +74,7 @@ const SignInForm = () => {
             type="email"
             id="email"
             placeholder="이메일 입력"
+            defaultValue={isDevelopment ? 'mogakco35@gmail.com' : undefined}
             scale="small"
             isEmail={Boolean(email)}
             resetEmail={() => setValue('email', '')}
@@ -88,6 +90,7 @@ const SignInForm = () => {
             type="password"
             id="password"
             placeholder="비밀번호 입력"
+            defaultValue={isDevelopment ? 'mogapass' : undefined}
             scale="small"
             onClickEye={onClickEye}
             isVisible={isVisiblePassword}
