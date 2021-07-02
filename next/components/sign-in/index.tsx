@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import { UnpackNestedValue, useForm } from 'react-hook-form';
 
-import type { ILoginProps } from 'typings/auth';
 import Form from '@components/common/Form';
 import Input from '@components/common/Input';
 import InputWrapper from '@components/common/InputWrapper';
