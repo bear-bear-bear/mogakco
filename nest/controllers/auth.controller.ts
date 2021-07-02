@@ -194,6 +194,7 @@ class AuthController {
     return {
       statusCode: 200,
       message: verification.isVerified,
+      email,
     };
   }
 }
