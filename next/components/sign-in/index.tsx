@@ -17,8 +17,8 @@ import * as CS from '@components/sign-up/common/styles';
 import * as S from '@components/sign-up/Start/style';
 
 export type FormInputs = {
-  email: string | null;
-  password: string | null;
+  email: string;
+  password: string;
 };
 
 const SignInForm = () => {
@@ -37,7 +37,7 @@ const SignInForm = () => {
 
   const onSubmit = (signInInfo: UnpackNestedValue<FormInputs>) => {
     setLoginLoading(true);
-    logInFetcher(signInInfo as ILoginProps)
+    logInFetcher(signInInfo)
       .then(() => {
         // TODO: 서비스 페이지로 이동하기
         debugLog('로그인 성공 응답');

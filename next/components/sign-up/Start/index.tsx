@@ -18,7 +18,7 @@ import * as CS from '../common/styles';
 import * as S from './style';
 
 export type FormInputs = {
-  email: string | null;
+  email: string;
 };
 
 const Start = () => {
