@@ -169,7 +169,6 @@ class AuthController {
       'FRONTEND_PORT',
     )}/sign-up/required`;
     const verification = await this.authService.verifyEmail(id, token);
-    console.log(verification);
     if (!verification) {
       return { url: `${redirection}?success=false` };
     }

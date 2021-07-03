@@ -52,7 +52,7 @@ const apiClient = axios.create({
     process.env.NODE_ENV === 'development'
       ? 'http://localhost:8001/'
       : 'https://[domain]/',
-  // withCredentials: true,
+  withCredentials: true,
 });
 
 const passUrl = ['/api/auth/refresh-token', '/api/auth/login'];
