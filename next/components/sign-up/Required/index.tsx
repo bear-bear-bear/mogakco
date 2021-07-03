@@ -22,7 +22,6 @@ const initialState: InputValues = {
   term: false,
 };
 
-// FIXME: 타이핑마다 2번 렌더링 되는거 확인
 const Required = () => {
   const router = useRouter();
 
