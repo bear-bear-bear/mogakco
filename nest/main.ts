@@ -9,13 +9,13 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule, { cors: true });
 
   app.use(helmet());
+  app.enableCors({
+    origin: true,
+    credentials: true,
+  });
   app.use(morgan('tiny'));
   app.use(cookieParser());
   app.setGlobalPrefix('api');
-  app.enableCors({
-    origin: '*',
-  });
-  app.use(cookieParser());
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
