@@ -24,7 +24,7 @@ import EmailService from '@services/email.service';
 import ParseJoinPipe from '@controllers/pipe/parse-join-pipe';
 import { ConfigService } from '@nestjs/config';
 import { CreateUserDto, LoginUserDto } from '@typing/auth';
-import { millisecondsToMinutes } from 'date-fns';
+import { addMinutes, millisecondsToMinutes } from 'date-fns';
 import JwtAuthGuard from '../guard/jwt-auth.guard';
 import NonAuthGuard from '../guard/non-auth.guard';
 
@@ -71,7 +71,7 @@ class AuthController {
       ...accessTokenCookieOptions,
     });
     const minutes = millisecondsToMinutes(accessTokenCookieOptions.maxAge);
-    const accessExpiredDate = new Date(new Date().setMinutes(minutes));
+    const accessExpiredDate = addMinutes(new Date(), minutes);
 
     return {
       statusCode: 200,
@@ -169,6 +169,7 @@ class AuthController {
       'FRONTEND_PORT',
     )}/sign-up/required`;
     const verification = await this.authService.verifyEmail(id, token);
+    console.log(verification);
     if (!verification) {
       return { url: `${redirection}?success=false` };
     }

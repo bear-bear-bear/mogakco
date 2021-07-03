@@ -63,7 +63,7 @@ const processProlongToken = async (config: AxiosRequestConfig) => {
       if (config.url === passUrl[0]) {
         log.debug('로그인 연장 처리 요청이므로 인터셉트 요청을 패스합니다.');
       } else {
-        log.debug('인터셉터 요청을 패스합니다.');
+        log.debug(`인터셉터 요청을 패스합니다. (${config.url})`);
       }
     }
 
