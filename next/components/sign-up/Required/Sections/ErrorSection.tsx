@@ -1,34 +1,30 @@
 import React from 'react';
+import type { FieldErrors } from 'react-hook-form';
+
 import Warning from '@components/common/Warning';
 
-import type { InputErrorStates } from '../typings';
+import type { InputValues } from '../typings';
 
 interface IProps {
-  username: string;
-  errorStates: InputErrorStates;
+  errors: FieldErrors<InputValues>;
 }
 
-const ErrorSection = ({ username, errorStates }: IProps) => {
+const ErrorSection = ({ errors }: IProps) => {
   const {
-    isUsernameError,
-    isPasswordTestError,
-    isPasswordMatchError,
-    isTermError,
-  } = errorStates;
+    username: usernameError,
+    password: passwordError,
+    passwordConfirm: passwordConfirmError,
+    term: termError,
+  } = errors;
 
   return (
     <>
-      {isUsernameError &&
-        (username.length > 12 ? (
-          <Warning>별명은 12자를 넘을 수 없습니다.</Warning>
-        ) : (
-          <Warning>형식에 맞는 별명을 입력하세요.</Warning>
-        ))}
-      {isPasswordTestError && (
-        <Warning>형식에 맞는 비밀번호를 입력하세요.</Warning>
+      {usernameError && <Warning>{usernameError.message}</Warning>}
+      {passwordError && <Warning>{passwordError.message}</Warning>}
+      {passwordConfirmError && (
+        <Warning>{passwordConfirmError.message}</Warning>
       )}
-      {isPasswordMatchError && <Warning>비밀번호가 일치하지 않습니다.</Warning>}
-      {isTermError && <Warning>약관에 동의하셔야 합니다.</Warning>}
+      {termError && <Warning>{termError.message}</Warning>}
     </>
   );
 };

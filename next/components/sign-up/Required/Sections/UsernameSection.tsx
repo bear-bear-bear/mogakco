@@ -1,5 +1,5 @@
 import React from 'react';
-import { UseFormRegister } from 'react-hook-form';
+import type { UseFormRegister } from 'react-hook-form';
 
 import Desc from '@components/common/Desc';
 import InputWrapper from '@components/common/InputWrapper';
@@ -11,11 +11,11 @@ import type { InputValues } from '../typings';
 
 import * as S from '../style';
 
-type Props = {
+interface IProps {
   register: UseFormRegister<InputValues>;
-};
+}
 
-const UsernameSection = ({ register }: Props) => {
+const UsernameSection = ({ register }: IProps) => {
   return (
     <>
       <InputWrapper>
@@ -27,7 +27,18 @@ const UsernameSection = ({ register }: Props) => {
           id="username"
           scale="small"
           spellCheck={false}
-          {...register('username', { pattern: usernameRule, maxLength: 12 })}
+          required
+          {...register('username', {
+            pattern: {
+              value: usernameRule,
+              message: '형식에 맞는 별명을 입력하세요.',
+            },
+            maxLength: {
+              value: 12,
+              message: '별명은 12자를 넘을 수 없습니다.',
+            },
+            required: '별명란를 입력해주세요',
+          })}
         />
       </InputWrapper>
       <S.DescWrapper>

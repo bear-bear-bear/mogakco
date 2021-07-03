@@ -4,10 +4,3 @@ export type InputValues = {
   passwordConfirm: string;
   term: boolean;
 };
-
-export type InputErrorStates = {
-  isUsernameError: boolean;
-  isPasswordTestError: boolean;
-  isPasswordMatchError: boolean;
-  isTermError: boolean;
-};
