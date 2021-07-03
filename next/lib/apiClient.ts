@@ -1,6 +1,8 @@
-import axios, { AxiosError } from 'axios';
+import axios, { AxiosError, AxiosRequestConfig } from 'axios';
 import log from 'loglevel';
 import type { IGeneralServerResponse } from 'typings/common';
+import { refreshAccessTokenApi } from '@lib/fetchers';
+import { isDevelopment } from '@lib/enviroment';
 
 export type Error = AxiosError<IGeneralServerResponse>;
 
@@ -52,5 +54,56 @@ const apiClient = axios.create({
       : 'https://[domain]/',
   // withCredentials: true,
 });
+
+const passUrl = ['/api/auth/refresh-token', '/api/auth/login'];
+
+const processProlongToken = async (config: AxiosRequestConfig) => {
+  if (passUrl.includes(config.url as string)) {
+    if (isDevelopment) {
+      if (config.url === passUrl[0]) {
+        log.debug('로그인 연장 처리 요청이므로 인터셉트 요청을 패스합니다.');
+      } else {
+        log.debug('인터셉터 요청을 패스합니다.');
+      }
+    }
+
+    return config;
+  }
+
+  const expiration = localStorage.getItem('expirationDate');
+  const refreshToken = localStorage.getItem('refreshToken');
+
+  if (expiration === null || refreshToken === null) {
+    return config;
+  }
+
+  const nowDate = new Date();
+  const expirationDate = new Date(expiration);
+  console.log({ nowDate, expirationDate });
+
+  if (nowDate > expirationDate) {
+    if (isDevelopment) {
+      log.debug('로그인 유효기간이 지났으므로, 토큰 유효기간을 연장합니다.');
+    }
+    try {
+      const response = await refreshAccessTokenApi(refreshToken);
+      console.log({ response });
+      return {
+        ...config,
+        headers: {
+          cookie: response.headers.cookie,
+        },
+      };
+    } catch (err) {
+      log.setLevel('ERROR');
+      log.error(err);
+      return config;
+    }
+  }
+
+  return config;
+};
+
+apiClient.interceptors.request.use(processProlongToken, undefined);
 
 export default apiClient;

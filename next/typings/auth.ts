@@ -47,4 +47,5 @@ export interface ILoginSuccessResponse extends ISignUpResponse {
     job: UserOptionalProps;
   };
   refreshToken: string;
+  accessExpiredDate: string;
 }
