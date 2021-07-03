@@ -7,6 +7,8 @@ import ContentBlock from '@components/landing/ContentBlock';
 import MiddleBlock from '@components/landing/MiddleBlock';
 import Footer from '@components/landing/Footer';
 import ScrollTop from '@components/common/ScrollTop';
+import Button from '@components/common/Button';
+import apiClient from '@lib/apiClient';
 
 const pageProps = {
   title: '모여서 각자 코딩 - Mogakco',
@@ -14,6 +16,18 @@ const pageProps = {
   url: '', // TODO: 도메인 정해지면 url에 추가하기
   locale: 'ko_KR',
 };
+
+const testApi = () =>
+  apiClient
+    .get('/api/auth/test')
+    .then((data) => {
+      console.log(data);
+      window.alert('테스트 성공 (로그인 자동 연장');
+    })
+    .catch((err) => {
+      console.log(err);
+      window.alert('자동로그인 실패 ( 다시 만드세요. )');
+    });
 
 const Landing = () => {
   const emailEl = useRef<HTMLInputElement>(null);
@@ -38,6 +52,9 @@ const Landing = () => {
           content="다른 개발자들과 소통하고 경쟁하며, 더 나은 자신을 향해 나아갈 동기를 얻어보세요!"
           onClickButton={() => emailEl.current?.focus()}
         />
+        <Button type="button" onClick={testApi}>
+          로그인 연장 테스트 하기
+        </Button>
         <ContentBlock
           type="right"
           title="일정을 계획"

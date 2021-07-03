@@ -7,13 +7,14 @@ import Input from '@components/common/Input';
 import InputWrapper from '@components/common/InputWrapper';
 import Label from '@components/common/Label';
 import useDebugLog from '@hooks/useDebugLog';
-import { logInFetcher } from '@lib/fetchers';
+import { logInApi } from '@lib/fetchers';
 import { logAxiosError } from '@lib/apiClient';
 import { isDevelopment } from '@lib/enviroment';
 
 // TODO: 회원가입 컴포넌트 스타일 그대로 갖다쓰는데, 해당 스타일 공용화 시키기
 import * as CS from '@components/sign-up/common/styles';
 import * as S from '@components/sign-up/Start/style';
+import { AxiosError } from 'axios';
 
 export type FormInputs = {
   email: string;
@@ -23,10 +24,15 @@ export type FormInputs = {
 const SignInForm = () => {
   const router = useRouter();
   const [signInLoading, setLoginLoading] = useState<boolean>(false);
-  const [isVisiblePassword, setIsVisiblePassword] = useState(false);
+  const [isVisiblePassword, setIsVisiblePassword] = useState<boolean>(false);
   const onClickEye = () => setIsVisiblePassword((prev) => !prev);
   const debugLog = useDebugLog();
-  const { watch, register, handleSubmit, setValue } = useForm<FormInputs>();
+  const { watch, register, handleSubmit, setValue } = useForm<FormInputs>({
+    defaultValues: {
+      email: isDevelopment ? 'mogakco35@gmail.com' : '',
+      password: isDevelopment ? 'mogapass' : '',
+    },
+  });
 
   const { email } = watch();
 
@@ -36,15 +42,17 @@ const SignInForm = () => {
 
   const onSubmit = (signInInfo: UnpackNestedValue<FormInputs>) => {
     setLoginLoading(true);
-    logInFetcher(signInInfo)
-      .then(() => {
+    logInApi(signInInfo)
+      .then(({ data: { refreshToken, accessExpiredDate } }) => {
         // TODO: 서비스 페이지로 이동하기
+        localStorage.setItem('refreshToken', refreshToken);
+        localStorage.setItem('expirationDate', accessExpiredDate);
         debugLog('로그인 성공 응답');
         debugLog('서비스 페이지 미구현 상태이므로 임시 경로(/)로 이동합니다');
         setLoginLoading(false);
         router.push('/');
       })
-      .catch((err) => {
+      .catch((err: AxiosError) => {
         setLoginLoading(false);
         logAxiosError(err);
       });
@@ -73,7 +81,6 @@ const SignInForm = () => {
             type="email"
             id="email"
             placeholder="이메일 입력"
-            defaultValue={isDevelopment ? 'mogakco35@gmail.com' : undefined}
             scale="small"
             isEmail={Boolean(email)}
             resetEmail={() => setValue('email', '')}
@@ -89,7 +96,6 @@ const SignInForm = () => {
             type="password"
             id="password"
             placeholder="비밀번호 입력"
-            defaultValue={isDevelopment ? 'mogapass' : undefined}
             scale="small"
             onClickEye={onClickEye}
             isVisible={isVisiblePassword}
