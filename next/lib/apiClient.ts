@@ -79,21 +79,13 @@ const processProlongToken = async (config: AxiosRequestConfig) => {
 
   const nowDate = new Date();
   const expirationDate = new Date(expiration);
-  console.log({ nowDate, expirationDate });
 
   if (nowDate > expirationDate) {
     if (isDevelopment) {
       log.debug('로그인 유효기간이 지났으므로, 토큰 유효기간을 연장합니다.');
     }
     try {
-      const response = await refreshAccessTokenApi(refreshToken);
-      console.log({ response });
-      return {
-        ...config,
-        headers: {
-          cookie: response.headers.cookie,
-        },
-      };
+      await refreshAccessTokenApi(refreshToken);
     } catch (err) {
       log.setLevel('ERROR');
       log.error(err);
