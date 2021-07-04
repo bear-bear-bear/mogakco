@@ -12,7 +12,7 @@ export const pageProps = {
   locale: 'ko_KR',
 };
 
-const SignIn = () => {
+const Dashboard = () => {
   return (
     <>
       <CustomHead {...pageProps} />
@@ -42,4 +42,4 @@ const SignIn = () => {
   );
 };
 
-export default SignIn;
+export default Dashboard;
