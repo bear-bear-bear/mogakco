@@ -9,6 +9,8 @@ import Footer from '@components/landing/Footer';
 import ScrollTop from '@components/common/ScrollTop';
 import Button from '@components/common/Button';
 import apiClient from '@lib/apiClient';
+import { AxiosResponse } from 'axios';
+import { isDevelopment } from '@lib/enviroment';
 
 const pageProps = {
   title: '모여서 각자 코딩 - Mogakco',
@@ -20,10 +22,13 @@ const pageProps = {
 const testApi = () =>
   apiClient
     .get('/api/auth/test')
-    .then((data) => {
-      console.log(data);
-      window.alert('테스트 성공 (로그인 자동 연장');
-    })
+    .then(
+      ({ data }: AxiosResponse<{ user: { id: number; username: string } }>) => {
+        window.alert(
+          `테스트 성공 (로그인 자동 연장 ) 로그인한 유저: ${data.user.username}`,
+        );
+      },
+    )
     .catch((err) => {
       console.log(err);
       window.alert('자동로그인 실패 ( 다시 만드세요. )');
@@ -52,9 +57,11 @@ const Landing = () => {
           content="다른 개발자들과 소통하고 경쟁하며, 더 나은 자신을 향해 나아갈 동기를 얻어보세요!"
           onClickButton={() => emailEl.current?.focus()}
         />
-        <Button type="button" onClick={testApi}>
-          로그인 연장 테스트 하기
-        </Button>
+        {isDevelopment && (
+          <Button type="button" onClick={testApi}>
+            로그인 연장 테스트 하기
+          </Button>
+        )}
         <ContentBlock
           type="right"
           title="일정을 계획"
