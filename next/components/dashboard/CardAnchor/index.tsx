@@ -10,9 +10,12 @@ interface IProps {
 }
 
 // TODO: svg 애니메이션 추가해보기
-const Card = ({ title, desc, svgName }: IProps) => {
+/**
+ * @returns: next/Link에 바로 넣을 수 있도록 a태그로 감싸 리턴합니다.
+ */
+const CardAnchor = ({ title, desc, svgName }: IProps) => {
   return (
-    <S.Card>
+    <S.CardAnchor>
       <Image
         src={`/assets/svg/${svgName}`}
         layout="intrinsic"
@@ -21,8 +24,8 @@ const Card = ({ title, desc, svgName }: IProps) => {
       />
       <h1>{title}</h1>
       <p>{desc}</p>
-    </S.Card>
+    </S.CardAnchor>
   );
 };
 
-export default Card;
+export default CardAnchor;

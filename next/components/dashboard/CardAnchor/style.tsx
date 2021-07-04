@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import media from '@components/globalStyles/media';
 
-export const Card = styled.div`
+export const CardAnchor = styled.a`
   width: 100%;
   height: 100%;
   display: grid;
