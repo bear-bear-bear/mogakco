@@ -9,6 +9,7 @@ interface IProps {
   svgName: `${string}.svg`;
 }
 
+// TODO: svg 애니메이션 추가해보기
 const Card = ({ title, desc, svgName }: IProps) => {
   return (
     <S.Card>
