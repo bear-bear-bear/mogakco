@@ -1,0 +1,9 @@
+<svg width="32" height="32" stroke-width="1.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <svg id="video-camera" width="24" height="24" stroke-width="1.5" viewBox="-1 4 20 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M15 12V16.4C15 16.7314 14.7314 17 14.4 17H3.6C3.26863 17 3 16.7314 3 16.4V7.6C3 7.26863 3.26863 7 3.6 7H14.4C14.7314 7 15 7.26863 15 7.6V12ZM15 12L20.0159 7.82009C20.4067 7.49443 21 7.77232 21 8.28103V15.719C21 16.2277 20.4067 16.5056 20.0159 16.1799L15 12Z" stroke="rgb(0, 41, 107)" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>
+  <svg id="chat-alt5" class="icon multi-color" width="24" height="24" xmlns="http://www.w3.org/2000/svg" viewBox="2 0 30 20">
+    <title style="stroke-width: 1.5;">chat alt 5</title>
+    <path id="secondary-fill" d="M21,6.27V16a1,1,0,0,1-1,1H13L8,21V17H4a1,1,0,0,1-1-1V6.27A2,2,0,0,1,4,6H20A2,2,0,0,1,21,6.27Z" style="fill: rgb(251, 181, 0); stroke-width: 1.5;"></path><path id="primary-stroke" d="M21,4V16a1,1,0,0,1-1,1H13L8,21V17H4a1,1,0,0,1-1-1V4A1,1,0,0,1,4,3H20A1,1,0,0,1,21,4Z" style="fill: none; stroke: rgb(0, 41, 107); stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.5;"></path><path id="primary-upstroke" d="M16,11h0Zm-4,0h0ZM8,11H8Z" style="fill: none; stroke: rgb(0, 41, 107); stroke-linecap: round; stroke-linejoin: round; stroke-width: 2.5;"></path>
+  </svg>
+</svg>
