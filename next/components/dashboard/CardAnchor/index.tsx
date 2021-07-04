@@ -11,7 +11,7 @@ interface IProps {
 
 // TODO: svg 애니메이션 추가해보기
 /**
- * @returns: next/Link에 바로 넣을 수 있도록 a태그로 감싸 리턴합니다.
+ * @returns: CardAnchor는 html <a> 엘리먼트입니다, next/link에 바로 넣어줄 수 있습니다.
  */
 const CardAnchor = ({ title, desc, svgName }: IProps) => {
   return (
