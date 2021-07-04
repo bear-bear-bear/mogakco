@@ -1,5 +1,7 @@
 import React from 'react';
 import CustomHead from '@components/common/CustomHead';
+import Container from '@components/dashboard/Container';
+import Card from '@components/dashboard/Card';
 
 export const pageProps = {
   title: '대시보드 - Mogakco',
@@ -12,7 +14,18 @@ const SignIn = () => {
   return (
     <>
       <CustomHead {...pageProps} />
-      <h1>대시보드 페이지입니다.</h1>
+      <Container>
+        <Card
+          svgName="video-chat.svg"
+          title="화상 채팅"
+          desc="모각코를 시작해요!"
+        />
+        <Card
+          svgName="chart-line-alt1.svg"
+          title="마이페이지"
+          desc="내 정보를 확인해보세요."
+        />
+      </Container>
     </>
   );
 };
