@@ -43,6 +43,11 @@ const Landing = () => {
       <Header />
       <Container>
         <ScrollTop />
+        {isDevelopment && (
+          <Button type="button" style={{ float: 'right' }} onClick={testApi}>
+            로그인 연장 테스트 하기
+          </Button>
+        )}
         <ContentBlock
           type="left"
           title="혼자 하는 코딩은 쓰니까."
@@ -57,11 +62,6 @@ const Landing = () => {
           content="다른 개발자들과 소통하고 경쟁하며, 더 나은 자신을 향해 나아갈 동기를 얻어보세요!"
           onClickButton={() => emailEl.current?.focus()}
         />
-        {isDevelopment && (
-          <Button type="button" onClick={testApi}>
-            로그인 연장 테스트 하기
-          </Button>
-        )}
         <ContentBlock
           type="right"
           title="일정을 계획"
