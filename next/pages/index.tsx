@@ -44,7 +44,12 @@ const Landing = () => {
       <Container>
         <ScrollTop />
         {isDevelopment && (
-          <Button type="button" style={{ float: 'right' }} onClick={testApi}>
+          <Button
+            type="button"
+            outline
+            style={{ float: 'right' }}
+            onClick={testApi}
+          >
             로그인 연장 테스트 하기
           </Button>
         )}
