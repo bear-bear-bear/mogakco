@@ -55,4 +55,5 @@ export interface ILoginSuccessResponse extends ISignUpResponse {
 export interface IProlongTokenProps extends Response {
   user: IUserProps;
   accessToken: string;
+  expirationTime: string;
 }

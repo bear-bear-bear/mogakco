@@ -82,8 +82,9 @@ const processProlongToken = async (config: AxiosRequestConfig) => {
 
     if (expiration === null) {
       const {
-        data: { accessToken },
+        data: { accessToken, expirationTime },
       } = await refreshAccessTokenApi();
+      localStorage.setItem('expirationDate', expirationTime);
       memoryStore.set(Memory.ACCESS_TOKEN, accessToken);
       return config;
     }
@@ -98,8 +99,9 @@ const processProlongToken = async (config: AxiosRequestConfig) => {
       }
       try {
         const {
-          data: { accessToken },
+          data: { accessToken, expirationTime },
         } = await refreshAccessTokenApi();
+        localStorage.setItem('expirationDate', expirationTime);
         memoryStore.set(Memory.ACCESS_TOKEN, accessToken);
       } catch (err) {
         log.setLevel('ERROR');
@@ -119,8 +121,9 @@ const processProlongToken = async (config: AxiosRequestConfig) => {
           log.debug('액세스 토큰 재발행 및 스토어 저장과 갱신을 진행합니다.');
         }
         const {
-          data: { accessToken },
+          data: { accessToken, expirationTime },
         } = await refreshAccessTokenApi();
+        localStorage.setItem('expirationDate', expirationTime);
         memoryStore.set(Memory.ACCESS_TOKEN, accessToken);
         config.headers.Authorization = `Bearer ${accessToken}`;
         return config;
