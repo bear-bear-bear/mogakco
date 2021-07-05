@@ -81,7 +81,10 @@ const processProlongToken = async (config: AxiosRequestConfig) => {
     const expiration = localStorage.getItem('expirationDate');
 
     if (expiration === null) {
-      await refreshAccessTokenApi();
+      const {
+        data: { accessToken },
+      } = await refreshAccessTokenApi();
+      memoryStore.set(Memory.ACCESS_TOKEN, accessToken);
       return config;
     }
 
@@ -89,7 +92,6 @@ const processProlongToken = async (config: AxiosRequestConfig) => {
     const nowDate = new Date();
     const expirationDate = new Date(expiration);
 
-    console.log({ nowDate, expirationDate });
     if (nowDate > expirationDate) {
       if (isDevelopment) {
         log.debug('로그인 유효기간이 지났으므로, 토큰 유효기간을 연장합니다.');
@@ -99,7 +101,6 @@ const processProlongToken = async (config: AxiosRequestConfig) => {
           data: { accessToken },
         } = await refreshAccessTokenApi();
         memoryStore.set(Memory.ACCESS_TOKEN, accessToken);
-        config.headers.Authorization = `Bearer ${accessToken}`;
       } catch (err) {
         log.setLevel('ERROR');
         log.error(err);
