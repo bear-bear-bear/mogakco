@@ -24,7 +24,6 @@ import EmailService from '@services/email.service';
 import ParseJoinPipe from '@controllers/pipe/parse-join-pipe';
 import { ConfigService } from '@nestjs/config';
 import { CreateUserDto, LoginUserDto } from '@typing/auth';
-import { addMinutes, millisecondsToMinutes } from 'date-fns';
 import JwtAuthGuard from '../guard/jwt-auth.guard';
 import NonAuthGuard from '../guard/non-auth.guard';
 
@@ -67,11 +66,7 @@ class AuthController {
       this.authService.getRefreshTokenCookie(user);
     await this.authService.saveHashRefreshToken(refreshToken, email);
 
-    const accessTokenExpirationTime = this.configService.get(
-      'JWT_ACCESS_TOKEN_EXPIRATION_TIME',
-    ) as string;
-    const minutes = millisecondsToMinutes(Number(`${accessTokenExpirationTime}000`));
-    const accessExpiredDate = addMinutes(new Date(), minutes);
+    const accessExpiredDate = this.authService.getAccessTokenExpirationTime();
 
     res.cookie('refreshToken', refreshToken, {
       ...refreshCookieOptions,
@@ -113,8 +108,10 @@ class AuthController {
     if (user === null) throw new InternalServerErrorException();
     const { password: notUsingProp, ...userProps } = user;
     const accessToken = this.authService.getAccessToken(userProps);
+    const expirationTime = this.authService.getAccessTokenExpirationTime();
     return {
       accessToken,
+      expirationTime,
       message: 'accessToken 갱신 완료!',
       statusCode: HttpStatus.CREATED,
       user: userProps,

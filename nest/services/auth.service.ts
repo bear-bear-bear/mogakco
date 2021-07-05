@@ -16,6 +16,7 @@ import UserJobRepository from '@models/repositories/ user-job.reposity';
 import { ConfigService } from '@nestjs/config';
 import UserEntity from '@models/entities/user.entity';
 import { CreateUserDto, ICookieProps, JwtUserProps } from '@typing/auth';
+import { addMinutes, millisecondsToMinutes } from 'date-fns';
 import UserService from './user.service';
 
 @Injectable()
@@ -257,6 +258,17 @@ class AuthService {
       }
     }
     return null;
+  }
+
+  /**
+   * @desc JWT AccessToken 에 대한 유효시간을 구해서 현재 시간에서 유효시간이 지난 시간을 반환합니다.
+   */
+  getAccessTokenExpirationTime() {
+    const accessTokenExpirationTime = this.configService.get(
+      'JWT_ACCESS_TOKEN_EXPIRATION_TIME',
+    ) as string;
+    const minutes = millisecondsToMinutes(Number(`${accessTokenExpirationTime}000`));
+    return addMinutes(new Date(), minutes);
   }
 }
 
