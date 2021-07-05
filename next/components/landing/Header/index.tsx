@@ -17,14 +17,18 @@ const Header = () => (
       <Box w="auto">
         <S.ButtonsWrapper>
           <Link href="/sign-in">
-            <Button color="black" underline>
-              로그인
-            </Button>
+            <a>
+              <Button color="black" underline>
+                로그인
+              </Button>
+            </a>
           </Link>
           <Link href="/sign-up">
-            <Button color="black" underline>
-              회원가입
-            </Button>
+            <a>
+              <Button color="black" underline>
+                회원가입
+              </Button>
+            </a>
           </Link>
         </S.ButtonsWrapper>
       </Box>

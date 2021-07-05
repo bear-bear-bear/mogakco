@@ -17,7 +17,7 @@ const Dashboard = () => {
     <>
       <CustomHead {...pageProps} />
       <Container>
-        <Link href="/video-chat/1.js">
+        <Link href="/video-chat/1.js" passHref>
           {/* <Link href={`/video-chat/${id}.js`}> */}
           {/* 임시로 화상채팅 1번 룸으로 가도록 설정 */}
           <CardAnchor
@@ -26,7 +26,7 @@ const Dashboard = () => {
             desc="모각코를 시작해요!"
           />
         </Link>
-        <Link href="/my-page">
+        <Link href="/my-page" passHref>
           <CardAnchor
             svgName="chart-line-alt1.svg"
             title="마이페이지"
