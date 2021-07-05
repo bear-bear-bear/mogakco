@@ -4,6 +4,12 @@ import type { IGeneralServerResponse } from 'typings/common';
 import { refreshAccessTokenApi } from '@lib/fetchers';
 import { isDevelopment } from '@lib/enviroment';
 
+export const memoryStore = new Map();
+
+export enum Memory {
+  ACCESS_TOKEN = 'accessToken',
+}
+
 export type Error = AxiosError<IGeneralServerResponse>;
 
 export const logAxiosError = (axiosError: Error) => {
@@ -58,6 +64,7 @@ const apiClient = axios.create({
 const passUrl = ['/api/auth/refresh-token', '/api/auth/login'];
 
 const processProlongToken = async (config: AxiosRequestConfig) => {
+  // 인터셉트를 패스시켜야 할 URL 접근일 때
   if (passUrl.includes(config.url as string)) {
     if (isDevelopment) {
       if (config.url === passUrl[0]) {
@@ -70,30 +77,71 @@ const processProlongToken = async (config: AxiosRequestConfig) => {
     return config;
   }
 
-  const expiration = localStorage.getItem('expirationDate');
-  const refreshToken = localStorage.getItem('refreshToken');
+  try {
+    const expiration = localStorage.getItem('expirationDate');
 
-  if (expiration === null || refreshToken === null) {
-    return config;
-  }
-
-  const nowDate = new Date();
-  const expirationDate = new Date(expiration);
-
-  if (nowDate > expirationDate) {
-    if (isDevelopment) {
-      log.debug('로그인 유효기간이 지났으므로, 토큰 유효기간을 연장합니다.');
+    if (expiration === null) {
+      await refreshAccessTokenApi();
+      return config;
     }
+
+    // 액세스 토큰 만료기한이 지났을 때
+    const nowDate = new Date();
+    const expirationDate = new Date(expiration);
+
+    console.log({ nowDate, expirationDate });
+    if (nowDate > expirationDate) {
+      if (isDevelopment) {
+        log.debug('로그인 유효기간이 지났으므로, 토큰 유효기간을 연장합니다.');
+      }
+      try {
+        const {
+          data: { accessToken },
+        } = await refreshAccessTokenApi();
+        memoryStore.set(Memory.ACCESS_TOKEN, accessToken);
+        config.headers.Authorization = `Bearer ${accessToken}`;
+      } catch (err) {
+        log.setLevel('ERROR');
+        log.error(err);
+        return config;
+      }
+    }
+
+    // 브라우저 리다이렉션 또는 외부요인으로 스토어 데이터가 손실됬을 때
+    const accessToken: string | undefined = memoryStore.get(
+      Memory.ACCESS_TOKEN,
+    );
     try {
-      await refreshAccessTokenApi(refreshToken);
+      if (accessToken === undefined) {
+        if (isDevelopment) {
+          log.debug('메모리 스토어에 액세스 토큰이 없습니다.');
+          log.debug('액세스 토큰 재발행 및 스토어 저장과 갱신을 진행합니다.');
+        }
+        const {
+          data: { accessToken },
+        } = await refreshAccessTokenApi();
+        memoryStore.set(Memory.ACCESS_TOKEN, accessToken);
+        config.headers.Authorization = `Bearer ${accessToken}`;
+        return config;
+      }
     } catch (err) {
-      log.setLevel('ERROR');
+      if (isDevelopment) {
+        log.error('액세스 토큰 갱신을 실패하였습니다.');
+      }
       log.error(err);
       return config;
     }
-  }
 
-  return config;
+    config.headers.Authorization = `Bearer ${accessToken}`;
+
+    return config;
+  } catch (err) {
+    // SSR 요청일 때
+    if (isDevelopment) {
+      log.debug('서버사이드 요청이므로 인터셉트가 패스됩니다.');
+    }
+    return config;
+  }
 };
 
 apiClient.interceptors.request.use(processProlongToken, undefined);
