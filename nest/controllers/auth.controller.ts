@@ -44,11 +44,10 @@ class AuthController {
   /**
    * @returns 사용자 accessToken, 정보를 반환한다.
    */
-  @UseGuards(JwtAuthGuard)
   @Get('/test')
+  @UseGuards(JwtAuthGuard)
   getTest(@Req() req: Request) {
     return {
-      cookies: req.cookies,
       user: req.user,
     };
   }
@@ -63,22 +62,27 @@ class AuthController {
     @Res({ passthrough: true }) res: Response,
   ) {
     const user = await this.authService.validateUser(email, plainPassword);
-    const { token: accessToken, ...accessTokenCookieOptions } =
-      this.authService.getCookieWithAccessToken(user);
-    const refreshToken = this.authService.getRefreshToken(user);
+    const accessToken = this.authService.getAccessToken(user);
+    const { token: refreshToken, ...refreshCookieOptions } =
+      this.authService.getRefreshTokenCookie(user);
     await this.authService.saveHashRefreshToken(refreshToken, email);
-    res.cookie('accessToken', accessToken, {
-      ...accessTokenCookieOptions,
-    });
-    const minutes = millisecondsToMinutes(accessTokenCookieOptions.maxAge);
+
+    const accessTokenExpirationTime = this.configService.get(
+      'JWT_ACCESS_TOKEN_EXPIRATION_TIME',
+    ) as string;
+    const minutes = millisecondsToMinutes(Number(`${accessTokenExpirationTime}000`));
     const accessExpiredDate = addMinutes(new Date(), minutes);
+
+    res.cookie('refreshToken', refreshToken, {
+      ...refreshCookieOptions,
+    });
 
     return {
       statusCode: 200,
       message: '로그인에 성공하였습니다!',
       user,
-      refreshToken,
       accessExpiredDate,
+      accessToken,
     };
   }
 
@@ -90,7 +94,7 @@ class AuthController {
   @Post('/logout')
   async logout(@Req() req: { user: UserEntity }, @Res({ passthrough: true }) res: Response) {
     await this.authService.removeRefreshToken(req.user.id);
-    res.cookie('accessToken', null);
+    res.cookie('refreshToken', null);
     return {
       message: `${req.user.username} 유저가 로그아웃 되었습니다.`,
       statusCode: HttpStatus.OK,
@@ -98,20 +102,19 @@ class AuthController {
   }
 
   /**
-   * @returns refresh-token 을 갱신하여 반환합니다.
+   * @returns accessToken 을 갱신하여 반환합니다.
    */
   @Get('/refresh-token')
   @HttpCode(201)
   @UseGuards(JwtAuthGuardWithRefresh)
-  async refresh(@Req() req: Request, @Res({ passthrough: true }) res: Response) {
+  async refresh(@Req() req: Request) {
     const { id } = req.user as UserEntity;
     const user = await this.userService.findUserForLogin(id);
     if (user === null) throw new InternalServerErrorException();
     const { password: notUsingProp, ...userProps } = user;
-    const { token: accessToken, ...cookieOptions } =
-      this.authService.getCookieWithAccessToken(userProps);
-    res.cookie('accessToken', accessToken, cookieOptions);
+    const accessToken = this.authService.getAccessToken(userProps);
     return {
+      accessToken,
       message: 'accessToken 갱신 완료!',
       statusCode: HttpStatus.CREATED,
       user: userProps,
@@ -125,13 +128,14 @@ class AuthController {
   @UseGuards(NonAuthGuard)
   @Post()
   async join(@Body(ParseJoinPipe) user: CreateUserDto, @Res({ passthrough: true }) res: Response) {
-    const { accessTokenObject, statusCode, message, refreshToken } = await this.authService.join(
+    const { accessToken, statusCode, message, refreshTokenCookieSet } = await this.authService.join(
       user,
     );
-    res.cookie('accessToken', accessTokenObject.accessToken, {
-      ...accessTokenObject.accessTokenCookieOptions,
+    const { token, ...refreshOptions } = refreshTokenCookieSet;
+    res.cookie('refreshToken', token, {
+      ...refreshOptions,
     });
-    return { statusCode, message, refreshToken };
+    return { statusCode, message, accessToken };
   }
 
   /**
