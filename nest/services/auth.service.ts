@@ -55,29 +55,22 @@ class AuthService {
   /**
    * @return AccessToken 을 생성하여 쿠키 정보와 함께 반환한다.
    */
-  getCookieWithAccessToken({ id, username }: JwtUserProps) {
+  getAccessToken({ id, username }: JwtUserProps) {
     const accessTokenExpirationTime = Number(
       this.configService.get('JWT_ACCESS_TOKEN_EXPIRATION_TIME'),
     );
     const payload = { id, username };
-    const token = this.jwtService.sign(payload, {
+    return this.jwtService.sign(payload, {
       secret: this.configService.get('JWT_ACCESS_TOKEN_SECRET'),
       expiresIn: `${accessTokenExpirationTime}s`,
       algorithm: 'HS256',
     });
-
-    return {
-      token,
-      path: '/',
-      httpOnly: true,
-      maxAge: accessTokenExpirationTime * 1000,
-    } as ICookieProps;
   }
 
   /**
    * @return RefreshToken 을 생성하여 객체정보로 반환한다.
    */
-  getRefreshToken({ id, username }: JwtUserProps) {
+  getRefreshTokenCookie({ id, username }: JwtUserProps) {
     const refreshTokenExpirationTime = Number(
       this.configService.get('JWT_REFRESH_TOKEN_EXPIRATION_TIME'),
     );
@@ -87,7 +80,11 @@ class AuthService {
       expiresIn: `${refreshTokenExpirationTime}s`,
     });
 
-    return token;
+    return {
+      token,
+      maxAge: 60480000,
+      path: '/',
+    } as ICookieProps;
   }
 
   /**
@@ -222,16 +219,16 @@ class AuthService {
       job: jobEntity ? jobEntity.id : null,
     } as CreateUserDto);
 
-    const { token: accessToken, ...accessTokenCookieOptions } = this.getCookieWithAccessToken({
+    const accessToken = this.getAccessToken({
       id,
       username,
     } as JwtUserProps);
-    const refreshToken = this.getRefreshToken({ id, username } as JwtUserProps);
+    const refreshTokenCookieSet = this.getRefreshTokenCookie({ id, username } as JwtUserProps);
     return {
       message: '유저가 생성되었습니다.',
       statusCode: 201,
-      accessTokenObject: { accessToken, accessTokenCookieOptions },
-      refreshToken,
+      accessToken,
+      refreshTokenCookieSet,
     };
   }
 
