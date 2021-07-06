@@ -83,7 +83,7 @@ class AuthService {
 
     return {
       token,
-      maxAge: 60480000,
+      maxAge: 6.048e8,
       path: '/',
     } as ICookieProps;
   }

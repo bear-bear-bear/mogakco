@@ -11,7 +11,7 @@ const loginForm = {
 
 describe('사용자 마이페이지 테스트', () => {
   let app: INestApplication;
-  let accessToken: string;
+  // let accessToken: string;
 
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
@@ -37,14 +37,14 @@ describe('사용자 마이페이지 테스트', () => {
   });
 
   it('로그인', async () => {
-    const response = await request(app.getHttpServer())
+    await request(app.getHttpServer())
       .post('/api/auth/login')
       .send(loginForm)
       .then(res => ({
         accessToken: res.headers['set-cookie'][0].split(';')[0].slice(12),
         body: res.body,
       }));
-    accessToken = response.accessToken;
+    // accessToken = response.accessToken;
   });
 
   // describe('GET /api/user - 사용자 본인 정보 확인', () => {
