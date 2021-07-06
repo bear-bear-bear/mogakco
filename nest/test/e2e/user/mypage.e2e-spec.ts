@@ -47,18 +47,18 @@ describe('사용자 마이페이지 테스트', () => {
     accessToken = response.accessToken;
   });
 
-  describe('GET /api/user - 사용자 본인 정보 확인', () => {
-    it('유저 개인정보를 확인한다.', async () => {
-      await request(app.getHttpServer())
-        .get('/api/user')
-        .set('Cookie', [`accessToken=${accessToken}`])
-        .then(({ body: res }) => {
-          expect(res).toHaveProperty('id');
-          expect(res).toHaveProperty('username');
-          expect(res).toHaveProperty('password');
-          expect(res).toHaveProperty('skills');
-          expect(res).toHaveProperty('job');
-        });
-    });
-  });
+  // describe('GET /api/user - 사용자 본인 정보 확인', () => {
+  //   it('유저 개인정보를 확인한다.', async () => {
+  //     await request(app.getHttpServer())
+  //       .get('/api/user')
+  //       .set('Cookie', [`accessToken=${accessToken}`])
+  //       .then(({ body: res }) => {
+  //         expect(res).toHaveProperty('id');
+  //         expect(res).toHaveProperty('username');
+  //         expect(res).toHaveProperty('password');
+  //         expect(res).toHaveProperty('skills');
+  //         expect(res).toHaveProperty('job');
+  //       });
+  //   });
+  // });
 });
