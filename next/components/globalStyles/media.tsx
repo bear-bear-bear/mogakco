@@ -1,6 +1,6 @@
 type screen = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl';
 
-export const mediaScreenSizes: Record<screen, number> = {
+export const mediaBreakpoints: Record<screen, number> = {
   xs: 576, // 이하
   sm: 576, // 이상
   md: 768, // 이상
@@ -48,12 +48,12 @@ const media: Record<
   screen,
   `@media only screen and (${'max' | 'min'}-width: ${number}px)`
 > = {
-  xs: `@media only screen and (max-width: ${mediaScreenSizes.xs}px)`,
-  sm: `@media only screen and (min-width: ${mediaScreenSizes.sm}px)`,
-  md: `@media only screen and (min-width: ${mediaScreenSizes.md}px)`,
-  lg: `@media only screen and (min-width: ${mediaScreenSizes.lg}px)`,
-  xl: `@media only screen and (min-width: ${mediaScreenSizes.xl}px)`,
-  xxl: `@media only screen and (min-width: ${mediaScreenSizes.xxl}px)`,
+  xs: `@media only screen and (max-width: ${mediaBreakpoints.xs}px)`,
+  sm: `@media only screen and (min-width: ${mediaBreakpoints.sm}px)`,
+  md: `@media only screen and (min-width: ${mediaBreakpoints.md}px)`,
+  lg: `@media only screen and (min-width: ${mediaBreakpoints.lg}px)`,
+  xl: `@media only screen and (min-width: ${mediaBreakpoints.xl}px)`,
+  xxl: `@media only screen and (min-width: ${mediaBreakpoints.xxl}px)`,
 };
 
 export default media;
