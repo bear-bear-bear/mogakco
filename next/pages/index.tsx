@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef, useState, useCallback } from 'react';
 
 import CustomHead from '@components/common/CustomHead';
 import Container from '@components/landing/Container';
@@ -19,23 +19,31 @@ const pageProps = {
   locale: 'ko_KR',
 };
 
-const testApi = () =>
-  apiClient
-    .get('/api/auth/test')
-    .then(
-      ({ data }: AxiosResponse<{ user: { id: number; username: string } }>) => {
-        window.alert(
-          `테스트 성공 (로그인 자동 연장 ) 로그인한 유저: ${data.user.username}`,
-        );
-      },
-    )
-    .catch((err) => {
-      console.log(err);
-      window.alert('자동로그인 실패 ( 다시 만드세요. )');
-    });
-
 const Landing = () => {
   const emailEl = useRef<HTMLInputElement>(null);
+  const [isTestButtonLoading, setIsTestButtonLoading] = useState<boolean>(false);
+
+  const onClickTestButton = useCallback(() => {
+    setIsTestButtonLoading(true);
+
+    apiClient
+      .get('/api/auth/test')
+      .then(
+        ({
+          data,
+        }: AxiosResponse<{ user: { id: number; username: string } }>) => {
+          setIsTestButtonLoading(false);
+          window.alert(
+            `테스트 성공 (로그인 자동 연장 ) 로그인한 유저: ${data.user.username}`,
+          );
+        },
+      )
+      .catch((err) => {
+        setIsTestButtonLoading(false);
+        console.log(err);
+        window.alert('자동로그인 실패 ( 다시 만드세요. )');
+      });
+  }, []);
 
   return (
     <>
@@ -48,7 +56,8 @@ const Landing = () => {
             type="button"
             outline
             style={{ float: 'right' }}
-            onClick={testApi}
+            onClick={onClickTestButton}
+            $loading={isTestButtonLoading}
           >
             로그인 연장 테스트 하기
           </Button>
