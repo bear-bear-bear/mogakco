@@ -5,6 +5,9 @@ import media from '@components/globalStyles/media';
 
 export const HeaderContainer = styled.header`
   max-width: 1280px;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
   margin: 0 auto;
   padding: 0.33rem 0.66rem;
 
