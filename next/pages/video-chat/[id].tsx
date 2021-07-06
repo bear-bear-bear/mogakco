@@ -1,14 +1,14 @@
+import { useEffect } from 'react';
+import log from 'loglevel';
+import { useRouter } from 'next/router';
+import { GetServerSideProps } from 'next';
+import io from 'socket.io-client';
 import CustomHead from '@components/common/CustomHead';
 import Container from '@components/video-chat/Container';
 import CamSection from '@components/video-chat/CamSection';
 import ChatSection from '@components/video-chat/ChatSection';
-import { GetServerSideProps } from 'next';
-import apiClient, { Memory, memoryStore } from '@lib/apiClient';
-import io from 'socket.io-client';
-import { useEffect } from 'react';
-import log from 'loglevel';
 import { isDevelopment } from '@lib/enviroment';
-import { useRouter } from 'next/router';
+import apiClient, { Memory, memoryStore } from '@lib/apiClient';
 import { IProlongTokenProps } from '../../typings/auth';
 
 export const END_POINT = 'http://localhost:8001/chat';
