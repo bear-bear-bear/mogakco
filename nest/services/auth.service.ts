@@ -16,6 +16,7 @@ import UserJobRepository from '@models/repositories/ user-job.reposity';
 import { ConfigService } from '@nestjs/config';
 import UserEntity from '@models/entities/user.entity';
 import { CreateUserDto, ICookieProps, JwtUserProps } from '@typing/auth';
+import { addMinutes, millisecondsToMinutes } from 'date-fns';
 import UserService from './user.service';
 
 @Injectable()
@@ -55,29 +56,22 @@ class AuthService {
   /**
    * @return AccessToken 을 생성하여 쿠키 정보와 함께 반환한다.
    */
-  getCookieWithAccessToken({ id, username }: JwtUserProps) {
+  getAccessToken({ id, username }: JwtUserProps) {
     const accessTokenExpirationTime = Number(
       this.configService.get('JWT_ACCESS_TOKEN_EXPIRATION_TIME'),
     );
     const payload = { id, username };
-    const token = this.jwtService.sign(payload, {
+    return this.jwtService.sign(payload, {
       secret: this.configService.get('JWT_ACCESS_TOKEN_SECRET'),
       expiresIn: `${accessTokenExpirationTime}s`,
       algorithm: 'HS256',
     });
-
-    return {
-      token,
-      path: '/',
-      httpOnly: true,
-      maxAge: accessTokenExpirationTime * 1000,
-    } as ICookieProps;
   }
 
   /**
    * @return RefreshToken 을 생성하여 객체정보로 반환한다.
    */
-  getRefreshToken({ id, username }: JwtUserProps) {
+  getRefreshTokenCookie({ id, username }: JwtUserProps) {
     const refreshTokenExpirationTime = Number(
       this.configService.get('JWT_REFRESH_TOKEN_EXPIRATION_TIME'),
     );
@@ -87,7 +81,11 @@ class AuthService {
       expiresIn: `${refreshTokenExpirationTime}s`,
     });
 
-    return token;
+    return {
+      token,
+      maxAge: 6.048e8,
+      path: '/',
+    } as ICookieProps;
   }
 
   /**
@@ -222,16 +220,16 @@ class AuthService {
       job: jobEntity ? jobEntity.id : null,
     } as CreateUserDto);
 
-    const { token: accessToken, ...accessTokenCookieOptions } = this.getCookieWithAccessToken({
+    const accessToken = this.getAccessToken({
       id,
       username,
     } as JwtUserProps);
-    const refreshToken = this.getRefreshToken({ id, username } as JwtUserProps);
+    const refreshTokenCookieSet = this.getRefreshTokenCookie({ id, username } as JwtUserProps);
     return {
       message: '유저가 생성되었습니다.',
       statusCode: 201,
-      accessTokenObject: { accessToken, accessTokenCookieOptions },
-      refreshToken,
+      accessToken,
+      refreshTokenCookieSet,
     };
   }
 
@@ -260,6 +258,17 @@ class AuthService {
       }
     }
     return null;
+  }
+
+  /**
+   * @desc JWT AccessToken 에 대한 유효시간을 구해서 현재 시간에서 유효시간이 지난 시간을 반환합니다.
+   */
+  getAccessTokenExpirationTime() {
+    const accessTokenExpirationTime = this.configService.get(
+      'JWT_ACCESS_TOKEN_EXPIRATION_TIME',
+    ) as string;
+    const minutes = millisecondsToMinutes(Number(`${accessTokenExpirationTime}000`));
+    return addMinutes(new Date(), minutes);
   }
 }
 

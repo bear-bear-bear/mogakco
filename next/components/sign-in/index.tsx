@@ -8,13 +8,13 @@ import InputWrapper from '@components/common/InputWrapper';
 import Label from '@components/common/Label';
 import useDebugLog from '@hooks/useDebugLog';
 import { logInApi } from '@lib/fetchers';
-import { logAxiosError } from '@lib/apiClient';
+import { logAxiosError, memoryStore } from '@lib/apiClient';
 import { isDevelopment } from '@lib/enviroment';
+import { AxiosError } from 'axios';
 
 // TODO: 회원가입 컴포넌트 스타일 그대로 갖다쓰는데, 해당 스타일 공용화 시키기
 import * as CS from '@components/sign-up/common/styles';
 import * as S from '@components/sign-up/Start/style';
-import { AxiosError } from 'axios';
 
 export type FormInputs = {
   email: string;
@@ -43,12 +43,14 @@ const SignInForm = () => {
   const onSubmit = (signInInfo: UnpackNestedValue<FormInputs>) => {
     setLoginLoading(true);
     logInApi(signInInfo)
-      .then(({ data: { refreshToken, accessExpiredDate } }) => {
+      .then(({ data: { accessToken, accessExpiredDate } }) => {
         // TODO: 서비스 페이지로 이동하기
-        localStorage.setItem('refreshToken', refreshToken);
+        memoryStore.set('accessToken', accessToken);
         localStorage.setItem('expirationDate', accessExpiredDate);
-        debugLog('로그인 성공 응답');
-        debugLog('서비스 페이지 미구현 상태이므로 임시 경로(/)로 이동합니다');
+        if (isDevelopment) {
+          debugLog('로그인 성공 응답');
+          debugLog('서비스 페이지 미구현 상태이므로 임시 경로(/)로 이동합니다');
+        }
         setLoginLoading(false);
         router.push('/');
       })

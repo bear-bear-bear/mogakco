@@ -4,6 +4,7 @@ import type {
   ILoginProps,
   ILoginSuccessResponse,
   IOptionalProps,
+  IProlongTokenProps,
   ISignUpResponse,
   ISignUpUserProps,
 } from 'typings/auth';
@@ -18,15 +19,11 @@ export const logInApi = (data: ILoginProps) =>
   apiClient.post<ILoginSuccessResponse>('/api/auth/login', data);
 
 // 로그아웃
-export const logOutFetcher = () => apiClient.get('/api/auth/logout');
+export const logOutFetcher = () => apiClient.post('/api/auth/logout');
 
 // 로그인 연장
-export const refreshAccessTokenApi = (token: string) =>
-  apiClient.get('/api/auth/refresh-token', {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
+export const refreshAccessTokenApi = () =>
+  apiClient.get<IProlongTokenProps>('/api/auth/refresh-token');
 
 // ********************************************************************************************************************
 // sign-up
