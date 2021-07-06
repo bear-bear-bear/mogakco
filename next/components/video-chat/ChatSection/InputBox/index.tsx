@@ -1,10 +1,9 @@
 import React, { KeyboardEvent } from 'react';
-import useInput from '@hooks/useInput';
-import log from 'loglevel';
-import { socketServer } from '@pages/video-chat/[id]';
-import * as S from './style';
 
-log.setLevel('DEBUG');
+import useInput from '@hooks/useInput';
+import { socketServer } from '@pages/video-chat/[id]';
+
+import * as S from './style';
 
 const InputBox = () => {
   const [chat, onChangeChat, setChat] = useInput('');

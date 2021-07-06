@@ -1,4 +1,5 @@
 import { useRef } from 'react';
+import { AxiosResponse } from 'axios';
 
 import CustomHead from '@components/common/CustomHead';
 import Container from '@components/landing/Container';
@@ -9,8 +10,8 @@ import Footer from '@components/landing/Footer';
 import ScrollTop from '@components/common/ScrollTop';
 import Button from '@components/common/Button';
 import apiClient from '@lib/apiClient';
-import { AxiosResponse } from 'axios';
 import { isDevelopment } from '@lib/enviroment';
+import devModeLog from '@lib/devModeLog';
 
 const pageProps = {
   title: '모여서 각자 코딩 - Mogakco',
@@ -30,7 +31,7 @@ const testApi = () =>
       },
     )
     .catch((err) => {
-      console.log(err);
+      devModeLog(err, 'error');
       window.alert('자동로그인 실패 ( 다시 만드세요. )');
     });
 

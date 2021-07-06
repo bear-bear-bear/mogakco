@@ -1,5 +1,4 @@
 import { useEffect } from 'react';
-import log from 'loglevel';
 import { useRouter } from 'next/router';
 import { GetServerSideProps } from 'next';
 import io from 'socket.io-client';
@@ -7,9 +6,9 @@ import CustomHead from '@components/common/CustomHead';
 import Container from '@components/video-chat/Container';
 import CamSection from '@components/video-chat/CamSection';
 import ChatSection from '@components/video-chat/ChatSection';
-import { isDevelopment } from '@lib/enviroment';
+import devModeLog from '@lib/devModeLog';
 import apiClient, { Memory, memoryStore } from '@lib/apiClient';
-import { IProlongTokenProps } from '../../typings/auth';
+import { IProlongTokenProps } from 'typings/auth';
 
 export const END_POINT = 'http://localhost:8001/chat';
 
@@ -28,10 +27,10 @@ const ChatRoom = () => {
 
   useEffect(() => {
     socketServer.on('connect', () => {
-      console.log('connected');
+      devModeLog('connected');
       socketServer.emit('joinChatRoom', id);
       socketServer.on('joinUserMessage', (clientId: string) => {
-        console.log(`${clientId} 유저가 접속하였다고 응답 되었음.`);
+        devModeLog(`${clientId} 유저가 접속하였다고 응답 되었음.`);
       });
     });
   }, [id]);
@@ -48,7 +47,6 @@ const ChatRoom = () => {
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  log.setLevel('debug');
   try {
     const {
       data: { accessToken },
@@ -58,23 +56,18 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       },
     });
     memoryStore.set(Memory.ACCESS_TOKEN, accessToken);
-    if (isDevelopment) {
-      log.debug('서버사이드에서 로그인이 연장처리 되었습니다.');
-    }
+    devModeLog('서버사이드에서 로그인이 연장처리 되었습니다.');
+
     const { data } = await apiClient.get<{
       message: boolean;
       statusCode: number;
     }>(`/api/chat/available/${context.query.id}`);
-    if (isDevelopment) {
-      log.debug(`Server Response Message: ${data.message}`);
-      log.debug(`Response Status Code: ${data.statusCode}`);
-    }
+    devModeLog(`Server Response Message: ${data.message}`);
+    devModeLog(`Response Status Code: ${data.statusCode}`);
 
     return { props: {} };
   } catch (error) {
-    if (isDevelopment) {
-      log.error(error.response?.data ?? error);
-    }
+    devModeLog(error.response?.data ?? error, 'error');
     return {
       redirect: {
         destination: '/',

@@ -4,7 +4,7 @@ import { UnpackNestedValue, useForm } from 'react-hook-form';
 import { sendEmailFetcher } from '@lib/fetchers';
 import { logAxiosError } from '@lib/apiClient';
 import useLanding from '@hooks/useLanding';
-import devLog from '@lib/devLog';
+import devModeLog from '@lib/devModeLog';
 import useIsomorphicLayoutEffect from '@hooks/useIsomorphicLayoutEffect';
 import { emailRule } from '@lib/regex';
 import Warning from '@components/common/Warning';
@@ -65,7 +65,7 @@ const Start = () => {
   const onError = () => setEmailTestError(true);
 
   const onClickSocial = () => {
-    devLog('미구현 기능입니다.');
+    devModeLog('미구현 기능입니다.');
   };
 
   useIsomorphicLayoutEffect(() => {
