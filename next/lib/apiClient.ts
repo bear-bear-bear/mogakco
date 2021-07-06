@@ -63,6 +63,14 @@ const apiClient = axios.create({
 
 const passUrl = ['/api/auth/refresh-token', '/api/auth/login'];
 
+const refreshAccessToken = async () => {
+  const {
+    data: { accessToken, expirationTime },
+  } = await refreshAccessTokenApi();
+  localStorage.setItem('expirationDate', expirationTime);
+  memoryStore.set(Memory.ACCESS_TOKEN, accessToken);
+};
+
 const processProlongToken = async (config: AxiosRequestConfig) => {
   // 인터셉트를 패스시켜야 할 URL 접근일 때
   if (passUrl.includes(config.url as string)) {
@@ -81,11 +89,7 @@ const processProlongToken = async (config: AxiosRequestConfig) => {
     const expiration = localStorage.getItem('expirationDate');
 
     if (expiration === null) {
-      const {
-        data: { accessToken, expirationTime },
-      } = await refreshAccessTokenApi();
-      localStorage.setItem('expirationDate', expirationTime);
-      memoryStore.set(Memory.ACCESS_TOKEN, accessToken);
+      await refreshAccessToken();
       return config;
     }
 
@@ -98,11 +102,7 @@ const processProlongToken = async (config: AxiosRequestConfig) => {
         log.debug('로그인 유효기간이 지났으므로, 토큰 유효기간을 연장합니다.');
       }
       try {
-        const {
-          data: { accessToken, expirationTime },
-        } = await refreshAccessTokenApi();
-        localStorage.setItem('expirationDate', expirationTime);
-        memoryStore.set(Memory.ACCESS_TOKEN, accessToken);
+        await refreshAccessToken();
       } catch (err) {
         log.setLevel('ERROR');
         log.error(err);
@@ -120,11 +120,7 @@ const processProlongToken = async (config: AxiosRequestConfig) => {
           log.debug('메모리 스토어에 액세스 토큰이 없습니다.');
           log.debug('액세스 토큰 재발행 및 스토어 저장과 갱신을 진행합니다.');
         }
-        const {
-          data: { accessToken, expirationTime },
-        } = await refreshAccessTokenApi();
-        localStorage.setItem('expirationDate', expirationTime);
-        memoryStore.set(Memory.ACCESS_TOKEN, accessToken);
+        await refreshAccessToken();
         config.headers.Authorization = `Bearer ${accessToken}`;
         return config;
       }
