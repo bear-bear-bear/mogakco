@@ -21,27 +21,7 @@ const devModeLog = (msg: any, level: LogLevelDescStr = 'debug') => {
     return;
   }
   log.setLevel(level);
-  // loglevel이 호출 시그니처를 지원하지 않아서
-  // log[level](msg) 같이 간단한 작성이 불가능하므로 하드 코딩 합니다
-  switch (level) {
-    case 'trace':
-      log.trace(msg);
-      break;
-    case 'debug':
-      log.debug(msg);
-      break;
-    case 'info':
-      log.info(msg);
-      break;
-    case 'warn':
-      log.warn(msg);
-      break;
-    case 'error':
-      log.error(msg);
-      break;
-    default:
-      break;
-  }
+  log[level](msg);
   log.setLevel('silent');
 };
 
