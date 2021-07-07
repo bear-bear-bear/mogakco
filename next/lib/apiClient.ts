@@ -63,6 +63,7 @@ const apiClient = axios.create({
 
 const passUrlDict = {
   ACCESS_TOKEN_REFRESH: '/api/auth/refresh-token',
+  SIGN_UP: '/api/auth',
   SIGN_IN: '/api/auth/login',
   SIGN_OUT: '/api/auth/logout',
   LOAD_SKILLS: '/api/user/skills',
