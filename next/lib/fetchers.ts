@@ -1,4 +1,5 @@
 import apiClient from '@lib/apiClient';
+import devModeLog from '@lib/devModeLog';
 import type { IGeneralServerResponse } from 'typings/common';
 import type {
   ILoginProps,
@@ -43,8 +44,8 @@ export const authProlongTestApi = () =>
       );
     })
     .catch((err) => {
-      console.log(err);
-      window.alert('accessToken 또는 refreshToken 만료');
+      devModeLog(err);
+      window.alert('로그인 연장 실패, 로그를 확인해주세요.');
     });
 
 // ********************************************************************************************************************
