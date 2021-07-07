@@ -65,6 +65,8 @@ const passUrlDict = {
   ACCESS_TOKEN_REFRESH: '/api/auth/refresh-token',
   SIGN_IN: '/api/auth/login',
   SIGN_OUT: '/api/auth/logout',
+  LOAD_SKILLS: '/api/user/skills',
+  LOAD_JOBS: '/api/user/jobs',
 };
 type PassUrl = keyof typeof passUrlDict;
 
@@ -74,7 +76,7 @@ type PassUrl = keyof typeof passUrlDict;
  * new accessToken은 memoryStore와 config.headers.Authorization에 각각 세팅
  * @returns headers.Authorization에 refreshed new AccessToken이 세팅된 AxiosRequestConfig
  */
-const refreshAccessToken = async (config: AxiosRequestConfig) => {
+export const refreshAccessToken = async (config: AxiosRequestConfig) => {
   devModeLog('토큰을 갱신합니다');
   try {
     const {
