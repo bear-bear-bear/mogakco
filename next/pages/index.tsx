@@ -1,4 +1,5 @@
 import { useRef, useState, useCallback } from 'react';
+import { GetServerSideProps } from 'next';
 
 import CustomHead from '@components/common/CustomHead';
 import Container from '@components/landing/Container';
@@ -8,9 +9,12 @@ import MiddleBlock from '@components/landing/MiddleBlock';
 import Footer from '@components/landing/Footer';
 import ScrollTop from '@components/common/ScrollTop';
 import Button from '@components/common/Button';
-import apiClient from '@lib/apiClient';
-import { AxiosResponse } from 'axios';
 import { isDevelopment } from '@lib/enviroment';
+import { authProlongTestApi, refreshAccessTokenApiSSR } from '@lib/fetchers';
+
+export type Props = {
+  isLogin: boolean;
+};
 
 const pageProps = {
   title: '모여서 각자 코딩 - Mogakco',
@@ -19,36 +23,20 @@ const pageProps = {
   locale: 'ko_KR',
 };
 
-const Landing = () => {
+const Landing = ({ isLogin }: Props) => {
   const emailEl = useRef<HTMLInputElement>(null);
   const [isTestBtnLoading, setIsTestBtnLoading] = useState<boolean>(false);
 
-  const onClickTestButton = useCallback(() => {
+  const onClickTestButton = useCallback(async () => {
     setIsTestBtnLoading(true);
-
-    apiClient
-      .get('/api/auth/test')
-      .then(
-        ({
-          data,
-        }: AxiosResponse<{ user: { id: number; username: string } }>) => {
-          setIsTestBtnLoading(false);
-          window.alert(
-            `테스트 성공 (로그인 자동 연장 ) 로그인한 유저: ${data.user.username}`,
-          );
-        },
-      )
-      .catch((err) => {
-        setIsTestBtnLoading(false);
-        console.log(err);
-        window.alert('자동로그인 실패 ( 다시 만드세요. )');
-      });
+    await authProlongTestApi();
+    setIsTestBtnLoading(false);
   }, []);
 
   return (
     <>
       <CustomHead {...pageProps} />
-      <Header />
+      <Header isLogin={isLogin} />
       <Container>
         <ScrollTop />
         {isDevelopment && (
@@ -98,6 +86,17 @@ const Landing = () => {
       <Footer />
     </>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async ({
+  req: { headers },
+}) => {
+  try {
+    await refreshAccessTokenApiSSR(headers);
+    return { props: { isLogin: true } };
+  } catch (err) {
+    return { props: { isLogin: false } };
+  }
 };
 
 export default Landing;

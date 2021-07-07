@@ -1,17 +1,17 @@
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import log from 'loglevel';
 import { useRouter } from 'next/router';
 import { GetServerSideProps } from 'next';
-import io from 'socket.io-client';
+
 import CustomHead from '@components/common/CustomHead';
 import Container from '@components/video-chat/Container';
 import CamSection from '@components/video-chat/CamSection';
 import ChatSection from '@components/video-chat/ChatSection';
-import { isDevelopment } from '@lib/enviroment';
-import apiClient, { Memory, memoryStore } from '@lib/apiClient';
-import { IProlongTokenProps } from '../../typings/auth';
-
-export const END_POINT = 'http://localhost:8001/chat';
+import devModeLog from '@lib/devModeLog';
+import apiClient, { logAxiosError, Memory, memoryStore } from '@lib/apiClient';
+import type { Error } from '@lib/apiClient';
+import { refreshAccessTokenApiSSR } from '@lib/fetchers';
+import { socketServer } from '@pages/_app';
 
 const pageProps = {
   title: '화상채팅 - Mogakco',
@@ -20,19 +20,14 @@ const pageProps = {
   locale: 'ko_KR',
 };
 
-export const socketServer = io.connect(END_POINT);
-
 const ChatRoom = () => {
   const router = useRouter();
-  const { id } = router.query;
+  const { id } = useMemo(() => router.query, [router.query]);
 
   useEffect(() => {
-    socketServer.on('connect', () => {
-      console.log('connected');
-      socketServer.emit('joinChatRoom', id);
-      socketServer.on('joinUserMessage', (clientId: string) => {
-        console.log(`${clientId} 유저가 접속하였다고 응답 되었음.`);
-      });
+    socketServer.emit('joinChatRoom', id);
+    socketServer.on('joinUserMessage', (clientId: string) => {
+      devModeLog(`${clientId} 유저가 접속하였다고 응답 되었음.`);
     });
   }, [id]);
 
@@ -47,34 +42,28 @@ const ChatRoom = () => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
+export const getServerSideProps: GetServerSideProps = async ({
+  req: { headers },
+  query: { id },
+}) => {
   log.setLevel('debug');
   try {
     const {
       data: { accessToken },
-    } = await apiClient.get<IProlongTokenProps>('/api/auth/refresh-token', {
-      headers: {
-        ...context.req.headers,
-      },
-    });
+    } = await refreshAccessTokenApiSSR(headers);
     memoryStore.set(Memory.ACCESS_TOKEN, accessToken);
-    if (isDevelopment) {
-      log.debug('서버사이드에서 로그인이 연장처리 되었습니다.');
-    }
+    devModeLog('서버사이드에서 로그인이 연장처리 되었습니다.');
+
     const { data } = await apiClient.get<{
       message: boolean;
       statusCode: number;
-    }>(`/api/chat/available/${context.query.id}`);
-    if (isDevelopment) {
-      log.debug(`Server Response Message: ${data.message}`);
-      log.debug(`Response Status Code: ${data.statusCode}`);
-    }
+    }>(`/api/chat/available/${id}`);
+    devModeLog(`Server Response Message: ${data.message}`);
+    devModeLog(`Response Status Code: ${data.statusCode}`);
 
     return { props: {} };
   } catch (error) {
-    if (isDevelopment) {
-      log.error(error.response?.data ?? error);
-    }
+    logAxiosError(error as Error);
     return {
       redirect: {
         destination: '/',
