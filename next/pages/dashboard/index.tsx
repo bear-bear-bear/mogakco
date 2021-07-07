@@ -1,9 +1,8 @@
 import React from 'react';
-import Link from 'next/link';
 
 import CustomHead from '@components/common/CustomHead';
 import Container from '@components/dashboard/Container';
-import CardAnchor from '@components/dashboard/CardAnchor';
+import CardLink from '@components/dashboard/CardLink';
 
 export const pageProps = {
   title: '대시보드 - Mogakco',
@@ -17,22 +16,20 @@ const Dashboard = () => {
     <>
       <CustomHead {...pageProps} />
       <Container>
-        <Link href="/video-chat/1.js" passHref>
-          {/* <Link href={`/video-chat/${id}.js`}> */}
-          {/* 임시로 화상채팅 1번 룸으로 가도록 설정 */}
-          <CardAnchor
-            svgName="video-chat.svg"
-            title="화상 채팅"
-            desc="모각코를 시작해요!"
-          />
-        </Link>
-        <Link href="/my-page" passHref>
-          <CardAnchor
-            svgName="chart-line-alt1.svg"
-            title="마이페이지"
-            desc="내 정보를 확인해보세요."
-          />
-        </Link>
+        {/* <Link href={`/video-chat/${id}.js`}> */}
+        {/* 임시로 화상채팅 1번 룸으로 가도록 설정 */}
+        <CardLink
+          href="/video-chat/1.js"
+          svgName="video-chat.svg"
+          title="화상 채팅"
+          desc="모각코를 시작해요!"
+        />
+        <CardLink
+          href="/my-page"
+          svgName="chart-line-alt1.svg"
+          title="마이페이지"
+          desc="내 정보를 확인해보세요."
+        />
       </Container>
     </>
   );
