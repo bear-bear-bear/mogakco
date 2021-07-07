@@ -1,5 +1,4 @@
-import React, { InputHTMLAttributes, Dispatch, SetStateAction } from 'react';
-import { UseFormSetValue } from 'react-hook-form';
+import React, { InputHTMLAttributes } from 'react';
 
 export interface IDefaultProps extends InputHTMLAttributes<HTMLInputElement> {
   type: 'checkbox' | 'text' | 'password' | 'email';

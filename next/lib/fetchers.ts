@@ -1,5 +1,4 @@
-import apiClient from '@lib/apiClient';
-import devModeLog from '@lib/devModeLog';
+import apiClient, { Error, logAxiosError } from '@lib/apiClient';
 import type { IGeneralServerResponse } from 'typings/common';
 import type {
   ILoginProps,
@@ -40,11 +39,10 @@ export const authProlongTestApi = () =>
     .get<{ user: { id: number; username: string } }>('/api/auth/test')
     .then(({ data }) => {
       window.alert(
-        `테스트 성공 (로그인 자동 연장 ) 로그인한 유저: ${data.user.username}`,
+        `테스트 성공(로그인 자동 연장): 로그인한 유저 - ${data.user.username}`,
       );
     })
-    .catch((err) => {
-      devModeLog(err);
+    .catch(() => {
       window.alert('로그인 연장 실패, 로그를 확인해주세요.');
     });
 

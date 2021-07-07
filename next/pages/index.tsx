@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef, useState, useCallback } from 'react';
 import { GetServerSideProps } from 'next';
 
 import CustomHead from '@components/common/CustomHead';
@@ -25,6 +25,13 @@ const pageProps = {
 
 const Landing = ({ isLogin }: Props) => {
   const emailEl = useRef<HTMLInputElement>(null);
+  const [isTestBtnLoading, setIsTestBtnLoading] = useState<boolean>(false);
+
+  const onClickTestButton = useCallback(async () => {
+    setIsTestBtnLoading(true);
+    await authProlongTestApi();
+    setIsTestBtnLoading(false);
+  }, []);
 
   return (
     <>
@@ -37,7 +44,8 @@ const Landing = ({ isLogin }: Props) => {
             type="button"
             outline
             style={{ float: 'right' }}
-            onClick={authProlongTestApi}
+            onClick={onClickTestButton}
+            $loading={isTestBtnLoading}
           >
             로그인 연장 테스트 하기
           </Button>
