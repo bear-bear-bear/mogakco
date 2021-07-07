@@ -1,7 +1,7 @@
 import React, { KeyboardEvent } from 'react';
 
 import useInput from '@hooks/useInput';
-import { socketServer } from '@pages/video-chat/[id]';
+import { socketServer } from '@pages/_app';
 
 import * as S from './style';
 

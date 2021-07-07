@@ -3,6 +3,11 @@ import CustomHead from '@components/common/CustomHead';
 import AuthContainer from '@components/common/AuthContainer';
 import ProgressBar from '@components/sign-up/ProgressBar';
 import Start from '@components/sign-up/Start';
+import { GetServerSideProps } from 'next';
+import log from 'loglevel';
+import { refreshAccessTokenApiSSR } from '@lib/fetchers';
+import { Memory, memoryStore } from '@lib/apiClient';
+import { isDevelopment } from '@lib/enviroment';
 
 export const pageProps = {
   title: '회원가입 - Mogakco',
@@ -20,6 +25,31 @@ const SignUpStart = () => {
       </AuthContainer>
     </>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async ({
+  req: { headers },
+}) => {
+  log.setLevel('DEBUG');
+  try {
+    const {
+      data: { accessToken },
+    } = await refreshAccessTokenApiSSR(headers);
+    memoryStore.set(Memory.ACCESS_TOKEN, accessToken);
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false,
+      },
+    };
+  } catch (err) {
+    if (err.statusCode === 401) {
+      if (isDevelopment) {
+        log.debug('비로그인 상태입니다.');
+      }
+    }
+    return { props: {} };
+  }
 };
 
 export default SignUpStart;

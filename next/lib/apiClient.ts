@@ -31,7 +31,7 @@ export const logAxiosError = (axiosError: Error) => {
   if (response) {
     const { data, headers } = response;
     log.error(
-      '요청이 이루어졌으며 서버가 2xx의 범위를 벗어나는 상태 코드로 응답했습니다.',
+      '요청이 이루어졌으나 서버가 2xx의 범위를 벗어나는 상태 코드로 응답했습니다.',
     );
     log.debug('Response');
     log.debug(' ㄴHeaders:', headers);
@@ -61,81 +61,82 @@ const apiClient = axios.create({
   withCredentials: true,
 });
 
-const passUrl = ['/api/auth/refresh-token', '/api/auth/login'];
+const passUrlDict = {
+  ACCESS_TOKEN_REFRESH: '/api/auth/refresh-token',
+  SIGN_IN: '/api/auth/login',
+  SIGN_OUT: '/api/auth/logout',
+};
+type PassUrl = keyof typeof passUrlDict;
 
-const processProlongToken = async (config: AxiosRequestConfig) => {
-  // 인터셉트를 패스시켜야 할 URL 접근일 때
-  if (passUrl.includes(config.url as string)) {
-    if (config.url === passUrl[0]) {
-      devModeLog('로그인 연장 처리 요청이므로 인터셉트 요청을 패스합니다.');
-    } else {
-      devModeLog(`인터셉터 요청을 패스합니다. (${config.url})`);
-    }
-
-    return config;
-  }
-
+/**
+ * @desc
+ * accessToken을 새로 발급받아 new expirationTime은 로컬 스토리지에,
+ * new accessToken은 memoryStore와 config.headers.Authorization에 각각 세팅
+ * @returns headers.Authorization에 refreshed new AccessToken이 세팅된 AxiosRequestConfig
+ */
+const refreshAccessToken = async (config: AxiosRequestConfig) => {
+  devModeLog('토큰을 갱신합니다');
   try {
-    const expiration = localStorage.getItem('expirationDate');
-
-    if (expiration === null) {
-      const {
-        data: { accessToken, expirationTime },
-      } = await refreshAccessTokenApi();
-      localStorage.setItem('expirationDate', expirationTime);
-      memoryStore.set(Memory.ACCESS_TOKEN, accessToken);
-      return config;
-    }
-
-    // 액세스 토큰 만료기한이 지났을 때
-    const nowDate = new Date();
-    const expirationDate = new Date(expiration);
-
-    if (nowDate > expirationDate) {
-      devModeLog('로그인 유효기간이 지났으므로, 토큰 유효기간을 연장합니다.');
-      try {
-        const {
-          data: { accessToken, expirationTime },
-        } = await refreshAccessTokenApi();
-        localStorage.setItem('expirationDate', expirationTime);
-        memoryStore.set(Memory.ACCESS_TOKEN, accessToken);
-      } catch (err) {
-        log.error(err);
-        return config;
-      }
-    }
-
-    // 브라우저 리다이렉션 또는 외부요인으로 스토어 데이터가 손실됬을 때
-    const accessToken: string | undefined = memoryStore.get(
-      Memory.ACCESS_TOKEN,
-    );
-    try {
-      if (accessToken === undefined) {
-        devModeLog('메모리 스토어에 액세스 토큰이 없습니다.');
-        devModeLog('액세스 토큰 재발행 및 스토어 저장과 갱신을 진행합니다.');
-
-        const {
-          data: { accessToken, expirationTime },
-        } = await refreshAccessTokenApi();
-        localStorage.setItem('expirationDate', expirationTime);
-        memoryStore.set(Memory.ACCESS_TOKEN, accessToken);
-        config.headers.Authorization = `Bearer ${accessToken}`;
-        return config;
-      }
-    } catch (err) {
-      devModeLog('액세스 토큰 갱신을 실패하였습니다.');
-      log.error(err);
-      return config;
-    }
-
-    config.headers.Authorization = `Bearer ${accessToken}`;
-
+    const {
+      data: { accessToken: newAccessToken, expirationTime: newExpirationTime },
+    } = await refreshAccessTokenApi();
+    localStorage.setItem('expirationDate', newExpirationTime);
+    memoryStore.set(Memory.ACCESS_TOKEN, newAccessToken);
+    config.headers.Authorization = `Bearer ${newAccessToken}`;
+    devModeLog('토큰 갱신 성공');
     return config;
   } catch (err) {
-    // SSR 요청일 때
-    devModeLog('서버사이드 요청이므로 인터셉트가 패스됩니다.');
+    devModeLog('토큰 갱신 실패');
+    logAxiosError(err as Error);
     return config;
   }
+};
+
+const processProlongToken = async (config: AxiosRequestConfig) => {
+  // 인터셉트를 패스시켜야 할 url인지 검사
+  const passUrlList = Object.values(passUrlDict);
+  if (passUrlList.includes(config.url as string)) {
+    const urlNames = Object.keys(passUrlDict) as PassUrl[];
+    const currUrlName = urlNames.find((key) => passUrlDict[key] === config.url);
+    devModeLog(
+      `현재 요청은 ${currUrlName} 요청이므로 기존 Access token의 유효성 검사와 갱신 과정을 생략합니다.`,
+    );
+    return config;
+  }
+
+  devModeLog('기존 Access token의 유효성 검사 중...');
+
+  // 패스할 url이 아니라면 사용자가 기존에 가지고 있던 accessToken의 유효성 검사 시작 (검사 실패 시 refresh)
+  // 검사 1. 로컬 스토리지 내 access-token 만료기한 유무 검사
+  const expiration = localStorage.getItem('expirationDate');
+  if (expiration === null) {
+    devModeLog('access-token 만료기한이 로컬 스토리지 내에 없습니다,');
+    const settedNewTokenReqConfig = await refreshAccessToken(config);
+    return settedNewTokenReqConfig;
+  }
+
+  // 검사 2. 액세스 토큰 만료 기한 유효성 검사
+  const nowDate = new Date();
+  const expirationDate = new Date(expiration);
+  if (nowDate > expirationDate) {
+    devModeLog('로그인 유효기간이 지났습니다');
+    const settedNewTokenReqConfig = await refreshAccessToken(config);
+    return settedNewTokenReqConfig;
+  }
+
+  // 검사 3. 브라우저 리다이렉션 또는 외부요인으로 인해 액세스 토큰이 소실 되었는지 검사
+  const accessToken: string | undefined = memoryStore.get(Memory.ACCESS_TOKEN);
+  if (accessToken === undefined) {
+    devModeLog('메모리 스토어에 액세스 토큰이 없습니다.');
+    const settedNewTokenReqConfig = await refreshAccessToken(config);
+    return settedNewTokenReqConfig;
+  }
+
+  // 검사를 모두 통과했다면 기존 토큰을 req 헤더에 세팅
+  devModeLog('기존 Access token을 요청 헤더에 추가합니다.');
+  config.headers.Authorization = `Bearer ${accessToken}`;
+
+  return config;
 };
 
 apiClient.interceptors.request.use(processProlongToken, undefined);
