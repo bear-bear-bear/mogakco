@@ -1,8 +1,7 @@
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import log from 'loglevel';
 import { useRouter } from 'next/router';
 import { GetServerSideProps } from 'next';
-import io from 'socket.io-client';
 import CustomHead from '@components/common/CustomHead';
 import Container from '@components/video-chat/Container';
 import CamSection from '@components/video-chat/CamSection';
@@ -10,8 +9,7 @@ import ChatSection from '@components/video-chat/ChatSection';
 import { isDevelopment } from '@lib/enviroment';
 import apiClient, { Memory, memoryStore } from '@lib/apiClient';
 import { refreshAccessTokenApiSSR } from '@lib/fetchers';
-
-export const END_POINT = 'http://localhost:8001/chat';
+import { socketServer } from '@pages/_app';
 
 const pageProps = {
   title: '화상채팅 - Mogakco',
@@ -20,19 +18,14 @@ const pageProps = {
   locale: 'ko_KR',
 };
 
-export const socketServer = io.connect();
-
 const ChatRoom = () => {
   const router = useRouter();
-  const { id } = router.query;
+  const { id } = useMemo(() => router.query, [router.query]);
 
   useEffect(() => {
-    socketServer.on('connect', () => {
-      console.log('connected');
-      socketServer.emit('joinChatRoom', id);
-      socketServer.on('joinUserMessage', (clientId: string) => {
-        console.log(`${clientId} 유저가 접속하였다고 응답 되었음.`);
-      });
+    socketServer.emit('joinChatRoom', id);
+    socketServer.on('joinUserMessage', (clientId: string) => {
+      console.log(`${clientId} 유저가 접속하였다고 응답 되었음.`);
     });
   }, [id]);
 

@@ -5,6 +5,10 @@ import { SWRConfig } from 'swr';
 import { useEffect } from 'react';
 import { refreshAccessTokenApi } from '@lib/fetchers';
 import { Memory, memoryStore } from '@lib/apiClient';
+import io from 'socket.io-client';
+
+export const END_POINT = 'http://localhost:8001/chat';
+export const socketServer = io.connect(END_POINT);
 
 /**
  * @url SWR Options Description https://swr.vercel.app/docs/options

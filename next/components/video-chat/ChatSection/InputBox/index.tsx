@@ -1,7 +1,9 @@
 import React, { KeyboardEvent } from 'react';
-import useInput from '@hooks/useInput';
 import log from 'loglevel';
-import { socketServer } from '@pages/video-chat/[id]';
+import useInput from '@hooks/useInput';
+
+import { socketServer } from '@pages/_app';
+
 import * as S from './style';
 
 log.setLevel('DEBUG');
