@@ -5,6 +5,7 @@ import { useRouter } from 'next/router';
 import useIsomorphicLayoutEffect from '@hooks/useIsomorphicLayoutEffect';
 import Desc from '@components/common/Desc';
 import Form from '@components/common/Form';
+import getSessionStorageValues from '@lib/getSessionStorageValues';
 
 import type { InputValues } from './typings';
 import UsernameSection from './Sections/UsernameSection';
@@ -29,6 +30,7 @@ const Required = () => {
     register,
     handleSubmit,
     getValues,
+    setValue,
     setFocus,
     setError,
     clearErrors,
@@ -56,7 +58,17 @@ const Required = () => {
     // 쿼리 이메일 저장 후 해당 쿼리 삭제
     const { email } = router.query;
     window.sessionStorage.setItem('email', email as string);
-  }, [router]);
+
+    // 만약 뒤로가기로 접근했다면 (이 단계를 완료했었다면) 입력했던 값 다시 세팅
+    const { username: typedUsername, password: typedPassword } =
+      getSessionStorageValues('username', 'password');
+    if (typedUsername && typedPassword) {
+      setValue('username', typedUsername);
+      setValue('password', typedPassword);
+      setValue('passwordConfirm', typedPassword);
+      setValue('term', true);
+    }
+  }, [router, setValue]);
 
   return (
     <>

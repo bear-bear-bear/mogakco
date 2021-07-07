@@ -25,56 +25,37 @@ const PasswordSection = ({ register, setError, clearErrors }: Props) => {
   const passwordEl = useRef<HTMLInputElement | null>(null);
   const passwordConfirmEl = useRef<HTMLInputElement | null>(null);
 
-  // ref, onChange를 사용하기 위해 register들을 수동 정의
+  // ref를 사용하기 위해 register들을 수동 정의
   // https://react-hook-form.com/api/useform/register#registerRef
-  const {
-    ref: pwRef,
-    onChange: onChangePw,
-    ...pwRest
-  } = register('password', {
+  const { ref: pwRef, ...pwRest } = register('password', {
     pattern: {
       value: passwordRule,
       message: '형식에 맞는 비밀번호를 입력하세요.',
     },
+    validate: {
+      confirm: (v) => {
+        const isPasswordConfirm = v === passwordConfirmEl.current?.value;
+        if (isPasswordConfirm) {
+          clearErrors('passwordConfirm');
+        }
+        if (!isPasswordConfirm) {
+          setError('passwordConfirm', {
+            type: 'validate',
+            message: '패스워드가 일치하지 않습니다.',
+          });
+        }
+        return true; // 무조건 true를 반환하여 errors.password에는 passwordConfirm관련 에러가 세팅되지 않음
+      },
+    },
     required: '비밀번호란을 입력해주세요',
   });
-  const {
-    ref: pwcRef,
-    onChange: onChangePwc,
-    ...pwcRest
-  } = register('passwordConfirm', {
+  const { ref: pwcRef, ...pwcRest } = register('passwordConfirm', {
+    validate: {
+      confirm: (v) =>
+        v === passwordEl.current?.value || '비밀번호가 일치하지 않습니다.',
+    },
     required: '비밀번호 확인란를 입력해주세요',
   });
-
-  // 패스워드 불일치 판단은 react-hook-form을 사용하면 동작 상 약간의 오류가 있어
-  // onChnage를 통해 error를 on/off 하는 방식으로 동작합니다.
-  const handleChange = () => {
-    // 타입 가드
-    if (passwordEl.current === null || passwordConfirmEl.current === null) {
-      return;
-    }
-
-    const currPassword = passwordEl.current.value;
-    const currPasswordConfirm = passwordConfirmEl.current.value;
-
-    // 비밀번호가 같을 시 passwordConfirm 에러 off
-    if (currPassword === currPasswordConfirm) {
-      clearErrors('passwordConfirm');
-    }
-
-    // 비밀번호 확인란의 값이 비었다면 에러를 띄우지 않음
-    if (currPasswordConfirm === '') {
-      return;
-    }
-
-    // 비밀번호가 다를 시 passwordConfirm 에러 on
-    if (currPassword !== currPasswordConfirm) {
-      setError('passwordConfirm', {
-        type: 'validate',
-        message: '패스워드가 일치하지 않습니다.',
-      });
-    }
-  };
 
   return (
     <>
@@ -89,10 +70,6 @@ const PasswordSection = ({ register, setError, clearErrors }: Props) => {
           onClickEye={onClickEye}
           isVisible={isVisiblePassword}
           required
-          onChange={(e) => {
-            onChangePw(e); // method from hook form register
-            handleChange(); // my method
-          }}
           {...pwRest}
           ref={(e) => {
             pwRef(e);
@@ -111,10 +88,6 @@ const PasswordSection = ({ register, setError, clearErrors }: Props) => {
           onClickEye={onClickEye}
           isVisible={isVisiblePassword}
           required
-          onChange={(e) => {
-            onChangePwc(e); // method from hook form register
-            handleChange(); // my method
-          }}
           {...pwcRest}
           ref={(e) => {
             pwcRef(e);
