@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
-
-import { socketServer } from '@pages/video-chat/[id]';
+import { socketServer } from '@pages/_app';
 import Chat from '../Chat';
+
 import * as S from './style';
 
 const dummyChatData = [

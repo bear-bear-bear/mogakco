@@ -61,7 +61,11 @@ const apiClient = axios.create({
   withCredentials: true,
 });
 
-const passUrl = ['/api/auth/refresh-token', '/api/auth/login'];
+const passUrl = [
+  '/api/auth/refresh-token',
+  '/api/auth/login',
+  '/api/auth/logout',
+];
 
 const refreshAccessToken = async () => {
   const {
@@ -136,10 +140,15 @@ const processProlongToken = async (config: AxiosRequestConfig) => {
 
     return config;
   } catch (err) {
-    // SSR 요청일 때
-    if (isDevelopment) {
-      log.debug('서버사이드 요청이므로 인터셉트가 패스됩니다.');
+    if (err.message === 'localStorage is not defined') {
+      // SSR 요청일 때
+      if (isDevelopment) {
+        log.debug('서버사이드 요청이므로 인터셉트가 패스됩니다.');
+      }
+    } else {
+      log.error(err);
     }
+
     return config;
   }
 };
