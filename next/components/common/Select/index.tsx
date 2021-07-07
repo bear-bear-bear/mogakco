@@ -15,24 +15,17 @@ type Styles = {
 // TODO: GlobalVariables 적용
 const Select: VFC<ComponentProps<typeof ReactSelect>> = (props) => {
   const colourStyles: StylesConfig<any, any> = {
+    container: (styles) => ({
+      ...styles,
+      width: '100%',
+    }),
     control: (styles) => ({
       ...styles,
-      backgroundColor: 'white',
       borderRadius: 0,
-      maxWidth: 500,
-    }),
-    option: (base) => ({
-      ...base,
-    }),
-    singleValue: (base) => ({
-      ...base,
     }),
     dropdownIndicator: (base) => ({
       ...base,
       borderRadius: 0,
-    }),
-    noOptionsMessage: (base) => ({
-      ...base,
     }),
     menu: (base) => ({
       ...base,
