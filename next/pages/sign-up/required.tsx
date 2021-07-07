@@ -11,7 +11,7 @@ const SignUpRequired = () => {
   return (
     <>
       <CustomHead {...pageProps} />
-      <AuthContainer progressBar={<ProgressBar fill={33} />}>
+      <AuthContainer progressBar={<ProgressBar fill={50} />}>
         <Required />
       </AuthContainer>
     </>

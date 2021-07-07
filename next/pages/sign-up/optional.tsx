@@ -24,7 +24,7 @@ const SignUpOptional = (props: IOptionalPageProps) => {
   return (
     <>
       <CustomHead {...pageProps} />
-      <AuthContainer progressBar={<ProgressBar fill={66} />}>
+      <AuthContainer progressBar={<ProgressBar fill={100} />}>
         <Optional {...props} />
       </AuthContainer>
     </>
