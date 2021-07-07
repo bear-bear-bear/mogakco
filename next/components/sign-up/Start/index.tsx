@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 
 import { sendEmailFetcher } from '@lib/fetchers';
 import { logAxiosError } from '@lib/apiClient';
-import useDebugLog from '@hooks/useDebugLog';
+import devModeLog from '@lib/devModeLog';
 import useIsomorphicLayoutEffect from '@hooks/useIsomorphicLayoutEffect';
 import { emailRule } from '@lib/regex';
 import Warning from '@components/common/Warning';
@@ -23,7 +23,6 @@ export type FormInputs = {
 
 const Start = () => {
   const router = useRouter();
-  const debugLog = useDebugLog();
   const [sendEmailState, setSendEmailState] = useState({
     loading: false,
     done: false,
@@ -67,7 +66,7 @@ const Start = () => {
   const onError = () => setEmailTestError(true);
 
   const onClickSocial = () => {
-    debugLog('미구현 기능입니다.');
+    devModeLog('미구현 기능입니다.');
   };
 
   useIsomorphicLayoutEffect(() => {

@@ -6,7 +6,7 @@ import Form from '@components/common/Form';
 import Input from '@components/common/Input';
 import InputWrapper from '@components/common/InputWrapper';
 import Label from '@components/common/Label';
-import useDebugLog from '@hooks/useDebugLog';
+import devModeLog from '@lib/devModeLog';
 import { logInApi } from '@lib/fetchers';
 import { logAxiosError, memoryStore } from '@lib/apiClient';
 import { isDevelopment } from '@lib/enviroment';
@@ -26,7 +26,6 @@ const SignInForm = () => {
   const [signInLoading, setLoginLoading] = useState<boolean>(false);
   const [isVisiblePassword, setIsVisiblePassword] = useState<boolean>(false);
   const onClickEye = () => setIsVisiblePassword((prev) => !prev);
-  const debugLog = useDebugLog();
   const { watch, register, handleSubmit, setValue } = useForm<FormInputs>({
     defaultValues: {
       email: isDevelopment ? 'mogakco35@gmail.com' : '',
@@ -37,7 +36,7 @@ const SignInForm = () => {
   const { email } = watch();
 
   const onClickSocial = () => {
-    debugLog('미구현 기능입니다');
+    devModeLog('미구현 기능입니다');
   };
 
   const onSubmit = (signInInfo: UnpackNestedValue<FormInputs>) => {
@@ -47,10 +46,8 @@ const SignInForm = () => {
         // TODO: 서비스 페이지로 이동하기
         memoryStore.set('accessToken', accessToken);
         localStorage.setItem('expirationDate', accessExpiredDate);
-        if (isDevelopment) {
-          debugLog('로그인 성공 응답');
-          debugLog('서비스 페이지 미구현 상태이므로 임시 경로(/)로 이동합니다');
-        }
+        devModeLog('로그인 성공 응답');
+        devModeLog('서비스 페이지 미구현 상태이므로 임시 경로(/)로 이동합니다');
         setLoginLoading(false);
         router.push('/');
       })
