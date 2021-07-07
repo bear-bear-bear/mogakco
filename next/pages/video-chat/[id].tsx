@@ -9,7 +9,7 @@ import CamSection from '@components/video-chat/CamSection';
 import ChatSection from '@components/video-chat/ChatSection';
 import { isDevelopment } from '@lib/enviroment';
 import apiClient, { Memory, memoryStore } from '@lib/apiClient';
-import { IProlongTokenProps } from '../../typings/auth';
+import { refreshAccessTokenApiSSR } from '@lib/fetchers';
 
 export const END_POINT = 'http://localhost:8001/chat';
 
@@ -20,7 +20,7 @@ const pageProps = {
   locale: 'ko_KR',
 };
 
-export const socketServer = io.connect(END_POINT);
+export const socketServer = io.connect();
 
 const ChatRoom = () => {
   const router = useRouter();
@@ -47,16 +47,15 @@ const ChatRoom = () => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
+export const getServerSideProps: GetServerSideProps = async ({
+  req: { headers },
+  query: { id },
+}) => {
   log.setLevel('debug');
   try {
     const {
       data: { accessToken },
-    } = await apiClient.get<IProlongTokenProps>('/api/auth/refresh-token', {
-      headers: {
-        ...context.req.headers,
-      },
-    });
+    } = await refreshAccessTokenApiSSR(headers);
     memoryStore.set(Memory.ACCESS_TOKEN, accessToken);
     if (isDevelopment) {
       log.debug('서버사이드에서 로그인이 연장처리 되었습니다.');
@@ -64,7 +63,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     const { data } = await apiClient.get<{
       message: boolean;
       statusCode: number;
-    }>(`/api/chat/available/${context.query.id}`);
+    }>(`/api/chat/available/${id}`);
     if (isDevelopment) {
       log.debug(`Server Response Message: ${data.message}`);
       log.debug(`Response Status Code: ${data.statusCode}`);
