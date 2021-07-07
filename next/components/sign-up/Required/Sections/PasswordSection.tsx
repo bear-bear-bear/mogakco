@@ -25,13 +25,9 @@ const PasswordSection = ({ register, setError, clearErrors }: Props) => {
   const passwordEl = useRef<HTMLInputElement | null>(null);
   const passwordConfirmEl = useRef<HTMLInputElement | null>(null);
 
-  // ref, onChange를 사용하기 위해 register들을 수동 정의
+  // ref를 사용하기 위해 register들을 수동 정의
   // https://react-hook-form.com/api/useform/register#registerRef
-  const {
-    ref: pwRef,
-    onChange: onChangePw,
-    ...pwRest
-  } = register('password', {
+  const { ref: pwRef, ...pwRest } = register('password', {
     pattern: {
       value: passwordRule,
       message: '형식에 맞는 비밀번호를 입력하세요.',
@@ -53,11 +49,7 @@ const PasswordSection = ({ register, setError, clearErrors }: Props) => {
     },
     required: '비밀번호란을 입력해주세요',
   });
-  const {
-    ref: pwcRef,
-    onChange: onChangePwc,
-    ...pwcRest
-  } = register('passwordConfirm', {
+  const { ref: pwcRef, ...pwcRest } = register('passwordConfirm', {
     validate: {
       confirm: (v) =>
         v === passwordEl.current?.value || '비밀번호가 일치하지 않습니다.',
@@ -78,10 +70,6 @@ const PasswordSection = ({ register, setError, clearErrors }: Props) => {
           onClickEye={onClickEye}
           isVisible={isVisiblePassword}
           required
-          onChange={(e) => {
-            onChangePw(e); // method from hook form register
-            // handleChange(); // my method
-          }}
           {...pwRest}
           ref={(e) => {
             pwRef(e);
@@ -100,10 +88,6 @@ const PasswordSection = ({ register, setError, clearErrors }: Props) => {
           onClickEye={onClickEye}
           isVisible={isVisiblePassword}
           required
-          onChange={(e) => {
-            onChangePwc(e); // method from hook form register
-            // handleChange(); // my method
-          }}
           {...pwcRest}
           ref={(e) => {
             pwcRef(e);
