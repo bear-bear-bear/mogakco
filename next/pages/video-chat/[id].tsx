@@ -1,25 +1,17 @@
-<<<<<<< HEAD
-import { useEffect } from 'react';
-=======
 import { useEffect, useMemo } from 'react';
 import log from 'loglevel';
->>>>>>> 5210577870ef6a98dd30fc4320ca4cd8d10a9b9c
 import { useRouter } from 'next/router';
 import { GetServerSideProps } from 'next';
+
 import CustomHead from '@components/common/CustomHead';
 import Container from '@components/video-chat/Container';
 import CamSection from '@components/video-chat/CamSection';
 import ChatSection from '@components/video-chat/ChatSection';
 import devModeLog from '@lib/devModeLog';
-import apiClient, { Memory, memoryStore } from '@lib/apiClient';
-<<<<<<< HEAD
-import { IProlongTokenProps } from 'typings/auth';
-
-export const END_POINT = 'http://localhost:8001/chat';
-=======
+import apiClient, { logAxiosError, Memory, memoryStore } from '@lib/apiClient';
+import type { Error } from '@lib/apiClient';
 import { refreshAccessTokenApiSSR } from '@lib/fetchers';
 import { socketServer } from '@pages/_app';
->>>>>>> 5210577870ef6a98dd30fc4320ca4cd8d10a9b9c
 
 const pageProps = {
   title: '화상채팅 - Mogakco',
@@ -33,18 +25,9 @@ const ChatRoom = () => {
   const { id } = useMemo(() => router.query, [router.query]);
 
   useEffect(() => {
-<<<<<<< HEAD
-    socketServer.on('connect', () => {
-      devModeLog('connected');
-      socketServer.emit('joinChatRoom', id);
-      socketServer.on('joinUserMessage', (clientId: string) => {
-        devModeLog(`${clientId} 유저가 접속하였다고 응답 되었음.`);
-      });
-=======
     socketServer.emit('joinChatRoom', id);
     socketServer.on('joinUserMessage', (clientId: string) => {
-      console.log(`${clientId} 유저가 접속하였다고 응답 되었음.`);
->>>>>>> 5210577870ef6a98dd30fc4320ca4cd8d10a9b9c
+      devModeLog(`${clientId} 유저가 접속하였다고 응답 되었음.`);
     });
   }, [id]);
 
@@ -59,15 +42,11 @@ const ChatRoom = () => {
   );
 };
 
-<<<<<<< HEAD
-export const getServerSideProps: GetServerSideProps = async (context) => {
-=======
 export const getServerSideProps: GetServerSideProps = async ({
   req: { headers },
   query: { id },
 }) => {
   log.setLevel('debug');
->>>>>>> 5210577870ef6a98dd30fc4320ca4cd8d10a9b9c
   try {
     const {
       data: { accessToken },
@@ -78,21 +57,13 @@ export const getServerSideProps: GetServerSideProps = async ({
     const { data } = await apiClient.get<{
       message: boolean;
       statusCode: number;
-<<<<<<< HEAD
-    }>(`/api/chat/available/${context.query.id}`);
+    }>(`/api/chat/available/${id}`);
     devModeLog(`Server Response Message: ${data.message}`);
     devModeLog(`Response Status Code: ${data.statusCode}`);
-=======
-    }>(`/api/chat/available/${id}`);
-    if (isDevelopment) {
-      log.debug(`Server Response Message: ${data.message}`);
-      log.debug(`Response Status Code: ${data.statusCode}`);
-    }
->>>>>>> 5210577870ef6a98dd30fc4320ca4cd8d10a9b9c
 
     return { props: {} };
   } catch (error) {
-    devModeLog(error.response?.data ?? error, 'error');
+    logAxiosError(error as Error);
     return {
       redirect: {
         destination: '/',
