@@ -8,6 +8,7 @@ import type {
   ISignUpResponse,
   ISignUpUserProps,
 } from 'typings/auth';
+import { IncomingHttpHeaders } from 'http';
 
 // FIXME: swr fetcher 형식에 맞게 변경하기
 
@@ -19,11 +20,31 @@ export const logInApi = (data: ILoginProps) =>
   apiClient.post<ILoginSuccessResponse>('/api/auth/login', data);
 
 // 로그아웃
-export const logOutFetcher = () => apiClient.post('/api/auth/logout');
+export const logOutApi = () =>
+  apiClient.post<IGeneralServerResponse>('/api/auth/logout');
 
 // 로그인 연장
 export const refreshAccessTokenApi = () =>
   apiClient.get<IProlongTokenProps>('/api/auth/refresh-token');
+
+// Next.js SSR 용 로그인 연장 Api
+export const refreshAccessTokenApiSSR = (headers: IncomingHttpHeaders) =>
+  apiClient.get<IProlongTokenProps>('/api/auth/refresh-token', {
+    headers,
+  });
+
+// 로그인 연장 테스트 Api
+export const authProlongTestApi = () =>
+  apiClient
+    .get<{ user: { id: number; username: string } }>('/api/auth/test')
+    .then(({ data }) => {
+      window.alert(
+        `테스트 성공(로그인 자동 연장): 로그인한 유저 - ${data.user.username}`,
+      );
+    })
+    .catch(() => {
+      window.alert('로그인 연장 실패, 로그를 확인해주세요.');
+    });
 
 // ********************************************************************************************************************
 // sign-up

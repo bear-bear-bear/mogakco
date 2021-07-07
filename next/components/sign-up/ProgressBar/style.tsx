@@ -1,5 +1,4 @@
 import styled from '@emotion/styled';
-import { css } from '@emotion/react';
 import type { ProgressBarProps } from './index';
 
 export const ProgressBarWrapper = styled.div`

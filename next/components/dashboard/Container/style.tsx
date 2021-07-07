@@ -1,12 +1,10 @@
 import styled from '@emotion/styled';
-import media, {
-  mediaScreenSizes as mediaSizes,
-} from '@components/globalStyles/media';
+import media, { mediaBreakpoints } from '@components/globalStyles/media';
 
 export const Container = styled.div`
   width: 100%;
   height: 100%;
-  max-width: ${mediaSizes.lg}px;
+  max-width: ${mediaBreakpoints.lg}px;
   position: absolute;
   top: 50%;
   left: 50%;
