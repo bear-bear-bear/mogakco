@@ -39,8 +39,7 @@ const Required = () => {
     defaultValues: initialState,
   });
 
-  console.log(errors);
-  const onSubmit = (e) => {
+  const onSubmit = () => {
     const { username, password } = getValues();
     window.sessionStorage.setItem('username', username);
     window.sessionStorage.setItem('password', password);
