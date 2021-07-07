@@ -4,7 +4,6 @@ import Fade from 'react-reveal/Fade';
 import Image from 'next/Image';
 import { Box, Flex } from '@chakra-ui/react';
 
-import useLanding from '@hooks/useLanding';
 import useIsomorphicLayoutEffect from '@hooks/useIsomorphicLayoutEffect';
 import useInput from '@hooks/useInput';
 import type { ILeftContentBlockProps } from '@components/landing/ContentBlock';
@@ -18,7 +17,6 @@ const LeftContentBlock = ({
   isFirstBlock,
   emailEl,
 }: ILeftContentBlockProps) => {
-  const { updateLanding } = useLanding();
   const router = useRouter();
   const [email, onChangeEmail, setEmail] = useInput('');
 
@@ -31,8 +29,10 @@ const LeftContentBlock = ({
 
   const toSignUp = (e: SyntheticEvent) => {
     e.preventDefault();
-    updateLanding({ email }, false);
-    router.push('/sign-up');
+    router.push({
+      pathname: '/sign-up',
+      query: { email },
+    });
   };
 
   return (

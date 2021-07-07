@@ -1,9 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { UnpackNestedValue, useForm } from 'react-hook-form';
+import { useRouter } from 'next/router';
 
 import { sendEmailFetcher } from '@lib/fetchers';
 import { logAxiosError } from '@lib/apiClient';
-import useLanding from '@hooks/useLanding';
 import devModeLog from '@lib/devModeLog';
 import useIsomorphicLayoutEffect from '@hooks/useIsomorphicLayoutEffect';
 import { emailRule } from '@lib/regex';
@@ -22,7 +22,7 @@ export type FormInputs = {
 };
 
 const Start = () => {
-  const { email: landingEmail, updateLanding } = useLanding();
+  const router = useRouter();
   const [sendEmailState, setSendEmailState] = useState({
     loading: false,
     done: false,
@@ -32,6 +32,7 @@ const Start = () => {
   const { register, handleSubmit, setValue, getValues, watch } =
     useForm<FormInputs>();
 
+  console.log('렌더링 테스트');
   const { email: watchedEmail } = watch();
 
   const onSubmitEmail = ({ email }: UnpackNestedValue<FormInputs>) => {
@@ -73,17 +74,13 @@ const Start = () => {
   }, [submitButtonEl]);
 
   useEffect(() => {
-    // 랜딩페이지에서 이메일 입력으로 회원가입 페이지로 넘어왔다면
-    // 이메일 입력창에 랜딩페이지에서 입력한 이메일을 자동 입력
-    if (landingEmail === null) return;
+    const { email: landingEmail } = router.query;
 
-    setValue('email', landingEmail);
-
-    // 자동 입력 후 랜딩페이지 이메일 상태 초기화
-    updateLanding({
-      email: null,
-    });
-  }, [landingEmail, setValue, updateLanding]);
+    if (landingEmail) {
+      setValue('email', landingEmail as string);
+      router.push('/sign-up', undefined, { shallow: true });
+    }
+  }, [router, setValue]);
 
   return (
     <>
