@@ -18,8 +18,7 @@ const End = () => {
   }, []);
 
   const onClickButton = () => {
-    // TODO: 모각코 서비스 페이지로 이동
-    router.replace('/');
+    router.replace('/dashboard');
   };
 
   return (
