@@ -1,13 +1,13 @@
 import React from 'react';
 import Link from 'next/link';
-
-import { Props } from '@pages/index';
-import Button from '@components/common/Button';
-
-import * as S from '@components/landing/Header/style';
 import { useRouter } from 'next/router';
+
+import Button from '@components/common/Button';
 import { logOutApi } from '@lib/fetchers';
 import { Memory, memoryStore } from '@lib/apiClient';
+import type { Props } from '@pages/index';
+
+import * as S from '@components/landing/Header/style';
 
 const AuthButtons = ({ isLogin }: Props) => {
   const router = useRouter();

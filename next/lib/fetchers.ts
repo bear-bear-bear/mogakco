@@ -1,4 +1,4 @@
-import apiClient, { Error, logAxiosError } from '@lib/apiClient';
+import apiClient from '@lib/apiClient';
 import type { IGeneralServerResponse } from 'typings/common';
 import type {
   ILoginProps,
