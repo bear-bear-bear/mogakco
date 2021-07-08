@@ -132,7 +132,8 @@ class AuthController {
     res.cookie('refreshToken', token, {
       ...refreshOptions,
     });
-    return { statusCode, message, accessToken };
+    const expirationDate = this.authService.getAccessTokenExpirationTime();
+    return { statusCode, message, accessToken, expirationDate };
   }
 
   /**
