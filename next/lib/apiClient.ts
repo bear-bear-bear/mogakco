@@ -63,24 +63,27 @@ const apiClient = axios.create({
 
 const passUrlDict = {
   ACCESS_TOKEN_REFRESH: '/api/auth/refresh-token',
+  SIGN_UP: '/api/auth',
   SIGN_IN: '/api/auth/login',
   SIGN_OUT: '/api/auth/logout',
+  LOAD_SKILLS: '/api/user/skills',
+  LOAD_JOBS: '/api/user/jobs',
 };
 type PassUrl = keyof typeof passUrlDict;
 
 /**
  * @desc
- * accessToken을 새로 발급받아 new expirationTime은 로컬 스토리지에,
+ * accessToken을 새로 발급받아 new expiration은 로컬 스토리지에,
  * new accessToken은 memoryStore와 config.headers.Authorization에 각각 세팅
  * @returns headers.Authorization에 refreshed new AccessToken이 세팅된 AxiosRequestConfig
  */
-const refreshAccessToken = async (config: AxiosRequestConfig) => {
+export const refreshAccessToken = async (config: AxiosRequestConfig) => {
   devModeLog('토큰을 갱신합니다');
   try {
     const {
-      data: { accessToken: newAccessToken, expirationTime: newExpirationTime },
+      data: { accessToken: newAccessToken, expiration: newExpiration },
     } = await refreshAccessTokenApi();
-    localStorage.setItem('expirationDate', newExpirationTime);
+    localStorage.setItem('expiration', newExpiration);
     memoryStore.set(Memory.ACCESS_TOKEN, newAccessToken);
     config.headers.Authorization = `Bearer ${newAccessToken}`;
     devModeLog('토큰 갱신 성공');
@@ -104,7 +107,7 @@ const processProlongToken = async (config: AxiosRequestConfig) => {
 
   // 패스할 url이 아니라면 사용자가 기존에 가지고 있던 accessToken의 유효성 검사 시작 (검사 실패 시 refresh)
   // 검사 1. 로컬 스토리지 내 access-token 만료기한 유무 검사
-  const expiration = localStorage.getItem('expirationDate');
+  const expiration = localStorage.getItem('expiration');
   if (expiration === null) {
     const settedNewTokenReqConfig = await refreshAccessToken(config);
     return settedNewTokenReqConfig;

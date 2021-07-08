@@ -66,7 +66,7 @@ class AuthController {
       this.authService.getRefreshTokenCookie(user);
     await this.authService.saveHashRefreshToken(refreshToken, email);
 
-    const accessExpiredDate = this.authService.getAccessTokenExpirationTime();
+    const expiration = this.authService.getAccessTokenExpirationTime();
 
     res.cookie('refreshToken', refreshToken, {
       ...refreshCookieOptions,
@@ -76,7 +76,7 @@ class AuthController {
       statusCode: 200,
       message: '로그인에 성공하였습니다!',
       user,
-      accessExpiredDate,
+      expiration,
       accessToken,
     };
   }
@@ -108,10 +108,10 @@ class AuthController {
     if (user === null) throw new InternalServerErrorException();
     const { password: notUsingProp, ...userProps } = user;
     const accessToken = this.authService.getAccessToken(userProps);
-    const expirationTime = this.authService.getAccessTokenExpirationTime();
+    const expiration = this.authService.getAccessTokenExpirationTime();
     return {
       accessToken,
-      expirationTime,
+      expiration,
       message: 'accessToken 갱신 완료!',
       statusCode: HttpStatus.CREATED,
       user: userProps,
@@ -132,7 +132,8 @@ class AuthController {
     res.cookie('refreshToken', token, {
       ...refreshOptions,
     });
-    return { statusCode, message, accessToken };
+    const expiration = this.authService.getAccessTokenExpirationTime();
+    return { statusCode, message, accessToken, expiration };
   }
 
   /**

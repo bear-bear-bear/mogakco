@@ -3,7 +3,7 @@ import { OptionsType } from 'react-select';
 import { useRouter } from 'next/router';
 
 import { signUpFetcher } from '@lib/fetchers';
-import { logAxiosError } from '@lib/apiClient';
+import { logAxiosError, Memory, memoryStore } from '@lib/apiClient';
 import getSessionStorageValues from '@lib/getSessionStorageValues';
 import Select from '@components/common/Select';
 import Desc from '@components/common/Desc';
@@ -49,9 +49,12 @@ const Optional = ({ skillOptions, jobOptions }: IOptionalPageProps) => {
       skills: skillIds,
       job: jobId,
     })
-      .then(() => {
+      .then(({ data: { accessToken, expiration } }) => {
         setSignUpLoading(false);
-        router.push('/sign-up/end');
+        localStorage.setItem('expiration', expiration);
+        memoryStore.set(Memory.ACCESS_TOKEN, accessToken);
+        window.sessionStorage.clear(); // 회원가입 과정에서 사용자가 입력했던 정보 삭제
+        router.replace('/dashboard');
       })
       .catch((err) => {
         setSignUpLoading(false);
