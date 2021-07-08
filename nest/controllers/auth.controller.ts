@@ -108,10 +108,10 @@ class AuthController {
     if (user === null) throw new InternalServerErrorException();
     const { password: notUsingProp, ...userProps } = user;
     const accessToken = this.authService.getAccessToken(userProps);
-    const expirationTime = this.authService.getAccessTokenExpirationTime();
+    const expiration = this.authService.getAccessTokenExpirationTime();
     return {
       accessToken,
-      expirationTime,
+      expiration,
       message: 'accessToken 갱신 완료!',
       statusCode: HttpStatus.CREATED,
       user: userProps,
@@ -132,8 +132,8 @@ class AuthController {
     res.cookie('refreshToken', token, {
       ...refreshOptions,
     });
-    const expirationDate = this.authService.getAccessTokenExpirationTime();
-    return { statusCode, message, accessToken, expirationDate };
+    const expiration = this.authService.getAccessTokenExpirationTime();
+    return { statusCode, message, accessToken, expiration };
   }
 
   /**
