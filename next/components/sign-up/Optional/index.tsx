@@ -51,8 +51,7 @@ const Optional = ({ skillOptions, jobOptions }: IOptionalPageProps) => {
     })
       .then(({ data: { accessToken, expiration } }) => {
         setSignUpLoading(false);
-        // TODO: 만료기간 로직 백단에 추가되면 주석제거
-        // localStorage.setItem('expirationDate', expiration);
+        localStorage.setItem('expiration', expiration);
         memoryStore.set(Memory.ACCESS_TOKEN, accessToken);
         window.sessionStorage.clear(); // 회원가입 과정에서 사용자가 입력했던 정보 삭제
         router.replace('/dashboard');

@@ -32,7 +32,6 @@ const Start = () => {
   const { register, handleSubmit, setValue, getValues, watch } =
     useForm<FormInputs>();
 
-  console.log('렌더링 테스트');
   const { email: watchedEmail } = watch();
 
   const onSubmitEmail = ({ email }: UnpackNestedValue<FormInputs>) => {
