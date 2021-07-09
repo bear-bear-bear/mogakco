@@ -67,5 +67,5 @@ export const loadSkillsFetcher = () =>
 export const loadJobsFetcher = () =>
   apiClient.get<IOptionalProps>(`/api/user/jobs`);
 // 회원가입
-export const signUpFetcher = (data: ISignUpUserProps) =>
+export const signUpApi = (data: ISignUpUserProps) =>
   apiClient.post<ISignUpResponse>('/api/auth', data);

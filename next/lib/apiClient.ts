@@ -96,6 +96,8 @@ export const refreshAccessToken = async (config: AxiosRequestConfig) => {
 };
 
 const processProlongToken = async (config: AxiosRequestConfig) => {
+  if (typeof window === 'undefined') return config;
+
   // 인터셉트를 패스시켜야 할 url인지 검사
   const passUrlList = Object.values(passUrlDict);
   if (passUrlList.includes(config.url as string)) {
