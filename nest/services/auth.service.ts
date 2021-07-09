@@ -225,6 +225,7 @@ class AuthService {
       username,
     } as JwtUserProps);
     const refreshTokenCookieSet = this.getRefreshTokenCookie({ id, username } as JwtUserProps);
+    await this.saveHashRefreshToken(refreshTokenCookieSet.token, email);
     return {
       message: '유저가 생성되었습니다.',
       statusCode: 201,
