@@ -3,12 +3,9 @@ import { ChakraProvider } from '@chakra-ui/react';
 import GlobalStyles, { customGlobalStyles } from '@components/globalStyles';
 import { SWRConfig } from 'swr';
 import { useEffect } from 'react';
-import { refreshAccessTokenApi } from '@lib/fetchers';
 import { Memory, memoryStore } from '@lib/apiClient';
-import io from 'socket.io-client';
 
-export const END_POINT = 'http://localhost:8001/chat';
-export const socketServer = io.connect(END_POINT);
+// export const END_POINT = 'http://localhost:8001/chat';
 
 /**
  * @url SWR Options Description https://swr.vercel.app/docs/options
@@ -18,15 +15,17 @@ const App = ({ Component, pageProps }: AppProps) => {
    * @desc 다른 페이지에서 로그아웃 할 시 감지하여 AccessToken 을 지워버립니다.
    */
   useEffect(() => {
-    const refreshStore = async () => {
-      refreshAccessTokenApi().catch(() => {
+    const detectLogOut = () => {
+      const logOutSignal = localStorage.getItem('log-out');
+      if (logOutSignal === 'true') {
         memoryStore.delete(Memory.ACCESS_TOKEN);
-      });
+      }
+      localStorage.removeItem('log-out');
     };
 
-    window.addEventListener('storage', refreshStore);
-    return () => window.removeEventListener('storage', refreshStore);
-  });
+    window.addEventListener('storage', detectLogOut);
+    return () => window.removeEventListener('storage', detectLogOut);
+  }, []);
 
   return (
     <SWRConfig
