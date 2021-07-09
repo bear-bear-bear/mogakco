@@ -68,6 +68,7 @@ const passUrlDict = {
   SIGN_OUT: '/api/auth/logout',
   LOAD_SKILLS: '/api/user/skills',
   LOAD_JOBS: '/api/user/jobs',
+  SEND_EMAIL: '/api/auth/is-verified/before-register',
 };
 type PassUrl = keyof typeof passUrlDict;
 
@@ -96,6 +97,8 @@ export const refreshAccessToken = async (config: AxiosRequestConfig) => {
 };
 
 const processProlongToken = async (config: AxiosRequestConfig) => {
+  if (typeof window === 'undefined') return config;
+
   // 인터셉트를 패스시켜야 할 url인지 검사
   const passUrlList = Object.values(passUrlDict);
   if (passUrlList.includes(config.url as string)) {

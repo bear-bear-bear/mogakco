@@ -15,9 +15,8 @@ const AuthButtons = ({ isLogin }: Props) => {
   const handleLogout = () => {
     logOutApi()
       .then(() => {
-        const now = new Date().toString();
         memoryStore.delete(Memory.ACCESS_TOKEN);
-        localStorage.setItem('log-out', now);
+        localStorage.setItem('log-out', 'true');
         router.push('/');
       })
       .catch(() => router.push('/'));
