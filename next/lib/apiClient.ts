@@ -68,6 +68,7 @@ const passUrlDict = {
   SIGN_OUT: '/api/auth/logout',
   LOAD_SKILLS: '/api/user/skills',
   LOAD_JOBS: '/api/user/jobs',
+  SEND_EMAIL: '/api/auth/is-verified/before-register',
 };
 type PassUrl = keyof typeof passUrlDict;
 
