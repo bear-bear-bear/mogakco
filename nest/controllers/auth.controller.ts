@@ -162,14 +162,14 @@ class AuthController {
    */
   // TODO: Domain ( Production ) Required
   @Get('/verify-email/before-register')
-  @Redirect(`http://localhost:3000/sign-up/required`, 307)
+  @Redirect(`http://localhost:3000/auth/sign-up/required`, 307)
   async processVerifyEmail(
     @Query()
     { id, token }: { id: string; token: string },
   ) {
     const redirection = `http://localhost:${this.configService.get(
       'FRONTEND_PORT',
-    )}/sign-up/required`;
+    )}/auth/sign-up/required`;
     const verification = await this.authService.verifyEmail(id, token);
     if (!verification) {
       return { url: `${redirection}?success=false` };
