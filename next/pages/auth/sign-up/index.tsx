@@ -27,29 +27,29 @@ const SignUpStart = () => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async ({
-  req: { headers },
-}) => {
-  log.setLevel('DEBUG');
-  try {
-    const {
-      data: { accessToken },
-    } = await refreshAccessTokenApiSSR(headers);
-    memoryStore.set(Memory.ACCESS_TOKEN, accessToken);
-    return {
-      redirect: {
-        destination: '/',
-        permanent: false,
-      },
-    };
-  } catch (err) {
-    if (err.statusCode === 401) {
-      if (isDevelopment) {
-        log.debug('비로그인 상태입니다.');
-      }
-    }
-    return { props: {} };
-  }
-};
+// export const getServerSideProps: GetServerSideProps = async ({
+//   req: { headers },
+// }) => {
+//   log.setLevel('DEBUG');
+//   try {
+//     const {
+//       data: { accessToken },
+//     } = await refreshAccessTokenApiSSR(headers);
+//     memoryStore.set(Memory.ACCESS_TOKEN, accessToken);
+//     return {
+//       redirect: {
+//         destination: '/',
+//         permanent: false,
+//       },
+//     };
+//   } catch (err) {
+//     if (err.statusCode === 401) {
+//       if (isDevelopment) {
+//         log.debug('비로그인 상태입니다.');
+//       }
+//     }
+//     return { props: {} };
+//   }
+// };
 
 export default SignUpStart;
