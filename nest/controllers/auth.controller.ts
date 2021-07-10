@@ -71,7 +71,7 @@ class AuthController {
     res.cookie('refreshToken', refreshToken, {
       ...refreshCookieOptions,
     });
-    res.setHeader('authorized', 'true');
+    res.cookie('authorized', 'true');
 
     return {
       statusCode: 200,
