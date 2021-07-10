@@ -71,6 +71,7 @@ class AuthController {
     res.cookie('refreshToken', refreshToken, {
       ...refreshCookieOptions,
     });
+    res.cookie('authorized', 'true');
 
     return {
       statusCode: 200,
@@ -90,6 +91,7 @@ class AuthController {
   async logout(@Req() req: { user: UserEntity }, @Res({ passthrough: true }) res: Response) {
     await this.authService.removeRefreshToken(req.user.id);
     res.clearCookie('refreshToken');
+    res.clearCookie('authorized');
     return {
       message: `${req.user.username} 유저가 로그아웃 되었습니다.`,
       statusCode: HttpStatus.OK,
@@ -132,6 +134,7 @@ class AuthController {
     res.cookie('refreshToken', token, {
       ...refreshOptions,
     });
+    res.cookie('authorized', 'true');
     const expiration = this.authService.getAccessTokenExpirationTime();
     return { statusCode, message, accessToken, expiration };
   }
