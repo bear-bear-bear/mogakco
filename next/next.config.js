@@ -21,8 +21,8 @@ module.exports = {
         source: '/',
         has: [
           {
-            type: 'header',
-            key: 'x-authorized',
+            type: 'cookie',
+            key: 'authorized',
             value: 'true',
           },
         ],
@@ -33,8 +33,8 @@ module.exports = {
         source: '/auth/:path*',
         has: [
           {
-            type: 'header',
-            key: 'x-authorized',
+            type: 'cookie',
+            key: 'authorized',
             value: 'true',
           },
         ],
@@ -45,8 +45,8 @@ module.exports = {
         source: '/service/:path*',
         has: [
           {
-            type: 'header',
-            key: 'x-authorized',
+            type: 'cookie',
+            key: 'authorized',
             value: 'false',
           },
         ],
