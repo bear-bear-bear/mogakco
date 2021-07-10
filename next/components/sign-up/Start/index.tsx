@@ -77,7 +77,7 @@ const Start = () => {
 
     if (landingEmail) {
       setValue('email', landingEmail as string);
-      router.push('/sign-up', undefined, { shallow: true });
+      router.push('/auth/sign-up', undefined, { shallow: true });
     }
   }, [router, setValue]);
 

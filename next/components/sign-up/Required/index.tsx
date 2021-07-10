@@ -44,7 +44,7 @@ const Required = () => {
     window.sessionStorage.setItem('username', username);
     window.sessionStorage.setItem('password', password);
 
-    router.push('/sign-up/optional');
+    router.push('/auth/sign-up/optional');
   };
 
   useIsomorphicLayoutEffect(() => {
@@ -53,7 +53,7 @@ const Required = () => {
 
   useEffect(() => {
     // optional 페이지 prefetch
-    router.prefetch('/sign-up/optional');
+    router.prefetch('/auth/sign-up/optional');
 
     // 쿼리 이메일 저장 후 해당 쿼리 삭제
     const { email } = router.query;
