@@ -46,7 +46,7 @@ const SignInForm = () => {
         memoryStore.set('accessToken', accessToken);
         localStorage.setItem('expiration', expiration);
         setLoginLoading(false);
-        router.push('/service/dashboard');
+        router.push('/service/');
       })
       .catch((err: AxiosError) => {
         setLoginLoading(false);

@@ -1,5 +1,4 @@
 import { useRef, useState, useCallback } from 'react';
-import { GetServerSideProps } from 'next';
 
 import CustomHead from '@components/common/CustomHead';
 import Container from '@components/landing/Container';
@@ -10,11 +9,7 @@ import Footer from '@components/landing/Footer';
 import ScrollTop from '@components/common/ScrollTop';
 import Button from '@components/common/Button';
 import { isDevelopment } from '@lib/enviroment';
-import { authProlongTestApi, refreshAccessTokenApiSSR } from '@lib/fetchers';
-
-export type Props = {
-  isLogin: boolean;
-};
+import { authProlongTestApi } from '@lib/fetchers';
 
 const pageProps = {
   title: '모여서 각자 코딩 - Mogakco',
@@ -23,7 +18,7 @@ const pageProps = {
   locale: 'ko_KR',
 };
 
-const Landing = ({ isLogin }: Props) => {
+const Landing = () => {
   const emailEl = useRef<HTMLInputElement>(null);
   const [isTestBtnLoading, setIsTestBtnLoading] = useState<boolean>(false);
 
@@ -36,7 +31,7 @@ const Landing = ({ isLogin }: Props) => {
   return (
     <>
       <CustomHead {...pageProps} />
-      <Header isLogin={isLogin} />
+      <Header />
       <Container>
         <ScrollTop />
         {isDevelopment && (
@@ -86,17 +81,6 @@ const Landing = ({ isLogin }: Props) => {
       <Footer />
     </>
   );
-};
-
-export const getServerSideProps: GetServerSideProps = async ({
-  req: { headers },
-}) => {
-  try {
-    await refreshAccessTokenApiSSR(headers);
-    return { props: { isLogin: true } };
-  } catch (err) {
-    return { props: { isLogin: false } };
-  }
 };
 
 export default Landing;

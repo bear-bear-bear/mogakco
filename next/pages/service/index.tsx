@@ -1,8 +1,12 @@
 import React from 'react';
+import { useRouter } from 'next/router';
 
 import CustomHead from '@components/common/CustomHead';
+import Button from '@components/common/Button';
 import Container from '@components/dashboard/Container';
 import CardLink from '@components/dashboard/CardLink';
+import { logOutApi } from '@lib/fetchers';
+import { Memory, memoryStore } from '@lib/apiClient';
 
 export const pageProps = {
   title: '대시보드 - Mogakco',
@@ -12,9 +16,25 @@ export const pageProps = {
 };
 
 const Dashboard = () => {
+  const router = useRouter();
+
+  const handleLogout = () => {
+    logOutApi()
+      .then(() => {
+        memoryStore.delete(Memory.ACCESS_TOKEN);
+        localStorage.setItem('log-out', 'true');
+        router.push('/');
+      })
+      .catch(() => router.push('/'));
+  };
+
   return (
+    // TODO: 버튼 위치 스타일 수정
     <>
       <CustomHead {...pageProps} />
+      <Button color="blue" outline onClick={handleLogout}>
+        로그아웃
+      </Button>
       <Container>
         {/* <Link href={`/service/video-chat/${id}.js`}> */}
         {/* 임시로 화상채팅 1번 룸으로 가도록 설정 */}
