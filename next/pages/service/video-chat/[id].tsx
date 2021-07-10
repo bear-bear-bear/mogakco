@@ -11,7 +11,7 @@ import devModeLog from '@lib/devModeLog';
 import apiClient, { logAxiosError, Memory, memoryStore } from '@lib/apiClient';
 import type { Error } from '@lib/apiClient';
 import { refreshAccessTokenApiSSR } from '@lib/fetchers';
-import { socketServer } from '@pages/_app';
+// import { socketServer } from '@pages/_app';
 
 const pageProps = {
   title: '화상채팅 - Mogakco',
@@ -24,12 +24,12 @@ const ChatRoom = () => {
   const router = useRouter();
   const { id } = useMemo(() => router.query, [router.query]);
 
-  useEffect(() => {
-    socketServer.emit('joinChatRoom', id);
-    socketServer.on('joinUserMessage', (clientId: string) => {
-      devModeLog(`${clientId} 유저가 접속하였다고 응답 되었음.`);
-    });
-  }, [id]);
+  // useEffect(() => {
+  //   socketServer.emit('joinChatRoom', id);
+  //   socketServer.on('joinUserMessage', (clientId: string) => {
+  //     devModeLog(`${clientId} 유저가 접속하였다고 응답 되었음.`);
+  //   });
+  // }, [id]);
 
   return (
     <>
