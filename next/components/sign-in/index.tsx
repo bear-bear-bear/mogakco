@@ -42,14 +42,11 @@ const SignInForm = () => {
   const onSubmit = (signInInfo: UnpackNestedValue<FormInputs>) => {
     setLoginLoading(true);
     logInApi(signInInfo)
-      .then(({ data: { accessToken, accessExpiredDate } }) => {
-        // TODO: 서비스 페이지로 이동하기
+      .then(({ data: { accessToken, expiration } }) => {
         memoryStore.set('accessToken', accessToken);
-        localStorage.setItem('expiration', accessExpiredDate);
-        devModeLog('로그인 성공 응답');
-        devModeLog('서비스 페이지 미구현 상태이므로 임시 경로(/)로 이동합니다');
+        localStorage.setItem('expiration', expiration);
         setLoginLoading(false);
-        router.push('/');
+        router.push('/service/dashboard');
       })
       .catch((err: AxiosError) => {
         setLoginLoading(false);
