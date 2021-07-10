@@ -91,7 +91,7 @@ class AuthController {
   async logout(@Req() req: { user: UserEntity }, @Res({ passthrough: true }) res: Response) {
     await this.authService.removeRefreshToken(req.user.id);
     res.clearCookie('refreshToken');
-    res.clearCookie('authorized', 'false');
+    res.cookie('authorized', 'false');
     return {
       message: `${req.user.username} 유저가 로그아웃 되었습니다.`,
       statusCode: HttpStatus.OK,
