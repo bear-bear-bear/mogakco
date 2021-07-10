@@ -26,14 +26,14 @@ const AuthButtons = ({ isLogin }: Props) => {
     <>
       {!isLogin && (
         <S.ButtonsWrapper>
-          <Link href="/sign-in">
+          <Link href="/auth/sign-in">
             <a>
               <Button color="black" underline>
                 로그인
               </Button>
             </a>
           </Link>
-          <Link href="/sign-up">
+          <Link href="/auth/sign-up">
             <a>
               <Button color="black" underline>
                 회원가입
