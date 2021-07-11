@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react';
+import { useContext, useEffect, useMemo } from 'react';
 import log from 'loglevel';
 import { useRouter } from 'next/router';
 import { GetServerSideProps } from 'next';
@@ -11,7 +11,7 @@ import devModeLog from '@lib/devModeLog';
 import apiClient, { logAxiosError, Memory, memoryStore } from '@lib/apiClient';
 import type { Error } from '@lib/apiClient';
 import { refreshAccessTokenApiSSR } from '@lib/fetchers';
-import { socketServer } from '@pages/_app';
+import { SocketContext } from '@pages/_app';
 
 const pageProps = {
   title: '화상채팅 - Mogakco',
@@ -23,13 +23,11 @@ const pageProps = {
 const ChatRoom = () => {
   const router = useRouter();
   const { id } = useMemo(() => router.query, [router.query]);
+  const socket = useContext(SocketContext);
 
   useEffect(() => {
-    socketServer.emit('joinChatRoom', id);
-    socketServer.on('joinUserMessage', (clientId: string) => {
-      devModeLog(`${clientId} 유저가 접속하였다고 응답 되었음.`);
-    });
-  }, [id]);
+    devModeLog('소켓 입장에 대한 이벤트를 받는 로직 배치 예정');
+  }, [id, socket]);
 
   return (
     <>
@@ -48,6 +46,10 @@ export const getServerSideProps: GetServerSideProps = async ({
 }) => {
   log.setLevel('debug');
   try {
+    if (memoryStore.has(Memory.ACCESS_TOKEN)) {
+      return { props: {} };
+    }
+
     const {
       data: { accessToken },
     } = await refreshAccessTokenApiSSR(headers);

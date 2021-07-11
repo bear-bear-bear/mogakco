@@ -23,7 +23,7 @@ const Dashboard = () => {
       .then(() => {
         memoryStore.delete(Memory.ACCESS_TOKEN);
         localStorage.setItem('log-out', 'true');
-        router.push('/');
+        router.push('/', undefined, { shallow: true });
       })
       .catch(() => router.push('/'));
   };
@@ -39,7 +39,7 @@ const Dashboard = () => {
         {/* <Link href={`/service/video-chat/${id}.js`}> */}
         {/* 임시로 화상채팅 1번 룸으로 가도록 설정 */}
         <CardLink
-          href="/service/video-chat/1.js"
+          href="/service/video-chat/1"
           svgName="video-chat.svg"
           title="화상 채팅"
           desc="모각코를 시작해요!"
