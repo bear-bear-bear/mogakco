@@ -4,7 +4,6 @@ import Fade from 'react-reveal/Fade';
 import Image from 'next/Image';
 import { Box, Flex } from '@chakra-ui/react';
 
-import useIsomorphicLayoutEffect from '@hooks/useIsomorphicLayoutEffect';
 import useInput from '@hooks/useInput';
 import type { ILeftContentBlockProps } from '@components/landing/ContentBlock';
 
@@ -19,13 +18,6 @@ const LeftContentBlock = ({
 }: ILeftContentBlockProps) => {
   const router = useRouter();
   const [email, onChangeEmail, setEmail] = useInput('');
-
-  useIsomorphicLayoutEffect(() => {
-    if (!isFirstBlock) {
-      return;
-    }
-    emailEl?.current?.focus();
-  }, [emailEl, isFirstBlock]);
 
   const toSignUp = (e: SyntheticEvent) => {
     e.preventDefault();
