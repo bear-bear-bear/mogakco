@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { UnpackNestedValue, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 
 import useUser from '@hooks/useUser';
 import Form from '@components/common/Form';
@@ -11,6 +11,7 @@ import { signInApi } from '@lib/apis';
 import { logAxiosError, memoryStore } from '@lib/apiClient';
 import type { Error } from '@lib/apiClient';
 import { isDevelopment } from '@lib/enviroment';
+import { ISignInProps } from 'typings/auth';
 
 // TODO: 회원가입 컴포넌트 스타일 그대로 갖다쓰는데, 해당 스타일 공용화 시키기
 import * as CS from '@components/sign-up/common/styles';
@@ -42,7 +43,7 @@ const SignInForm = () => {
     devModeLog('미구현 기능입니다');
   };
 
-  const onSubmit = async (signInInfo: UnpackNestedValue<FormInputs>) => {
+  const onSubmit = async (signInInfo: ISignInProps) => {
     setLoginLoading(true);
     try {
       const {
