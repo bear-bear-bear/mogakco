@@ -1,13 +1,13 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { UnpackNestedValue, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/router';
 
 import { sendEmailApi } from '@lib/apis';
 import { logAxiosError } from '@lib/apiClient';
+import type { Error } from '@lib/apiClient';
 import devModeLog from '@lib/devModeLog';
 import useIsomorphicLayoutEffect from '@hooks/useIsomorphicLayoutEffect';
 import { emailRule } from '@lib/regex';
-import Warning from '@components/common/Warning';
 import Desc from '@components/common/Desc';
 import Form from '@components/common/Form';
 import Input from '@components/common/Input';
@@ -27,42 +27,32 @@ const Start = () => {
     loading: false,
     done: false,
   });
-  const [emailTestError, setEmailTestError] = useState(false);
   const submitButtonEl = useRef<HTMLButtonElement>(null);
   const { register, handleSubmit, setValue, getValues, watch } =
     useForm<FormInputs>();
 
-  const { email: watchedEmail } = watch();
+  const { email: watchedEmail } = watch(); // 이메일 Input 컴포넌트의 X 버튼을 위한 watch
 
-  const onSubmitEmail = ({ email }: UnpackNestedValue<FormInputs>) => {
-    setEmailTestError(false);
-
-    if (email === null) {
-      return;
-    }
-
+  const onSubmitEmail = async ({ email }: FormInputs) => {
     setSendEmailState({
       loading: true,
       done: false,
     });
 
-    sendEmailApi(email)
-      .then(() => {
-        setSendEmailState({
-          loading: false,
-          done: true,
-        });
-      })
-      .catch((err) => {
-        setSendEmailState({
-          loading: false,
-          done: false,
-        });
-        logAxiosError(err);
+    try {
+      await sendEmailApi(email);
+      setSendEmailState({
+        loading: false,
+        done: true,
       });
+    } catch (error) {
+      logAxiosError(error as Error);
+      setSendEmailState({
+        loading: false,
+        done: false,
+      });
+    }
   };
-
-  const onError = () => setEmailTestError(true);
 
   const onClickSocial = () => {
     devModeLog('미구현 기능입니다.');
@@ -97,7 +87,7 @@ const Start = () => {
             </S.SocialAnchor>
           </S.SocialLoginWrapper>
           <S.DevideLine />
-          <Form action="" onSubmit={handleSubmit(onSubmitEmail, onError)}>
+          <Form action="" onSubmit={handleSubmit(onSubmitEmail)}>
             <InputWrapper>
               <Label htmlFor="email" direction="bottom">
                 이메일
@@ -110,10 +100,12 @@ const Start = () => {
                 isEmail={Boolean(watchedEmail)}
                 resetEmail={() => setValue('email', '')}
                 spellCheck="false"
-                {...register('email', { pattern: emailRule })}
+                {...register('email', {
+                  pattern: emailRule,
+                  required: true,
+                })}
               />
             </InputWrapper>
-            {emailTestError && <Warning>정확한 이메일을 입력해주세요!</Warning>}
             <S.SubmitButton
               ref={submitButtonEl}
               type="submit"
