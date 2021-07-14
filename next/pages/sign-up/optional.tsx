@@ -36,7 +36,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
   // TODO: API들 모듈로 분리
   const getSkillsAPI = '/api/user/skills';
   const getJobsAPI = '/api/user/jobs';
-  const optionalInfoListFetcher = (url: string) =>
+  const optionalInfoListApi = (url: string) =>
     apiClient
       .get<IOptionalProps[] | null>(url)
       .then((res) => res.data)
@@ -46,8 +46,8 @@ export const getServerSideProps: GetServerSideProps = async () => {
       });
 
   const [skills, jobs] = await Promise.all([
-    optionalInfoListFetcher(getSkillsAPI),
-    optionalInfoListFetcher(getJobsAPI),
+    optionalInfoListApi(getSkillsAPI),
+    optionalInfoListApi(getJobsAPI),
   ]).then((fetchResults) => fetchResults);
 
   return {

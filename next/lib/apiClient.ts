@@ -1,7 +1,7 @@
 import axios, { AxiosError, AxiosRequestConfig } from 'axios';
 import log from 'loglevel';
 import devModeLog from '@lib/devModeLog';
-import { refreshAccessTokenApi } from '@lib/fetchers';
+import { refreshAccessTokenApi } from '@lib/apis';
 import type { IGeneralServerResponse } from 'typings/common';
 
 export const memoryStore = new Map();

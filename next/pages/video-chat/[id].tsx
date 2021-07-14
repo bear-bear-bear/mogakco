@@ -10,7 +10,7 @@ import ChatSection from '@components/video-chat/ChatSection';
 import devModeLog from '@lib/devModeLog';
 import apiClient, { logAxiosError, Memory, memoryStore } from '@lib/apiClient';
 import type { Error } from '@lib/apiClient';
-import { refreshAccessTokenApiSSR } from '@lib/fetchers';
+import { refreshAccessTokenApiSSR } from '@lib/apis';
 import { socketServer } from '@pages/_app';
 
 const pageProps = {

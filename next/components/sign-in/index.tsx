@@ -7,7 +7,7 @@ import Input from '@components/common/Input';
 import InputWrapper from '@components/common/InputWrapper';
 import Label from '@components/common/Label';
 import devModeLog from '@lib/devModeLog';
-import { logInApi } from '@lib/fetchers';
+import { signInApi } from '@lib/apis';
 import { logAxiosError, memoryStore } from '@lib/apiClient';
 import type { Error } from '@lib/apiClient';
 import { isDevelopment } from '@lib/enviroment';
@@ -47,7 +47,7 @@ const SignInForm = () => {
     try {
       const {
         data: { user, accessToken, expiration },
-      } = await logInApi(signInInfo);
+      } = await signInApi(signInInfo);
       memoryStore.set('accessToken', accessToken);
       localStorage.setItem('expiration', expiration);
       mutateUser(user);

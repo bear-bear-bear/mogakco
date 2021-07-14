@@ -2,7 +2,7 @@ import React, { useCallback, useState, SyntheticEvent } from 'react';
 import { OptionsType } from 'react-select';
 import { useRouter } from 'next/router';
 
-import { signUpApi } from '@lib/fetchers';
+import { signUpApi } from '@lib/apis';
 import { logAxiosError, Memory, memoryStore } from '@lib/apiClient';
 import getSessionStorageValues from '@lib/getSessionStorageValues';
 import Select from '@components/common/Select';
