@@ -8,7 +8,7 @@ import InputWrapper from '@components/common/InputWrapper';
 import Label from '@components/common/Label';
 import devModeLog from '@lib/devModeLog';
 import { signInApi } from '@lib/apis';
-import { logAxiosError, memoryStore } from '@lib/apiClient';
+import { logAxiosError, Memory, memoryStore } from '@lib/apiClient';
 import type { Error } from '@lib/apiClient';
 import { isDevelopment } from '@lib/enviroment';
 import { ISignInProps } from 'typings/auth';
@@ -23,10 +23,7 @@ export type FormInputs = {
 };
 
 const SignInForm = () => {
-  const { mutateUser } = useUser({
-    redirectTo: '/dashboard',
-    redirectIfFound: true,
-  });
+  const { mutateUser } = useUser();
   const [signInLoading, setLoginLoading] = useState<boolean>(false);
   const [isVisiblePassword, setIsVisiblePassword] = useState<boolean>(false);
   const onClickEye = () => setIsVisiblePassword((prev) => !prev);
@@ -45,18 +42,19 @@ const SignInForm = () => {
 
   const onSubmit = async (signInInfo: ISignInProps) => {
     setLoginLoading(true);
+
     try {
       const {
         data: { user, accessToken, expiration },
       } = await signInApi(signInInfo);
-      memoryStore.set('accessToken', accessToken);
+      memoryStore.set(Memory.ACCESS_TOKEN, accessToken);
       localStorage.setItem('expiration', expiration);
       mutateUser(user);
-      setLoginLoading(false);
     } catch (error) {
       logAxiosError(error as Error);
-      setLoginLoading(false);
     }
+
+    setLoginLoading(false);
   };
 
   return (

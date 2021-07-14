@@ -1,10 +1,11 @@
 import React, { useCallback, useState, SyntheticEvent } from 'react';
 import { OptionsType } from 'react-select';
-import { useRouter } from 'next/router';
 
+import useUser from '@hooks/useUser';
 import { signUpApi } from '@lib/apis';
 import type { ISignUpProps } from 'typings/auth';
 import { logAxiosError, Memory, memoryStore } from '@lib/apiClient';
+import type { Error } from '@lib/apiClient';
 import getSessionStorageValues from '@lib/getSessionStorageValues';
 import Select from '@components/common/Select';
 import Desc from '@components/common/Desc';
@@ -19,7 +20,7 @@ import * as CS from '../common/styles';
 const SKILLS_LIMIT = 5;
 
 const Optional = ({ skillOptions, jobOptions }: IOptionalPageProps) => {
-  const router = useRouter();
+  const { mutateUser } = useUser();
   const [signUpLoading, setSignUpLoading] = useState<boolean>(false);
   const [isShowSkillOptions, setIsShowSkillOptions] = useState<boolean>(true);
   const [skillIds, setSkillIds] = useState<number[] | null>(null);
@@ -34,7 +35,7 @@ const Optional = ({ skillOptions, jobOptions }: IOptionalPageProps) => {
 
   const onChangeJob = (job: SelectProps) => setJobId(job.value);
 
-  const onSubmit = (e: SyntheticEvent) => {
+  const onSubmit = async (e: SyntheticEvent) => {
     e.preventDefault();
     setSignUpLoading(true);
 
@@ -44,18 +45,19 @@ const Optional = ({ skillOptions, jobOptions }: IOptionalPageProps) => {
       job: jobId,
     } as ISignUpProps;
 
-    signUpApi(signUpInfo)
-      .then(({ data: { accessToken, expiration } }) => {
-        setSignUpLoading(false);
-        localStorage.setItem('expiration', expiration);
-        memoryStore.set(Memory.ACCESS_TOKEN, accessToken);
-        window.sessionStorage.clear(); // 회원가입 과정에서 사용자가 입력했던 정보 삭제
-        router.replace('/dashboard');
-      })
-      .catch((err) => {
-        setSignUpLoading(false);
-        logAxiosError(err);
-      });
+    try {
+      const {
+        data: { user, accessToken, expiration },
+      } = await signUpApi(signUpInfo);
+      memoryStore.set(Memory.ACCESS_TOKEN, accessToken);
+      localStorage.setItem('expiration', expiration);
+      mutateUser(user);
+      window.sessionStorage.clear(); // 회원가입 과정에서 사용자가 입력했던 정보 삭제
+    } catch (error) {
+      logAxiosError(error as Error);
+    }
+
+    setSignUpLoading(false);
   };
 
   return (
