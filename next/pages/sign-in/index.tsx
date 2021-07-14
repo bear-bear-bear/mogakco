@@ -6,7 +6,7 @@ import AuthContainer from '@components/common/AuthContainer';
 import ProgressBar from '@components/sign-up/ProgressBar';
 import SignInForm from '@components/sign-in';
 import { Memory, memoryStore } from '@lib/apiClient';
-import { refreshAccessTokenApiSSR } from '@lib/fetchers';
+import { refreshAccessTokenApiSSR } from '@lib/apis';
 import { isDevelopment } from '@lib/enviroment';
 
 export const pageProps = {

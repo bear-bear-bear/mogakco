@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { UnpackNestedValue, useForm } from 'react-hook-form';
 import { useRouter } from 'next/router';
 
-import { sendEmailApi } from '@lib/fetchers';
+import { sendEmailApi } from '@lib/apis';
 import { logAxiosError } from '@lib/apiClient';
 import devModeLog from '@lib/devModeLog';
 import useIsomorphicLayoutEffect from '@hooks/useIsomorphicLayoutEffect';

@@ -7,7 +7,7 @@ import Input from '@components/common/Input';
 import InputWrapper from '@components/common/InputWrapper';
 import Label from '@components/common/Label';
 import devModeLog from '@lib/devModeLog';
-import { signInApi } from '@lib/fetchers';
+import { signInApi } from '@lib/apis';
 import { logAxiosError, memoryStore } from '@lib/apiClient';
 import { isDevelopment } from '@lib/enviroment';
 import { AxiosError } from 'axios';

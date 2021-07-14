@@ -5,7 +5,7 @@ import ProgressBar from '@components/sign-up/ProgressBar';
 import Start from '@components/sign-up/Start';
 import { GetServerSideProps } from 'next';
 import log from 'loglevel';
-import { refreshAccessTokenApiSSR } from '@lib/fetchers';
+import { refreshAccessTokenApiSSR } from '@lib/apis';
 import { Memory, memoryStore } from '@lib/apiClient';
 import { isDevelopment } from '@lib/enviroment';
 

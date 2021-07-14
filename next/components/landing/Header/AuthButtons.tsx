@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 
 import Button from '@components/common/Button';
-import { signOutApi } from '@lib/fetchers';
+import { signOutApi } from '@lib/apis';
 import { Memory, memoryStore } from '@lib/apiClient';
 import type { Props } from '@pages/index';
 
