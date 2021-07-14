@@ -1,7 +1,6 @@
-import { useEffect, useMemo } from 'react';
-import log from 'loglevel';
-import { useRouter } from 'next/router';
+import { useEffect } from 'react';
 import { GetServerSideProps } from 'next';
+import { useRouter } from 'next/router';
 
 import CustomHead from '@components/common/CustomHead';
 import Container from '@components/video-chat/Container';
@@ -11,7 +10,10 @@ import devModeLog from '@lib/devModeLog';
 import apiClient, { logAxiosError, Memory, memoryStore } from '@lib/apiClient';
 import type { Error } from '@lib/apiClient';
 import { refreshAccessTokenApiSSR } from '@lib/fetchers';
-import { socketServer } from '@pages/_app';
+import useSocket from '@hooks/useSocket';
+
+import { IUserProps } from 'typings/auth';
+import { IJoinChatRoomProps } from '../../../types/chat';
 
 const pageProps = {
   title: '화상채팅 - Mogakco',
@@ -20,16 +22,28 @@ const pageProps = {
   locale: 'ko_KR',
 };
 
-const ChatRoom = () => {
+type Props = {
+  user?: IUserProps;
+};
+
+const ChatRoom = ({ user }: Props) => {
   const router = useRouter();
-  const { id } = useMemo(() => router.query, [router.query]);
+  const socket = useSocket();
+  console.log({ socket });
 
   useEffect(() => {
-    socketServer.emit('joinChatRoom', id);
-    socketServer.on('joinUserMessage', (clientId: string) => {
-      devModeLog(`${clientId} 유저가 접속하였다고 응답 되었음.`);
-    });
-  }, [id]);
+    if (user) {
+      const props: IJoinChatRoomProps = {
+        userId: user.id,
+        roomId: String(router.query.id),
+      };
+
+      socket?.emit('join-chat-room', props);
+    }
+    socket?.emit('events', { name: 'Nest' }, (data: string) =>
+      console.log(data),
+    );
+  }, [router.query.id, socket, user]);
 
   return (
     <>
@@ -46,22 +60,19 @@ export const getServerSideProps: GetServerSideProps = async ({
   req: { headers },
   query: { id },
 }) => {
-  log.setLevel('debug');
   try {
     const {
-      data: { accessToken },
+      data: { accessToken, user },
     } = await refreshAccessTokenApiSSR(headers);
     memoryStore.set(Memory.ACCESS_TOKEN, accessToken);
     devModeLog('서버사이드에서 로그인이 연장처리 되었습니다.');
 
-    const { data } = await apiClient.get<{
+    await apiClient.get<{
       message: boolean;
       statusCode: number;
     }>(`/api/chat/available/${id}`);
-    devModeLog(`Server Response Message: ${data.message}`);
-    devModeLog(`Response Status Code: ${data.statusCode}`);
 
-    return { props: {} };
+    return { props: { user } };
   } catch (error) {
     logAxiosError(error as Error);
     return {
