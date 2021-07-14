@@ -7,7 +7,7 @@ import Input from '@components/common/Input';
 import InputWrapper from '@components/common/InputWrapper';
 import Label from '@components/common/Label';
 import devModeLog from '@lib/devModeLog';
-import { logInApi } from '@lib/fetchers';
+import { signInApi } from '@lib/apis';
 import { logAxiosError, memoryStore } from '@lib/apiClient';
 import { isDevelopment } from '@lib/enviroment';
 import { AxiosError } from 'axios';
@@ -41,7 +41,7 @@ const SignInForm = () => {
 
   const onSubmit = (signInInfo: UnpackNestedValue<FormInputs>) => {
     setLoginLoading(true);
-    logInApi(signInInfo)
+    signInApi(signInInfo)
       .then(({ data: { accessToken, accessExpiredDate } }) => {
         // TODO: 서비스 페이지로 이동하기
         memoryStore.set('accessToken', accessToken);

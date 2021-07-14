@@ -10,7 +10,7 @@ import Footer from '@components/landing/Footer';
 import ScrollTop from '@components/common/ScrollTop';
 import Button from '@components/common/Button';
 import { isDevelopment } from '@lib/enviroment';
-import { authProlongTestApi, refreshAccessTokenApiSSR } from '@lib/fetchers';
+import { authProlongTestApi, refreshAccessTokenApiSSR } from '@lib/apis';
 
 export type Props = {
   isLogin: boolean;
