@@ -40,7 +40,7 @@ class AuthService {
     if (!isPasswordMatch) {
       throw new UnauthorizedException('비밀번호가 틀렸습니다.');
     }
-    const { password: notUsingProp, ...returnProps } = user;
+    const { password: notUsingProp1, hashedRefreshToken: notUsingProps2, ...returnProps } = user;
     return returnProps;
   }
 
@@ -212,7 +212,7 @@ class AuthService {
       throw new HttpException('직업 정보가 일치하지 않습니다.', HttpStatus.BAD_REQUEST);
     }
 
-    const { id } = await this.userRepository.createUserOne({
+    const user = await this.userRepository.createUserOne({
       username,
       password: await makeHash(password),
       email,
@@ -220,6 +220,8 @@ class AuthService {
       job: jobEntity ? jobEntity.id : null,
     } as CreateUserDto);
 
+    const { id } = user;
+    const { password: notUsingProps1, hashedRefreshToken: notUsingProps2, ...userProps } = user;
     const accessToken = this.getAccessToken({
       id,
       username,
@@ -231,6 +233,7 @@ class AuthService {
       statusCode: 201,
       accessToken,
       refreshTokenCookieSet,
+      user: userProps,
     };
   }
 

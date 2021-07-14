@@ -124,16 +124,15 @@ class AuthController {
    */
   @UseGuards(NonAuthGuard)
   @Post()
-  async join(@Body(ParseJoinPipe) user: CreateUserDto, @Res({ passthrough: true }) res: Response) {
-    const { accessToken, statusCode, message, refreshTokenCookieSet } = await this.authService.join(
-      user,
-    );
+  async join(@Body(ParseJoinPipe) info: CreateUserDto, @Res({ passthrough: true }) res: Response) {
+    const { accessToken, statusCode, message, refreshTokenCookieSet, user } =
+      await this.authService.join(info);
     const { token, ...refreshOptions } = refreshTokenCookieSet;
     res.cookie('refreshToken', token, {
       ...refreshOptions,
     });
     const expiration = this.authService.getAccessTokenExpirationTime();
-    return { statusCode, message, accessToken, expiration };
+    return { statusCode, message, accessToken, expiration, user };
   }
 
   /**
