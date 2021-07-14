@@ -1,13 +1,13 @@
 import React from 'react';
-import { GetServerSideProps } from 'next';
-import log from 'loglevel';
+// import { GetServerSideProps } from 'next';
+// import log from 'loglevel';
 import CustomHead from '@components/common/CustomHead';
 import AuthContainer from '@components/common/AuthContainer';
 import ProgressBar from '@components/sign-up/ProgressBar';
 import SignInForm from '@components/sign-in';
-import { Memory, memoryStore } from '@lib/apiClient';
-import { refreshAccessTokenApiSSR } from '@lib/fetchers';
-import { isDevelopment } from '@lib/enviroment';
+// import { Memory, memoryStore } from '@lib/apiClient';
+// import { refreshAccessTokenApiSSR } from '@lib/fetchers';
+// import { isDevelopment } from '@lib/enviroment';
 
 export const pageProps = {
   title: '로그인 - Mogakco',
@@ -27,29 +27,29 @@ const SignIn = () => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async ({
-  req: { headers },
-}) => {
-  log.setLevel('DEBUG');
-  try {
-    const {
-      data: { accessToken },
-    } = await refreshAccessTokenApiSSR(headers);
-    memoryStore.set(Memory.ACCESS_TOKEN, accessToken);
-    return {
-      redirect: {
-        destination: '/',
-        permanent: false,
-      },
-    };
-  } catch (err) {
-    if (err.statusCode === 401) {
-      if (isDevelopment) {
-        log.debug('비로그인 상태입니다.');
-      }
-    }
-    return { props: {} };
-  }
-};
+// export const getServerSideProps: GetServerSideProps = async ({
+//   req: { headers },
+// }) => {
+//   log.setLevel('DEBUG');
+//   try {
+//     const {
+//       data: { accessToken },
+//     } = await refreshAccessTokenApiSSR(headers);
+//     memoryStore.set(Memory.ACCESS_TOKEN, accessToken);
+//     return {
+//       redirect: {
+//         destination: '/',
+//         permanent: false,
+//       },
+//     };
+//   } catch (err) {
+//     if (err.statusCode === 401) {
+//       if (isDevelopment) {
+//         log.debug('비로그인 상태입니다.');
+//       }
+//     }
+//     return { props: {} };
+//   }
+// };
 
 export default SignIn;
