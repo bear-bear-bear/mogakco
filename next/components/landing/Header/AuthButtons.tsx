@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 
 import Button from '@components/common/Button';
-import { logOutApi } from '@lib/fetchers';
+import { signOutApi } from '@lib/fetchers';
 import { Memory, memoryStore } from '@lib/apiClient';
 import type { Props } from '@pages/index';
 
@@ -13,7 +13,7 @@ const AuthButtons = ({ isLogin }: Props) => {
   const router = useRouter();
 
   const handleLogout = () => {
-    logOutApi()
+    signOutApi()
       .then(() => {
         memoryStore.delete(Memory.ACCESS_TOKEN);
         localStorage.setItem('log-out', 'true');

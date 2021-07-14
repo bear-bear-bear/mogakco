@@ -16,11 +16,11 @@ import { IncomingHttpHeaders } from 'http';
 // user
 // ********************************************************************************************************************
 // 로그인
-export const logInApi = (data: ILoginProps) =>
+export const signInApi = (data: ILoginProps) =>
   apiClient.post<ILoginSuccessResponse>('/api/auth/login', data);
 
 // 로그아웃
-export const logOutApi = () =>
+export const signOutApi = () =>
   apiClient.post<IGeneralServerResponse>('/api/auth/logout');
 
 // 로그인 연장
