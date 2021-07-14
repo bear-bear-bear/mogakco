@@ -26,20 +26,32 @@ type Props = {
   user?: IUserProps;
 };
 
+const socketCache = new Map<string, string>();
+
 const ChatRoom = ({ user }: Props) => {
   const router = useRouter();
   const socket = useSocket();
   console.log({ socket });
 
   useEffect(() => {
-    if (user) {
-      const props: IJoinChatRoomProps = {
-        userId: user.id,
-        roomId: String(router.query.id),
-      };
+    const socketNameSpace = socket?.nsp ?? 'initial';
+    console.log({ socketNameSpace });
+    console.log({ socketCache });
+    const isCached = socketCache.has(socketNameSpace);
+    console.log({ isCached });
+    if (!isCached) {
+      if (user) {
+        console.log('join-chat-room 이벤트');
+        const props: IJoinChatRoomProps = {
+          userId: user.id,
+          roomId: String(router.query.id),
+        };
 
-      socket?.emit('join-chat-room', props);
+        socket?.emit('join-chat-room', props);
+      }
     }
+    socketCache.set(socketNameSpace, socketNameSpace);
+
     socket?.emit('events', { name: 'Nest' }, (data: string) =>
       console.log(data),
     );
