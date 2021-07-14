@@ -10,11 +10,13 @@ import type {
 } from 'typings/auth';
 import { IncomingHttpHeaders } from 'http';
 
-// FIXME: swr fetcher 형식에 맞게 변경하기
-
 // ********************************************************************************************************************
 // user
 // ********************************************************************************************************************
+// 회원가입
+export const signUpApi = (data: ISignUpUserProps) =>
+  apiClient.post<ISignUpResponse>('/api/auth', data);
+
 // 로그인
 export const signInApi = (data: ILoginProps) =>
   apiClient.post<ILoginSuccessResponse>('/api/auth/login', data);
@@ -50,22 +52,19 @@ export const authProlongTestApi = () =>
 // sign-up
 // ********************************************************************************************************************
 // 검증 이메일 전송
-export const sendEmailFetcher = (email: string) =>
+export const sendEmailApi = (email: string) =>
   apiClient.post<IGeneralServerResponse>(
     '/api/auth/send-token/before-register',
     { email },
   );
 // 이메일 검증에 성공시 나타나는 쿼리의 이메일에 대해 다시 한 번 검증
-export const verifyEmailFetcher = (email: string) =>
+export const verifyEmailApi = (email: string) =>
   apiClient.get<IGeneralServerResponse>(
     `/api/auth/is-verified/before-register?email=${email}`,
   );
 // 개발 분야 목록 불러오기
-export const loadSkillsFetcher = () =>
+export const loadSkillsApi = () =>
   apiClient.get<IOptionalProps>(`/api/user/skills`);
 // 직업 목록 불러오기
-export const loadJobsFetcher = () =>
+export const loadJobsApi = () =>
   apiClient.get<IOptionalProps>(`/api/user/jobs`);
-// 회원가입
-export const signUpApi = (data: ISignUpUserProps) =>
-  apiClient.post<ISignUpResponse>('/api/auth', data);

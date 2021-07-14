@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { UnpackNestedValue, useForm } from 'react-hook-form';
 import { useRouter } from 'next/router';
 
-import { sendEmailFetcher } from '@lib/fetchers';
+import { sendEmailApi } from '@lib/fetchers';
 import { logAxiosError } from '@lib/apiClient';
 import devModeLog from '@lib/devModeLog';
 import useIsomorphicLayoutEffect from '@hooks/useIsomorphicLayoutEffect';
@@ -46,7 +46,7 @@ const Start = () => {
       done: false,
     });
 
-    sendEmailFetcher(email)
+    sendEmailApi(email)
       .then(() => {
         setSendEmailState({
           loading: false,
