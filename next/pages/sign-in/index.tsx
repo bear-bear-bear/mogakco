@@ -1,6 +1,8 @@
 import React from 'react';
 // import { GetServerSideProps } from 'next';
 // import log from 'loglevel';
+
+import useUser from '@hooks/useUser';
 import CustomHead from '@components/common/CustomHead';
 import AuthContainer from '@components/common/AuthContainer';
 import ProgressBar from '@components/sign-up/ProgressBar';
@@ -17,6 +19,12 @@ export const pageProps = {
 };
 
 const SignIn = () => {
+  const { user } = useUser({
+    redirectTo: '/dashboard',
+    redirectIfFound: true,
+  });
+
+  if (user) return null;
   return (
     <>
       <CustomHead {...pageProps} />
