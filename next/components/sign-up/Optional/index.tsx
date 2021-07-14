@@ -3,6 +3,7 @@ import { OptionsType } from 'react-select';
 import { useRouter } from 'next/router';
 
 import { signUpApi } from '@lib/apis';
+import type { ISignUpProps } from 'typings/auth';
 import { logAxiosError, Memory, memoryStore } from '@lib/apiClient';
 import getSessionStorageValues from '@lib/getSessionStorageValues';
 import Select from '@components/common/Select';
@@ -37,18 +38,13 @@ const Optional = ({ skillOptions, jobOptions }: IOptionalPageProps) => {
     e.preventDefault();
     setSignUpLoading(true);
 
-    const { email, username, password } = getSessionStorageValues(
-      'email',
-      'username',
-      'password',
-    );
-    signUpApi({
-      email,
-      username,
-      password,
+    const signUpInfo = {
+      ...getSessionStorageValues('email', 'username', 'password'),
       skills: skillIds,
       job: jobId,
-    })
+    } as ISignUpProps;
+
+    signUpApi(signUpInfo)
       .then(({ data: { accessToken, expiration } }) => {
         setSignUpLoading(false);
         localStorage.setItem('expiration', expiration);

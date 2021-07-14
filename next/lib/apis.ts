@@ -1,12 +1,11 @@
 import apiClient from '@lib/apiClient';
 import type { IGeneralServerResponse } from 'typings/common';
 import type {
-  ILoginProps,
-  ILoginSuccessResponse,
+  ISignInProps,
+  ISignUpProps,
+  IAuthSuccessResponse,
   IOptionalProps,
   IProlongTokenProps,
-  ISignUpResponse,
-  ISignUpUserProps,
 } from 'typings/auth';
 import { IncomingHttpHeaders } from 'http';
 
@@ -14,12 +13,12 @@ import { IncomingHttpHeaders } from 'http';
 // user
 // ********************************************************************************************************************
 // 회원가입
-export const signUpApi = (data: ISignUpUserProps) =>
-  apiClient.post<ISignUpResponse>('/api/auth', data);
+export const signUpApi = (data: ISignUpProps) =>
+  apiClient.post<IAuthSuccessResponse>('/api/auth', data);
 
 // 로그인
-export const signInApi = (data: ILoginProps) =>
-  apiClient.post<ILoginSuccessResponse>('/api/auth/login', data);
+export const signInApi = (data: ISignInProps) =>
+  apiClient.post<IAuthSuccessResponse>('/api/auth/login', data);
 
 // 로그아웃
 export const signOutApi = () =>
