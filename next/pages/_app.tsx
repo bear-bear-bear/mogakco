@@ -11,21 +11,21 @@ import { memoryStorage, ACCESS_TOKEN } from '@lib/token';
  * @url SWR Options Description https://swr.vercel.app/docs/options
  */
 const App = ({ Component, pageProps }: AppProps) => {
-  /**
-   * @desc 다른 페이지에서 로그아웃 할 시 감지하여 AccessToken 을 지워버립니다.
-   */
-  useEffect(() => {
-    const detectLogOut = () => {
-      const logOutSignal = localStorage.getItem('log-out');
-      if (logOutSignal === 'true') {
-        memoryStorage.delete(ACCESS_TOKEN);
-      }
-      localStorage.removeItem('log-out');
-    };
+  // /**
+  //  * @desc 다른 페이지에서 로그아웃 할 시 감지하여 AccessToken 을 지워버립니다.
+  //  */
+  // useEffect(() => {
+  //   const detectLogOut = () => {
+  //     const logOutSignal = localStorage.getItem('log-out');
+  //     if (logOutSignal === 'true') {
+  //       memoryStorage.delete(ACCESS_TOKEN);
+  //     }
+  //     localStorage.removeItem('log-out');
+  //   };
 
-    window.addEventListener('storage', detectLogOut);
-    return () => window.removeEventListener('storage', detectLogOut);
-  }, []);
+  //   window.addEventListener('storage', detectLogOut);
+  //   return () => window.removeEventListener('storage', detectLogOut);
+  // }, []);
 
   return (
     <SWRConfig

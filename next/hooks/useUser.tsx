@@ -4,7 +4,7 @@ import useSWR from 'swr';
 import type { SWRConfiguration } from 'swr';
 
 import fetcher from '@lib/fetcher';
-import { memoryStorage, ACCESS_TOKEN, setToken } from '@lib/token';
+import { memoryStorage, ACCESS_TOKEN, setToken, deleteToken } from '@lib/token';
 import type {
   IUserGetSuccessResponse,
   IUserGetFailureResponse,
@@ -51,11 +51,8 @@ export default function useUser({
   );
 
   useEffect(() => {
-    console.log({ redirectTo, redirectIfFound, user });
-
-    // 리디렉트가 필요하지 않다면 그냥 return (예: 이미 /dashboard에 있음)
     // 사용자 데이터가 아직 존재하지 않으면(패치 진행 중 일때 등) 아직 아무것도 하지 않음
-    if (!redirectTo || !user) return;
+    if (!user) return;
 
     // accessToken이 유효하지 않아 refeshToken으로 user정보를 갱신한 경우
     // 동봉되어 온 accessToken과 expiration을 세팅
@@ -63,6 +60,20 @@ export default function useUser({
     if (accessToken && expiration) {
       setToken({ accessToken, expiration });
     }
+
+    // swr로 검증 결과 사용자가 없을 땐, 로그아웃 처리 (다른 탭과 동기화)
+    // user.isLoggedIn===false 라는건 swr에서 보낸 요청에서 access와 refresh 두 토큰 모두 무효하다는게 검증되었단 뜻입니다.
+    if (user.isLoggedIn === false) {
+      deleteToken();
+    }
+  }, [user]);
+
+  useEffect(() => {
+    console.log({ redirectTo, redirectIfFound, user });
+
+    // 리디렉트가 필요하지 않다면 그냥 return (예: 이미 /dashboard에 있음)
+    // 사용자 데이터가 아직 존재하지 않으면(패치 진행 중 일때 등) 아직 아무것도 하지 않음
+    if (!redirectTo || !user) return;
 
     if (
       // redirectTo가 설정되어 있을 시, 사용자가 없을 때 리디렉션
