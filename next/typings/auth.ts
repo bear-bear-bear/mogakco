@@ -40,6 +40,20 @@ export interface IUserProps {
 }
 
 /**
+ * 토큰으로 유저 정보를 요청했을 떄의 성공 응답
+ */
+export interface IUserGetSuccessResponse extends IUserProps {
+  isLoggedIn: true;
+}
+
+/**
+ * 토큰으로 유저 정보를 요청했을 떄의 실패 응답
+ */
+export interface IUserGetFailureResponse {
+  isLoggedIn: false;
+}
+
+/**
  * 회원가입 optional 페이지에서 서버로부터 받는 선택 옵션들의 타입
  */
 export interface IOptionalProps {
