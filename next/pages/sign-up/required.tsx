@@ -14,7 +14,7 @@ const SignUpRequired = () => {
     redirectIfFound: true,
   });
 
-  if (user) return null;
+  if (user?.isLoggedIn) return null;
   return (
     <>
       <CustomHead {...pageProps} />

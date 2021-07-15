@@ -3,7 +3,7 @@ import { ChakraProvider } from '@chakra-ui/react';
 import GlobalStyles, { customGlobalStyles } from '@components/globalStyles';
 import { SWRConfig } from 'swr';
 import { useEffect } from 'react';
-import { Memory, memoryStore } from '@lib/apiClient';
+import { memoryStorage, ACCESS_TOKEN } from '@lib/token';
 
 // export const END_POINT = 'http://localhost:8001/chat';
 
@@ -18,7 +18,7 @@ const App = ({ Component, pageProps }: AppProps) => {
     const detectLogOut = () => {
       const logOutSignal = localStorage.getItem('log-out');
       if (logOutSignal === 'true') {
-        memoryStore.delete(Memory.ACCESS_TOKEN);
+        memoryStorage.delete(ACCESS_TOKEN);
       }
       localStorage.removeItem('log-out');
     };

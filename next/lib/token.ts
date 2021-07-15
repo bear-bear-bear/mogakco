@@ -13,14 +13,13 @@ export const EXPIRATION = 'expiration';
 
 /**
  * @decs
- * 로그인, 회원가입 성공 시의 응답을 인자로 받아 그 안의 액세스 토큰과 expiration을 사전 합의된 위치에 세팅.
+ * 로그인, 회원가입 성공 시의 응답 중 { accessToken, expiration }을 인자로 받아 사전 합의된 위치에 세팅.
  * 리프레쉬 토큰은 서버단에서 쿠키에 자동으로 세팅해줌을 인지할 것
- * ---
- * @example
- * setToken(await loginApi(info));
  */
-export const setToken = (authSuccessResponse: IAuthSuccessResponse) => {
-  const { accessToken, expiration } = authSuccessResponse;
+export const setToken = ({
+  accessToken,
+  expiration,
+}: Pick<IAuthSuccessResponse, 'accessToken' | 'expiration'>) => {
   memoryStorage.set(ACCESS_TOKEN, accessToken);
   localStorage.setItem(EXPIRATION, expiration);
 };

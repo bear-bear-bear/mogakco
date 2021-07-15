@@ -4,7 +4,6 @@ import { useRouter } from 'next/router';
 
 import { sendEmailApi } from '@lib/apis';
 import { logAxiosError } from '@lib/apiClient';
-import type { Error } from '@lib/apiClient';
 import devModeLog from '@lib/devModeLog';
 import useIsomorphicLayoutEffect from '@hooks/useIsomorphicLayoutEffect';
 import { emailRule } from '@lib/regex';
@@ -13,6 +12,7 @@ import Form from '@components/common/Form';
 import Input from '@components/common/Input';
 import InputWrapper from '@components/common/InputWrapper';
 import Label from '@components/common/Label';
+import type { GeneralAxiosError } from 'typings/common';
 
 import * as CS from '../common/styles';
 import * as S from './style';
@@ -46,7 +46,7 @@ const Start = () => {
         done: true,
       });
     } catch (error) {
-      logAxiosError(error as Error);
+      logAxiosError(error as GeneralAxiosError);
       setSendEmailState({
         loading: false,
         done: false,

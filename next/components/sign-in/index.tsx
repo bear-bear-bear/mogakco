@@ -8,14 +8,15 @@ import InputWrapper from '@components/common/InputWrapper';
 import Label from '@components/common/Label';
 import devModeLog from '@lib/devModeLog';
 import { signInApi } from '@lib/apis';
-import { logAxiosError, Memory, memoryStore } from '@lib/apiClient';
-import type { Error } from '@lib/apiClient';
+import { setToken } from '@lib/token';
 import { isDevelopment } from '@lib/enviroment';
-import { ISignInProps } from 'typings/auth';
+import type { ISignInProps } from 'typings/auth';
+import type { GeneralAxiosError } from 'typings/common';
 
 // TODO: 회원가입 컴포넌트 스타일 그대로 갖다쓰는데, 해당 스타일 공용화 시키기
 import * as CS from '@components/sign-up/common/styles';
 import * as S from '@components/sign-up/Start/style';
+import { logAxiosError } from '@lib/apiClient';
 
 export type FormInputs = {
   email: string;
@@ -47,11 +48,13 @@ const SignInForm = () => {
       const {
         data: { user, accessToken, expiration },
       } = await signInApi(signInInfo);
-      memoryStore.set(Memory.ACCESS_TOKEN, accessToken);
-      localStorage.setItem('expiration', expiration);
-      mutateUser(user);
+      mutateUser({
+        ...user,
+        isLoggedIn: true,
+      });
+      setToken({ accessToken, expiration });
     } catch (error) {
-      logAxiosError(error as Error);
+      logAxiosError(error as GeneralAxiosError);
     }
 
     setLoginLoading(false);

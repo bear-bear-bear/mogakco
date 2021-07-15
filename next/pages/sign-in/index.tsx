@@ -7,7 +7,7 @@ import CustomHead from '@components/common/CustomHead';
 import AuthContainer from '@components/common/AuthContainer';
 import ProgressBar from '@components/sign-up/ProgressBar';
 import SignInForm from '@components/sign-in';
-// import { Memory, memoryStore } from '@lib/apiClient';
+// import { memoryStorage, ACCESS_TOKEN } from '@lib/token';
 // import { refreshAccessTokenApiSSR } from '@lib/apis';
 // import { isDevelopment } from '@lib/enviroment';
 
@@ -24,7 +24,7 @@ const SignIn = () => {
     redirectIfFound: true,
   });
 
-  if (user) return null;
+  if (user?.isLoggedIn) return null;
   return (
     <>
       <CustomHead {...pageProps} />
@@ -43,7 +43,7 @@ const SignIn = () => {
 //     const {
 //       data: { accessToken },
 //     } = await refreshAccessTokenApiSSR(headers);
-//     memoryStore.set(Memory.ACCESS_TOKEN, accessToken);
+//     memoryStorage.set(ACCESS_TOKEN, accessToken);
 //     return {
 //       redirect: {
 //         destination: '/',

@@ -2,10 +2,6 @@ import React, { useCallback, useState, SyntheticEvent } from 'react';
 import { OptionsType } from 'react-select';
 
 import useUser from '@hooks/useUser';
-import { signUpApi } from '@lib/apis';
-import type { ISignUpProps } from 'typings/auth';
-import { logAxiosError, Memory, memoryStore } from '@lib/apiClient';
-import type { Error } from '@lib/apiClient';
 import getSessionStorageValues from '@lib/getSessionStorageValues';
 import Select from '@components/common/Select';
 import Desc from '@components/common/Desc';
@@ -14,6 +10,11 @@ import InputWrapper from '@components/common/InputWrapper';
 import Label from '@components/common/Label';
 import type { IOptionalPageProps } from '@pages/sign-up/optional';
 import type { SelectProps } from '@lib/toSelectOptions';
+import { signUpApi } from '@lib/apis';
+import { setToken } from '@lib/token';
+import { logAxiosError } from '@lib/apiClient';
+import type { ISignUpProps } from 'typings/auth';
+import { GeneralAxiosError } from 'typings/common';
 
 import * as CS from '../common/styles';
 
@@ -49,14 +50,16 @@ const Optional = ({ skillOptions, jobOptions }: IOptionalPageProps) => {
       const {
         data: { user, accessToken, expiration },
       } = await signUpApi(signUpInfo);
-      memoryStore.set(Memory.ACCESS_TOKEN, accessToken);
-      localStorage.setItem('expiration', expiration);
-      mutateUser(user);
-      window.sessionStorage.clear(); // 회원가입 과정에서 사용자가 입력했던 정보 삭제
+      mutateUser({
+        ...user,
+        isLoggedIn: true,
+      });
+      setToken({ accessToken, expiration });
     } catch (error) {
-      logAxiosError(error as Error);
+      logAxiosError(error as GeneralAxiosError);
     }
 
+    window.sessionStorage.clear(); // 회원가입 과정에서 사용자가 입력했던 정보 비우기
     setSignUpLoading(false);
   };
 

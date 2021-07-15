@@ -1,8 +1,14 @@
 import React from 'react';
+import useUser from '@hooks/useUser';
 
+import Button from '@components/common/Button';
 import CustomHead from '@components/common/CustomHead';
 import Container from '@components/dashboard/Container';
 import CardLink from '@components/dashboard/CardLink';
+import { signOutApi } from '@lib/apis';
+import { deleteToken } from '@lib/token';
+import { logAxiosError } from '@lib/apiClient';
+import type { GeneralAxiosError } from 'typings/common';
 
 export const pageProps = {
   title: '대시보드 - Mogakco',
@@ -12,9 +18,29 @@ export const pageProps = {
 };
 
 const Dashboard = () => {
+  const { user, mutateUser } = useUser({ redirectTo: '/' });
+  const handleLogout = async () => {
+    try {
+      await signOutApi();
+      mutateUser({
+        isLoggedIn: false,
+      });
+      deleteToken();
+    } catch (error) {
+      logAxiosError(error as GeneralAxiosError);
+    }
+  };
+
+  // TODO: 로그아웃 버튼 스타일, 위치 등 수정하기
   return (
     <>
       <CustomHead {...pageProps} />
+      {user?.isLoggedIn && (
+        // 임시 위치, 임시 스타일
+        <Button style={{ float: 'right' }} outline onClick={handleLogout}>
+          로그아웃
+        </Button>
+      )}
       <Container>
         {/* <Link href={`/video-chat/${id}.js`}> */}
         {/* 임시로 화상채팅 1번 룸으로 가도록 설정 */}

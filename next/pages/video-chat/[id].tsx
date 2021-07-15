@@ -8,10 +8,11 @@ import Container from '@components/video-chat/Container';
 import CamSection from '@components/video-chat/CamSection';
 import ChatSection from '@components/video-chat/ChatSection';
 import devModeLog from '@lib/devModeLog';
-import apiClient, { logAxiosError, Memory, memoryStore } from '@lib/apiClient';
-import type { Error } from '@lib/apiClient';
+import apiClient, { logAxiosError } from '@lib/apiClient';
+import { memoryStorage, ACCESS_TOKEN } from '@lib/token';
 import { refreshAccessTokenApiSSR } from '@lib/apis';
 import { socketServer } from '@pages/_app';
+import type { GeneralAxiosError } from 'typings/common';
 
 const pageProps = {
   title: '화상채팅 - Mogakco',
@@ -51,7 +52,7 @@ export const getServerSideProps: GetServerSideProps = async ({
     const {
       data: { accessToken },
     } = await refreshAccessTokenApiSSR(headers);
-    memoryStore.set(Memory.ACCESS_TOKEN, accessToken);
+    memoryStorage.set(ACCESS_TOKEN, accessToken);
     devModeLog('서버사이드에서 로그인이 연장처리 되었습니다.');
 
     const { data } = await apiClient.get<{
@@ -63,7 +64,7 @@ export const getServerSideProps: GetServerSideProps = async ({
 
     return { props: {} };
   } catch (error) {
-    logAxiosError(error as Error);
+    logAxiosError(error as GeneralAxiosError);
     return {
       redirect: {
         destination: '/',

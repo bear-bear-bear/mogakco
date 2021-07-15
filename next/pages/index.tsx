@@ -1,6 +1,6 @@
 import { useRef, useState, useCallback } from 'react';
-import { GetServerSideProps } from 'next';
 
+import useUser from '@hooks/useUser';
 import CustomHead from '@components/common/CustomHead';
 import Container from '@components/landing/Container';
 import Header from '@components/landing/Header';
@@ -10,11 +10,7 @@ import Footer from '@components/landing/Footer';
 import ScrollTop from '@components/common/ScrollTop';
 import Button from '@components/common/Button';
 import { isDevelopment } from '@lib/enviroment';
-import { authProlongTestApi, refreshAccessTokenApiSSR } from '@lib/apis';
-
-export type Props = {
-  isLogin: boolean;
-};
+import { authProlongTestApi } from '@lib/apis';
 
 const pageProps = {
   title: '모여서 각자 코딩 - Mogakco',
@@ -23,7 +19,12 @@ const pageProps = {
   locale: 'ko_KR',
 };
 
-const Landing = ({ isLogin }: Props) => {
+const Landing = () => {
+  const { user } = useUser({
+    redirectTo: '/dashboard',
+    redirectIfFound: true,
+  });
+
   const emailEl = useRef<HTMLInputElement>(null);
   const [isTestBtnLoading, setIsTestBtnLoading] = useState<boolean>(false);
 
@@ -33,10 +34,11 @@ const Landing = ({ isLogin }: Props) => {
     setIsTestBtnLoading(false);
   }, []);
 
+  if (user?.isLoggedIn) return null;
   return (
     <>
       <CustomHead {...pageProps} />
-      <Header isLogin={isLogin} />
+      <Header />
       <Container>
         <ScrollTop />
         {isDevelopment && (
@@ -86,17 +88,6 @@ const Landing = ({ isLogin }: Props) => {
       <Footer />
     </>
   );
-};
-
-export const getServerSideProps: GetServerSideProps = async ({
-  req: { headers },
-}) => {
-  try {
-    await refreshAccessTokenApiSSR(headers);
-    return { props: { isLogin: true } };
-  } catch (err) {
-    return { props: { isLogin: false } };
-  }
 };
 
 export default Landing;

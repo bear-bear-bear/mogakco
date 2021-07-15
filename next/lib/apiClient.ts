@@ -1,18 +1,11 @@
-import axios, { AxiosError, AxiosRequestConfig } from 'axios';
+import axios, { AxiosRequestConfig } from 'axios';
 import log from 'loglevel';
 import devModeLog from '@lib/devModeLog';
 import { refreshAccessTokenApi } from '@lib/apis';
-import type { IGeneralServerResponse } from 'typings/common';
+import { memoryStorage, ACCESS_TOKEN } from '@lib/token';
+import type { GeneralAxiosError } from 'typings/common';
 
-export const memoryStore = new Map();
-
-export enum Memory {
-  ACCESS_TOKEN = 'accessToken',
-}
-
-export type Error = AxiosError<IGeneralServerResponse>;
-
-export const logAxiosError = (axiosError: Error) => {
+export const logAxiosError = (axiosError: GeneralAxiosError) => {
   if (process.env.NODE_ENV === 'production') {
     log.setLevel('trace');
     log.trace('배포 모드에선 로그를 표시하지 않습니다.');
@@ -72,10 +65,11 @@ const passUrlDict = {
 };
 type PassUrl = keyof typeof passUrlDict;
 
+// TODO: 응답에 user 추가하여 메모리에 세팅
 /**
  * @desc
  * accessToken을 새로 발급받아 new expiration은 로컬 스토리지에,
- * new accessToken은 memoryStore와 config.headers.Authorization에 각각 세팅
+ * new accessToken은 memoryStorage와 config.headers.Authorization에 각각 세팅
  * @returns headers.Authorization에 refreshed new AccessToken이 세팅된 AxiosRequestConfig
  */
 export const refreshAccessToken = async (config: AxiosRequestConfig) => {
@@ -85,13 +79,13 @@ export const refreshAccessToken = async (config: AxiosRequestConfig) => {
       data: { accessToken: newAccessToken, expiration: newExpiration },
     } = await refreshAccessTokenApi();
     localStorage.setItem('expiration', newExpiration);
-    memoryStore.set(Memory.ACCESS_TOKEN, newAccessToken);
+    memoryStorage.set(ACCESS_TOKEN, newAccessToken);
     config.headers.Authorization = `Bearer ${newAccessToken}`;
     devModeLog('토큰 갱신 성공');
     return config;
   } catch (err) {
     devModeLog('토큰 갱신 실패');
-    logAxiosError(err as Error);
+    logAxiosError(err as GeneralAxiosError);
     return config;
   }
 };
@@ -125,7 +119,7 @@ const processProlongToken = async (config: AxiosRequestConfig) => {
   }
 
   // 검사 3. 브라우저 리다이렉션 또는 외부요인으로 인해 액세스 토큰이 소실 되었는지 검사
-  const accessToken: string | undefined = memoryStore.get(Memory.ACCESS_TOKEN);
+  const accessToken: string | undefined = memoryStorage.get(ACCESS_TOKEN);
   if (accessToken === undefined) {
     const settedNewTokenReqConfig = await refreshAccessToken(config);
     return settedNewTokenReqConfig;
