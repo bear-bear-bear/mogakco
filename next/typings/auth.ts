@@ -41,15 +41,18 @@ export interface IUserProps {
 
 /**
  * 토큰으로 유저 정보를 요청했을 떄의 성공 응답
+ * refreshToken으로 인증 성공 시 갱신된 accessToken과 expiration이 동봉되어 옵니다
  */
 export interface IUserGetSuccessResponse extends IUserProps {
   isLoggedIn: true;
+  accessToken?: string;
+  expiration?: string;
 }
 
 /**
  * 토큰으로 유저 정보를 요청했을 떄의 실패 응답
  */
-export interface IUserGetFailureResponse {
+export interface IUserGetFailureResponse extends IGeneralServerResponse {
   isLoggedIn: false;
 }
 
