@@ -21,9 +21,10 @@ const Dashboard = () => {
   const { user, mutateUser } = useUser({ redirectTo: '/' });
   const handleLogout = async () => {
     try {
-      await signOutApi();
+      const { data: generalReponse } = await signOutApi();
       mutateUser({
         isLoggedIn: false,
+        ...generalReponse,
       });
       deleteToken();
     } catch (error) {

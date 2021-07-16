@@ -9,6 +9,7 @@ export const memoryStorage = new Map();
  * @decs 액세스 토큰을 memoryStorage에 저장할 때 사용하는 dict
  */
 export const ACCESS_TOKEN = 'accessToken';
+export const REFRESH_TOKEN = 'refreshToken';
 export const EXPIRATION = 'expiration';
 
 /**

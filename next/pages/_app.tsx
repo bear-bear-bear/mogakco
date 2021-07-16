@@ -2,8 +2,6 @@ import type { AppProps } from 'next/app';
 import { ChakraProvider } from '@chakra-ui/react';
 import GlobalStyles, { customGlobalStyles } from '@components/globalStyles';
 import { SWRConfig } from 'swr';
-import { useEffect } from 'react';
-import { memoryStorage, ACCESS_TOKEN } from '@lib/token';
 
 // export const END_POINT = 'http://localhost:8001/chat';
 

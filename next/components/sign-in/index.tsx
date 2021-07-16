@@ -46,10 +46,10 @@ const SignInForm = () => {
 
     try {
       const {
-        data: { user, accessToken, expiration },
+        data: { accessToken, expiration, ...generalServerResponseWithUser },
       } = await signInApi(signInInfo);
       mutateUser({
-        ...user,
+        ...generalServerResponseWithUser,
         isLoggedIn: true,
       });
       setToken({ accessToken, expiration });

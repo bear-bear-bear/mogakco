@@ -1,15 +1,10 @@
 import React from 'react';
-// import { GetServerSideProps } from 'next';
-// import log from 'loglevel';
 
 import useUser from '@hooks/useUser';
 import CustomHead from '@components/common/CustomHead';
 import AuthContainer from '@components/common/AuthContainer';
 import ProgressBar from '@components/sign-up/ProgressBar';
 import Start from '@components/sign-up/Start';
-// import { refreshAccessTokenApiSSR } from '@lib/apis';
-// import { memoryStorage, ACCESS_TOKEN } from '@lib/token';
-// import { isDevelopment } from '@lib/enviroment';
 
 export const pageProps = {
   title: '회원가입 - Mogakco',
@@ -34,30 +29,5 @@ const SignUpStart = () => {
     </>
   );
 };
-
-// export const getServerSideProps: GetServerSideProps = async ({
-//   req: { headers },
-// }) => {
-//   log.setLevel('DEBUG');
-//   try {
-//     const {
-//       data: { accessToken },
-//     } = await refreshAccessTokenApiSSR(headers);
-//     memoryStorage.set(ACCESS_TOKEN, accessToken);
-//     return {
-//       redirect: {
-//         destination: '/',
-//         permanent: false,
-//       },
-//     };
-//   } catch (err) {
-//     if (err.statusCode === 401) {
-//       if (isDevelopment) {
-//         log.debug('비로그인 상태입니다.');
-//       }
-//     }
-//     return { props: {} };
-//   }
-// };
 
 export default SignUpStart;
