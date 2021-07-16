@@ -1,4 +1,4 @@
-import { useRef, useState, useCallback } from 'react';
+import { useRef } from 'react';
 
 import useUser from '@hooks/useUser';
 import CustomHead from '@components/common/CustomHead';
@@ -8,9 +8,6 @@ import ContentBlock from '@components/landing/ContentBlock';
 import MiddleBlock from '@components/landing/MiddleBlock';
 import Footer from '@components/landing/Footer';
 import ScrollTop from '@components/common/ScrollTop';
-import Button from '@components/common/Button';
-import { isDevelopment } from '@lib/enviroment';
-import { authProlongTestApi } from '@lib/apis';
 
 const pageProps = {
   title: '모여서 각자 코딩 - Mogakco',
@@ -26,13 +23,6 @@ const Landing = () => {
   });
 
   const emailEl = useRef<HTMLInputElement>(null);
-  const [isTestBtnLoading, setIsTestBtnLoading] = useState<boolean>(false);
-
-  const onClickTestButton = useCallback(async () => {
-    setIsTestBtnLoading(true);
-    await authProlongTestApi();
-    setIsTestBtnLoading(false);
-  }, []);
 
   if (user?.isLoggedIn) return null;
   return (
@@ -41,17 +31,6 @@ const Landing = () => {
       <Header />
       <Container>
         <ScrollTop />
-        {isDevelopment && (
-          <Button
-            type="button"
-            outline
-            style={{ float: 'right' }}
-            onClick={onClickTestButton}
-            $loading={isTestBtnLoading}
-          >
-            로그인 연장 테스트 하기
-          </Button>
-        )}
         <ContentBlock
           type="left"
           title="혼자 하는 코딩은 쓰니까."
