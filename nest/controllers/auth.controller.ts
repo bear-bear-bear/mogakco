@@ -203,15 +203,10 @@ class AuthController {
   async getAuthentication(@Req() { headers }: Request) {
     const accessToken = this.authService.getAccessTokenByHeaders(headers);
     if (accessToken === undefined) {
-      throw new HttpException('accessToken 이 헤더에 존재하지 않습니다.', HttpStatus.BAD_REQUEST);
+      return { isLoggedIn: false };
     }
-    const verification = await this.authService.getAuthentication(accessToken);
-    if (verification === false) {
-      return {
-        isLoggedIn: false,
-      };
-    }
-    return { isLoggedIn: true };
+    const { isLoggedIn, user } = await this.authService.getAuthentication(accessToken);
+    return !isLoggedIn ? { isLoggedIn } : { isLoggedIn, user };
   }
 }
 

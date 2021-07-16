@@ -1,5 +1,7 @@
 import React from 'react';
 import { GetServerSideProps } from 'next';
+
+import useUser from '@hooks/useUser';
 import CustomHead from '@components/common/CustomHead';
 import AuthContainer from '@components/common/AuthContainer';
 import ProgressBar from '@components/sign-up/ProgressBar';
@@ -21,6 +23,12 @@ export interface IOptionalPageProps {
 }
 
 const SignUpOptional = (props: IOptionalPageProps) => {
+  const { user } = useUser({
+    redirectTo: '/dashboard',
+    redirectIfFound: true,
+  });
+
+  if (user?.isLoggedIn) return null;
   return (
     <>
       <CustomHead {...pageProps} />
@@ -32,8 +40,6 @@ const SignUpOptional = (props: IOptionalPageProps) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async () => {
-  // TODO: fetcher 모듈로 분리 (재사용 가능한 모듈로 분리할 수 있는지 생각해보기)
-  // TODO: API들 모듈로 분리
   const getSkillsAPI = '/api/user/skills';
   const getJobsAPI = '/api/user/jobs';
   const optionalInfoListApi = (url: string) =>

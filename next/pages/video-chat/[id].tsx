@@ -1,19 +1,19 @@
-import { useEffect, useMemo } from 'react';
-import log from 'loglevel';
+import { useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { GetServerSideProps } from 'next';
 
 import CustomHead from '@components/common/CustomHead';
 import Container from '@components/video-chat/Container';
 import CamSection from '@components/video-chat/CamSection';
 import ChatSection from '@components/video-chat/ChatSection';
-import devModeLog from '@lib/devModeLog';
-import apiClient, { logAxiosError, Memory, memoryStore } from '@lib/apiClient';
-import type { Error } from '@lib/apiClient';
-import { refreshAccessTokenApiSSR } from '@lib/apis';
+import useUser from '@hooks/useUser';
 import useSocket from '@hooks/useSocket';
-
-import { IUserProps } from 'typings/auth';
+import apiClient, { logAxiosError } from '@lib/apiClient';
+import devModeLog from '@lib/devModeLog';
+import type { GeneralAxiosError } from 'typings/common';
+import type { IUserGetSuccessResponse } from 'typings/auth';
+import { GetServerSideProps } from 'next';
+import { refreshAccessTokenApiSSR } from '@lib/apis';
+import token from '@lib/token';
 
 const pageProps = {
   title: '화상채팅 - Mogakco',
@@ -22,32 +22,29 @@ const pageProps = {
   locale: 'ko_KR',
 };
 
-type Props = {
-  user?: IUserProps;
-};
-
-const ChatRoom = ({ user }: Props) => {
+const ChatRoom = () => {
   const router = useRouter();
+  const { user } = useUser({ redirectTo: '/' });
   const socket = useSocket();
   socket?.emit('events', { text: 'text' });
-  console.log({ socket });
+  devModeLog({ socket });
 
   useEffect(() => {
-    if (socket && user) {
-      socket.on('test', (data: string) => console.log('test: ', data));
-      // TODO: 타입 다시 만들어야함 (cur: any)
-      const props: any = {
-        userId: user.id,
-        roomId: String(router.query.id),
-      };
+    if (!socket || !user?.isLoggedIn) return;
 
-      socket.emit('join-chat-room', props);
-      socket.emit('events', { name: 'Nest' }, (data: string) =>
-        console.log(data),
-      );
-    }
+    socket.on('test', (data: string) => devModeLog({ data }));
+    // TODO: 타입 다시 만들어야함 (cur: any)
+    const { id: userId } = user as IUserGetSuccessResponse;
+    const props: any = {
+      userId,
+      roomId: String(router.query.id),
+    };
+
+    socket.emit('join-chat-room', props);
+    socket.emit('events', { name: 'Nest' }, (data: string) => devModeLog(data));
   }, [router.query.id, socket, user]);
 
+  if (!user?.isLoggedIn) return null;
   return (
     <>
       <CustomHead {...pageProps} />
@@ -63,12 +60,11 @@ export const getServerSideProps: GetServerSideProps = async ({
   req: { headers },
   query: { id },
 }) => {
-  log.setLevel('debug');
   try {
     const {
       data: { accessToken },
     } = await refreshAccessTokenApiSSR(headers);
-    memoryStore.set(Memory.ACCESS_TOKEN, accessToken);
+    token.set({ accessToken });
     devModeLog('서버사이드에서 로그인이 연장처리 되었습니다.');
 
     const { data } = await apiClient.get<{
@@ -80,7 +76,7 @@ export const getServerSideProps: GetServerSideProps = async ({
 
     return { props: {} };
   } catch (error) {
-    logAxiosError(error as Error);
+    logAxiosError(error as GeneralAxiosError);
     return {
       redirect: {
         destination: '/',

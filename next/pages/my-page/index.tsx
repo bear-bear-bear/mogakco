@@ -1,6 +1,8 @@
 import React from 'react';
-import CustomHead from '@components/common/CustomHead';
 import { Flex } from '@chakra-ui/react';
+
+import useUser from '@hooks/useUser';
+import CustomHead from '@components/common/CustomHead';
 
 export const pageProps = {
   title: '마이페이지 - Mogakco',
@@ -10,6 +12,9 @@ export const pageProps = {
 };
 
 const SignIn = () => {
+  const { user } = useUser({ redirectTo: '/' });
+
+  if (!user?.isLoggedIn) return null;
   return (
     <>
       <CustomHead {...pageProps} />

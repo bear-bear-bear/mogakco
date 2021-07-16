@@ -15,7 +15,7 @@ import UserRepository from '@models/repositories/user.repository';
 import UserJobRepository from '@models/repositories/ user-job.reposity';
 import { ConfigService } from '@nestjs/config';
 import UserEntity from '@models/entities/user.entity';
-import { CreateUserDto, ICookieProps, JwtUserProps } from '@typing/auth';
+import { CreateUserDto, ICookieProps, IJwtPayload, JwtUserProps } from '@typing/auth';
 import { addMinutes, millisecondsToMinutes } from 'date-fns';
 import { IncomingHttpHeaders } from 'http';
 import jwtVerifyPromise from '@lib/promisifyJwtVerify';
@@ -281,15 +281,15 @@ class AuthService {
     return headers.authorization?.split(' ')[1];
   }
 
-  getAuthentication(accessToken: string) {
-    const secretKey = this.configService.get('JWT_ACCESS_TOKEN_SECRET') as string;
-    return jwtVerifyPromise(accessToken, secretKey)
-      .then((decoded: any) => {
-        return decoded;
-      })
-      .catch(() => {
-        return false;
-      });
+  async getAuthentication(accessToken: string) {
+    try {
+      const secretKey = this.configService.get('JWT_ACCESS_TOKEN_SECRET') as string;
+      const decodedToken = (await jwtVerifyPromise(accessToken, secretKey)) as IJwtPayload;
+      const user = await this.userService.findUserShallow(decodedToken.id);
+      return { isLoggedIn: true, user };
+    } catch {
+      return { isLoggedIn: false };
+    }
   }
 }
 

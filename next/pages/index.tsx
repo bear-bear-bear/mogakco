@@ -1,6 +1,6 @@
-import { useRef, useState, useCallback } from 'react';
-import { GetServerSideProps } from 'next';
+import { useRef } from 'react';
 
+import useUser from '@hooks/useUser';
 import CustomHead from '@components/common/CustomHead';
 import Container from '@components/landing/Container';
 import Header from '@components/landing/Header';
@@ -8,13 +8,6 @@ import ContentBlock from '@components/landing/ContentBlock';
 import MiddleBlock from '@components/landing/MiddleBlock';
 import Footer from '@components/landing/Footer';
 import ScrollTop from '@components/common/ScrollTop';
-import Button from '@components/common/Button';
-import { isDevelopment } from '@lib/enviroment';
-import { authProlongTestApi, refreshAccessTokenApiSSR } from '@lib/apis';
-
-export type Props = {
-  isLogin: boolean;
-};
 
 const pageProps = {
   title: '모여서 각자 코딩 - Mogakco',
@@ -23,33 +16,21 @@ const pageProps = {
   locale: 'ko_KR',
 };
 
-const Landing = ({ isLogin }: Props) => {
+const Landing = () => {
+  const { user } = useUser({
+    redirectTo: '/dashboard',
+    redirectIfFound: true,
+  });
+
   const emailEl = useRef<HTMLInputElement>(null);
-  const [isTestBtnLoading, setIsTestBtnLoading] = useState<boolean>(false);
 
-  const onClickTestButton = useCallback(async () => {
-    setIsTestBtnLoading(true);
-    await authProlongTestApi();
-    setIsTestBtnLoading(false);
-  }, []);
-
+  if (user?.isLoggedIn) return null;
   return (
     <>
       <CustomHead {...pageProps} />
-      <Header isLogin={isLogin} />
+      <Header />
       <Container>
         <ScrollTop />
-        {isDevelopment && (
-          <Button
-            type="button"
-            outline
-            style={{ float: 'right' }}
-            onClick={onClickTestButton}
-            $loading={isTestBtnLoading}
-          >
-            로그인 연장 테스트 하기
-          </Button>
-        )}
         <ContentBlock
           type="left"
           title="혼자 하는 코딩은 쓰니까."
@@ -86,17 +67,6 @@ const Landing = ({ isLogin }: Props) => {
       <Footer />
     </>
   );
-};
-
-export const getServerSideProps: GetServerSideProps = async ({
-  req: { headers },
-}) => {
-  try {
-    await refreshAccessTokenApiSSR(headers);
-    return { props: { isLogin: true } };
-  } catch (err) {
-    return { props: { isLogin: false } };
-  }
 };
 
 export default Landing;

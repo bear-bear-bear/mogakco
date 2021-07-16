@@ -39,6 +39,10 @@ class UserService {
     return this.userRepository.findUserByIdForLogin(id);
   }
 
+  findUserShallow(id: number) {
+    return this.userRepository.findUserShallow(id);
+  }
+
   /**
    * @return 분야정보 리스트를 반환합니다.
    */

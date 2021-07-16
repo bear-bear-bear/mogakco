@@ -1,15 +1,16 @@
-type Response = {
-  statusCode: number;
-  message: string;
-};
+import type { IGeneralServerResponse } from './common';
 
-// 로그인 요청에 필요한 정보
+/**
+ * 로그인 요청에 필요한 정보
+ */
 export interface ISignInProps {
   email: string;
   password: string;
 }
 
-// 회원가입 요청에 필요한 정보
+/**
+ * 회원가입 요청에 필요한 정보
+ */
 export interface ISignUpProps {
   email: string;
   username: string;
@@ -18,16 +19,18 @@ export interface ISignUpProps {
   job: number | null;
 }
 
-// 회원가입/로그인 성공 응답 스키마
-export interface IAuthSuccessResponse {
-  statusCode: number;
-  message: string;
+/**
+ * 회원가입/로그인/액세스토큰연장 성공 응답 스키마
+ */
+export interface IAuthSuccessResponse extends IGeneralServerResponse {
   accessToken: string;
   expiration: string;
   user: IUserProps;
 }
 
-// 유저가 가지고 있는 정보
+/**
+ * 유저가 가지고 있는 정보
+ */
 export interface IUserProps {
   id: number;
   username: string;
@@ -36,14 +39,25 @@ export interface IUserProps {
   job: IOptionalProps | null;
 }
 
-// accessToken 연장 성공 응답 스키마
-export interface IProlongTokenProps extends Response {
-  user: IUserProps;
-  accessToken: string;
-  expiration: string;
+/**
+ * 토큰으로 유저 정보를 요청했을 떄의 성공 응답
+ */
+export interface IUserGetSuccessResponse
+  extends IGeneralServerResponse,
+    IUserProps {
+  isLoggedIn: boolean; // true
 }
 
-// 회원가입 optional 페이지에서 서버로부터 받는 선택 옵션들의 타입
+/**
+ * 토큰으로 유저 정보를 요청했을 떄의 실패 응답
+ */
+export interface IUserGetFailureResponse extends IGeneralServerResponse {
+  isLoggedIn: boolean; // false
+}
+
+/**
+ * 회원가입 optional 페이지에서 서버로부터 받는 선택 옵션들의 타입
+ */
 export interface IOptionalProps {
   id: number;
   name: string;

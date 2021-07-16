@@ -41,8 +41,8 @@ module.exports = {
       plugins: ['@typescript-eslint'],
       extends: ['plugin:@typescript-eslint/recommended'],
       rules: {
-        'no-shadow': 'warn',
-        '@typescript-eslint/no-shadow': 'warn',
+        'no-shadow': 'off',
+        '@typescript-eslint/no-shadow': ['error'],
         'no-use-before-define': 'off',
         '@typescript-eslint/no-explicit-any': 'off',
         '@typescript-eslint/explicit-module-boundary-types': 'off',

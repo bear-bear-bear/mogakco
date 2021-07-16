@@ -1,10 +1,7 @@
 import React, { useCallback, useState, SyntheticEvent } from 'react';
 import { OptionsType } from 'react-select';
-import { useRouter } from 'next/router';
 
-import { signUpApi } from '@lib/apis';
-import type { ISignUpProps } from 'typings/auth';
-import { logAxiosError, Memory, memoryStore } from '@lib/apiClient';
+import useUser from '@hooks/useUser';
 import getSessionStorageValues from '@lib/getSessionStorageValues';
 import Select from '@components/common/Select';
 import Desc from '@components/common/Desc';
@@ -13,13 +10,18 @@ import InputWrapper from '@components/common/InputWrapper';
 import Label from '@components/common/Label';
 import type { IOptionalPageProps } from '@pages/sign-up/optional';
 import type { SelectProps } from '@lib/toSelectOptions';
+import { signUpApi } from '@lib/apis';
+import token from '@lib/token';
+import { logAxiosError } from '@lib/apiClient';
+import type { ISignUpProps } from 'typings/auth';
+import { GeneralAxiosError } from 'typings/common';
 
 import * as CS from '../common/styles';
 
 const SKILLS_LIMIT = 5;
 
 const Optional = ({ skillOptions, jobOptions }: IOptionalPageProps) => {
-  const router = useRouter();
+  const { mutateUser } = useUser();
   const [signUpLoading, setSignUpLoading] = useState<boolean>(false);
   const [isShowSkillOptions, setIsShowSkillOptions] = useState<boolean>(true);
   const [skillIds, setSkillIds] = useState<number[] | null>(null);
@@ -34,7 +36,7 @@ const Optional = ({ skillOptions, jobOptions }: IOptionalPageProps) => {
 
   const onChangeJob = (job: SelectProps) => setJobId(job.value);
 
-  const onSubmit = (e: SyntheticEvent) => {
+  const onSubmit = async (e: SyntheticEvent) => {
     e.preventDefault();
     setSignUpLoading(true);
 
@@ -44,18 +46,21 @@ const Optional = ({ skillOptions, jobOptions }: IOptionalPageProps) => {
       job: jobId,
     } as ISignUpProps;
 
-    signUpApi(signUpInfo)
-      .then(({ data: { accessToken, expiration } }) => {
-        setSignUpLoading(false);
-        localStorage.setItem('expiration', expiration);
-        memoryStore.set(Memory.ACCESS_TOKEN, accessToken);
-        window.sessionStorage.clear(); // 회원가입 과정에서 사용자가 입력했던 정보 삭제
-        router.replace('/dashboard');
-      })
-      .catch((err) => {
-        setSignUpLoading(false);
-        logAxiosError(err);
+    try {
+      const {
+        data: { accessToken, expiration, ...generalServerResponseWithUser },
+      } = await signUpApi(signUpInfo);
+      mutateUser({
+        ...generalServerResponseWithUser,
+        isLoggedIn: true,
       });
+      token.set({ accessToken, expiration });
+    } catch (error) {
+      logAxiosError(error as GeneralAxiosError);
+    }
+
+    window.sessionStorage.clear(); // 회원가입 과정에서 사용자가 입력했던 정보 비우기
+    setSignUpLoading(false);
   };
 
   return (

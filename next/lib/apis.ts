@@ -3,11 +3,12 @@ import type { IGeneralServerResponse } from 'typings/common';
 import type {
   ISignInProps,
   ISignUpProps,
-  IAuthSuccessResponse,
   IOptionalProps,
-  IProlongTokenProps,
+  IAuthSuccessResponse,
 } from 'typings/auth';
 import { IncomingHttpHeaders } from 'http';
+
+// TODO: 각 API 사용 시 res.data와 catch err 반복 제거해보기
 
 // ********************************************************************************************************************
 // user
@@ -26,11 +27,11 @@ export const signOutApi = () =>
 
 // 로그인 연장
 export const refreshAccessTokenApi = () =>
-  apiClient.get<IProlongTokenProps>('/api/auth/refresh-token');
+  apiClient.get<IAuthSuccessResponse>('/api/auth/refresh-token');
 
 // Next.js SSR 용 로그인 연장 Api
 export const refreshAccessTokenApiSSR = (headers: IncomingHttpHeaders) =>
-  apiClient.get<IProlongTokenProps>('/api/auth/refresh-token', {
+  apiClient.get<IAuthSuccessResponse>('/api/auth/refresh-token', {
     headers,
   });
 
