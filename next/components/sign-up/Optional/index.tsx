@@ -11,7 +11,7 @@ import Label from '@components/common/Label';
 import type { IOptionalPageProps } from '@pages/sign-up/optional';
 import type { SelectProps } from '@lib/toSelectOptions';
 import { signUpApi } from '@lib/apis';
-import { setToken } from '@lib/token';
+import token from '@lib/token';
 import { logAxiosError } from '@lib/apiClient';
 import type { ISignUpProps } from 'typings/auth';
 import { GeneralAxiosError } from 'typings/common';
@@ -54,7 +54,7 @@ const Optional = ({ skillOptions, jobOptions }: IOptionalPageProps) => {
         ...generalServerResponseWithUser,
         isLoggedIn: true,
       });
-      setToken({ accessToken, expiration });
+      token.set({ accessToken, expiration });
     } catch (error) {
       logAxiosError(error as GeneralAxiosError);
     }

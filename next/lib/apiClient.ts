@@ -2,12 +2,7 @@ import axios, { AxiosRequestConfig } from 'axios';
 import log from 'loglevel';
 import devModeLog from '@lib/devModeLog';
 import { refreshAccessTokenApi } from '@lib/apis';
-import {
-  memoryStorage,
-  deleteToken,
-  ACCESS_TOKEN,
-  REFRESH_TOKEN,
-} from '@lib/token';
+import token, { memoryStorage, ACCESS_TOKEN, REFRESH_TOKEN } from '@lib/token';
 import type { GeneralAxiosError } from 'typings/common';
 
 export const logAxiosError = (axiosError: GeneralAxiosError) => {
@@ -96,7 +91,7 @@ export const refreshAccessToken = async (config: AxiosRequestConfig) => {
       devModeLog('UnAuthorized - 기존 토큰 정보를 삭제합니다');
       // 401일땐 로그아웃 처리 (다른 탭과 동기화)
       // 이 경우는 서버단에서 쿠키의 refresh토큰을 지워주지 않기 때문에 클라이언트단에서 직접 삭제합니다
-      deleteToken();
+      token.delete();
       document.cookie = `${REFRESH_TOKEN}=;expires=Thu, 01 Jan 1970 00:00:01 GMT;`;
     }
     return config;

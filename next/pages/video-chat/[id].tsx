@@ -13,7 +13,7 @@ import type { GeneralAxiosError } from 'typings/common';
 import type { IUserGetSuccessResponse } from 'typings/auth';
 import { GetServerSideProps } from 'next';
 import { refreshAccessTokenApiSSR } from '@lib/apis';
-import { setToken } from '@lib/token';
+import token from '@lib/token';
 
 const pageProps = {
   title: '화상채팅 - Mogakco',
@@ -64,7 +64,7 @@ export const getServerSideProps: GetServerSideProps = async ({
     const {
       data: { accessToken },
     } = await refreshAccessTokenApiSSR(headers);
-    setToken({ accessToken });
+    token.set({ accessToken });
     devModeLog('서버사이드에서 로그인이 연장처리 되었습니다.');
 
     const { data } = await apiClient.get<{

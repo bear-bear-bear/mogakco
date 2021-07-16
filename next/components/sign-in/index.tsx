@@ -8,7 +8,7 @@ import InputWrapper from '@components/common/InputWrapper';
 import Label from '@components/common/Label';
 import devModeLog from '@lib/devModeLog';
 import { signInApi } from '@lib/apis';
-import { setToken } from '@lib/token';
+import token from '@lib/token';
 import { isDevelopment } from '@lib/enviroment';
 import type { ISignInProps } from 'typings/auth';
 import type { GeneralAxiosError } from 'typings/common';
@@ -52,7 +52,7 @@ const SignInForm = () => {
         ...generalServerResponseWithUser,
         isLoggedIn: true,
       });
-      setToken({ accessToken, expiration });
+      token.set({ accessToken, expiration });
     } catch (error) {
       logAxiosError(error as GeneralAxiosError);
     }

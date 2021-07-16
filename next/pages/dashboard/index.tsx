@@ -6,7 +6,7 @@ import CustomHead from '@components/common/CustomHead';
 import Container from '@components/dashboard/Container';
 import CardLink from '@components/dashboard/CardLink';
 import { authProlongTestApi, signOutApi } from '@lib/apis';
-import { deleteToken } from '@lib/token';
+import token from '@lib/token';
 import { logAxiosError } from '@lib/apiClient';
 import type { GeneralAxiosError } from 'typings/common';
 import { isDevelopment } from '@lib/enviroment';
@@ -35,7 +35,7 @@ const Dashboard = () => {
         isLoggedIn: false,
         ...generalReponse,
       });
-      deleteToken();
+      token.delete();
     } catch (error) {
       logAxiosError(error as GeneralAxiosError);
     }
