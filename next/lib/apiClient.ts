@@ -90,7 +90,7 @@ export const refreshAccessToken = async (config: AxiosRequestConfig) => {
     return config;
   } catch (err) {
     devModeLog('토큰 갱신 실패');
-    logAxiosError(err as GeneralAxiosError);
+    // logAxiosError(err as GeneralAxiosError);
     const { response } = err as GeneralAxiosError;
     if (response?.status === 401) {
       devModeLog('UnAuthorized - 기존 토큰 정보를 삭제합니다');

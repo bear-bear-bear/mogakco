@@ -52,9 +52,9 @@ export default function useUser({
   useEffect(() => {
     console.log({ redirectTo, redirectIfFound, user });
 
-    // 리디렉트가 필요하지 않다면 그냥 return (예: 이미 /dashboard에 있음)
-    // 사용자 데이터가 아직 존재하지 않으면(패치 진행 중 일때 등) 아직 아무것도 하지 않음
-    if (!redirectTo || !user) return;
+    // 리디렉트가 필요하지 않다면 return (예: 이미 /dashboard에 있음)
+    // 사용자 데이터가 아직 존재하지 않으면(패치 진행 중 일때 등) return
+    if (!redirectTo && !user) return;
 
     if (
       // redirectTo가 설정되어 있을 시, 사용자가 없을 때 리디렉션
@@ -62,7 +62,6 @@ export default function useUser({
       // redirectIfFound가 설정되어 있을 시, 사용자가 발견되면 리디렉션
       (redirectTo && redirectIfFound && user?.isLoggedIn)
     ) {
-      alert(`redirectTo: ${redirectTo}`);
       router.push(redirectTo);
     }
   }, [redirectIfFound, redirectTo, router, user]);
