@@ -285,7 +285,7 @@ class AuthService {
     try {
       const secretKey = this.configService.get('JWT_ACCESS_TOKEN_SECRET') as string;
       const decodedToken = (await jwtVerifyPromise(accessToken, secretKey)) as IJwtPayload;
-      const user = await this.userService.findUserForLogin(decodedToken.id);
+      const user = await this.userService.findUserShallow(decodedToken.id);
       return { isLoggedIn: true, user };
     } catch {
       return { isLoggedIn: false };
