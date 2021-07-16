@@ -1,7 +1,6 @@
 import React, { KeyboardEvent } from 'react';
 
 import useInput from '@hooks/useInput';
-import { socketServer } from '@pages/_app';
 
 import * as S from './style';
 
@@ -10,7 +9,6 @@ const InputBox = () => {
   const handleChat = (e: KeyboardEvent<HTMLTextAreaElement>) => {
     if (chat.trim() !== '') {
       if (e.code === 'Enter' && !e.altKey) {
-        socketServer.emit('chat', chat);
         setChat('');
       }
       if (e.code === 'Enter' && e.altKey) {
