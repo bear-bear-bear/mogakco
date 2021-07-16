@@ -11,7 +11,9 @@ import devModeLog from '@lib/devModeLog';
 import apiClient, { logAxiosError, Memory, memoryStore } from '@lib/apiClient';
 import type { Error } from '@lib/apiClient';
 import { refreshAccessTokenApiSSR } from '@lib/apis';
-import { socketServer } from '@pages/_app';
+import useSocket from '@hooks/useSocket';
+
+import { IUserProps } from 'typings/auth';
 
 const pageProps = {
   title: '화상채팅 - Mogakco',
@@ -20,16 +22,31 @@ const pageProps = {
   locale: 'ko_KR',
 };
 
-const ChatRoom = () => {
+type Props = {
+  user?: IUserProps;
+};
+
+const ChatRoom = ({ user }: Props) => {
   const router = useRouter();
-  const { id } = useMemo(() => router.query, [router.query]);
+  const socket = useSocket();
+  socket?.emit('events', { text: 'text' });
+  console.log({ socket });
 
   useEffect(() => {
-    socketServer.emit('joinChatRoom', id);
-    socketServer.on('joinUserMessage', (clientId: string) => {
-      devModeLog(`${clientId} 유저가 접속하였다고 응답 되었음.`);
-    });
-  }, [id]);
+    if (socket && user) {
+      socket.on('test', (data: string) => console.log('test: ', data));
+      // TODO: 타입 다시 만들어야함 (cur: any)
+      const props: any = {
+        userId: user.id,
+        roomId: String(router.query.id),
+      };
+
+      socket.emit('join-chat-room', props);
+      socket.emit('events', { name: 'Nest' }, (data: string) =>
+        console.log(data),
+      );
+    }
+  }, [router.query.id, socket, user]);
 
   return (
     <>
