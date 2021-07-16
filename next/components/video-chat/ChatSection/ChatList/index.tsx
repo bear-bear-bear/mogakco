@@ -1,5 +1,4 @@
-import React, { useEffect } from 'react';
-import { socketServer } from '@pages/_app';
+import React, { useContext, useEffect } from 'react';
 import Chat from '../Chat';
 
 import * as S from './style';
@@ -45,11 +44,6 @@ const dummyChatData = [
 ];
 
 const ChatList = () => {
-  useEffect(() => {
-    socketServer.on('joinSuccess', () => {
-      window.alert('채팅방에 참여하셨습니다.');
-    });
-  }, []);
   return (
     <S.ChatList>
       {dummyChatData.map((chat) => (

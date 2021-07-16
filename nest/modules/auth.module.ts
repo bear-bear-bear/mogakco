@@ -34,7 +34,7 @@ import UserModule from './user.module';
   ],
   controllers: [AuthController],
   providers: [ConfigService, AuthService, JwtStrategy, JwtStrategyWithRefresh, EmailService],
-  exports: [JwtStrategy, JwtStrategyWithRefresh, PassportModule],
+  exports: [AuthService, JwtStrategy, JwtStrategyWithRefresh, EmailService],
 })
 class AuthModule {}
 
