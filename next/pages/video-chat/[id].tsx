@@ -1,18 +1,13 @@
 import { useEffect, useMemo } from 'react';
-import log from 'loglevel';
 import { useRouter } from 'next/router';
-import { GetServerSideProps } from 'next';
 
 import CustomHead from '@components/common/CustomHead';
 import Container from '@components/video-chat/Container';
 import CamSection from '@components/video-chat/CamSection';
 import ChatSection from '@components/video-chat/ChatSection';
 import devModeLog from '@lib/devModeLog';
-import apiClient, { logAxiosError } from '@lib/apiClient';
-import { memoryStorage, ACCESS_TOKEN } from '@lib/token';
-import { refreshAccessTokenApiSSR } from '@lib/apis';
+import useUser from '@hooks/useUser';
 import { socketServer } from '@pages/_app';
-import type { GeneralAxiosError } from 'typings/common';
 
 const pageProps = {
   title: '화상채팅 - Mogakco',
@@ -23,6 +18,7 @@ const pageProps = {
 
 const ChatRoom = () => {
   const router = useRouter();
+  const { user } = useUser({ redirectTo: '/' });
   const { id } = useMemo(() => router.query, [router.query]);
 
   useEffect(() => {
@@ -32,6 +28,7 @@ const ChatRoom = () => {
     });
   }, [id]);
 
+  if (!user?.isLoggedIn) return null;
   return (
     <>
       <CustomHead {...pageProps} />
@@ -41,37 +38,6 @@ const ChatRoom = () => {
       </Container>
     </>
   );
-};
-
-export const getServerSideProps: GetServerSideProps = async ({
-  req: { headers },
-  query: { id },
-}) => {
-  log.setLevel('debug');
-  try {
-    const {
-      data: { accessToken },
-    } = await refreshAccessTokenApiSSR(headers);
-    memoryStorage.set(ACCESS_TOKEN, accessToken);
-    devModeLog('서버사이드에서 로그인이 연장처리 되었습니다.');
-
-    const { data } = await apiClient.get<{
-      message: boolean;
-      statusCode: number;
-    }>(`/api/chat/available/${id}`);
-    devModeLog(`Server Response Message: ${data.message}`);
-    devModeLog(`Response Status Code: ${data.statusCode}`);
-
-    return { props: {} };
-  } catch (error) {
-    logAxiosError(error as GeneralAxiosError);
-    return {
-      redirect: {
-        destination: '/',
-        permanent: false,
-      },
-    };
-  }
 };
 
 export default ChatRoom;

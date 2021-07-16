@@ -19,7 +19,7 @@ export const pageProps = {
 
 const Dashboard = () => {
   const { user, mutateUser } = useUser({ redirectTo: '/' });
-  const handleLogout = async () => {
+  const handleSignOut = async () => {
     try {
       const { data: generalReponse } = await signOutApi();
       mutateUser({
@@ -33,12 +33,13 @@ const Dashboard = () => {
   };
 
   // TODO: 로그아웃 버튼 스타일, 위치 등 수정하기
+  if (!user?.isLoggedIn) return null;
   return (
     <>
       <CustomHead {...pageProps} />
       {user?.isLoggedIn && (
         // 임시 위치, 임시 스타일
-        <Button style={{ float: 'right' }} outline onClick={handleLogout}>
+        <Button style={{ float: 'right' }} outline onClick={handleSignOut}>
           로그아웃
         </Button>
       )}
