@@ -44,10 +44,10 @@ const Dashboard = () => {
         </Button>
       )}
       <Container>
-        {/* <Link href={`/video-chat/${id}.js`}> */}
+        {/* <Link href={`/video-chat/${id}`}> */}
         {/* 임시로 화상채팅 1번 룸으로 가도록 설정 */}
         <CardLink
-          href="/video-chat/1.js"
+          href="/video-chat/1"
           svgName="video-chat.svg"
           title="화상 채팅"
           desc="모각코를 시작해요!"

@@ -19,10 +19,15 @@ export const EXPIRATION = 'expiration';
  */
 export const setToken = ({
   accessToken,
-  expiration,
-}: Pick<IAuthSuccessResponse, 'accessToken' | 'expiration'>) => {
+  expiration = undefined,
+}: {
+  accessToken: string;
+  expiration?: string;
+}) => {
   memoryStorage.set(ACCESS_TOKEN, accessToken);
-  localStorage.setItem(EXPIRATION, expiration);
+  if (typeof window !== 'undefined' && expiration) {
+    localStorage.setItem(EXPIRATION, expiration);
+  }
 };
 
 /**
@@ -32,5 +37,7 @@ export const setToken = ({
  */
 export const deleteToken = () => {
   memoryStorage.delete(ACCESS_TOKEN);
-  localStorage.removeItem(EXPIRATION);
+  if (typeof window !== 'undefined') {
+    localStorage.removeItem(EXPIRATION);
+  }
 };

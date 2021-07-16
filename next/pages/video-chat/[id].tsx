@@ -1,5 +1,4 @@
 import { useEffect } from 'react';
-import type { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 
 import CustomHead from '@components/common/CustomHead';
@@ -8,12 +7,13 @@ import CamSection from '@components/video-chat/CamSection';
 import ChatSection from '@components/video-chat/ChatSection';
 import useUser from '@hooks/useUser';
 import useSocket from '@hooks/useSocket';
-import { refreshAccessTokenApiSSR } from '@lib/apis';
-import { ACCESS_TOKEN, memoryStorage } from '@lib/token';
 import apiClient, { logAxiosError } from '@lib/apiClient';
 import devModeLog from '@lib/devModeLog';
-import type { GeneralAxiosError, IGeneralServerResponse } from 'typings/common';
+import type { GeneralAxiosError } from 'typings/common';
 import type { IUserGetSuccessResponse } from 'typings/auth';
+import { GetServerSideProps } from 'next';
+import { refreshAccessTokenApiSSR } from '@lib/apis';
+import { setToken } from '@lib/token';
 
 const pageProps = {
   title: '화상채팅 - Mogakco',
@@ -27,23 +27,21 @@ const ChatRoom = () => {
   const { user } = useUser({ redirectTo: '/' });
   const socket = useSocket();
   socket?.emit('events', { text: 'text' });
-  console.log({ socket });
+  devModeLog({ socket });
 
   useEffect(() => {
-    if (socket && user?.isLoggedIn) {
-      socket.on('test', (data: string) => console.log('test: ', data));
-      // TODO: 타입 다시 만들어야함 (cur: any)
-      const { id } = user as IUserGetSuccessResponse;
-      const props: any = {
-        userId: id,
-        roomId: String(router.query.id),
-      };
+    if (!socket || !user?.isLoggedIn) return;
 
-      socket.emit('join-chat-room', props);
-      socket.emit('events', { name: 'Nest' }, (data: string) =>
-        console.log(data),
-      );
-    }
+    socket.on('test', (data: string) => devModeLog({ data }));
+    // TODO: 타입 다시 만들어야함 (cur: any)
+    const { id: userId } = user as IUserGetSuccessResponse;
+    const props: any = {
+      userId,
+      roomId: String(router.query.id),
+    };
+
+    socket.emit('join-chat-room', props);
+    socket.emit('events', { name: 'Nest' }, (data: string) => devModeLog(data));
   }, [router.query.id, socket, user]);
 
   if (!user?.isLoggedIn) return null;
@@ -66,12 +64,13 @@ export const getServerSideProps: GetServerSideProps = async ({
     const {
       data: { accessToken },
     } = await refreshAccessTokenApiSSR(headers);
-    memoryStorage.set(ACCESS_TOKEN, accessToken);
+    setToken({ accessToken });
     devModeLog('서버사이드에서 로그인이 연장처리 되었습니다.');
 
-    const { data } = await apiClient.get<IGeneralServerResponse>(
-      `/api/chat/available/${id}`,
-    );
+    const { data } = await apiClient.get<{
+      message: boolean;
+      statusCode: number;
+    }>(`/api/chat/available/${id}`);
     devModeLog(`Server Response Message: ${data.message}`);
     devModeLog(`Response Status Code: ${data.statusCode}`);
 
