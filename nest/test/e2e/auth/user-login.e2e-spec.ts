@@ -150,4 +150,30 @@ describe('사용자 로그인 테스트', () => {
         );
     });
   });
+
+  describe('GET /api/auth/user 유저 인증여부 검사', () => {
+    it('로그인 상태가 아니라면 boolean 값이 false 가 된다.', async () => {
+      await request(app.getHttpServer())
+        .get('/api/auth/user')
+        .then(({ body: res }) => {
+          expect(res.isLoggedIn).toBeFalsy();
+        });
+    });
+
+    it('로그인 상태라면 boolean 값이 true 가 된다.', async () => {
+      let temporalToken;
+      await request(app.getHttpServer())
+        .post('/api/auth/login')
+        .send(loginForm)
+        .then(({ body: res }) => {
+          temporalToken = res.accessToken;
+        });
+      await request(app.getHttpServer())
+        .get('/api/auth/user')
+        .set('Authorization', `Bearer ${temporalToken}`)
+        .then(({ body: res }) => {
+          expect(res.isLoggedIn).toBeTruthy();
+        });
+    });
+  });
 });
