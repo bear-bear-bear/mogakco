@@ -4,7 +4,6 @@ import UserFieldEntity from '@models/entities/user-field.entity';
 import UserJobEntity from '@models/entities/users-job.entity';
 import UserFieldRepository from '@models/repositories/user-field.repository';
 import UserJobRepository from '@models/repositories/ user-job.reposity';
-import bcrypt from 'bcrypt';
 import UserRepository from '../models/repositories/user.repository';
 
 @Injectable()
