@@ -1,7 +1,11 @@
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 
-const descSizeStyles = ({ scale }) => {
+import type { NoUndefinedField } from 'typings/common';
+import type { IProps } from './index';
+
+type Scale = NoUndefinedField<Pick<IProps, 'scale'>>;
+const descSizeStyles = ({ scale }: Scale) => {
   const scales = {
     small: {
       fontSize: '0.95rem',

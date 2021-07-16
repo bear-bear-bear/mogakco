@@ -4,6 +4,7 @@ import styled from '@emotion/styled';
 import Button from '@components/common/Button';
 import Input from '@components/common/Input';
 import media from '@components/globalStyles/media';
+import type { Screen } from '@components/globalStyles/media';
 
 import type { ILeftContentBlockProps } from '../index';
 
@@ -102,14 +103,14 @@ const firstBlockFontStyles = () => {
       p: '1.6rem',
     },
   };
-  const mediaFontSizes = (screenSize: string) =>
+  const mediaFontSizes = (screen: Screen) =>
     `
-      ${media[screenSize]} {
+      ${media[screen]} {
         h1 {
-          font-size: ${fontSizes[screenSize].h1};
+          font-size: ${fontSizes[screen].h1};
         }
         p {
-          font-size: ${fontSizes[screenSize].p};
+          font-size: ${fontSizes[screen].p};
         }
       }
     `.trim();

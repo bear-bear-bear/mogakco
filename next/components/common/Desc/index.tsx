@@ -1,12 +1,14 @@
-import React, { FC } from 'react';
+import React from 'react';
+import type { ReactNode } from 'react';
 
 import * as S from './style';
 
-interface Props {
+export interface IProps {
+  children?: ReactNode;
   scale?: 'small' | 'medium';
 }
 
-const Desc: FC<Props> = ({ scale = 'medium', children, ...rest }) => (
+const Desc = ({ scale = 'medium', children, ...rest }: IProps) => (
   <S.Desc scale={scale} {...rest}>
     {children}
   </S.Desc>

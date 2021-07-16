@@ -9,4 +9,14 @@ export interface IGeneralServerResponse {
   error?: string | string[];
 }
 
+/**
+ * Axios 에러 타입
+ */
 export type GeneralAxiosError = AxiosError<IGeneralServerResponse>;
+
+/**
+ * T 에서 undefined를 삭제한 타입 반환
+ */
+export type NoUndefinedField<T> = {
+  [P in keyof T]-?: Exclude<T[P], null | undefined>;
+};
