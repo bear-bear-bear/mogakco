@@ -11,7 +11,6 @@ interface IProps {
   svgName: `${string}.svg`;
 }
 
-// TODO: svg 애니메이션 추가해보기
 /**
  * @desc: CardAnchor는 next Link입니다.
  */
