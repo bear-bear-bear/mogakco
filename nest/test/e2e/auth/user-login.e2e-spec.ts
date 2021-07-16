@@ -160,7 +160,7 @@ describe('사용자 로그인 테스트', () => {
         });
     });
 
-    it('로그인 상태라면 boolean 값이 true 가 된다.', async () => {
+    it('로그인 상태라면 boolean 값이 true 가 된다. ( user 정보 포함 )', async () => {
       let temporalToken;
       await request(app.getHttpServer())
         .post('/api/auth/login')
@@ -173,6 +173,7 @@ describe('사용자 로그인 테스트', () => {
         .set('Authorization', `Bearer ${temporalToken}`)
         .then(({ body: res }) => {
           expect(res.isLoggedIn).toBeTruthy();
+          expect(res.user).toBeTruthy();
         });
     });
   });
