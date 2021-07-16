@@ -109,6 +109,34 @@ class UserRepository extends Repository<UserEntity> {
     };
   }
 
+  /**
+   * @description 민감한 데이터 제거, 중복 함수가 많기때문에 차선책을 고려할 예정 TODO: 차선책 요구
+   */
+  async findUserShallow(id: number) {
+    const user = await this.findOne(id, {
+      select: ['id', 'username', 'email', 'skills', 'job'],
+    });
+
+    if (user === undefined) return null;
+
+    // TODO: Relation Column 개선 필요
+    const skillIds = user.skills;
+    const skills =
+      skillIds &&
+      (await UserFieldEntity.findByIds(skillIds, {
+        select: ['id', 'name'],
+      }));
+    const job = await UserJobEntity.findOne({
+      select: ['id', 'name'],
+      where: { id: user.id },
+    });
+    return {
+      ...user,
+      skills,
+      job,
+    };
+  }
+
   async updateUser(user: any): Promise<UserEntity> {
     const updatedUser = await this.save(user);
     if (!updatedUser) {
