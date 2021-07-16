@@ -17,6 +17,8 @@ import { ConfigService } from '@nestjs/config';
 import UserEntity from '@models/entities/user.entity';
 import { CreateUserDto, ICookieProps, JwtUserProps } from '@typing/auth';
 import { addMinutes, millisecondsToMinutes } from 'date-fns';
+import { IncomingHttpHeaders } from 'http';
+import jwtVerifyPromise from '@lib/promisifyJwtVerify';
 import UserService from './user.service';
 
 @Injectable()
@@ -273,6 +275,21 @@ class AuthService {
     ) as string;
     const minutes = millisecondsToMinutes(Number(`${accessTokenExpirationTime}000`));
     return addMinutes(new Date(), minutes);
+  }
+
+  getAccessTokenByHeaders(headers: IncomingHttpHeaders) {
+    return headers.authorization?.split(' ')[1];
+  }
+
+  getAuthentication(accessToken: string) {
+    const secretKey = this.configService.get('JWT_ACCESS_TOKEN_SECRET') as string;
+    return jwtVerifyPromise(accessToken, secretKey)
+      .then((decoded: any) => {
+        return decoded;
+      })
+      .catch(() => {
+        return false;
+      });
   }
 }
 
