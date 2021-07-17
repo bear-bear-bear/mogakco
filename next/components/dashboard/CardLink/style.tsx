@@ -1,7 +1,21 @@
 import styled from '@emotion/styled';
+import { keyframes } from '@emotion/react';
 import media from '@components/globalStyles/media';
 
+const fadeAnimation = keyframes`
+  ${'0%'} {
+    opacity: 0;
+    top: 2rem;
+  }
+
+  ${'100%'} {
+    opacity: 100%;
+    top: 0;
+  }
+`;
+
 export const CardAnchor = styled.a`
+  position: relative;
   width: 100%;
   height: 100%;
   display: grid;
@@ -10,6 +24,7 @@ export const CardAnchor = styled.a`
   padding: 2rem;
   cursor: pointer;
   transition: box-shadow 0.15s ease-in-out;
+  animation: ${fadeAnimation} 0.5s ease-in-out forwards;
 
   & > h1 {
     font-size: 2rem;
