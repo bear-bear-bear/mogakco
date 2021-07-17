@@ -1,4 +1,5 @@
-import React, { FC, LabelHTMLAttributes } from 'react';
+import React from 'react';
+import type { LabelHTMLAttributes, ReactNode } from 'react';
 
 import * as S from './style';
 
@@ -7,17 +8,13 @@ import * as S from './style';
  * direction은 정의할 input의 상대적인 방향을 말합니다. 해당 방향으로 margin 이 적용됩니다.
  */
 
-interface Props extends LabelHTMLAttributes<HTMLLabelElement> {
+export interface IProps extends LabelHTMLAttributes<HTMLLabelElement> {
+  children?: ReactNode;
   scale?: 'small' | 'medium';
   direction: 'right' | 'left' | 'top' | 'bottom';
 }
 
-const Label: FC<Props> = ({
-  scale = 'medium',
-  direction,
-  children,
-  ...rest
-}) => (
+const Label = ({ scale = 'medium', direction, children, ...rest }: IProps) => (
   <S.Label scale={scale} direction={direction} {...rest}>
     {children}
   </S.Label>

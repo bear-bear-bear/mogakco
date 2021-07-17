@@ -1,6 +1,6 @@
-type screen = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl';
+export type Screen = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl';
 
-export const mediaBreakpoints: Record<screen, number> = {
+export const mediaBreakpoints: Record<Screen, number> = {
   xs: 576, // 이하
   sm: 576, // 이상
   md: 768, // 이상
@@ -45,7 +45,7 @@ export const mediaBreakpoints: Record<screen, number> = {
  * `
  */
 const media: Record<
-  screen,
+  Screen,
   `@media only screen and (${'max' | 'min'}-width: ${number}px)`
 > = {
   xs: `@media only screen and (max-width: ${mediaBreakpoints.xs}px)`,

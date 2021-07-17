@@ -1,7 +1,11 @@
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 
-const labelMarginStyles = ({ direction }) => {
+import type { NoUndefinedField } from 'typings/common';
+import type { IProps } from './index';
+
+type Direction = Pick<IProps, 'direction'>;
+const labelMarginStyles = ({ direction }: Direction) => {
   const margin = `margin-${direction}`;
 
   return css`
@@ -9,7 +13,9 @@ const labelMarginStyles = ({ direction }) => {
   `;
 };
 
-const labelSizeStyles = ({ scale }) => {
+type Scale = Pick<IProps, 'scale'>;
+type RequiredScale = NoUndefinedField<Scale>;
+const labelSizeStyles = ({ scale }: Scale) => {
   const scales = {
     small: {
       fontSize: '1.05rem',
@@ -20,7 +26,7 @@ const labelSizeStyles = ({ scale }) => {
       lineHeight: '1.3',
     },
   };
-  const { fontSize, lineHeight } = scales[scale];
+  const { fontSize, lineHeight } = scales[scale as RequiredScale['scale']];
 
   return css`
     font-size: ${fontSize};
@@ -28,7 +34,7 @@ const labelSizeStyles = ({ scale }) => {
   `;
 };
 
-export const Label = styled.label<{ scale: string; direction: string }>`
+export const Label = styled.label<IProps>`
   display: block;
   color: var(--color-gray-4);
 

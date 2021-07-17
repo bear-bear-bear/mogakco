@@ -6,7 +6,9 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
-    "next:dev": "next",
+    "build": "next build",
+    "dev": "next dev",
+    "start": "next start",
     "lint": "eslint .",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "test:unit": "jest --config test/unit/frontend/test-config.json test/unit/frontend/**/*.jsx",

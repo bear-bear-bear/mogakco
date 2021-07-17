@@ -41,7 +41,7 @@ const PasswordSection = ({ register, setError, clearErrors }: Props) => {
         if (!isPasswordConfirm) {
           setError('passwordConfirm', {
             type: 'validate',
-            message: '패스워드가 일치하지 않습니다.',
+            message: '비밀번호가 일치하지 않습니다.',
           });
         }
         return true; // 무조건 true를 반환하여 errors.password에는 passwordConfirm관련 에러가 세팅되지 않음
