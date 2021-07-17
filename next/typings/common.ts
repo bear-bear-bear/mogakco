@@ -15,7 +15,7 @@ export interface IGeneralServerResponse {
 export type GeneralAxiosError = AxiosError<IGeneralServerResponse>;
 
 /**
- * T 에서 undefined를 삭제한 타입 반환
+ * T 에서 null 또는 undefined를 삭제한 필드 반환
  */
 export type NoUndefinedField<T> = {
   [P in keyof T]-?: Exclude<T[P], null | undefined>;

@@ -1,4 +1,4 @@
-import Reac from 'react';
+import React from 'react';
 import type { LabelHTMLAttributes, ReactNode } from 'react';
 
 import * as S from './style';
