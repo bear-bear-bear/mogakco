@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import media, { mediaBreakpoints } from '@components/globalStyles/media';
 
-export const Container = styled.div`
+export const Container = styled.main`
   width: 100%;
   height: 100%;
   max-width: ${mediaBreakpoints.lg}px;

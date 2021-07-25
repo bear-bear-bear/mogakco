@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import media from '../../globalStyles/media';
 
-export const OuterContainer = styled.div`
+export const OuterContainer = styled.main`
   position: absolute;
   top: 50%;
   transform: translate(0, -50%);
