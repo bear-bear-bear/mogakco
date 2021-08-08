@@ -12,7 +12,6 @@ export default async function fetcher<T extends IGeneralServerResponse>(
 ) {
   const res = await apiClient.get<T>(url);
 
-  // 에러일 경우 로그 표시
   if (res.data.statusCode >= 400) {
     logAxiosError(res.data as unknown as GeneralAxiosError);
   }
