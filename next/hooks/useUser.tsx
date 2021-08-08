@@ -68,7 +68,7 @@ export default function useUser({
     // 사용자 데이터가 아직 존재하지 않으면(패치 진행 중 일때 등) return
     if (!redirectTo && !user) return;
 
-    devModeLog({ redirectTo, redirectIfFound, user });
+    // devModeLog({ redirectTo, redirectIfFound, user });
 
     if (
       // redirectTo가 설정되어 있을 시, 사용자가 없을 때 리디렉션
