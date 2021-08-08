@@ -4,7 +4,7 @@ import useSWR from 'swr';
 import type { SWRConfiguration } from 'swr';
 
 import fetcher from '@lib/fetcher';
-import devModeLog from '@lib/devModeLog';
+// import devModeLog from '@lib/devModeLog';
 import type {
   IUserGetSuccessResponse,
   IUserGetFailureResponse,
@@ -65,16 +65,17 @@ export default function useUser({
 
   useEffect(() => {
     // 리디렉트가 필요하지 않다면 return (예: 이미 /dashboard에 있음)
-    // 사용자 데이터가 아직 존재하지 않으면(패치 진행 중 일때 등) return
-    if (!redirectTo && !user) return;
+    if (!redirectTo) return;
+    // 사용자 데이터가 아직 존재하지 않으면 return (패치 진행 중 일때 등)
+    if (!user) return;
 
     // devModeLog({ redirectTo, redirectIfFound, user });
 
     if (
       // redirectTo가 설정되어 있을 시, 사용자가 없을 때 리디렉션
-      (redirectTo && !redirectIfFound && !user?.isLoggedIn) ||
+      (redirectTo && !redirectIfFound && !user.isLoggedIn) ||
       // redirectIfFound가 설정되어 있을 시, 사용자가 발견되면 리디렉션
-      (redirectTo && redirectIfFound && user?.isLoggedIn)
+      (redirectTo && redirectIfFound && user.isLoggedIn)
     ) {
       router.push(redirectTo);
     }
