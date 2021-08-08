@@ -25,13 +25,13 @@ export interface ISignUpProps {
 export interface IAuthSuccessResponse extends IGeneralServerResponse {
   accessToken: string;
   expiration: string;
-  user: IUserProps;
+  user: IUserInfo;
 }
 
 /**
  * 유저가 가지고 있는 정보
  */
-export interface IUserProps {
+export interface IUserInfo {
   id: number;
   username: string;
   email: string;
@@ -42,7 +42,7 @@ export interface IUserProps {
 /**
  * 토큰으로 유저 정보를 요청했을 떄의 성공 응답
  */
-export interface IUserGetSuccessResponse extends IUserProps {
+export interface IUserGetSuccessResponse extends IUserInfo {
   isLoggedIn: boolean; // true
 }
 
