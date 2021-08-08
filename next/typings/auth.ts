@@ -42,16 +42,14 @@ export interface IUserProps {
 /**
  * 토큰으로 유저 정보를 요청했을 떄의 성공 응답
  */
-export interface IUserGetSuccessResponse
-  extends IGeneralServerResponse,
-    IUserProps {
+export interface IUserGetSuccessResponse extends IUserProps {
   isLoggedIn: boolean; // true
 }
 
 /**
  * 토큰으로 유저 정보를 요청했을 떄의 실패 응답
  */
-export interface IUserGetFailureResponse extends IGeneralServerResponse {
+export interface IUserGetFailureResponse {
   isLoggedIn: boolean; // false
 }
 

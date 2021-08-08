@@ -27,7 +27,7 @@ const ChatRoom = () => {
   const { user } = useUser({ redirectTo: '/' });
   const socket = useSocket();
   socket?.emit('events', { text: 'text' });
-  devModeLog({ socket });
+  devModeLog({ socket, user });
 
   useEffect(() => {
     if (!socket || !user?.isLoggedIn) return;
