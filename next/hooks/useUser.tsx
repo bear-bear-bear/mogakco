@@ -4,7 +4,7 @@ import useSWR from 'swr';
 import type { SWRConfiguration } from 'swr';
 
 import fetcher from '@lib/fetcher';
-import devModeLog from '@lib/devModeLog';
+// import devModeLog from '@lib/devModeLog';
 import type {
   IUserGetSuccessResponse,
   IUserGetFailureResponse,
@@ -24,11 +24,10 @@ const SWROptions: SWRConfiguration<
   GeneralAxiosError
 > = {
   onErrorRetry: (error, key, config, revalidate, { retryCount }) => {
-    // Never retry
     const status = error.response?.status as number;
-    if (unAuthorizedStatus.includes(status)) return;
-
-    // Retry after 5 seconds.
+    if (unAuthorizedStatus.includes(status)) {
+      return;
+    }
     setTimeout(() => revalidate({ retryCount }), 5000);
   },
 };
@@ -53,85 +52,6 @@ const SWROptions: SWRConfiguration<
         // ... page content ....
       )
     }
- * // 2. 로그아웃 후에 isLoggedIn을 false로 설정하여 '/' 경로로 리디렉션 됩니다.
- * const MyHeader = () => {
-      const { mutateUser } = useUser({ redirectTo: '/' });
-    
-      const handleSignOut = async () => {
-        try {
-          const { data: generalServerReponse } = await signOutApi();
-          // user 타입에 server response가 포함된다는 것에 유의
-          mutateUser({
-            isLoggedIn: false,
-            ...generalServerReponse,
-          });
-          // ...
-        } catch (error) {
-          // ...
-        }
-      };
-      
-      return (
-        {user?.isLoggedIn && (
-          <Button onClick={handleSignOut}>
-            로그아웃
-          </Button>
-        )}
-        {!user?.isLoggedIn && (
-          <Link href="/sign-in">
-            <a>
-              <Button>
-                로그인
-              </Button>
-            </a>
-          </Link>
-          <Link href="/sign-up">
-            <a>
-              <Button>
-                회원가입
-              </Button>
-            </a>
-          </Link>
-        )}
-      );
-    }
-  * // 3. SignInForm에서 로그인 작업 후 mutateUser로 user 상태를 변경하면, SignInPage의 리디렉션이 실행됩니다.
-  * // pages/sign-in
-    const SignInPage = () => {
-      const { user } = useUser({
-        redirectTo: '/dashboard',
-        redirectIfFound: true,
-      });
-
-      if (user?.isLoggedIn) return null;
-      return (
-        <SignInForm />
-      );
-    };
-
-    // components/SignInForm
-    const SignInForm = () => {
-      const { mutateUser } = useUser();
-
-      const onSubmit = async () => {
-        try {
-          const {
-            data: { extData, ...generalServerResponseWithUser },
-          } = await signInApi();
-          mutateUser({
-            isLoggedIn: true,
-            ...generalServerResponseWithUser,
-          });
-          // ... use extData logic
-        } catch (error) {
-          // ...
-        }
-      }
-      
-      return (
-        <LoginButton onSubmit={onSubmit}>로그인</Button>
-      )
-    };
  */
 export default function useUser({
   redirectTo,
@@ -141,24 +61,21 @@ export default function useUser({
   const { data: user, mutate: mutateUser } = useSWR<
     IUserGetSuccessResponse | IUserGetFailureResponse,
     GeneralAxiosError
-  >(
-    '/api/auth/user',
-    fetcher, // 서버단 API 추가 시 주석 제거
-    SWROptions,
-  );
+  >('/api/auth/user', fetcher, SWROptions);
 
   useEffect(() => {
     // 리디렉트가 필요하지 않다면 return (예: 이미 /dashboard에 있음)
-    // 사용자 데이터가 아직 존재하지 않으면(패치 진행 중 일때 등) return
-    if (!redirectTo && !user) return;
+    if (!redirectTo) return;
+    // 사용자 데이터가 아직 존재하지 않으면 return (패치 진행 중 일때 등)
+    if (!user) return;
 
-    devModeLog({ redirectTo, redirectIfFound, user });
+    // devModeLog({ redirectTo, redirectIfFound, user });
 
     if (
       // redirectTo가 설정되어 있을 시, 사용자가 없을 때 리디렉션
-      (redirectTo && !redirectIfFound && !user?.isLoggedIn) ||
+      (redirectTo && !redirectIfFound && !user.isLoggedIn) ||
       // redirectIfFound가 설정되어 있을 시, 사용자가 발견되면 리디렉션
-      (redirectTo && redirectIfFound && user?.isLoggedIn)
+      (redirectTo && redirectIfFound && user.isLoggedIn)
     ) {
       router.push(redirectTo);
     }

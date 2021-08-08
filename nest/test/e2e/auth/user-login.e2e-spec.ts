@@ -173,7 +173,6 @@ describe('사용자 로그인 테스트', () => {
         .set('Authorization', `Bearer ${temporalToken}`)
         .then(({ body: res }) => {
           expect(res.isLoggedIn).toBeTruthy();
-          expect(res.user).toBeTruthy();
         });
     });
   });

@@ -27,13 +27,12 @@ const ChatRoom = () => {
   const { user } = useUser({ redirectTo: '/' });
   const socket = useSocket();
   socket?.emit('events', { text: 'text' });
-  devModeLog({ socket });
+  devModeLog({ socket, user });
 
   useEffect(() => {
     if (!socket || !user?.isLoggedIn) return;
 
     socket.on('test', (data: string) => devModeLog({ data }));
-    // TODO: 타입 다시 만들어야함 (cur: any)
     const { id: userId } = user as IUserGetSuccessResponse;
     const props: any = {
       userId,

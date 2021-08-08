@@ -206,7 +206,7 @@ class AuthController {
       return { isLoggedIn: false };
     }
     const { isLoggedIn, user } = await this.authService.getAuthentication(accessToken);
-    return !isLoggedIn ? { isLoggedIn } : { isLoggedIn, user };
+    return !isLoggedIn ? { isLoggedIn } : { isLoggedIn, ...user };
   }
 }
 
