@@ -11,6 +11,7 @@ const config: Config.InitialOptions = {
   },
   transformIgnorePatterns: ['<rootDir>/node_modules/'],
   moduleNameMapper: {
+    '^@src/(.*)$': '<rootDir>/src/$1',
     '^@controllers/(.*)$': '<rootDir>/src/controllers/$1',
     '^@lib/(.*)$': '<rootDir>/src/lib/$1',
     '^@models/(.*)$': '<rootDir>/src/models/$1',
