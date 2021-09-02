@@ -2,7 +2,7 @@ import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import cookieParser from 'cookie-parser';
 import request from 'supertest';
-import AppModule from '../../../src/modules/app.module';
+import AppModule from '@src/app.module';
 
 const loginForm = {
   email: 'mogakco35@gmail.com',
