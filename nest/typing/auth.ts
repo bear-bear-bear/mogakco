@@ -9,9 +9,9 @@ import {
   ArrayMaxSize,
   IsOptional,
 } from 'class-validator';
-import UserJobEntity from '@models/entities/users-job.entity';
-import UserFieldEntity from '@models/entities/user-field.entity';
-import RoomUserEntity from '@models/entities/room-user.entity';
+import UserJobEntity from '../src/models/entities/users-job.entity';
+import UserFieldEntity from '../src/models/entities/user-field.entity';
+import RoomUserEntity from '../src/models/entities/room-user.entity';
 
 /** @interface Types of Data Object & Properties  */
 export interface ICookieProps {

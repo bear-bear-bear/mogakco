@@ -7,18 +7,18 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
-import makeHash from '@lib/makeHash';
 import { v4 as uuidv4 } from 'uuid';
-import UserVerifyEntity from '@models/entities/user-verify.entity';
-import UserVerifyRepository from '@models/repositories/user-verify.repository';
-import UserRepository from '@models/repositories/user.repository';
-import UserJobRepository from '@models/repositories/ user-job.reposity';
 import { ConfigService } from '@nestjs/config';
-import UserEntity from '@models/entities/user.entity';
 import { CreateUserDto, ICookieProps, IJwtPayload, JwtUserProps } from '@typing/auth';
 import { addMinutes, millisecondsToMinutes } from 'date-fns';
 import { IncomingHttpHeaders } from 'http';
-import jwtVerifyPromise from '@lib/promisifyJwtVerify';
+import makeHash from '../lib/makeHash';
+import UserVerifyEntity from '../models/entities/user-verify.entity';
+import UserVerifyRepository from '../models/repositories/user-verify.repository';
+import UserRepository from '../models/repositories/user.repository';
+import UserJobRepository from '../models/repositories/ user-job.reposity';
+import UserEntity from '../models/entities/user.entity';
+import jwtVerifyPromise from '../lib/promisifyJwtVerify';
 import UserService from './user.service';
 
 @Injectable()

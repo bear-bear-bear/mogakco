@@ -1,5 +1,5 @@
 import { EntityRepository, Repository } from 'typeorm';
-import UserJobEntity from '@models/entities/users-job.entity';
+import UserJobEntity from '../entities/users-job.entity';
 
 @EntityRepository(UserJobEntity)
 export default class UserJobRepository extends Repository<UserJobEntity> {

@@ -1,8 +1,8 @@
 import { INestApplication } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import request from 'supertest';
-import AppModule from '@modules/app.module';
 import { ISimpleItemProps } from '@test/type/mock-data-type';
+import AppModule from '../../../src/modules/app.module';
 
 const validateSimpleItemProps = (
   item: ISimpleItemProps & { createdAt: string; updatedAt: string },
@@ -27,13 +27,13 @@ describe('사용자 관련 데이터 테스트', () => {
     await app.init();
   });
 
-  it('GET /api/users/skills - 희망 분야 리스트 불러오기 Api', async () => {
+  it.skip('GET /api/users/skills - 희망 분야 리스트 불러오기 Api', async () => {
     await request(app.getHttpServer())
       .get('/api/user/skills')
       .then(({ body: fields }) => validateSimpleItemProps(fields[0]));
   });
 
-  it('GET /api/user/jobs - 직업 목록 리스트 불러오기 Api', async () => {
+  it.skip('GET /api/user/jobs - 직업 목록 리스트 불러오기 Api', async () => {
     await request(app.getHttpServer())
       .get('/api/user/jobs')
       .then(({ body: jobs }) => validateSimpleItemProps(jobs[0]));
