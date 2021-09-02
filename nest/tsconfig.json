@@ -18,6 +18,8 @@
     "noImplicitAny": true,
     "strict": true,
     "paths": {
+      "@src/*": ["./src/*"],
+      "@config/*": ["./config/*"],
       "@controllers/*": ["./src/controllers/*"],
       "@lib/*": ["./src/lib/*"],
       "@models/*": ["./src/models/*"],
