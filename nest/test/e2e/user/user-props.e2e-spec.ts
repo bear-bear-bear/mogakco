@@ -7,6 +7,7 @@ import AppModule from '../../../src/modules/app.module';
 const validateSimpleItemProps = (
   item: ISimpleItemProps & { createdAt: string; updatedAt: string },
 ) => {
+  console.log(item);
   expect(item).toBeTruthy();
   expect(item).toHaveProperty('id');
   expect(item).toHaveProperty('name');
