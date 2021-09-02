@@ -2,8 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { MailerService } from '@nestjs-modules/mailer';
 import { ConfigService } from '@nestjs/config';
 import { join } from 'path';
-import { emailFailure, emailSuccess } from '@lib/log';
 import { UserVerifyEmailDto } from '@typing/auth';
+import { emailFailure, emailSuccess } from '../lib/log';
 
 // interface UserVerifyEmailDTO {
 //   email: string;

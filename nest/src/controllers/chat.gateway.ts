@@ -7,7 +7,7 @@ import {
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { Logger } from '@nestjs/common';
-import ChatService from '@services/chat.service';
+import ChatService from '../services/chat.service';
 
 /**
  * @ClientIdentifier client 의 conn.id

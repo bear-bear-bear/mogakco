@@ -16,14 +16,14 @@ import {
   InternalServerErrorException,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
-import JwtAuthGuardWithRefresh from '@services/passport/jwt.refresh.guard';
-import AuthService from '@services/auth.service';
-import UserEntity from '@models/entities/user.entity';
-import UserService from '@services/user.service';
-import EmailService from '@services/email.service';
-import ParseJoinPipe from '@controllers/pipe/parse-join-pipe';
 import { ConfigService } from '@nestjs/config';
 import { CreateUserDto, LoginUserDto } from '@typing/auth';
+import JwtAuthGuardWithRefresh from '../services/passport/jwt.refresh.guard';
+import AuthService from '../services/auth.service';
+import UserEntity from '../models/entities/user.entity';
+import UserService from '../services/user.service';
+import EmailService from '../services/email.service';
+import ParseJoinPipe from './pipe/parse-join-pipe';
 import JwtAuthGuard from '../guard/jwt-auth.guard';
 import NonAuthGuard from '../guard/non-auth.guard';
 

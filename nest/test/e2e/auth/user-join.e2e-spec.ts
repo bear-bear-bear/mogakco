@@ -1,13 +1,13 @@
 import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
-import AppModule from '@modules/app.module';
 import { getConnection } from 'typeorm';
-import UserVerifyEntity from '@models/entities/user-verify.entity';
 import request from 'supertest';
-import UserEntity from '@models/entities/user.entity';
-import { getRandomFieldList, getRandomJob } from '@lib/test-support';
 import cookieParser from 'cookie-parser';
 import { CreateUserDto } from '@typing/auth';
+import AppModule from '../../../src/modules/app.module';
+import UserVerifyEntity from '../../../src/models/entities/user-verify.entity';
+import UserEntity from '../../../src/models/entities/user.entity';
+import { getRandomFieldList, getRandomJob } from '../../../src/lib/test-support';
 import { evalResponseBodyMessage, evalToContainBodyMessage } from '../helper/support';
 
 const TEST_EMAIL = 'mockTest@test.com';

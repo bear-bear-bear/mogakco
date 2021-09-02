@@ -1,11 +1,11 @@
 import { INestApplication } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import request from 'supertest';
-import AppModule from '@modules/app.module';
-import UserVerifyEntity from '@models/entities/user-verify.entity';
 import { evalResponseBodyMessage } from '@test/e2e/helper/support';
-import UserEntity from '@models/entities/user.entity';
 import cookieParser from 'cookie-parser';
+import AppModule from '../../../src/modules/app.module';
+import UserVerifyEntity from '../../../src/models/entities/user-verify.entity';
+import UserEntity from '../../../src/models/entities/user.entity';
 
 const TEST_EMAIL = 'mockTest@test.com';
 

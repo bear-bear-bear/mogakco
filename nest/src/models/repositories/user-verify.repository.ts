@@ -1,5 +1,5 @@
-import UserVerifyEntity from '@models/entities/user-verify.entity';
 import { Repository, EntityRepository } from 'typeorm';
+import UserVerifyEntity from '../entities/user-verify.entity';
 
 @EntityRepository(UserVerifyEntity)
 class UserVerifyRepository extends Repository<UserVerifyEntity> {

@@ -1,9 +1,9 @@
 import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
-import AppModule from '@modules/app.module';
 import cookieParser from 'cookie-parser';
 import request from 'supertest';
 import { evalResponseBodyMessage, evalToStrictEqualBodyMessage } from '@test/e2e/helper/support';
+import AppModule from '../../../src/modules/app.module';
 
 // TODO!: refreshToken 이 Cookie-Set 이 될 경우 테스트 케이스에서만 에러가 발생 중.
 describe('사용자 로그인 테스트', () => {
