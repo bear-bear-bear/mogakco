@@ -12,13 +12,13 @@ interface Options {
   isCookieAble: boolean;
 }
 
-export default async function getTestAppModule(opts: Options): Promise<INestApplication> {
+export default async function getTestAppModule(opts?: Options): Promise<INestApplication> {
   const moduleRef = await Test.createTestingModule({
     imports: [AppModule],
   }).compile();
   const app: INestApplication = moduleRef.createNestApplication();
   app.setGlobalPrefix('api');
-  if (opts.isValid) {
+  if (opts?.isValid) {
     app.useGlobalPipes(
       new ValidationPipe({
         whitelist: true,
@@ -27,7 +27,7 @@ export default async function getTestAppModule(opts: Options): Promise<INestAppl
       }),
     );
   }
-  if (opts.isCookieAble) {
+  if (opts?.isCookieAble) {
     app.use(cookieParser());
   }
   await app.init();

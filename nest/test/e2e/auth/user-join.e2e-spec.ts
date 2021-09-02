@@ -1,11 +1,8 @@
-import { INestApplication, ValidationPipe } from '@nestjs/common';
-import { Test } from '@nestjs/testing';
+import { INestApplication } from '@nestjs/common';
 import { getConnection } from 'typeorm';
 import request from 'supertest';
-import cookieParser from 'cookie-parser';
 import { CreateUserDto } from '@typing/auth';
 import getTestAppModule from '@test/e2e/helper/module';
-import AppModule from '../../../src/modules/app.module';
 import UserVerifyEntity from '../../../src/models/entities/user-verify.entity';
 import UserEntity from '../../../src/models/entities/user.entity';
 import { getRandomFieldList, getRandomJob } from '../../../src/lib/test-support';
