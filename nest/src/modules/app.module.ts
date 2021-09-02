@@ -1,11 +1,10 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import Joi from 'joi';
-import { join } from 'path';
 import ChatModule from './chat.module';
 import AuthModule from './auth.module';
 import MailModule from './mail.module';
+import MariadbModule from '../config/database/mariadb.module';
 
 @Module({
   imports: [
@@ -33,20 +32,7 @@ import MailModule from './mail.module';
         TYPEORM_LOGGING: Joi.boolean().required(),
       }),
     }),
-    TypeOrmModule.forRoot({
-      type: 'mariadb',
-      host: process.env.DATABASE_HOST as string,
-      port: parseInt(process.env.DATABASE_PORT as string, 10),
-      username: process.env.DATABASE_USER as string,
-      password: process.env.DATABASE_PASSWORD as string,
-      database: process.env.DATABASE_NAME as string,
-      synchronize: process.env.NODE_ENV === 'development',
-      logging: Boolean(process.env.TYPEORM_LOGGING),
-      migrationsTableName: 'migrations',
-      migrations: ['migrations/*.ts'],
-      cli: { migrationsDir: 'migration' },
-      entities: [join(__dirname, '../models/entities/*.entity{.ts,.js}')],
-    }),
+    MariadbModule,
     AuthModule,
     MailModule,
     ChatModule,
