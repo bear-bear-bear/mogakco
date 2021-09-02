@@ -18,14 +18,14 @@
     "noImplicitAny": true,
     "strict": true,
     "paths": {
-      "@controllers/*": ["./controllers/*"],
-      "@lib/*": ["./lib/*"],
-      "@models/*": ["./models/*"],
-      "@modules/*": ["./modules/*"],
-      "@services/*": ["./services/*"],
-      "@test/*": ["./test/*"],
-      "@guard/*": ["./guard/*"],
-      "@typing/*": ["./typing/*"]
+      "@controllers/*": ["./src/controllers/*"],
+      "@lib/*": ["./src/lib/*"],
+      "@models/*": ["./src/models/*"],
+      "@modules/*": ["./src/modules/*"],
+      "@services/*": ["./src/services/*"],
+      "@test/*": ["./src/test/*"],
+      "@guard/*": ["./src/guard/*"],
+      "@typing/*": ["./src/typing/*"]
     }
   }
 }

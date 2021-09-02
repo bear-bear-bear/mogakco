@@ -11,14 +11,14 @@ const config: Config.InitialOptions = {
   },
   transformIgnorePatterns: ['<rootDir>/node_modules/'],
   moduleNameMapper: {
-    '^@controllers/(.*)$': '<rootDir>/controllers/$1',
-    '^@lib/(.*)$': '<rootDir>/lib/$1',
-    '^@models/(.*)$': '<rootDir>/models/$1',
-    '^@modules/(.*)$': '<rootDir>/modules/$1',
-    '^@services/(.*)$': '<rootDir>/services/$1',
+    '^@controllers/(.*)$': '<rootDir>/src/controllers/$1',
+    '^@lib/(.*)$': '<rootDir>/src/lib/$1',
+    '^@models/(.*)$': '<rootDir>/src/models/$1',
+    '^@modules/(.*)$': '<rootDir>/src/modules/$1',
+    '^@services/(.*)$': '<rootDir>/src/services/$1',
     '^@test/(.*)$': '<rootDir>/test/$1',
-    '^@guard/(.*)$': '<rootDir>/guard/$1',
-    '^@typing/(.*)$': '<rootDir>/typing/$1',
+    '^@guard/(.*)$': '<rootDir>/src/guard/$1',
+    '^@typing/(.*)$': '<rootDir>/src/typing/$1',
   },
 };
 
