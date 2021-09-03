@@ -1,11 +1,16 @@
 import { INestApplication } from '@nestjs/common';
-import { Test } from '@nestjs/testing';
 import request from 'supertest';
 import { evalResponseBodyMessage } from '@test/e2e/helper/support';
+<<<<<<< HEAD
 import cookieParser from 'cookie-parser';
 import AppModule from '@src/app.module';
 import UserVerifyEntity from '@src/models/entities/user-verify.entity';
 import UserEntity from '@src/models/entities/user.entity';
+=======
+import getTestAppModule from '@test/e2e/helper/module';
+import UserVerifyEntity from '../../../src/models/entities/user-verify.entity';
+import UserEntity from '../../../src/models/entities/user.entity';
+>>>>>>> master
 
 const TEST_EMAIL = 'mockTest@test.com';
 
@@ -13,14 +18,10 @@ describe('사용자 관련 데이터 테스트', () => {
   let app: INestApplication;
 
   beforeAll(async () => {
-    const moduleRef = await Test.createTestingModule({
-      imports: [AppModule],
-    }).compile();
-
-    app = moduleRef.createNestApplication();
-    app.setGlobalPrefix('api');
-    app.use(cookieParser());
-    await app.init();
+    app = await getTestAppModule({
+      isCookieAble: true,
+      isValid: true,
+    });
   });
 
   afterAll(async () => {

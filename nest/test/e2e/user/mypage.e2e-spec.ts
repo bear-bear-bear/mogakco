@@ -1,8 +1,10 @@
-import { INestApplication, ValidationPipe } from '@nestjs/common';
-import { Test } from '@nestjs/testing';
-import cookieParser from 'cookie-parser';
+import { INestApplication } from '@nestjs/common';
 import request from 'supertest';
+<<<<<<< HEAD
 import AppModule from '@src/app.module';
+=======
+import getTestAppModule from '@test/e2e/helper/module';
+>>>>>>> master
 
 const loginForm = {
   email: 'mogakco35@gmail.com',
@@ -14,22 +16,10 @@ describe('사용자 마이페이지 테스트', () => {
   // let accessToken: string;
 
   beforeAll(async () => {
-    const moduleRef = await Test.createTestingModule({
-      imports: [AppModule],
-    }).compile();
-
-    app = moduleRef.createNestApplication();
-    app.setGlobalPrefix('api');
-    app.useGlobalPipes(
-      new ValidationPipe({
-        whitelist: true,
-        forbidNonWhitelisted: true,
-        transform: true,
-      }),
-    );
-    app.use(cookieParser());
-
-    await app.init();
+    app = await getTestAppModule({
+      isCookieAble: true,
+      isValid: true,
+    });
   });
 
   afterAll(async () => {

@@ -1,38 +1,27 @@
-import { INestApplication, ValidationPipe } from '@nestjs/common';
-import { Test } from '@nestjs/testing';
-import cookieParser from 'cookie-parser';
+import { INestApplication } from '@nestjs/common';
 import request from 'supertest';
 import { evalResponseBodyMessage, evalToStrictEqualBodyMessage } from '@test/e2e/helper/support';
+<<<<<<< HEAD
 import AppModule from '@src/app.module';
+=======
+import getTestAppModule from '@test/e2e/helper/module';
+>>>>>>> master
 
 // TODO!: refreshToken 이 Cookie-Set 이 될 경우 테스트 케이스에서만 에러가 발생 중.
 describe('사용자 로그인 테스트', () => {
   let app: INestApplication;
-  let loginForm: { email: string; password: string };
+  const loginForm: { email: string; password: string } = {
+    email: 'mogakco35@gmail.com',
+    password: 'mogapass',
+  };
   let accessToken: string;
   let refreshToken: string;
 
   beforeAll(async () => {
-    const moduleRef = await Test.createTestingModule({
-      imports: [AppModule],
-    }).compile();
-
-    loginForm = {
-      email: 'mogakco35@gmail.com',
-      password: 'mogapass',
-    };
-    app = moduleRef.createNestApplication();
-    app.setGlobalPrefix('api');
-    app.useGlobalPipes(
-      new ValidationPipe({
-        whitelist: true,
-        forbidNonWhitelisted: true,
-        transform: true,
-      }),
-    );
-    app.use(cookieParser());
-
-    await app.init();
+    app = await getTestAppModule({
+      isCookieAble: true,
+      isValid: true,
+    });
   });
 
   afterAll(async () => {
