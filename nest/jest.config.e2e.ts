@@ -10,6 +10,8 @@ const config: Config.InitialOptions = {
   testRegex: '.e2e-spec.ts$',
   transformIgnorePatterns: ['<rootDir>/node_modules/'],
   moduleNameMapper: {
+    '^@common/(.*)$': '<rootDir>/src/common/$1',
+    '^@authentication/(.*)$': '<rootDir>/src/authentication/$1',
     '^@controllers/(.*)$': '<rootDir>/src/controllers/$1',
     '^@lib/(.*)$': '<rootDir>/src/lib/$1',
     '^@models/(.*)$': '<rootDir>/src/models/$1',
