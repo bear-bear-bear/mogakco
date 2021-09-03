@@ -12,6 +12,8 @@ const config: Config.InitialOptions = {
   moduleNameMapper: {
     '^@src/(.*)$': '<rootDir>/src/$1',
     '^@config/(.*)$': '<rootDir>/config/$1',
+    '^@common/(.*)$': '<rootDir>/src/common/$1',
+    '^@authentication/(.*)$': '<rootDir>/src/authentication/$1',
     '^@controllers/(.*)$': '<rootDir>/src/controllers/$1',
     '^@lib/(.*)$': '<rootDir>/src/lib/$1',
     '^@models/(.*)$': '<rootDir>/src/models/$1',

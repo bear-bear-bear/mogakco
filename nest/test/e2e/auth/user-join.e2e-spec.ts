@@ -1,10 +1,8 @@
-import { INestApplication, ValidationPipe } from '@nestjs/common';
-import { Test } from '@nestjs/testing';
+import { INestApplication } from '@nestjs/common';
 import { getConnection } from 'typeorm';
 import request from 'supertest';
-import cookieParser from 'cookie-parser';
 import { CreateUserDto } from '@typing/auth';
-import AppModule from '../../../src/modules/app.module';
+import getTestAppModule from '@test/e2e/helper/module';
 import UserVerifyEntity from '../../../src/models/entities/user-verify.entity';
 import UserEntity from '../../../src/models/entities/user.entity';
 import { getRandomFieldList, getRandomJob } from '../../../src/lib/test-support';
@@ -17,11 +15,10 @@ describe('사용자 관련 데이터 테스트', () => {
   let user: CreateUserDto;
 
   beforeAll(async () => {
-    const moduleRef = await Test.createTestingModule({
-      imports: [AppModule],
-    }).compile();
-
-    app = moduleRef.createNestApplication();
+    app = await getTestAppModule({
+      isValid: true,
+      isCookieAble: true,
+    });
     user = {
       username: 'mogatest',
       email: TEST_EMAIL,
@@ -29,17 +26,6 @@ describe('사용자 관련 데이터 테스트', () => {
       skills: await getRandomFieldList(),
       job: await getRandomJob(),
     };
-    app.setGlobalPrefix('api');
-    app.useGlobalPipes(
-      new ValidationPipe({
-        whitelist: true,
-        forbidNonWhitelisted: true,
-        transform: true,
-      }),
-    );
-    app.use(cookieParser());
-
-    await app.init();
   });
 
   afterAll(async () => {

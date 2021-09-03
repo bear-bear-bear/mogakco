@@ -20,6 +20,8 @@
     "paths": {
       "@src/*": ["./src/*"],
       "@config/*": ["./config/*"],
+      "@common/*": ["./src/common/*"],
+      "@authentication/*": ["./src/authentication/*"],
       "@controllers/*": ["./src/controllers/*"],
       "@lib/*": ["./src/lib/*"],
       "@models/*": ["./src/models/*"],
