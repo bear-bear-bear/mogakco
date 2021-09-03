@@ -16,7 +16,7 @@ import { join } from 'path';
       migrationsTableName: 'migrations',
       migrations: ['migrations/*.ts'],
       cli: { migrationsDir: 'migration' },
-      entities: [join(__dirname, '../models/entities/*.entity{.ts,.js}')],
+      entities: [join(__dirname, '../../models/**/*.entity{.ts,.js}')],
     }),
   ],
 })
