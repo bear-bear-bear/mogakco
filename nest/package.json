@@ -6,6 +6,7 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
+    "prepare": "cd ../ && npx husky install nest/.husky",
     "nest:prebuild": "rimraf dist",
     "nest:build": "nest build && tsc-alias",
     "nest:build-run": "node dist/main",
@@ -26,6 +27,12 @@
     "seed:run": "npm run schema:drop && npm run schema:sync && ts-node ./node_modules/typeorm-seeding/dist/cli.js seed",
     "schema:drop": "npm run typeorm schema:drop",
     "schema:sync": "npm run typeorm schema:sync"
+  },
+  "lint-staged": {
+    "*.{js,ts}": [
+      "eslint . --fix",
+      "prettier --write"
+    ]
   },
   "dependencies": {
     "@jest/types": "^27.0.2",
@@ -102,7 +109,9 @@
     "eslint-plugin-import": "^2.23.3",
     "eslint-plugin-jsx-a11y": "^6.4.1",
     "eslint-plugin-prettier": "^3.4.0",
+    "husky": "^4.2.3",
     "jest": "^26.6.3",
+    "lint-staged": "^10.0.0-1",
     "mysql2": "^2.2.5",
     "passport-local": "^1.0.0",
     "prettier": "^2.3.0",
