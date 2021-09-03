@@ -18,6 +18,7 @@
     "noImplicitAny": true,
     "strict": true,
     "paths": {
+      "@src/*": ["./src/*"],
       "@common/*": ["./src/common/*"],
       "@authentication/*": ["./src/authentication/*"],
       "@controllers/*": ["./src/controllers/*"],

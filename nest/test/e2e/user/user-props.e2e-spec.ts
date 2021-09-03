@@ -1,7 +1,11 @@
 import { INestApplication } from '@nestjs/common';
 import request from 'supertest';
 import { ISimpleItemProps } from '@test/type/mock-data-type';
+<<<<<<< HEAD
+import AppModule from '@src/app.module';
+=======
 import getTestAppModule from '@test/e2e/helper/module';
+>>>>>>> master
 
 const validateSimpleItemProps = (
   item: ISimpleItemProps & { createdAt: string; updatedAt: string },

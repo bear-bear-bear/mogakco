@@ -6,7 +6,7 @@ import { BaseEntityOnlyCreatedAt } from './helper/abstract';
 @Entity({
   name: 'room_users',
 })
-class RoomUserEntity extends BaseEntityOnlyCreatedAt {
+export default class RoomUserEntity extends BaseEntityOnlyCreatedAt {
   @ManyToOne(() => RoomEntity, room => room.id)
   @JoinColumn({ name: 'room_id', referencedColumnName: 'id' })
   roomId!: RoomEntity;
@@ -15,5 +15,3 @@ class RoomUserEntity extends BaseEntityOnlyCreatedAt {
   @JoinColumn({ name: 'user_id', referencedColumnName: 'id' })
   userId!: UserEntity;
 }
-
-export default RoomUserEntity;

@@ -2,10 +2,17 @@ import { INestApplication } from '@nestjs/common';
 import { getConnection } from 'typeorm';
 import request from 'supertest';
 import { CreateUserDto } from '@typing/auth';
+<<<<<<< HEAD
+import AppModule from '@src/app.module';
+import UserVerifyEntity from '@src/models/entities/user-verify.entity';
+import UserEntity from '@src/models/entities/user.entity';
+import { getRandomFieldList, getRandomJob } from '@src/lib/test-support';
+=======
 import getTestAppModule from '@test/e2e/helper/module';
 import UserVerifyEntity from '../../../src/models/entities/user-verify.entity';
 import UserEntity from '../../../src/models/entities/user.entity';
 import { getRandomFieldList, getRandomJob } from '../../../src/lib/test-support';
+>>>>>>> master
 import { evalResponseBodyMessage, evalToContainBodyMessage } from '../helper/support';
 
 const TEST_EMAIL = 'mockTest@test.com';

@@ -1,7 +1,11 @@
 import { INestApplication } from '@nestjs/common';
 import request from 'supertest';
 import { evalResponseBodyMessage, evalToStrictEqualBodyMessage } from '@test/e2e/helper/support';
+<<<<<<< HEAD
+import AppModule from '@src/app.module';
+=======
 import getTestAppModule from '@test/e2e/helper/module';
+>>>>>>> master
 
 // TODO!: refreshToken 이 Cookie-Set 이 될 경우 테스트 케이스에서만 에러가 발생 중.
 describe('사용자 로그인 테스트', () => {
