@@ -27,6 +27,7 @@ module.exports = {
     'max-classes-per-file': ['off'],
     'import/no-cycle': 'off',
     'no-param-reassign': 'warn',
+    'import/no-extraneous-dependencies': ['error', { devDependencies: true }],
   },
   ignorePatterns: ['dist', 'node_modules'],
 };
