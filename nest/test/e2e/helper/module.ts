@@ -1,5 +1,5 @@
 import { Test } from '@nestjs/testing';
-import AppModule from '@modules/app.module';
+import AppModule from '@src/app.module';
 import { INestApplication, ValidationPipe } from '@nestjs/common';
 import cookieParser from 'cookie-parser';
 

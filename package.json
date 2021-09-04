@@ -1,0 +1,19 @@
+{
+  "name": "mogakco",
+  "version": "1.0.0",
+  "main": "",
+  "devDependencies": {
+    "husky": "^4.2.3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bear-bear-bear/mogakco.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bear-bear-bear/mogakco/issues"
+  },
+  "homepage": "https://github.com/bear-bear-bear/mogakco#readme",
+  "description": ""
+}

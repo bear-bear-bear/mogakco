@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "baseUrl": "./",
+    "types": ["node"],
     "module": "commonjs",
     "declaration": true,
     "removeComments": true,
@@ -14,11 +14,14 @@
     "incremental": true,
     "allowJs": true,
     "esModuleInterop": true,
+    "resolveJsonModule": true,
     "downlevelIteration": true,
     "noImplicitAny": true,
     "strict": true,
+    "baseUrl": ".",
     "paths": {
       "@src/*": ["./src/*"],
+      "@config/*": ["./config/*"],
       "@common/*": ["./src/common/*"],
       "@authentication/*": ["./src/authentication/*"],
       "@controllers/*": ["./src/controllers/*"],
@@ -30,5 +33,10 @@
       "@guard/*": ["./src/guard/*"],
       "@typing/*": ["./typing/*"]
     }
-  }
+  },
+  "include": [
+    "**/*.ts",
+    "**/*.js",
+    ".eslintrc.js"
+  ]
 }

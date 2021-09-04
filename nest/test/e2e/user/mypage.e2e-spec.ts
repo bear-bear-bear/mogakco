@@ -1,10 +1,6 @@
 import { INestApplication } from '@nestjs/common';
 import request from 'supertest';
-<<<<<<< HEAD
-import AppModule from '@src/app.module';
-=======
 import getTestAppModule from '@test/e2e/helper/module';
->>>>>>> master
 
 const loginForm = {
   email: 'mogakco35@gmail.com',
