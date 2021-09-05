@@ -17,7 +17,6 @@ import {
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { ConfigService } from '@nestjs/config';
-import { CreateUserDto, LoginUserDto } from '@typing/auth';
 import UserEntity from '@models/entities/user.entity';
 import UserService from '@services/user.service';
 import ParseJoinPipe from '@common/pipes/parse-join-pipe';
@@ -26,6 +25,8 @@ import JwtAuthGuard from '@common/guards/jwt-auth.guard';
 import NonAuthGuard from '@common/guards/non-auth.guard';
 import JwtAuthGuardWithRefresh from '@common/guards/jwt-refresh.guard';
 
+import LoginUserDto from './dto/login-user.dto';
+import CreateUserDto from './dto/create-user.dto';
 import AuthService from './auth.service';
 
 /**
