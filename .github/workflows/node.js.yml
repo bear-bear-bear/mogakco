@@ -52,12 +52,16 @@ jobs:
         run: npm run seed:run
         working-directory: ${{ env.NEST }}
 
+      - name: insall npm next package dependencies
+        run: npm ci
+        working-directory: ${{ env.NEXT }}
+
       - name: Run Eslint Nest
         run: npm run lint
         working-directory: ${{ env.NEST }}
 
       - name: Run Eslint Next
-        run: npm i -D eslint && eslint .
+        run: npm run lint
         working-directory: ${{ env.NEXT }}
 
       - name: Testing Nest Unit Test
