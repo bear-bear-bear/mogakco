@@ -2,6 +2,11 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { join } from 'path';
 
+function isLogging(): boolean {
+  const mode = process.env.NODE_ENV;
+  return mode === 'development';
+}
+
 @Module({
   imports: [
     TypeOrmModule.forRoot({
@@ -12,7 +17,7 @@ import { join } from 'path';
       password: process.env.DATABASE_PASSWORD as string,
       database: process.env.DATABASE_NAME as string,
       synchronize: process.env.NODE_ENV === 'development',
-      logging: Boolean(process.env.TYPEORM_LOGGING),
+      logging: isLogging(),
       migrationsTableName: 'migrations',
       migrations: ['migrations/*.ts'],
       cli: { migrationsDir: 'migration' },
