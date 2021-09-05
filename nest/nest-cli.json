@@ -3,6 +3,6 @@
   "sourceRoot": ".",
   "compilerOptions": {
     "tsConfigPath": "tsconfig.json",
-    "assets": ["./services/email/*.pug"]
+    "assets": ["./src/services/email/*.pug"]
   }
 }
