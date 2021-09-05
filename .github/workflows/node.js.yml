@@ -57,7 +57,7 @@ jobs:
         working-directory: ${{ env.NEST }}
 
       - name: Run Eslint Next
-        run: npm run lint
+        run: npm i -D eslint && eslint .
         working-directory: ${{ env.NEXT }}
 
       - name: Testing Nest Unit Test
