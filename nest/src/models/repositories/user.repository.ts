@@ -1,6 +1,6 @@
 import { EntityRepository, Repository } from 'typeorm';
 import { InternalServerErrorException } from '@nestjs/common';
-import { CreateUserDto } from '@typing/auth';
+import CreateUserDto from '@authentication/dto/create-user.dto';
 import UserFieldEntity from '../entities/user-field.entity';
 import UserEntity from '../entities/user.entity';
 import UserJobEntity from '../entities/users-job.entity';
