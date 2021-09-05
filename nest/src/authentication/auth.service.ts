@@ -9,7 +9,7 @@ import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { v4 as uuidv4 } from 'uuid';
 import { ConfigService } from '@nestjs/config';
-import { CreateUserDto, ICookieProps, IJwtPayload, JwtUserProps } from '@typing/auth';
+import { ICookieProps, IJwtPayload, JwtUserProps } from '@typing/auth';
 import { addMinutes, millisecondsToMinutes } from 'date-fns';
 import { IncomingHttpHeaders } from 'http';
 import makeHash from '@lib/makeHash';
@@ -20,6 +20,7 @@ import UserJobRepository from '@models/repositories/ user-job.reposity';
 import UserEntity from '@models/entities/user.entity';
 import jwtVerifyPromise from '@lib/jwt-promise';
 import UserService from '@services/user.service';
+import CreateUserDto from '@authentication/dto/create-user.dto';
 
 @Injectable()
 class AuthService {
