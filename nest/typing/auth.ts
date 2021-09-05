@@ -1,14 +1,4 @@
 import { Observable } from 'rxjs';
-import {
-  IsEmail,
-  IsString,
-  MaxLength,
-  MinLength,
-  Matches,
-  IsNotEmpty,
-  ArrayMaxSize,
-  IsOptional,
-} from 'class-validator';
 import UserJobEntity from '../src/models/entities/users-job.entity';
 import UserFieldEntity from '../src/models/entities/user-field.entity';
 import RoomUserEntity from '../src/models/entities/room-user.entity';
