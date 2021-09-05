@@ -1,14 +1,10 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule as NestConfigModule } from '@nestjs/config';
 import Joi from 'joi';
-import ChatModule from './chat.module';
-import AuthModule from './auth.module';
-import MailModule from './mail.module';
-import MariadbModule from '../config/database/mariadb.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({
+    NestConfigModule.forRoot({
       envFilePath: '.env',
       isGlobal: true,
       validationSchema: Joi.object({
@@ -32,12 +28,6 @@ import MariadbModule from '../config/database/mariadb.module';
         TYPEORM_LOGGING: Joi.boolean().required(),
       }),
     }),
-    MariadbModule,
-    AuthModule,
-    MailModule,
-    ChatModule,
   ],
-  controllers: [],
-  providers: [],
 })
-export default class AppModule {}
+export default class ConfigModule {}

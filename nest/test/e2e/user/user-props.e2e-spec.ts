@@ -1,8 +1,7 @@
 import { INestApplication } from '@nestjs/common';
-import { Test } from '@nestjs/testing';
 import request from 'supertest';
 import { ISimpleItemProps } from '@test/type/mock-data-type';
-import AppModule from '../../../src/modules/app.module';
+import getTestAppModule from '@test/e2e/helper/module';
 
 const validateSimpleItemProps = (
   item: ISimpleItemProps & { createdAt: string; updatedAt: string },
@@ -18,13 +17,7 @@ describe('사용자 관련 데이터 테스트', () => {
   let app: INestApplication;
 
   beforeAll(async () => {
-    const moduleRef = await Test.createTestingModule({
-      imports: [AppModule],
-    }).compile();
-
-    app = moduleRef.createNestApplication();
-    app.setGlobalPrefix('api');
-    await app.init();
+    app = await getTestAppModule();
   });
 
   it.skip('GET /api/users/skills - 희망 분야 리스트 불러오기 Api', async () => {
