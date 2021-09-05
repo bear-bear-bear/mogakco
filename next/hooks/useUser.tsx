@@ -24,10 +24,18 @@ const SWROptions: SWRConfiguration<
   GeneralAxiosError
 > = {
   onErrorRetry: (error, key, config, revalidate, { retryCount }) => {
+    // status
     const status = error.response?.status as number;
     if (unAuthorizedStatus.includes(status)) {
       return;
     }
+
+    // Never url
+    if (key === '/api/auth/user') return;
+
+    // count
+    if (retryCount >= 10) return;
+
     setTimeout(() => revalidate({ retryCount }), 5000);
   },
 };
