@@ -10,7 +10,7 @@
     "build": "next build",
     "dev": "next dev",
     "start": "next start",
-    "lint": "eslint .",
+    "lint": "npx eslint .",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "stylelint": "stylelint styles/**/*.js",
     "stylelint-check": "stylelint-config-prettier-check",
