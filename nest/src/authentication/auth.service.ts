@@ -13,13 +13,13 @@ import { ICookieProps, IJwtPayload, JwtUserProps } from '@typing/auth';
 import { addMinutes, millisecondsToMinutes } from 'date-fns';
 import { IncomingHttpHeaders } from 'http';
 import makeHash from '@lib/makeHash';
-import UserVerifyEntity from '@models/entities/user-verify.entity';
-import UserVerifyRepository from '@models/repositories/user-verify.repository';
-import UserRepository from '@models/repositories/user.repository';
-import UserJobRepository from '@models/repositories/ user-job.reposity';
-import UserEntity from '@models/entities/user.entity';
 import jwtVerifyPromise from '@lib/jwt-promise';
-import UserService from '@services/user.service';
+import UserVerifyEntity from '@models/user/entities/user-verify.entity';
+import UserVerifyRepository from '@models/user/repositories/user-verify.repository';
+import UserRepository from '@models/user/repositories/user.repository';
+import UserJobRepository from '@models/user/repositories/ user-job.reposity';
+import UserEntity from '@models/user/entities/user.entity';
+import UserService from '@models/user/user.service';
 import CreateUserDto from '@authentication/dto/create-user.dto';
 
 @Injectable()

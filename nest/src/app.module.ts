@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
-import ChatModule from '@modules/chat.module';
-import MailModule from '@modules/mail.module';
+import ChatModule from '@models/chat/chat.module';
 import ConfigModule from '@config/app/config.module';
 import MariadbModule from '@config/database/mariadb.module';
+import MailModule from '@mail/mail.module';
 import AuthModule from './authentication/auth.module';
 
 @Module({
