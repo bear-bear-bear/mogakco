@@ -7,6 +7,11 @@ function isLogging(): boolean {
   return mode === 'development';
 }
 
+function isSync(): boolean {
+  const mode = process.env.NODE_ENV;
+  return mode === ('development' || 'test');
+}
+
 @Module({
   imports: [
     TypeOrmModule.forRoot({
@@ -16,7 +21,7 @@ function isLogging(): boolean {
       username: process.env.DATABASE_USER as string,
       password: process.env.DATABASE_PASSWORD as string,
       database: process.env.DATABASE_NAME as string,
-      synchronize: process.env.NODE_ENV === 'development',
+      synchronize: isSync(),
       logging: isLogging(),
       migrationsTableName: 'migrations',
       migrations: ['migrations/*.ts'],
