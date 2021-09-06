@@ -13,8 +13,8 @@ import { ConfigService } from '@nestjs/config';
 import { ICookieProps, IJwtPayload, JwtUserProps } from '@typing/auth';
 import { addMinutes, millisecondsToMinutes } from 'date-fns';
 import { IncomingHttpHeaders } from 'http';
-import makeHash from '@lib/makeHash';
-import jwtVerifyPromise from '@lib/jwt-promise';
+import makeHash from '@common/helpers/make-hash.helper';
+import jwtVerifyPromise from '@common//helpers/jwt-promise.helper';
 import UserVerifyEntity from '@models/user/entities/user-verify.entity';
 import UserVerifyRepository from '@models/user/repositories/user-verify.repository';
 import UserRepository from '@models/user/repositories/user.repository';
@@ -212,7 +212,7 @@ class AuthService {
     }
     const jobEntity = await this.userJobRepository.fineOneById(job);
 
-    if (jobEntity === undefined) {
+    if (jobEntity === null) {
       throw new HttpException('직업 정보가 일치하지 않습니다.', HttpStatus.BAD_REQUEST);
     }
 
