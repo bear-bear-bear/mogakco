@@ -55,7 +55,7 @@ describe('사용자 관련 데이터 테스트', () => {
       await request(app.getHttpServer())
         .post('/api/auth')
         .send(user)
-        .then(({ body: res }) => evalResponseBodyMessage(res, 400, '이메일 인증을 수행해주세요.'));
+        .then(({ body: res }) => evalResponseBodyMessage(res, 401, '이메일 인증을 수행해주세요.'));
     });
 
     it('테스트를 위한 이메일 인증 성공 전환..', async () => {
@@ -83,7 +83,7 @@ describe('사용자 관련 데이터 테스트', () => {
       await request(app.getHttpServer())
         .post('/api/auth')
         .send(user)
-        .then(({ body: res }) => evalResponseBodyMessage(res, 401, '이미 존재하는 유저입니다.'));
+        .then(({ body: res }) => evalResponseBodyMessage(res, 409, '이미 존재하는 유저입니다.'));
       await getConnection()
         .createQueryBuilder()
         .delete()
