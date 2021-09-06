@@ -26,7 +26,7 @@
     "no-console": "warn",
     "no-shadow": "warn",
     "@typescript-eslint/no-shadow": "warn",
-    "no-unused-vars": "error",
+    "no-unused-vars": "warn",
     "max-classes-per-file": [
       "off"
     ],
