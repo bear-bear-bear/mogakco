@@ -1,10 +1,12 @@
 import { BadRequestException, Controller, Get, Param, ParseIntPipe } from '@nestjs/common';
 import ChatService from './chat.service';
+import { ChatAvailableSwagger } from '@common/decorators/swagger/chat.decorator';
 
 @Controller('chat')
 class ChatController {
   constructor(private readonly chatService: ChatService) {}
 
+  @ChatAvailableSwagger()
   @Get('/available/:id')
   async isAvailableChatRoom(
     @Param('id', ParseIntPipe)
