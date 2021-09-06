@@ -3,6 +3,7 @@ import {
   HttpException,
   HttpStatus,
   Injectable,
+  NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
@@ -38,7 +39,7 @@ class AuthService {
    */
   async validateUser(email: string, password: string) {
     const user = await this.userRepository.findUserByEmailForLogin(email);
-    if (user === null) throw new BadRequestException('가입되지 않은 유저입니다.');
+    if (user === null) throw new NotFoundException('가입되지 않은 유저입니다.');
     const isPasswordMatch = await bcrypt.compare(password, user.password);
     if (!isPasswordMatch) {
       throw new UnauthorizedException('비밀번호가 틀렸습니다.');
@@ -197,17 +198,17 @@ class AuthService {
       email,
     });
     if (!verification || !verification.isVerified) {
-      throw new HttpException('이메일 인증을 수행해주세요.', HttpStatus.BAD_REQUEST);
+      throw new HttpException('이메일 인증을 수행해주세요.', HttpStatus.UNAUTHORIZED);
     }
 
     const currentUser = await this.userRepository.findUserByEmail(email);
     if (currentUser) {
-      throw new HttpException('이미 존재하는 유저입니다.', HttpStatus.UNAUTHORIZED);
+      throw new HttpException('이미 존재하는 유저입니다.', HttpStatus.CONFLICT);
     }
 
     const currentName = await this.userRepository.findUserByName(username);
     if (currentName) {
-      throw new HttpException('이미 존재하는 닉네임입니다.', HttpStatus.BAD_REQUEST);
+      throw new HttpException('이미 존재하는 닉네임입니다.', HttpStatus.CONFLICT);
     }
     const jobEntity = await this.userJobRepository.fineOneById(job);
 

@@ -17,6 +17,7 @@ import {
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { ConfigService } from '@nestjs/config';
+
 import UserEntity from '@models/user/entities/user.entity';
 import UserService from '@models/user/user.service';
 import ParseJoinPipe from '@common/pipes/parse-join-pipe';
@@ -28,6 +29,15 @@ import JwtAuthGuardWithRefresh from '@common/guards/jwt-refresh.guard';
 import LoginUserDto from './dto/login-user.dto';
 import CreateUserDto from './dto/create-user.dto';
 import AuthService from './auth.service';
+import {
+  AccessTokenSwagger,
+  BeforeRegisterSwagger,
+  LoginSwagger,
+  LogoutSwagger,
+  SendTokenSwagger,
+  SignOutSwagger,
+  VerifyEmailSwagger,
+} from '@common/decorators/swagger/auth.decorator';
 
 /**
  * @desc 회원가입/로그인에 대한 처리 컨트롤러
@@ -56,6 +66,7 @@ class AuthController {
   /**
    * @returns 로그인을 수행하고 로그인 정보를 반환합니다.
    */
+  @LoginSwagger()
   @Post('/login')
   @HttpCode(200)
   async login(
@@ -87,8 +98,10 @@ class AuthController {
    * @return 로그아웃을 요청한 리퀘스트 유저 정보에 대한 DB 항목에서 refreshToken 을 제거하고,
    * 쿠키 값을 초기화 후 응답을 전송합니다.
    */
+  @LogoutSwagger()
   @UseGuards(JwtAuthGuardWithRefresh)
   @Post('/logout')
+  @HttpCode(200)
   async logout(@Req() req: { user: UserEntity }, @Res({ passthrough: true }) res: Response) {
     await this.authService.removeRefreshToken(req.user.id);
     res.clearCookie('refreshToken');
@@ -101,6 +114,7 @@ class AuthController {
   /**
    * @returns accessToken 을 갱신하여 반환합니다.
    */
+  @AccessTokenSwagger()
   @Get('/refresh-token')
   @HttpCode(201)
   @UseGuards(JwtAuthGuardWithRefresh)
@@ -124,6 +138,7 @@ class AuthController {
    * @desc 회원가입 컨트롤러 입니다.
    * @returns 성공적으로 회원가입 된 사용자 객체
    */
+  @SignOutSwagger()
   @UseGuards(NonAuthGuard)
   @Post()
   async join(@Body(ParseJoinPipe) info: CreateUserDto, @Res({ passthrough: true }) res: Response) {
@@ -140,6 +155,7 @@ class AuthController {
   /**
    * @returns 이메일 전송 여부에 대한 객체를 반환한다.
    */
+  @SendTokenSwagger()
   @Post('/send-token/before-register')
   @HttpCode(200)
   async sendTokenBeforeRegister(@Body('email') email: string) {
@@ -161,7 +177,8 @@ class AuthController {
   /**
    * @redirect 이메일 인증 검증 여부와 함께 회원가입 페이지로 리다이렉션한다.
    */
-  // TODO: Domain ( Production ) Required
+  // TODO: Domain ( Production )
+  @BeforeRegisterSwagger()
   @Get('/verify-email/before-register')
   @Redirect(`http://localhost:3000/sign-up/required`, 307)
   async processVerifyEmail(
@@ -183,6 +200,7 @@ class AuthController {
   /**
    * @returns 사용자가 이메일인증을 수행했는지에 대한 여부를 반환한다.
    */
+  @VerifyEmailSwagger()
   @Get('/is-verified/before-register')
   @HttpCode(200)
   async lastCheckingBeforeRegister(@Query('email') email: string) {
@@ -201,6 +219,9 @@ class AuthController {
     };
   }
 
+  /**
+   * @Deprecated
+   */
   @Get('/user')
   async getAuthentication(@Req() { headers }: Request) {
     const accessToken = this.authService.getAccessTokenByHeaders(headers);
