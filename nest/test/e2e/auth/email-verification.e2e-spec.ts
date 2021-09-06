@@ -97,7 +97,7 @@ describe('사용자 관련 데이터 테스트', () => {
       await request(app.getHttpServer())
         .get(`/api/auth/verify-email/before-register?id=${id}&token=${token}`)
         .then(({ headers }) => {
-          expect(headers.location).toContain(false);
+          expect(headers.location).toContain('false');
         });
     });
   });
