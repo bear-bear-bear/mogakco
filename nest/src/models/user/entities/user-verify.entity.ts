@@ -2,7 +2,7 @@ import { Column, Entity } from 'typeorm';
 import { BaseEntityOnlyCreatedAt } from '@common/helpers/entity.helper';
 
 @Entity({
-  name: 'users_verifies',
+  name: 'users_verify',
 })
 class UserVerifyEntity extends BaseEntityOnlyCreatedAt {
   @Column({ length: 50 })
