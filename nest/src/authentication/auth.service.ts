@@ -212,7 +212,7 @@ class AuthService {
     }
     const jobEntity = await this.userJobRepository.fineOneById(job);
 
-    if (jobEntity === null) {
+    if (jobEntity === undefined) {
       throw new HttpException('직업 정보가 일치하지 않습니다.', HttpStatus.BAD_REQUEST);
     }
 

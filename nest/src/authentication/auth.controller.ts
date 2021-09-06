@@ -14,7 +14,6 @@ import {
   Redirect,
   HttpCode,
   InternalServerErrorException,
-  Logger,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { ConfigService } from '@nestjs/config';
@@ -39,7 +38,6 @@ import {
   SignOutSwagger,
   VerifyEmailSwagger,
 } from '@common/decorators/swagger/auth.decorator';
-import { ServerMessage } from '@common/helpers/enum.helper';
 
 /**
  * @desc 회원가입/로그인에 대한 처리 컨트롤러
@@ -47,8 +45,6 @@ import { ServerMessage } from '@common/helpers/enum.helper';
 @Controller('auth')
 @UseInterceptors(ClassSerializerInterceptor)
 class AuthController {
-  private logger = new Logger();
-
   constructor(
     private userService: UserService,
     private authService: AuthService,
@@ -146,19 +142,14 @@ class AuthController {
   @UseGuards(NonAuthGuard)
   @Post()
   async join(@Body(ParseJoinPipe) info: CreateUserDto, @Res({ passthrough: true }) res: Response) {
-    try {
-      const { accessToken, statusCode, message, refreshTokenCookieSet, user } =
-        await this.authService.join(info);
-      const { token, ...refreshOptions } = refreshTokenCookieSet;
-      res.cookie('refreshToken', token, {
-        ...refreshOptions,
-      });
-      const expiration = this.authService.getAccessTokenExpirationTime();
-      return { statusCode, message, accessToken, expiration, user };
-    } catch (err) {
-      this.logger.error(err);
-      new InternalServerErrorException(ServerMessage.INTERVAL);
-    }
+    const { accessToken, statusCode, message, refreshTokenCookieSet, user } =
+      await this.authService.join(info);
+    const { token, ...refreshOptions } = refreshTokenCookieSet;
+    res.cookie('refreshToken', token, {
+      ...refreshOptions,
+    });
+    const expiration = this.authService.getAccessTokenExpirationTime();
+    return { statusCode, message, accessToken, expiration, user };
   }
 
   /**
@@ -168,28 +159,19 @@ class AuthController {
   @Post('/send-token/before-register')
   @HttpCode(200)
   async sendTokenBeforeRegister(@Body('email') email: string) {
-    try {
-      this.authService.verifyEmailRequest(email);
+    this.authService.verifyEmailRequest(email);
 
-      const {
-        token,
-        email: destinatedEmail,
-        id,
-      } = await this.authService.getEmailVerifyToken(email);
-      this.emailService.userVerify({
-        email: destinatedEmail,
-        token,
-        id,
-      });
+    const { token, email: destinatedEmail, id } = await this.authService.getEmailVerifyToken(email);
+    this.emailService.userVerify({
+      email: destinatedEmail,
+      token,
+      id,
+    });
 
-      return {
-        statusCode: HttpStatus.OK,
-        message: '이메일 전송 성공',
-      };
-    } catch (err) {
-      this.logger.error(err);
-      new InternalServerErrorException(ServerMessage.INTERVAL);
-    }
+    return {
+      statusCode: HttpStatus.OK,
+      message: '이메일 전송 성공',
+    };
   }
 
   /**
