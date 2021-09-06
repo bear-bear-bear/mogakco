@@ -7,8 +7,8 @@ export default class UserJobRepository extends Repository<UserJobEntity> {
     if (id === null) {
       return null;
     }
-    const jobEntity = await this.findOne(id);
-
-    return jobEntity;
+    const job = await this.findOne(id);
+    if (!job) return null;
+    return job;
   }
 }
