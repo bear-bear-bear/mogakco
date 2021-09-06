@@ -6,7 +6,7 @@ import { compilerOptions } from './tsconfig.json';
 const config: Config.InitialOptions = {
   preset: 'ts-jest',
   moduleFileExtensions: ['ts', 'js', 'json'],
-  rootDir: '.',
+  rootDir: '<rootDir>',
   transformIgnorePatterns: ['<rootDir>/node_modules/'],
   moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, { prefix: '<rootDir>/' }),
   transform: {
