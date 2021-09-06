@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "types": ["node"],
+//    "types": ["node"], ??
     "module": "commonjs",
     "declaration": true,
     "removeComments": true,
@@ -13,6 +13,7 @@
     "outDir": "./dist",
     "incremental": true,
     "allowJs": true,
+    "moduleResolution": "node",
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "downlevelIteration": true,
@@ -34,6 +35,6 @@
   "include": [
     "**/*.ts",
     "**/*.js",
-    ".eslintrc.js"
+    ".eslintrc.json"
   ]
 }
