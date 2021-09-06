@@ -1,7 +1,7 @@
 import { Entity, JoinColumn, OneToMany, OneToOne } from 'typeorm';
+import UserEntity from '@models/user/entities/user.entity';
+import { BaseEntitySoftDelete } from '@common/helpers/entity.helper';
 import RoomUserEntity from './room-user.entity';
-import UserEntity from './user.entity';
-import { BaseEntitySoftDelete } from './helper/abstract';
 
 @Entity({
   name: 'rooms',

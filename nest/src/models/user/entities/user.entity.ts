@@ -1,7 +1,7 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import { Exclude } from 'class-transformer';
-import RoomUserEntity from './room-user.entity';
-import { BaseEntitySoftDelete } from './helper/abstract';
+import { BaseEntitySoftDelete } from '@common/helpers/entity.helper';
+import RoomUserEntity from '@models/chat/entities/room-user.entity';
 import UserJobEntity from './users-job.entity';
 
 @Entity({
@@ -30,7 +30,7 @@ class UserEntity extends BaseEntitySoftDelete {
   job!: UserJobEntity | null;
 
   @OneToMany(() => RoomUserEntity, room => room.userId)
-  roomUser?: RoomUserEntity;
+  roomUserNumber?: RoomUserEntity;
 }
 
 export default UserEntity;

@@ -8,7 +8,7 @@ import {
   MaxLength,
   MinLength,
 } from 'class-validator';
-import UserJobEntity from '@models/entities/users-job.entity';
+import UserJobEntity from '@models/user/entities/users-job.entity';
 
 const passwordRegex = new RegExp(
   /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@!%*#?&])[A-Za-z\d$@!%*#?&]{8,50}$/,

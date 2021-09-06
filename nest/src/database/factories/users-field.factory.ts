@@ -1,5 +1,5 @@
 import { define } from 'typeorm-seeding';
-import UserFieldEntity from '../models/entities/user-field.entity';
+import UserFieldEntity from '@models/user/entities/user-field.entity';
 
 export const fieldData = [
   '프론트엔드',

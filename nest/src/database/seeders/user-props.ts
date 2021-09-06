@@ -1,14 +1,14 @@
 import { Factory, Seeder } from 'typeorm-seeding';
 import { getCustomRepository } from 'typeorm';
-import makeHash from '../lib/makeHash';
-import UserJobEntity from '../models/entities/users-job.entity';
-import { jobDataLength } from '../factory/users-job.factory';
-import { fieldDataLength } from '../factory/users-field.factory';
-import UserFieldEntity from '../models/entities/user-field.entity';
-import UserEntity from '../models/entities/user.entity';
-import UserRepository from '../models/repositories/user.repository';
-import { getRandomFieldList, getRandomJob } from '../lib/test-support';
-import RoomRepository from '../models/repositories/room.repository';
+import UserJobEntity from '@models/user/entities/users-job.entity';
+import UserFieldEntity from '@models/user/entities/user-field.entity';
+import UserEntity from '@models/user/entities/user.entity';
+import UserRepository from '@models/user/repositories/user.repository';
+import RoomRepository from '@models/chat/repositories/room.repository';
+import makeHash from '@lib/makeHash';
+import { getRandomFieldList, getRandomJob } from '@common/helpers/test.helper';
+import { jobDataLength } from '../factories/users-job.factory';
+import { fieldDataLength } from '../factories/users-field.factory';
 
 export default class CreateUserProps implements Seeder {
   async run(factory: Factory) {

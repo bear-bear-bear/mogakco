@@ -1,7 +1,7 @@
 import { Observable } from 'rxjs';
-import UserJobEntity from '../src/models/entities/users-job.entity';
-import UserFieldEntity from '../src/models/entities/user-field.entity';
-import RoomUserEntity from '../src/models/entities/room-user.entity';
+import UserJobEntity from '@models/user/entities/users-job.entity';
+import UserFieldEntity from '@models/user/entities/user-field.entity';
+import RoomUserEntity from '@models/chat/entities/room-user.entity';
 
 /** @interface Types of Data Object & Properties  */
 export interface ICookieProps {

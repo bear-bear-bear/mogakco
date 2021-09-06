@@ -1,10 +1,10 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import UserFieldEntity from '../models/entities/user-field.entity';
-import UserJobEntity from '../models/entities/users-job.entity';
-import UserFieldRepository from '../models/repositories/user-field.repository';
-import UserJobRepository from '../models/repositories/ user-job.reposity';
-import UserRepository from '../models/repositories/user.repository';
+import UserFieldEntity from '@models/user/entities/user-field.entity';
+import UserJobEntity from '@models/user/entities/users-job.entity';
+import UserFieldRepository from '@models/user/repositories/user-field.repository';
+import UserJobRepository from '@models/user/repositories/ user-job.reposity';
+import UserRepository from '@models/user/repositories/user.repository';
 
 @Injectable()
 class UserService {
@@ -15,7 +15,7 @@ class UserService {
     private jobRepository: UserJobRepository,
   ) {}
 
-  async findUserOne(id: number) {
+  findUserOne(id: number) {
     return this.userRepository.findUserOne(id);
   }
 

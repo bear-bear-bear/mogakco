@@ -1,6 +1,6 @@
 import { Column, Entity, OneToMany } from 'typeorm';
+import { BaseEntityHardDelete } from '@common/helpers/entity.helper';
 import UserEntity from './user.entity';
-import { BaseEntityHardDelete } from './helper/abstract';
 
 @Entity({
   name: 'users_job',

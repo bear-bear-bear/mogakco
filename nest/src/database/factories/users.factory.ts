@@ -1,6 +1,6 @@
 import Faker from 'faker';
 import { define } from 'typeorm-seeding';
-import UserEntity from '../models/entities/user.entity';
+import UserEntity from '@models/user/entities/user.entity';
 
 define(UserEntity, (faker: typeof Faker) => {
   faker.locale = 'ko';

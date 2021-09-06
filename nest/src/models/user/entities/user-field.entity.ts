@@ -1,8 +1,8 @@
 import { Column, Entity } from 'typeorm';
-import { BaseEntityHardDelete } from './helper/abstract';
+import { BaseEntityHardDelete } from '@common/helpers/entity.helper';
 
 @Entity({
-  name: 'users_field',
+  name: 'users_fields',
 })
 class UserFieldEntity extends BaseEntityHardDelete {
   @Column({ length: 20, nullable: false })

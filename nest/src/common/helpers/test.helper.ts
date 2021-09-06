@@ -1,5 +1,5 @@
 import { getConnection } from 'typeorm';
-import UserJobEntity from '../models/entities/users-job.entity';
+import UserJobEntity from '@models/user/entities/users-job.entity';
 
 type RowQueryResult = {
   id: number;

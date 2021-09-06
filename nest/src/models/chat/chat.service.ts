@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import RoomRepository from '../models/repositories/room.repository';
+import RoomRepository from './repositories/room.repository';
 
 @Injectable()
 class ChatService {

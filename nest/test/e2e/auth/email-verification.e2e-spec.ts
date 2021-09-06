@@ -1,8 +1,8 @@
 import { INestApplication } from '@nestjs/common';
 import request from 'supertest';
 import { evalResponseBodyMessage } from '@test/e2e/helper/support';
-import UserVerifyEntity from '@src/models/entities/user-verify.entity';
-import UserEntity from '@src/models/entities/user.entity';
+import UserVerifyEntity from '@models/user/entities/user-verify.entity';
+import UserEntity from '@models/user/entities/user.entity';
 import getTestAppModule from '@test/e2e/helper/module';
 
 const TEST_EMAIL = 'mockTest@test.com';

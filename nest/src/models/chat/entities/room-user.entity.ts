@@ -1,7 +1,7 @@
 import { Entity, JoinColumn, ManyToOne } from 'typeorm';
+import UserEntity from '@models/user/entities/user.entity';
+import { BaseEntityOnlyCreatedAt } from '@common/helpers/entity.helper';
 import RoomEntity from './room.entity';
-import UserEntity from './user.entity';
-import { BaseEntityOnlyCreatedAt } from './helper/abstract';
 
 @Entity({
   name: 'room_users',

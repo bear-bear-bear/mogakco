@@ -1,6 +1,6 @@
 import { EntityRepository, getCustomRepository, Repository } from 'typeorm';
-import UserRepository from './user.repository';
-import RoomEntity from '../entities/room.entity';
+import UserRepository from '@models/user/repositories/user.repository';
+import RoomEntity from '@models/chat/entities/room.entity';
 
 @EntityRepository(RoomEntity)
 export default class RoomRepository extends Repository<RoomEntity> {

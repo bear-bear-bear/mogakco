@@ -1,5 +1,5 @@
 import { define } from 'typeorm-seeding';
-import UserJobEntity from '../models/entities/users-job.entity';
+import UserJobEntity from '@models/user/entities/users-job.entity';
 
 export const jobData = [
   '학생',

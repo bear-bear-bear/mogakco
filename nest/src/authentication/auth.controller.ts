@@ -17,10 +17,10 @@ import {
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { ConfigService } from '@nestjs/config';
-import UserEntity from '@models/entities/user.entity';
-import UserService from '@services/user.service';
+import UserEntity from '@models/user/entities/user.entity';
+import UserService from '@models/user/user.service';
 import ParseJoinPipe from '@common/pipes/parse-join-pipe';
-import EmailService from '@services/email.service';
+import EmailService from '@mail/email.service';
 import JwtAuthGuard from '@common/guards/jwt-auth.guard';
 import NonAuthGuard from '@common/guards/non-auth.guard';
 import JwtAuthGuardWithRefresh from '@common/guards/jwt-refresh.guard';

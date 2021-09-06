@@ -1,5 +1,5 @@
 import { BadRequestException, Controller, Get, Param, ParseIntPipe } from '@nestjs/common';
-import ChatService from '../services/chat.service';
+import ChatService from './chat.service';
 
 @Controller('chat')
 class ChatController {
