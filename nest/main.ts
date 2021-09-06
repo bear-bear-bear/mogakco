@@ -1,12 +1,16 @@
 import { NestFactory } from '@nestjs/core';
-import { ValidationPipe } from '@nestjs/common';
+import { Logger, ValidationPipe } from '@nestjs/common';
 import cookieParser from 'cookie-parser';
 import morgan from 'morgan';
 import helmet from 'helmet';
-import AppModule from './app.module';
+import AppModule from '@src/app.module';
+import { setSwaggerModule, showListeningLog } from '@common/helpers/app.helper';
 
 async function bootstrap() {
+  const log = new Logger();
   const app = await NestFactory.create(AppModule);
+  app.setGlobalPrefix('api');
+  setSwaggerModule(app);
 
   app.use(helmet());
   app.enableCors({
@@ -15,7 +19,6 @@ async function bootstrap() {
   });
   app.use(morgan('tiny'));
   app.use(cookieParser());
-  app.setGlobalPrefix('api');
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
@@ -24,7 +27,9 @@ async function bootstrap() {
     }),
   );
 
-  await app.listen(parseInt(process.env.SERVER_PORT as string, 10) || 8001);
+  const port = parseInt(process.env.SERVER_PORT as string, 10) || 8001;
+  await app.listen(port);
+  showListeningLog(port, log);
 }
 
 bootstrap();
