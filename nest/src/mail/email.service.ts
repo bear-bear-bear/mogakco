@@ -18,7 +18,7 @@ export default class EmailService {
   ) {}
 
   /**
-   * @desc 사용자에게 이메일을 전송합니다. 개발모드라면 로그를 발생시킵니다.
+   * @desc 사용자에게 이메일을 전송합니다.
    */
   userVerify({ email, token, id }: UserVerifyEmailDto): void {
     this.mailerService.sendMail({
