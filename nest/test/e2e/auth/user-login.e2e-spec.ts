@@ -93,7 +93,6 @@ describe('사용자 로그인 테스트', () => {
         .get('/api/auth/refresh-token')
         .set('Cookie', [`refreshToken=${refreshToken}`])
         .then(res => {
-          console.log(res);
           evalResponseBodyMessage(res.body, 201, 'accessToken 갱신 완료!');
         });
     });
