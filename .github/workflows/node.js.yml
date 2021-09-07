@@ -52,8 +52,8 @@ jobs:
         run: npm run seed:run
         working-directory: ${{ env.NEST }}
 
-      - name: insall npm next package dependencies
-        run: npm ci
+      - name: insall next eslint
+        run: npm run eslint-install
         working-directory: ${{ env.NEXT }}
 
       - name: Run Eslint Nest
