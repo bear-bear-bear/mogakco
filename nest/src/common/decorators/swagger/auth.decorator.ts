@@ -22,6 +22,7 @@ export function LogoutSwagger() {
       description: '로그아웃을 수행합니다.',
     }),
     ApiResponse({ status: 200, description: '로그아웃 성공' }),
+    ApiResponse({ status: 401, description: 'refreshToken 정보 없음' }),
   );
 }
 
@@ -33,6 +34,7 @@ export function AccessTokenSwagger() {
       description: 'accessToken 을 갱신하여 반환합니다. ( Refresh 정보 필요 )',
     }),
     ApiResponse({ status: 201, description: 'accessToken 갱신 완료' }),
+    ApiResponse({ status: 401, description: 'refreshToken 정보가 없음' }),
   );
 }
 
@@ -96,5 +98,18 @@ export function VerifyEmailSwagger() {
     }),
     ApiResponse({ status: 200, description: '이메일 인증을 수행한 유저' }),
     ApiResponse({ status: 401, description: '인증을 수행하지 않은 유저' }),
+  );
+}
+
+export function GetAuthenticationSwagger() {
+  return decoratorHelper(
+    SwaggerTag.AUTH,
+    ApiOperation({
+      summary: '인증정보 API',
+      description:
+        'Bearer Access Token 기반으로 로그인 유효한 사용자인 지 여부와 유저 객체를 반환합니다.',
+    }),
+    ApiResponse({ status: 200, description: '인증 성공 여부와 유저 객체 반환' }),
+    ApiResponse({ status: 401, description: '인증 실패 여부 반환' }),
   );
 }
