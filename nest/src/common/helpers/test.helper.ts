@@ -5,13 +5,13 @@ type RowQueryResult = {
   id: number;
 }[];
 
-const getRand = (length: number) => Math.floor(Math.random() * length);
-const parseTextRows = (queryResult: RowQueryResult) => queryResult.map(q => q.id);
+const getRand = (length: number): number => Math.floor(Math.random() * length);
+const parseTextRows = (queryResult: RowQueryResult): number[] => queryResult.map(q => q.id);
 
 /**
  * @return 5개가 넘지않은 임의의 희망 분야 id 배열이 반환된다.
  */
-export const getRandomFieldList = async () => {
+export const getRandomFieldList = async (): Promise<number[] | null> => {
   const fieldList = (await getConnection().query('SELECT id FROM users_field')) as RowQueryResult;
   const idList = parseTextRows(fieldList);
   const { length } = idList;
@@ -31,10 +31,19 @@ export const getRandomFieldList = async () => {
 /**
  * @return 임의의 1개 직업 id가 반환된다.
  */
-export const getRandomJob = async () => {
+export const getRandomJob = async (): Promise<UserJobEntity | null> => {
+  const jobList = (await getConnection().query('SELECT id FROM users_job')) as RowQueryResult;
+  const idList = parseTextRows(jobList);
+  const jobId = idList[getRand(jobList.length)];
+  const job = await UserJobEntity.findOne(jobId);
+  if (!job) return null;
+  return job;
+};
+
+export const getRandomJobId = async (): Promise<number> => {
   const jobList = (await getConnection().query('SELECT id FROM users_job')) as RowQueryResult;
   const idList = parseTextRows(jobList);
   const jobId = idList[getRand(jobList.length)];
   const job = (await UserJobEntity.findOne(jobId)) as UserJobEntity;
-  return job as unknown as UserJobEntity;
+  return job.id;
 };
