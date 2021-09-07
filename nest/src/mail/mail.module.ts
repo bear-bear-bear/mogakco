@@ -26,7 +26,7 @@ import { ConfigModule } from '@nestjs/config';
           auth: {
             type: 'login',
             user: process.env.EMAIL_ADMIN as string,
-            pass: process.env.EMAIL_PASSWORD as string,
+            pass: Buffer.from(process.env.EMAIL_PASSWORD as string, 'base64').toString('utf8'),
           },
         },
         template: {
