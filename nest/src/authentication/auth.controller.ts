@@ -32,6 +32,7 @@ import AuthService from './auth.service';
 import {
   AccessTokenSwagger,
   BeforeRegisterSwagger,
+  GetAuthenticationSwagger,
   LoginSwagger,
   LogoutSwagger,
   SendTokenSwagger,
@@ -220,12 +221,14 @@ class AuthController {
   }
 
   /**
-   * @Deprecated
+   * @desc 사용자 로그인 상태 여부를 accessToken 을 검증하여 유저 객체와 함께 반환한다.
    */
+  @GetAuthenticationSwagger()
   @Get('/user')
-  async getAuthentication(@Req() { headers }: Request) {
+  async getAuthentication(@Req() { headers }: Request, @Res({ passthrough: true }) res: Response) {
     const accessToken = this.authService.getAccessTokenByHeaders(headers);
     if (accessToken === undefined) {
+      res.statusCode = HttpStatus.UNAUTHORIZED;
       return { isLoggedIn: false };
     }
     const { isLoggedIn, user } = await this.authService.getAuthentication(accessToken);
