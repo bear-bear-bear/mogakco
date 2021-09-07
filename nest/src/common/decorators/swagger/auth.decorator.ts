@@ -1,4 +1,4 @@
-import { ApiOperation, ApiQuery, ApiResponse } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiQuery, ApiResponse } from '@nestjs/swagger';
 import { SwaggerTag } from '@common/helpers/enum.helper';
 import decoratorHelper from '@common/helpers/decorator.helper';
 
@@ -109,6 +109,7 @@ export function GetAuthenticationSwagger() {
       description:
         'Bearer Access Token 기반으로 로그인 유효한 사용자인 지 여부와 유저 객체를 반환합니다.',
     }),
+    ApiBearerAuth(),
     ApiResponse({ status: 200, description: '인증 성공 여부와 유저 객체 반환' }),
     ApiResponse({ status: 401, description: '인증 실패 여부 반환' }),
   );
