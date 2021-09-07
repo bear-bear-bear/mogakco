@@ -1,7 +1,7 @@
 import UserRepository from '@models/user/repositories/user.repository';
 import { Test, TestingModule } from '@nestjs/testing';
 
-describe('UserRepository e2e 테스트', () => {
+describe('UserRepository 단위 테스트', () => {
   let userRepository: UserRepository;
 
   beforeEach(async () => {
