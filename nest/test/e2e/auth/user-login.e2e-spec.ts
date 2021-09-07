@@ -25,7 +25,7 @@ describe('사용자 로그인 테스트', () => {
   });
 
   describe('POST /api/auth/login - 사용자 로그인', () => {
-    it.skip('로그인 시도에 잘못된 요청 양식을 보낼 경우 실패한다.', async () => {
+    it('로그인 시도에 잘못된 요청 양식을 보낼 경우 실패한다.', async () => {
       const wrongLoginForm = {
         email: loginForm.email,
       };
@@ -43,7 +43,7 @@ describe('사용자 로그인 테스트', () => {
     });
 
     // res.headers['set-cookie'][0].split(';')[0].slice(12)
-    it.skip('로그인에 성공하고 토큰 값을 반환받는다.', async () => {
+    it('로그인에 성공하고 토큰 값을 반환받는다.', async () => {
       const response = await request(app.getHttpServer())
         .post('/api/auth/login')
         .send(loginForm)
@@ -57,7 +57,7 @@ describe('사용자 로그인 테스트', () => {
       evalResponseBodyMessage(response.body, 200, '로그인에 성공하였습니다!');
     });
 
-    it.skip('로그인 한 유저는 회원가입을 수행할 수 없다.', async () => {
+    it('로그인 한 유저는 회원가입을 수행할 수 없다.', async () => {
       await request(app.getHttpServer())
         .post('/api/auth')
         .set('Authorization', `Bearer ${accessToken}`)
@@ -68,7 +68,7 @@ describe('사용자 로그인 테스트', () => {
   });
 
   describe('GET /api/auth/test - 로그인 상태 여부 ( 테스트 )', () => {
-    it.skip('로그인 한 상태면, accessToken 과 함께 간단한 유저 정보가 반환된다.', async () => {
+    it('로그인 한 상태면, accessToken 과 함께 간단한 유저 정보가 반환된다.', async () => {
       await request(app.getHttpServer())
         .get('/api/auth/test')
         .set('Authorization', `Bearer ${accessToken}`)
@@ -78,7 +78,7 @@ describe('사용자 로그인 테스트', () => {
         });
     });
 
-    it.skip('10분이 지나면 401 상태 코드가 반환된다.', async () => {
+    it('10분이 지나면 401 상태 코드가 반환된다.', async () => {
       await request(app.getHttpServer())
         .get('/api/auth/test')
         .then(({ body: res }) => {
@@ -88,14 +88,17 @@ describe('사용자 로그인 테스트', () => {
   });
 
   describe('GET /api/auth/refresh-token - 새로운 accessToken 발급', () => {
-    it.skip('refreshToken 값이 검증되면 accessToken이 새로 발급된다.', async () => {
+    it('refreshToken 값이 검증되면 accessToken이 새로 발급된다.', async () => {
       await request(app.getHttpServer())
         .get('/api/auth/refresh-token')
         .set('Cookie', [`refreshToken=${refreshToken}`])
-        .then(({ body: res }) => evalResponseBodyMessage(res, 201, 'accessToken 갱신 완료!'));
+        .then(res => {
+          console.log(res);
+          evalResponseBodyMessage(res.body, 201, 'accessToken 갱신 완료!');
+        });
     });
 
-    it.skip('refreshToken 값이 만료, 존재하지 않으면 401이 반환된다.', async () => {
+    it('refreshToken 값이 만료, 존재하지 않으면 401이 반환된다.', async () => {
       await request(app.getHttpServer())
         .get('/api/auth/refresh-token')
         .then(({ body: res }) => evalResponseBodyMessage(res, 401, 'Unauthorized'));
@@ -120,13 +123,13 @@ describe('사용자 로그인 테스트', () => {
   });
 
   describe('POST /api/auth/logout - 유저 로그아웃', () => {
-    it.skip('로그인 상태가 아니라면 401이 반환된다.', async () => {
+    it('로그인 상태가 아니라면 401이 반환된다.', async () => {
       await request(app.getHttpServer())
         .post('/api/auth/logout')
         .then(({ body: res }) => evalResponseBodyMessage(res, 401, 'Unauthorized'));
     });
 
-    it.skip('로그아웃을 정상적으로 수행한다.', async () => {
+    it('로그아웃을 정상적으로 수행한다.', async () => {
       await request(app.getHttpServer())
         .post('/api/auth/logout')
         .set('Cookie', `refreshToken=${refreshToken}`)
@@ -137,7 +140,7 @@ describe('사용자 로그인 테스트', () => {
   });
 
   describe('GET /api/auth/user 유저 인증여부 검사', () => {
-    it.skip('로그인 상태가 아니라면 boolean 값이 false 가 된다.', async () => {
+    it('로그인 상태가 아니라면 boolean 값이 false 가 된다.', async () => {
       await request(app.getHttpServer())
         .get('/api/auth/user')
         .then(({ body: res }) => {
