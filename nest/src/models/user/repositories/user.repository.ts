@@ -18,13 +18,13 @@ class UserRepository extends Repository<UserEntity> {
     job,
     skills,
   }: CreateUserDto): Promise<UserEntity> {
-    const newUser = new UserEntity();
-    newUser.username = username;
-    newUser.password = password;
-    newUser.email = email;
-    newUser.job = job;
-    newUser.skills = skills;
-
+    const newUser = this.create({
+      username,
+      password,
+      email,
+      job,
+      skills,
+    });
     await this.save(newUser);
     return newUser;
   }
@@ -70,7 +70,7 @@ class UserRepository extends Repository<UserEntity> {
   }
 
   async findUserByIdForLogin(id: number) {
-    const user = await this.getJoinJobQueryBuilder().where('user.email = :email', { id }).getOne();
+    const user = await this.getJoinJobQueryBuilder().where('user.id = :id', { id }).getOne();
     if (user === undefined) return null;
     const skills = await this.getUserFields(user.skills);
     return {
@@ -85,7 +85,7 @@ class UserRepository extends Repository<UserEntity> {
   async findUserShallow(id: number) {
     const user = await this.getJoinJobQueryBuilder()
       .select(['id', 'username', 'email', 'skills', 'job'])
-      .where('user.email = :email', { id })
+      .where('user.id = :id', { id })
       .getOne();
     if (user === undefined) return null;
     const skills = await this.getUserFields(user.skills);

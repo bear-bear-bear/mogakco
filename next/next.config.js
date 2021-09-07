@@ -2,6 +2,7 @@
  * @type {import('next/dist/next-server/server/config').NextConfig}
  * */
 module.exports = {
+  webpack5: false,
   excludeFile: (str) => /test\/*/.test(str),
   webpack: (config) => {
     config.module.rules.push({
