@@ -22,6 +22,7 @@ export function LogoutSwagger() {
       description: '로그아웃을 수행합니다.',
     }),
     ApiResponse({ status: 200, description: '로그아웃 성공' }),
+    ApiResponse({ status: 401, description: 'refreshToken 정보 없음' }),
   );
 }
 
@@ -33,6 +34,7 @@ export function AccessTokenSwagger() {
       description: 'accessToken 을 갱신하여 반환합니다. ( Refresh 정보 필요 )',
     }),
     ApiResponse({ status: 201, description: 'accessToken 갱신 완료' }),
+    ApiResponse({ status: 401, description: 'refreshToken 정보가 없음' }),
   );
 }
 
