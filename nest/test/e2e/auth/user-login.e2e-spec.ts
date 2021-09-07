@@ -43,7 +43,7 @@ describe('사용자 로그인 테스트', () => {
     });
 
     // res.headers['set-cookie'][0].split(';')[0].slice(12)
-    it.skip('로그인에 성공하고 토큰 값을 반환받는다.', async () => {
+    it('로그인에 성공하고 토큰 값을 반환받는다.', async () => {
       const response = await request(app.getHttpServer())
         .post('/api/auth/login')
         .send(loginForm)
@@ -148,7 +148,7 @@ describe('사용자 로그인 테스트', () => {
         });
     });
 
-    it.skip('로그인 상태라면 boolean 값이 true 가 된다. ( user 정보 포함 )', async () => {
+    it('로그인 상태라면 boolean 값이 true 가 된다. ( user 정보 포함 )', async () => {
       let temporalToken;
       await request(app.getHttpServer())
         .post('/api/auth/login')

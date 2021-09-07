@@ -22,7 +22,7 @@ describe('사용자 마이페이지 테스트', () => {
     await app.close();
   });
 
-  it.skip('로그인', async () => {
+  it('로그인', async () => {
     await request(app.getHttpServer())
       .post('/api/auth/login')
       .send(loginForm)

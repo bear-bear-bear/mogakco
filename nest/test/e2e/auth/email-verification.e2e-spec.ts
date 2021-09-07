@@ -71,7 +71,7 @@ describe('사용자 관련 데이터 테스트', () => {
   });
 
   describe('GET /api/auth/verify-email/before-register - 이메일 클릭 시 인증 성공/실패 여부 검증', () => {
-    it.skip('30분이 지나기 전, 이메일을 확인하면 성공한다.', async () => {
+    it('30분이 지나기 전, 이메일을 확인하면 성공한다.', async () => {
       const verification = (await UserVerifyEntity.findOne({
         email: TEST_EMAIL,
       })) as UserVerifyEntity;
