@@ -12,7 +12,7 @@ import ChatService from './chat.service';
 /**
  * @ClientIdentifier client 의 conn.id
  */
-@WebSocketGateway({ namespace: 'chat' })
+@WebSocketGateway({ namespace: 'chat', cors: { origin: '*', credentials: true } })
 class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @WebSocketServer()
   server!: Server;
