@@ -31,7 +31,7 @@ export interface IValueProps {
 // TODO: 타입 값이 데이터와 정확한 지 점검 필요 2021-06-10
 export interface JwtUserProps {
   skills: UserFieldEntity[] | null;
-  job: UserJobEntity | undefined;
+  job: UserJobEntity | null;
   username: string;
   email: string;
   hashedRefreshToken?: string | null | undefined;
