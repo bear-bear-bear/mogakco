@@ -29,6 +29,7 @@ import JwtAuthGuardWithRefresh from '@common/guards/jwt-refresh.guard';
 import LoginUserDto from './dto/login-user.dto';
 import CreateUserDto from './dto/create-user.dto';
 import AuthService from './auth.service';
+
 import {
   AccessTokenSwagger,
   BeforeRegisterSwagger,
@@ -38,6 +39,7 @@ import {
   SignOutSwagger,
   VerifyEmailSwagger,
 } from '@common/decorators/swagger/auth.decorator';
+import AuthValidateService from '@authentication/auth-validate.service';
 
 /**
  * @desc 회원가입/로그인에 대한 처리 컨트롤러
@@ -48,6 +50,7 @@ class AuthController {
   constructor(
     private userService: UserService,
     private authService: AuthService,
+    private authValidateService: AuthValidateService,
     private emailService: EmailService,
     private configService: ConfigService,
   ) {}
@@ -73,7 +76,7 @@ class AuthController {
     @Body() { email, password: plainPassword }: LoginUserDto,
     @Res({ passthrough: true }) res: Response,
   ) {
-    const user = await this.authService.validateUser(email, plainPassword);
+    const user = await this.authValidateService.validateUser(email, plainPassword);
     const accessToken = this.authService.getAccessToken(user);
     const { token: refreshToken, ...refreshCookieOptions } =
       this.authService.getRefreshTokenCookie(user);
@@ -122,7 +125,7 @@ class AuthController {
     const { id } = req.user as UserEntity;
     const user = await this.userService.findUserForLogin(id);
     if (user === null) throw new InternalServerErrorException();
-    const { password: notUsingProp, ...userProps } = user;
+    const { password, ...userProps } = user;
     const accessToken = this.authService.getAccessToken(userProps);
     const expiration = this.authService.getAccessTokenExpirationTime();
     return {
@@ -159,9 +162,13 @@ class AuthController {
   @Post('/send-token/before-register')
   @HttpCode(200)
   async sendTokenBeforeRegister(@Body('email') email: string) {
-    this.authService.verifyEmailRequest(email);
+    this.authValidateService.verifyEmailRequest(email);
 
-    const { token, email: destinatedEmail, id } = await this.authService.getEmailVerifyToken(email);
+    const {
+      token,
+      email: destinatedEmail,
+      id,
+    } = await this.authValidateService.getEmailVerifyToken(email);
     this.emailService.userVerify({
       email: destinatedEmail,
       token,
@@ -188,7 +195,7 @@ class AuthController {
     const redirection = `http://localhost:${this.configService.get(
       'FRONTEND_PORT',
     )}/sign-up/required`;
-    const verification = await this.authService.verifyEmail(id, token);
+    const verification = await this.authValidateService.verifyEmail(id, token);
     if (!verification) {
       return { url: `${redirection}?success=false` };
     }
@@ -204,9 +211,9 @@ class AuthController {
   @Get('/is-verified/before-register')
   @HttpCode(200)
   async lastCheckingBeforeRegister(@Query('email') email: string) {
-    this.authService.verifyEmailRequest(email);
+    this.authValidateService.verifyEmailRequest(email);
 
-    const verification = await this.authService.lastCheckingEmailVerify(email);
+    const verification = await this.authValidateService.lastCheckingEmailVerify(email);
 
     if (typeof verification === 'boolean' || !verification.isVerified) {
       throw new HttpException('인증에 실패하였습니다.', HttpStatus.UNAUTHORIZED);
