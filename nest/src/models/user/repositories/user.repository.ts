@@ -83,10 +83,12 @@ class UserRepository extends Repository<UserEntity> {
    * @description 민감한 데이터 제거
    */
   async findUserShallow(id: number) {
-    const user = await this.getJoinJobQueryBuilder()
-      .select(['id', 'username', 'email', 'skills', 'job'])
-      .where('user.id = :id', { id })
-      .getOne();
+    const user = await this.findOne(
+      { id },
+      {
+        relations: ['job'],
+      },
+    );
     if (user === undefined) return null;
     const skills = await this.getUserFields(user.skills);
     return {
