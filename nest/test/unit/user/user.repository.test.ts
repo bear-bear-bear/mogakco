@@ -26,7 +26,7 @@ describe('UserRepository 단위 테스트', () => {
         deletedAt: undefined,
       };
       // @ts-ignore
-      jest.spyOn(userRepository, 'findUserByEmailForLogin').mockResolvedValue(mock);
+      jest.spyOn(userRepository, 'findUserByEmailForLogin').mockResolvedValue(result);
       const user = await userRepository.findUserByEmailForLogin('mogakco35@gmail.com');
       expect(user).toBe(result);
     });
