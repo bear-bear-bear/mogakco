@@ -26,7 +26,7 @@ export default class EmailService {
       from: this.configService.get('EMAIL_ADMIN'),
       subject: 'Mogakco forwards Autentication to your email 🥰',
       encoding: 'utf8',
-      template: join(__dirname, '/email', 'user-verify'),
+      template: join(__dirname, 'assets', 'user-verify'),
       context: {
         id,
         to: email,
