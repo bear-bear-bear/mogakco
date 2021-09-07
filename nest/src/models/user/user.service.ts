@@ -15,24 +15,8 @@ class UserService {
     private jobRepository: UserJobRepository,
   ) {}
 
-  findUserOne(id: number) {
-    return this.userRepository.findUserOne(id);
-  }
-
-  findUserByName(username: string) {
-    return this.userRepository.findUserByName(username);
-  }
-
-  findUserByEmail(email: string) {
-    return this.userRepository.findUserByEmail(email);
-  }
-
-  updateUserOne(user: any) {
-    return this.userRepository.updateUser(user);
-  }
-
   deleteUser(id: number) {
-    return this.userRepository.deleteUser(id);
+    return this.userRepository.softDelete(id);
   }
 
   findUserForLogin(id: number) {
