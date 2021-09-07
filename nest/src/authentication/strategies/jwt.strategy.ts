@@ -6,7 +6,7 @@ import { IJwtPayload } from '@typing/auth';
 import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
-class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
+export default class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
   constructor(private configService: ConfigService, private jwtService: JwtService) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
@@ -18,5 +18,3 @@ class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
     return { id, username };
   }
 }
-
-export default JwtStrategy;
