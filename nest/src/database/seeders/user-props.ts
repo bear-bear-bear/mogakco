@@ -5,7 +5,7 @@ import UserFieldEntity from '@models/user/entities/user-field.entity';
 import UserEntity from '@models/user/entities/user.entity';
 import UserRepository from '@models/user/repositories/user.repository';
 import RoomRepository from '@models/chat/repositories/room.repository';
-import makeHash from '@lib/makeHash';
+import makeHash from '@common/helpers/make-hash.helper';
 import { getRandomFieldList, getRandomJob } from '@common/helpers/test.helper';
 import { jobDataLength } from '../factories/users-job.factory';
 import { fieldDataLength } from '../factories/users-field.factory';
