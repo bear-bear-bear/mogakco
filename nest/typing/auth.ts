@@ -1,7 +1,6 @@
 import { Observable } from 'rxjs';
 import UserJobEntity from '@models/user/entities/users-job.entity';
 import UserFieldEntity from '@models/user/entities/user-field.entity';
-import RoomUserEntity from '@models/chat/entities/room-user.entity';
 
 /** @interface Types of Data Object & Properties  */
 export interface ICookieProps {
@@ -39,7 +38,6 @@ export interface JwtUserProps {
   createdAt: Date;
   updatedAt: Date;
   deletedAt?: Date;
-  roomUser?: RoomUserEntity;
 }
 
 /** @typing Types of Data Object & Properties with Utilities Class */

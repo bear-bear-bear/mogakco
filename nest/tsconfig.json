@@ -24,7 +24,6 @@
       "@config/*": ["./src/config/*"],
       "@common/*": ["./src/common/*"],
       "@authentication/*": ["./src/authentication/*"],
-      "@lib/*": ["./src/lib/*"],
       "@models/*": ["./src/models/*"],
       "@mail/*": ["./src/mail/*"],
       "@test/*": ["./test/*"],
