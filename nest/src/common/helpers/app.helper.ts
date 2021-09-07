@@ -7,7 +7,7 @@ export function setSwaggerModule(app: INestApplication): void {
     .setDescription('모각코 Api 문서 리스트입니다.')
     .setVersion('1.0')
     .addBearerAuth({ description: 'accessToken 키', type: 'http' })
-    .addCookieAuth('refreshToken', { description: 'refreshToken 쿠키', type: 'http' })
+    .addCookieAuth('refreshToken', { description: 'refreshToken 쿠키', type: 'apiKey' })
     .addTag('인증 API', '회원가입, 로그인 등 인증에 관련된 APIs')
     .addTag('유저 API', '유저와 관련된 APIs')
     .addTag('채팅 API', '채팅과 관련된 APIs')
