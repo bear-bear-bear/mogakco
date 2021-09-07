@@ -6,7 +6,6 @@ import Container from '@components/video-chat/Container';
 import CamSection from '@components/video-chat/CamSection';
 import ChatSection from '@components/video-chat/ChatSection';
 import useUser from '@hooks/useUser';
-import useSocket from '@hooks/useSocket';
 import apiClient, { logAxiosError } from '@lib/apiClient';
 import devModeLog from '@lib/devModeLog';
 import type { GeneralAxiosError } from 'typings/common';
@@ -14,6 +13,7 @@ import type { IUserGetSuccessResponse } from 'typings/auth';
 import { GetServerSideProps } from 'next';
 import { refreshAccessTokenApiSSR } from '@lib/apis';
 import token from '@lib/token';
+import useSocketTest from '@hooks/useSocketTest';
 
 const pageProps = {
   title: '화상채팅 - Mogakco',
@@ -25,23 +25,23 @@ const pageProps = {
 const ChatRoom = () => {
   const router = useRouter();
   const { user } = useUser({ redirectTo: '/' });
-  const socket = useSocket();
-  socket?.emit('events', { text: 'text' });
-  devModeLog({ socket, user });
+  const { client } = useSocketTest();
+  client?.emit('events', { text: 'text' });
+  devModeLog({ client, user });
 
   useEffect(() => {
-    if (!socket || !user?.isLoggedIn) return;
+    if (!client || !user?.isLoggedIn) return;
 
-    socket.on('test', (data: string) => devModeLog({ data }));
+    client.on('test', (data: string) => devModeLog({ data }));
     const { id: userId } = user as IUserGetSuccessResponse;
     const props: any = {
       userId,
       roomId: String(router.query.id),
     };
 
-    socket.emit('join-chat-room', props);
-    socket.emit('events', { name: 'Nest' }, (data: string) => devModeLog(data));
-  }, [router.query.id, socket, user]);
+    client.emit('join-chat-room', props);
+    client.emit('events', { name: 'Nest' }, (data: string) => devModeLog(data));
+  }, [router.query.id, client, user]);
 
   if (!user?.isLoggedIn) return null;
   return (

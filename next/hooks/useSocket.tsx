@@ -7,7 +7,7 @@ export default function useSocket() {
   const [socket, setSocket] = useState<typeof Socket | undefined>(undefined);
 
   const connect = useCallback(() => {
-    const socketIO = io.connect(SOCKET_SERVER);
+    const socketIO = io(SOCKET_SERVER);
     setSocket(socketIO);
   }, []);
 
