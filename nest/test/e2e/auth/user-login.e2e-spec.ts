@@ -142,6 +142,7 @@ describe('사용자 로그인 테스트', () => {
     it('로그인 상태가 아니라면 boolean 값이 false 가 된다.', async () => {
       await request(app.getHttpServer())
         .get('/api/auth/user')
+        .set('Authorization', `Bearer killMeBaby`)
         .then(({ body: res }) => {
           expect(res.isLoggedIn).toBeFalsy();
         });

@@ -235,8 +235,9 @@ class AuthController {
   async getAuthentication(@Req() { headers }: Request, @Res({ passthrough: true }) res: Response) {
     const accessToken = this.authService.getAccessTokenByHeaders(headers);
     if (accessToken === undefined) {
-      res.statusCode = HttpStatus.UNAUTHORIZED;
-      return { isLoggedIn: false };
+      return res.status(HttpStatus.UNAUTHORIZED).json({
+        isLoggedIn: false,
+      });
     }
     const { isLoggedIn, user } = await this.authService.getAuthentication(accessToken);
     return !isLoggedIn ? { isLoggedIn } : { isLoggedIn, ...user };
