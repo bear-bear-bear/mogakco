@@ -1,4 +1,4 @@
-import { ApiHeader, ApiOperation, ApiQuery, ApiResponse } from '@nestjs/swagger';
+import { ApiOperation, ApiQuery, ApiResponse } from '@nestjs/swagger';
 import { SwaggerTag } from '@common/helpers/enum.helper';
 import decoratorHelper from '@common/helpers/decorator.helper';
 
