@@ -43,7 +43,7 @@ describe('사용자 로그인 테스트', () => {
     });
 
     // res.headers['set-cookie'][0].split(';')[0].slice(12)
-    it('로그인에 성공하고 토큰 값을 반환받는다.', async () => {
+    it.skip('로그인에 성공하고 토큰 값을 반환받는다.', async () => {
       const response = await request(app.getHttpServer())
         .post('/api/auth/login')
         .send(loginForm)
