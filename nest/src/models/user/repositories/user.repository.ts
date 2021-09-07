@@ -18,13 +18,13 @@ class UserRepository extends Repository<UserEntity> {
     job,
     skills,
   }: CreateUserDto): Promise<UserEntity> {
-    const newUser = new UserEntity();
-    newUser.username = username;
-    newUser.password = password;
-    newUser.email = email;
-    newUser.job = job;
-    newUser.skills = skills;
-
+    const newUser = this.create({
+      username,
+      password,
+      email,
+      job,
+      skills,
+    });
     await this.save(newUser);
     return newUser;
   }

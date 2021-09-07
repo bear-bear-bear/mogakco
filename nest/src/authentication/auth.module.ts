@@ -13,6 +13,7 @@ import JwtStrategy from './strategies/jwt.strategy';
 
 import AuthController from './auth.controller';
 import AuthService from './auth.service';
+import AuthValidateService from '@authentication/auth-validate.service';
 
 @Module({
   imports: [
@@ -34,7 +35,14 @@ import AuthService from './auth.service';
     ConfigModule,
   ],
   controllers: [AuthController],
-  providers: [ConfigService, AuthService, JwtStrategy, JwtStrategyWithRefresh, EmailService],
+  providers: [
+    ConfigService,
+    AuthService,
+    AuthValidateService,
+    JwtStrategy,
+    JwtStrategyWithRefresh,
+    EmailService,
+  ],
   exports: [AuthService, JwtStrategy, JwtStrategyWithRefresh, EmailService],
 })
 class AuthModule {}
