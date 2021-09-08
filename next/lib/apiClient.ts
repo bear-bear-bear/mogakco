@@ -2,7 +2,12 @@ import axios, { AxiosRequestConfig } from 'axios';
 import log from 'loglevel';
 import devModeLog from '@lib/devModeLog';
 import { refreshAccessTokenApi } from '@lib/apis';
-import token, { memoryStorage, ACCESS_TOKEN, REFRESH_TOKEN } from '@lib/token';
+import token, {
+  memoryStorage,
+  ACCESS_TOKEN,
+  REFRESH_TOKEN,
+  isRefreshTokenByCookie,
+} from '@lib/token';
 import type { GeneralAxiosError } from 'typings/common';
 
 export const logAxiosError = (axiosError: GeneralAxiosError) => {
@@ -103,6 +108,8 @@ export const refreshAccessToken = async (config: AxiosRequestConfig) => {
 const processProlongToken = async (config: AxiosRequestConfig) => {
   if (typeof window === 'undefined') return config;
 
+  const isRefresh = isRefreshTokenByCookie();
+  if (!isRefresh) return config;
   // 인터셉트를 패스시켜야 할 url인지 검사
   const passUrlList = Object.values(passUrlDict);
   if (passUrlList.includes(config.url as string)) {
