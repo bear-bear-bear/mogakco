@@ -1,0 +1,7 @@
+<svg class="icon multi-color" width="32" height="32" id="left" data-name="Multi Color"
+  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+  <title style="stroke-width: 1.5;">left</title>
+  <path id="primary-stroke" d="M10,19,3,12l7-7M3,12H21"
+    style="fill: none; stroke: rgb(0, 41, 107); stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.5;">
+  </path>
+</svg>
