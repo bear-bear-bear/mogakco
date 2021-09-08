@@ -9,7 +9,6 @@ import type {
   IUserGetSuccessResponse,
   IUserGetFailureResponse,
 } from 'typings/auth';
-import type { GeneralAxiosError } from 'typings/common';
 
 // useUser props
 interface IProps {
@@ -18,18 +17,11 @@ interface IProps {
 }
 
 // SWRConfiguration
-const unAuthorizedStatus = [400, 401, 403, 404];
 const SWROptions: SWRConfiguration<
-  IUserGetSuccessResponse | IUserGetFailureResponse,
-  GeneralAxiosError
+  IUserGetSuccessResponse,
+  IUserGetFailureResponse
 > = {
   onErrorRetry: (error, key, config, revalidate, { retryCount }) => {
-    // status
-    const status = error.response?.status as number;
-    if (unAuthorizedStatus.includes(status)) {
-      return;
-    }
-
     // Never url
     if (key === '/api/auth/user') return;
 
@@ -67,8 +59,8 @@ export default function useUser({
 }: IProps = {}) {
   const router = useRouter();
   const { data: user, mutate: mutateUser } = useSWR<
-    IUserGetSuccessResponse | IUserGetFailureResponse,
-    GeneralAxiosError
+    IUserGetSuccessResponse,
+    IUserGetFailureResponse
   >('/api/auth/user', fetcher, SWROptions);
 
   useEffect(() => {

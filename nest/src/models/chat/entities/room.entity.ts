@@ -11,8 +11,10 @@ class RoomEntity extends BaseEntitySoftDelete {
   @JoinColumn({ name: 'owner_id', referencedColumnName: 'id' })
   ownerId!: UserEntity;
 
-  @OneToMany(() => RoomUserEntity, room => room.roomId)
-  roomUser?: RoomUserEntity;
+  @OneToMany(() => RoomUserEntity, room => room.roomId, {
+    cascade: true,
+  })
+  roomUser?: RoomUserEntity[];
 }
 
 export default RoomEntity;

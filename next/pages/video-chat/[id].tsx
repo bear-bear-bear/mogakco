@@ -1,6 +1,3 @@
-import { useEffect } from 'react';
-import { useRouter } from 'next/router';
-
 import CustomHead from '@components/common/CustomHead';
 import Container from '@components/video-chat/Container';
 import CamSection from '@components/video-chat/CamSection';
@@ -9,11 +6,12 @@ import useUser from '@hooks/useUser';
 import apiClient, { logAxiosError } from '@lib/apiClient';
 import devModeLog from '@lib/devModeLog';
 import type { GeneralAxiosError } from 'typings/common';
-import type { IUserGetSuccessResponse } from 'typings/auth';
 import { GetServerSideProps } from 'next';
 import { refreshAccessTokenApiSSR } from '@lib/apis';
 import token from '@lib/token';
-import useSocketTest from '@hooks/useSocketTest';
+import { useRouter } from 'next/router';
+import useSocket from '@hooks/useSocket';
+import { useEffect } from 'react';
 
 const pageProps = {
   title: '화상채팅 - Mogakco',
@@ -25,22 +23,25 @@ const pageProps = {
 const ChatRoom = () => {
   const router = useRouter();
   const { user } = useUser({ redirectTo: '/' });
-  const { client } = useSocketTest();
-  client?.emit('events', { text: 'text' });
+  const { client } = useSocket();
   devModeLog({ client, user });
 
   useEffect(() => {
     if (!client || !user?.isLoggedIn) return;
 
-    client.on('test', (data: string) => devModeLog({ data }));
-    const { id: userId } = user as IUserGetSuccessResponse;
-    const props: any = {
+    const { id: userId } = user;
+    const props: { userId: number; roomId: string } = {
       userId,
       roomId: String(router.query.id),
     };
 
-    client.emit('join-chat-room', props);
-    client.emit('events', { name: 'Nest' }, (data: string) => devModeLog(data));
+    client.emit(
+      'joinChatRoom',
+      props,
+      (data: { joinedUserName: string; joinedRoomId: string }) => {
+        console.log(data);
+      },
+    );
   }, [router.query.id, client, user]);
 
   if (!user?.isLoggedIn) return null;

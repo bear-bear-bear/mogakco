@@ -1,23 +1,29 @@
-import { useState, useEffect, useCallback } from 'react';
-import io, { Socket } from 'socket.io-client';
+import useSWR from 'swr';
+import SocketIOClient from 'socket.io-client';
+import { useEffect } from 'react';
 
+export const SOCKET_TEST_KEY = 'socket-test';
 const SOCKET_SERVER = 'http://localhost:8001/chat';
 
 export default function useSocket() {
-  const [socket, setSocket] = useState<typeof Socket | undefined>(undefined);
-
-  const connect = useCallback(() => {
-    const socketIO = io(SOCKET_SERVER);
-    setSocket(socketIO);
-  }, []);
-
+  const { data: client, mutate } = useSWR(
+    SOCKET_TEST_KEY,
+    () =>
+      SocketIOClient(SOCKET_SERVER, {
+        reconnectionDelay: 2000,
+      }),
+    {
+      revalidateOnFocus: false,
+    },
+  );
   useEffect(() => {
-    connect();
     return () => {
-      socket?.disconnect();
+      client?.disconnect();
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [client]);
 
-  return socket;
+  return {
+    client,
+    mutate,
+  };
 }
