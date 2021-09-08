@@ -2,11 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { ConfigService } from '@nestjs/config';
-import { ICookieProps, IJwtPayload, JwtUserProps } from '@typing/auth';
+import { ICookieProps, JwtUserProps } from '@typing/auth';
 import { addMinutes, millisecondsToMinutes } from 'date-fns';
 import { IncomingHttpHeaders } from 'http';
 import makeHash from '@common/helpers/make-hash.helper';
-import jwtVerifyPromise from '@common//helpers/jwt-promise.helper';
 import UserVerifyRepository from '@models/user/repositories/user-verify.repository';
 import UserRepository from '@models/user/repositories/user.repository';
 import UserEntity from '@models/user/entities/user.entity';
@@ -28,8 +27,8 @@ export default class AuthService {
   /**
    * @desc id 에 대응하는 사용자의 refreshToken 을 제거한다.
    */
-  removeRefreshToken(id: number): void {
-    this.userRepository.update(id, {
+  removeRefreshToken(id: number) {
+    return this.userRepository.update(id, {
       hashedRefreshToken: null,
     });
   }
@@ -155,13 +154,15 @@ export default class AuthService {
   }
 
   getAccessTokenByHeaders(headers: IncomingHttpHeaders): string | undefined {
-    return headers.authorization?.split(' ')[1];
+    return headers?.authorization?.split(' ')[1];
   }
 
   async getAuthentication(accessToken: string) {
     try {
-      const secretKey = this.configService.get('JWT_ACCESS_TOKEN_SECRET') as string;
-      const decodedToken = (await jwtVerifyPromise(accessToken, secretKey)) as IJwtPayload;
+      const secretKey = this.configService.get<string>('JWT_ACCESS_TOKEN_SECRET');
+      const decodedToken = this.jwtService.verify(accessToken, {
+        secret: secretKey,
+      });
       const user = await this.userRepository.findUserShallow(decodedToken.id);
       return { isLoggedIn: true, user };
     } catch {
