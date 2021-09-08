@@ -2,13 +2,16 @@ import React, { KeyboardEvent } from 'react';
 
 import useInput from '@hooks/useInput';
 
+import useSocket from '@hooks/useSocket';
 import * as S from './style';
 
 const InputBox = () => {
   const [chat, onChangeChat, setChat] = useInput('');
+  const { client } = useSocket();
   const handleChat = (e: KeyboardEvent<HTMLTextAreaElement>) => {
     if (chat.trim() !== '') {
       if (e.code === 'Enter' && !e.altKey) {
+        client?.emit('chat', chat);
         setChat('');
       }
       if (e.code === 'Enter' && e.altKey) {
