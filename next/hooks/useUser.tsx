@@ -5,10 +5,7 @@ import type { SWRConfiguration } from 'swr';
 
 import fetcher from '@lib/fetcher';
 // import devModeLog from '@lib/devModeLog';
-import type {
-  IUserGetSuccessResponse,
-  IUserGetFailureResponse,
-} from 'typings/auth';
+import type { IUserGetSuccessResponse } from 'typings/auth';
 import type { GeneralAxiosError } from 'typings/common';
 
 // useUser props
@@ -19,26 +16,24 @@ interface IProps {
 
 // SWRConfiguration
 const unAuthorizedStatus = [400, 401, 403, 404];
-const SWROptions: SWRConfiguration<
-  IUserGetSuccessResponse | IUserGetFailureResponse,
-  GeneralAxiosError
-> = {
-  onErrorRetry: (error, key, config, revalidate, { retryCount }) => {
-    // status
-    const status = error.response?.status as number;
-    if (unAuthorizedStatus.includes(status)) {
-      return;
-    }
+const SWROptions: SWRConfiguration<IUserGetSuccessResponse, GeneralAxiosError> =
+  {
+    onErrorRetry: (error, key, config, revalidate, { retryCount }) => {
+      // status
+      const status = error.response?.status as number;
+      if (unAuthorizedStatus.includes(status)) {
+        return;
+      }
 
-    // Never url
-    if (key === '/api/auth/user') return;
+      // Never url
+      if (key === '/api/auth/user') return;
 
-    // count
-    if (retryCount >= 10) return;
+      // count
+      if (retryCount >= 10) return;
 
-    setTimeout(() => revalidate({ retryCount }), 5000);
-  },
-};
+      setTimeout(() => revalidate({ retryCount }), 5000);
+    },
+  };
 
 /**
  * @desc
@@ -67,7 +62,7 @@ export default function useUser({
 }: IProps = {}) {
   const router = useRouter();
   const { data: user, mutate: mutateUser } = useSWR<
-    IUserGetSuccessResponse | IUserGetFailureResponse,
+    IUserGetSuccessResponse,
     GeneralAxiosError
   >('/api/auth/user', fetcher, SWROptions);
 
