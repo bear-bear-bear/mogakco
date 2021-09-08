@@ -42,7 +42,6 @@ import {
   VerifyEmailSwagger,
 } from '@common/decorators/swagger/auth.decorator';
 import AuthValidateService from '@authentication/auth-validate.service';
-import { JwtService } from '@nestjs/jwt';
 import { IJwtPayload } from '@typing/auth';
 
 /**
