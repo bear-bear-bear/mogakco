@@ -46,7 +46,6 @@ export function SignSwagger() {
       status: 201,
       description: '회원가입 성공',
       schema: {
-        $ref: 'sign',
         example: {
           statusCode: 200,
           message: '회원가입에 성공하였습니다.',
