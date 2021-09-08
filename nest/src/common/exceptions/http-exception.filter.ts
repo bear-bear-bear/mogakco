@@ -11,8 +11,8 @@ export class HttpExceptionFilter implements ExceptionFilter {
 
     response.status(status).json({
       statusCode: status,
-      timestamp: new Date().toISOString(),
-      path: request.url,
+      message: '에러가 발생하였습니다.',
+      error: `path - ${request.url}`,
     });
   }
 }
