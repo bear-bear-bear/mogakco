@@ -1,9 +1,9 @@
 import { INestApplication } from '@nestjs/common';
-import request from 'supertest';
+import request, { SuperTest, Test } from 'supertest';
 import { evalResponseBodyMessage, evalToStrictEqualBodyMessage } from '@test/e2e/helper/support';
 import getTestAppModule from '@test/e2e/helper/module';
+import { APIs } from '@test/e2e/helper/enum';
 
-// TODO!: refreshToken 이 Cookie-Set 이 될 경우 테스트 케이스에서만 에러가 발생 중.
 describe('사용자 로그인 테스트', () => {
   let app: INestApplication;
   const loginForm: { email: string; password: string } = {
@@ -12,12 +12,14 @@ describe('사용자 로그인 테스트', () => {
   };
   let accessToken: string;
   let refreshToken: string;
+  let agent: SuperTest<Test>;
 
   beforeAll(async () => {
     app = await getTestAppModule({
       isCookieAble: true,
       isValid: true,
     });
+    agent = request(app.getHttpServer());
   });
 
   afterAll(async () => {
@@ -30,8 +32,8 @@ describe('사용자 로그인 테스트', () => {
         email: loginForm.email,
       };
 
-      await request(app.getHttpServer())
-        .post('/api/auth/login')
+      await agent
+        .post(APIs.LOGIN)
         .send(wrongLoginForm)
         .then(({ body: res }) => {
           evalToStrictEqualBodyMessage(res, {
@@ -44,8 +46,8 @@ describe('사용자 로그인 테스트', () => {
 
     // res.headers['set-cookie'][0].split(';')[0].slice(12)
     it('로그인에 성공하고 토큰 값을 반환받는다.', async () => {
-      const response = await request(app.getHttpServer())
-        .post('/api/auth/login')
+      const response = await agent
+        .post(APIs.LOGIN)
         .send(loginForm)
         .then(res => ({
           accessToken: res.body.accessToken,
@@ -58,8 +60,8 @@ describe('사용자 로그인 테스트', () => {
     });
 
     it('로그인 한 유저는 회원가입을 수행할 수 없다.', async () => {
-      await request(app.getHttpServer())
-        .post('/api/auth')
+      await agent
+        .post(APIs.JOIN)
         .set('Authorization', `Bearer ${accessToken}`)
         .then(({ body: res }) =>
           evalResponseBodyMessage(res, 401, '로그인 상태에서 접근할 수 없습니다.'),
@@ -69,8 +71,8 @@ describe('사용자 로그인 테스트', () => {
 
   describe('GET /api/auth/test - 로그인 상태 여부 ( 테스트 )', () => {
     it('로그인 한 상태면, accessToken 과 함께 간단한 유저 정보가 반환된다.', async () => {
-      await request(app.getHttpServer())
-        .get('/api/auth/test')
+      await agent
+        .get(APIs.AUTH_TEST)
         .set('Authorization', `Bearer ${accessToken}`)
         .then(({ body: res }) => {
           expect(res.user).toHaveProperty('id');
@@ -79,18 +81,16 @@ describe('사용자 로그인 테스트', () => {
     });
 
     it('10분이 지나면 401 상태 코드가 반환된다.', async () => {
-      await request(app.getHttpServer())
-        .get('/api/auth/test')
-        .then(({ body: res }) => {
-          expect(res.statusCode).toBe(401);
-        });
+      await agent.get(APIs.AUTH_TEST).then(({ body: res }) => {
+        expect(res.statusCode).toBe(401);
+      });
     });
   });
 
   describe('GET /api/auth/refresh-token - 새로운 accessToken 발급', () => {
     it('refreshToken 값이 검증되면 accessToken이 새로 발급된다.', async () => {
-      await request(app.getHttpServer())
-        .get('/api/auth/refresh-token')
+      await agent
+        .get(APIs.REFRESH_TOKEN)
         .set('Cookie', [`refreshToken=${refreshToken}`])
         .then(res => {
           evalResponseBodyMessage(res.body, 201, 'accessToken 갱신 완료!');
@@ -98,39 +98,37 @@ describe('사용자 로그인 테스트', () => {
     });
 
     it('refreshToken 값이 만료, 존재하지 않으면 401이 반환된다.', async () => {
-      await request(app.getHttpServer())
-        .get('/api/auth/refresh-token')
+      await agent
+        .get(APIs.REFRESH_TOKEN)
         .then(({ body: res }) => evalResponseBodyMessage(res, 401, 'Unauthorized'));
     });
 
     // TODO: 해당 테스트 확인하기
-    // it('accessToken 새로 발급 후, /api/auth/test 가 정상적으로 응답된다.', async () => {
-    //   await request(app.getHttpServer())
-    //     .get('/api/auth/refresh-token')
-    //     .set('Cookie', [`refreshToken=${refreshToken}`])
-    //     .then(({ headers }) => headers['set-cookie'][0].split(';')[0].slice(12));
-    //
-    //   await request(app.getHttpServer())
-    //     .get('/api/auth/test')
-    //     .set('Authorization', `Bearer ${accessToken}`)
-    //     .then(({ body: res }) => {
-    //       expect(res.cookies).toHaveProperty('accessToken');
-    //       expect(res.user).toHaveProperty('id');
-    //       expect(res.user).toHaveProperty('username');
-    //     });
-    // });
+    it('accessToken 새로 발급 후, /api/auth/test 가 정상적으로 응답된다.', async () => {
+      const newAccessToken = await agent
+        .get(APIs.REFRESH_TOKEN)
+        .set('Cookie', `refreshToken=${refreshToken}`)
+        .then(({ body }) => body.accessToken);
+      await agent
+        .get('/api/auth/test')
+        .set('Authorization', `Bearer ${newAccessToken}`)
+        .then(({ body: res }) => {
+          expect(res.user).toHaveProperty('id');
+          expect(res.user).toHaveProperty('username');
+        });
+    });
   });
 
   describe('POST /api/auth/logout - 유저 로그아웃', () => {
     it('로그인 상태가 아니라면 401이 반환된다.', async () => {
-      await request(app.getHttpServer())
-        .post('/api/auth/logout')
+      await agent
+        .post(APIs.LOGOUT)
         .then(({ body: res }) => evalResponseBodyMessage(res, 401, 'Unauthorized'));
     });
 
     it('로그아웃을 정상적으로 수행한다.', async () => {
-      await request(app.getHttpServer())
-        .post('/api/auth/logout')
+      await agent
+        .post(APIs.LOGOUT)
         .set('Cookie', `refreshToken=${refreshToken}`)
         .then(({ body: res }) =>
           evalResponseBodyMessage(res, 200, 'mogauser 유저가 로그아웃 되었습니다.'),
@@ -140,8 +138,8 @@ describe('사용자 로그인 테스트', () => {
 
   describe('GET /api/auth/user 유저 인증여부 검사', () => {
     it('로그인 상태가 아니라면 boolean 값이 false 가 된다.', async () => {
-      await request(app.getHttpServer())
-        .get('/api/auth/user')
+      await agent
+        .get(APIs.GET_AUTHENTICATION)
         .set('Authorization', `Bearer killMeBaby`)
         .then(({ body: res }) => {
           expect(res.isLoggedIn).toBeFalsy();
@@ -150,14 +148,14 @@ describe('사용자 로그인 테스트', () => {
 
     it('로그인 상태라면 boolean 값이 true 가 된다. ( user 정보 포함 )', async () => {
       let temporalToken;
-      await request(app.getHttpServer())
-        .post('/api/auth/login')
+      await agent
+        .post(APIs.LOGIN)
         .send(loginForm)
         .then(({ body: res }) => {
           temporalToken = res.accessToken;
         });
-      await request(app.getHttpServer())
-        .get('/api/auth/user')
+      await agent
+        .get(APIs.GET_AUTHENTICATION)
         .set('Authorization', `Bearer ${temporalToken}`)
         .then(({ body: res }) => {
           expect(res.isLoggedIn).toBeTruthy();

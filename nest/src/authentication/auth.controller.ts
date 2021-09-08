@@ -37,7 +37,7 @@ import {
   LoginSwagger,
   LogoutSwagger,
   SendTokenSwagger,
-  SignOutSwagger,
+  SignSwagger,
   VerifyEmailSwagger,
 } from '@common/decorators/swagger/auth.decorator';
 import AuthValidateService from '@authentication/auth-validate.service';
@@ -142,7 +142,7 @@ class AuthController {
    * @desc 회원가입 컨트롤러 입니다.
    * @returns 성공적으로 회원가입 된 사용자 객체
    */
-  @SignOutSwagger()
+  @SignSwagger()
   @UseGuards(NonAuthGuard)
   @Post()
   async join(@Body(ParseJoinPipe) info: CreateUserDto, @Res({ passthrough: true }) res: Response) {

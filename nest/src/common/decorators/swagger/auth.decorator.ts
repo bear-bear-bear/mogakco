@@ -38,11 +38,47 @@ export function AccessTokenSwagger() {
   );
 }
 
-export function SignOutSwagger() {
+export function SignSwagger() {
   return decoratorHelper(
     SwaggerTag.AUTH,
     ApiOperation({ summary: '회원가입 API', description: '회원가입을 수행합니다.' }),
-    ApiResponse({ status: 201, description: '회원가입 성공' }),
+    ApiResponse({
+      status: 201,
+      description: '회원가입 성공',
+      schema: {
+        example: {
+          statusCode: 200,
+          message: '회원가입에 성공하였습니다.',
+          accessToken: 'acecssToken',
+          expiration: 'Date',
+          user: {
+            id: 1,
+            username: 'username',
+            email: 'email',
+            job: {
+              id: 1,
+              name: '직업',
+              createdAt: 'Date',
+              updatedAt: 'Date',
+            },
+            skills: [
+              {
+                id: 1,
+                name: '주술사',
+                createdAt: 'Date',
+                updatedAt: 'Date',
+              },
+              {
+                id: 2,
+                name: '성기사',
+                createdAt: 'Date',
+                updatedAt: 'Date',
+              },
+            ],
+          },
+        },
+      },
+    }),
     ApiResponse({ status: 400, description: '잘못된 요청 폼' }),
     ApiResponse({
       status: 409,
