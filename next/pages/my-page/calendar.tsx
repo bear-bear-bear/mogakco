@@ -14,7 +14,7 @@ export const pageProps = {
   locale: 'ko_KR',
 };
 
-const MyPageDashboard = () => {
+const MyPageCalendar = () => {
   const { user } = useUser({ redirectTo: '/' });
 
   if (!user?.isLoggedIn) return null;
@@ -30,4 +30,4 @@ const MyPageDashboard = () => {
   );
 };
 
-export default MyPageDashboard;
+export default MyPageCalendar;
