@@ -8,10 +8,10 @@ import RoomEntity from './room.entity';
 })
 export default class RoomUserEntity extends BaseEntityOnlyCreatedAt {
   @ManyToOne(() => RoomEntity, room => room.id)
-  @JoinColumn({ name: 'room_id', referencedColumnName: 'id' })
+  @JoinColumn({ name: 'room_id' })
   roomId!: RoomEntity;
 
   @ManyToOne(() => UserEntity, user => user.id)
-  @JoinColumn({ name: 'user_id', referencedColumnName: 'id' })
+  @JoinColumn({ name: 'user_id' })
   userId!: UserEntity;
 }

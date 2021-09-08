@@ -48,10 +48,10 @@ const Optional = ({ skillOptions, jobOptions }: IOptionalPageProps) => {
 
     try {
       const {
-        data: { accessToken, expiration, ...generalServerResponseWithUser },
+        data: { accessToken, expiration, user },
       } = await signUpApi(signUpInfo);
       mutateUser({
-        ...generalServerResponseWithUser,
+        ...user,
         isLoggedIn: true,
       });
       token.set({ accessToken, expiration });
