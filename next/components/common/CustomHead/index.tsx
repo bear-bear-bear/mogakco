@@ -17,7 +17,7 @@ const CustomHead: FC<IProps> = ({
   // TODO: favicon 제작하여 추가하기
   // html <head>에 들어갈 정보: https://github.com/joshbuchea/HEAD
   const logoUrl =
-    'https://github.com/bear-bear-bear/mogakco/blob/master/public/assets/svg/logo.svg';
+    'https://github.com/bear-bear-bear/mogakco/blob/master/public/assets/svg/logo1.svg';
 
   return (
     <Head>

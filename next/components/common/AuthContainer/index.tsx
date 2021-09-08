@@ -20,7 +20,7 @@ const AuthContainer: FC<IProps> = ({ progressBar, children, ...rest }) => {
       <S.Header>
         <S.LogoWrapper onClick={onClickLogo}>
           <Image
-            src="/assets/svg/logo.svg"
+            src="/assets/svg/logo1.svg"
             layout="responsive"
             width={200}
             height={80}
