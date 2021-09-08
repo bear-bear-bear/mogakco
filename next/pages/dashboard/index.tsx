@@ -30,11 +30,8 @@ const Dashboard = () => {
 
   const handleSignOut = async () => {
     try {
-      const { data: generalReponse } = await signOutApi();
-      mutateUser({
-        isLoggedIn: false,
-        ...generalReponse,
-      });
+      await signOutApi();
+      mutateUser(undefined);
       token.delete();
     } catch (error) {
       logAxiosError(error as GeneralAxiosError);
