@@ -86,6 +86,7 @@ class UserRepository extends Repository<UserEntity> {
     const user = await this.findOne(
       { id },
       {
+        select: ['id', 'username', 'email', 'skills', 'job', 'createdAt'],
         relations: ['job'],
       },
     );

@@ -5,7 +5,6 @@ import morgan from 'morgan';
 import helmet from 'helmet';
 import AppModule from '@src/app.module';
 import { setSwaggerModule, showListeningLog } from '@common/helpers/app.helper';
-import { HttpExceptionFilter } from '@common/exceptions/http-exception.filter';
 
 async function bootstrap() {
   const log = new Logger();
@@ -27,7 +26,6 @@ async function bootstrap() {
       transform: true,
     }),
   );
-  app.useGlobalFilters(new HttpExceptionFilter());
 
   const port = parseInt(process.env.SERVER_PORT as string, 10) || 8001;
   await app.listen(port);

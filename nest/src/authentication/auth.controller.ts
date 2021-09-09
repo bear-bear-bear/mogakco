@@ -15,6 +15,7 @@ import {
   HttpCode,
   InternalServerErrorException,
   Logger,
+  UseFilters,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { ConfigService } from '@nestjs/config';
@@ -43,6 +44,7 @@ import {
 } from '@common/decorators/swagger/auth.decorator';
 import AuthValidateService from '@authentication/auth-validate.service';
 import { IJwtPayload } from '@typing/auth';
+import NoUserException from '@common/exceptions/no-user-exception.filter';
 
 /**
  * @desc 회원가입/로그인에 대한 처리 컨트롤러
@@ -107,6 +109,7 @@ class AuthController {
    * 쿠키 값을 초기화 후 응답을 전송합니다.
    */
   @LogoutSwagger()
+  @UseFilters(NoUserException)
   @UseGuards(JwtAuthGuardWithRefresh)
   @Post('/logout')
   @HttpCode(200)
@@ -123,6 +126,7 @@ class AuthController {
    * @returns accessToken 을 갱신하여 반환합니다.
    */
   @AccessTokenSwagger()
+  @UseFilters(NoUserException)
   @Get('/refresh-token')
   @HttpCode(201)
   @UseGuards(JwtAuthGuardWithRefresh)
@@ -148,7 +152,7 @@ class AuthController {
    */
   @SignSwagger()
   @UseGuards(NonAuthGuard)
-  @Post()
+  @Post('/')
   async join(@Body(ParseJoinPipe) info: CreateUserDto, @Res({ passthrough: true }) res: Response) {
     const { accessToken, statusCode, message, refreshTokenCookieSet, user } =
       await this.authService.join(info);
@@ -235,6 +239,7 @@ class AuthController {
    * @desc 사용자 로그인 상태 여부를 accessToken 을 검증하여 유저 객체와 함께 반환한다.
    */
   @GetAuthenticationSwagger()
+  @UseFilters(NoUserException)
   @Get('/user')
   async getAuthentication(@Req() { headers }: Request, @Res({ passthrough: true }) res: Response) {
     const accessToken = this.authService.getAccessTokenByHeaders(headers);
