@@ -1,20 +1,17 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { JwtModule as NestJwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { PassportModule } from '@nestjs/passport';
 import JwtStrategy from '@authentication/strategies/jwt.strategy';
 import JwtStrategyWithRefresh from '@authentication/strategies/jwt.refresh.strategy';
-import UserModule from '@models/user/user.module';
-import AuthService from '@authentication/auth.service';
-import AuthValidateService from '@authentication/auth-validate.service';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import UserVerifyRepository from '@models/user/repositories/user-verify.repository';
-import UserRepository from '@models/user/repositories/user.repository';
-import UserJobRepository from '@models/user/repositories/ user-job.reposity';
+import SharedModule from './shared.module';
 
+/**
+ * @desc jwt 인증에 관한 모듈입니다.
+ */
 @Module({
   imports: [
-    TypeOrmModule.forFeature([UserVerifyRepository, UserRepository, UserJobRepository]),
+    forwardRef(() => SharedModule),
     PassportModule.register({
       defaultStrategy: ['jwt', 'jwt-with-refresh'],
     }),
@@ -28,16 +25,8 @@ import UserJobRepository from '@models/user/repositories/ user-job.reposity';
         },
       }),
     }),
-    UserModule,
   ],
-  providers: [JwtStrategy, JwtStrategyWithRefresh, AuthService, AuthValidateService],
-  exports: [
-    JwtStrategy,
-    JwtStrategyWithRefresh,
-    PassportModule,
-    NestJwtModule,
-    AuthService,
-    AuthValidateService,
-  ],
+  providers: [JwtStrategy, JwtStrategyWithRefresh],
+  exports: [JwtStrategy, JwtStrategyWithRefresh, PassportModule, NestJwtModule],
 })
 export default class JwtModule {}
