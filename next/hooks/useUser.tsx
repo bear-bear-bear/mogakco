@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import useSWR from 'swr';
 import type { SWRConfiguration, KeyedMutator } from 'swr/dist/types';
 
-import token from '@lib/token';
+import token, { ACCESS_TOKEN } from '@lib/token';
 import fetcher from '@lib/fetcher';
 
 import type {
@@ -41,8 +41,8 @@ const getSWRKeyByRefreshTokenExist = () =>
  * swr fetcher가 axios 함수이므로 유저 정보 패치 전 인터셉터를 통해 현재 액세스 토큰의 유효성 여부 판단과 그에 따른 갱신 또한 이뤄지게 됩니다.
  * 요청에 대한 응답이 400, 401, 403, 404 등일 때, 재요청 폴링을 금지합니다.
  * ---
- * @param redirectTo {`/${string}`} (optional) 리디렉션 경로 - redirectTo가 설정되어 있을 시, 사용자가 없다면 리디렉션
- * @param redirectIfFound {boolean} (optional) 리디렉션 경로 - redirectTo가 설정되어 있을 시, 사용자를 있다면 리디렉션
+ * @param redirectTo {`/${string}`} (optional) 리디렉션 경로
+ * @param redirectIfFound {boolean} (optional) Authorization이 필요하지 않은 페이지에서 true로 설정
  * ---
  * @example
  * // 1. 유저가 없다면 '/' 경로로 리디렉션 됩니다.
@@ -69,16 +69,16 @@ export default function useUser({
   useEffect(() => {
     // 리디렉트가 필요하지 않다면 return (예: 이미 /dashboard에 있음)
     if (!redirectTo) return;
-    // 사용자 데이터가 아직 존재하지 않으면 return (패치 진행 중 일때 등)
-    if (!user) return;
-
-    // if(!redirectIfFound && )
 
     if (
-      // redirectIfFound false일때, 사용자가 없을 때 리디렉션
-      (!redirectIfFound && !user.isLoggedIn) ||
-      // redirectIfFound true일때, 사용자가 발견되면 리디렉션
-      (redirectIfFound && user.isLoggedIn)
+      // Authorization이 필요한 페이지인데 사용자 비로그인 상태라면 리디렉션
+      (!redirectIfFound && !user?.isLoggedIn) ||
+      // Authorization이 필요하지 않은 페이지인데 사용자가 로그인 상태라면 리디렉션
+      (redirectIfFound && user?.isLoggedIn) ||
+      // Authorization이 필요한 페이지인데, 리프레쉬 토큰이 쿠키에 없는데 액세스 토큰은 메모리에 있는 상황이라면 (사용자가 쿠키를 고의로 지웠을 경우) 리디렉션
+      (!redirectIfFound &&
+        !token.isRefreshTokenInCookie() &&
+        token.get()[ACCESS_TOKEN])
     ) {
       router.push(redirectTo);
     }

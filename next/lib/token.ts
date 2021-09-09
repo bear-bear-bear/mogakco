@@ -13,7 +13,10 @@ export const EXPIRATION = 'expiration';
 const token = {
   get: () => {
     const accessToken: string | undefined = memoryStorage.get(ACCESS_TOKEN);
-    const expiration = localStorage.getItem(EXPIRATION);
+    const expiration =
+      typeof localStorage !== 'undefined'
+        ? localStorage.getItem(EXPIRATION)
+        : null;
     return {
       [ACCESS_TOKEN]: accessToken,
       [EXPIRATION]: expiration,
