@@ -147,7 +147,6 @@ export function GetAuthenticationSwagger() {
         'Bearer Access Token 기반으로 로그인 유효한 사용자인 지 여부와 유저 객체를 반환합니다.',
     }),
     ApiBearerAuth(),
-    ApiResponse({ status: 200, description: '인증 성공 여부와 유저 객체 반환' }),
-    ApiResponse({ status: 401, description: '인증 실패 여부 반환' }),
+    ApiResponse({ status: 200, description: '인증 여부와 유저 객체 반환' }),
   );
 }
