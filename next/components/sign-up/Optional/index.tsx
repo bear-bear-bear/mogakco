@@ -1,7 +1,7 @@
 import React, { useCallback, useState, SyntheticEvent } from 'react';
 import { OptionsType } from 'react-select';
 
-import useUser from '@hooks/useUser';
+import type { UserMutator } from '@hooks/useUser';
 import getSessionStorageValues from '@lib/getSessionStorageValues';
 import Select from '@components/common/Select';
 import Desc from '@components/common/Desc';
@@ -20,8 +20,11 @@ import * as CS from '../common/styles';
 
 const SKILLS_LIMIT = 5;
 
-const Optional = ({ skillOptions, jobOptions }: IOptionalPageProps) => {
-  const { mutateUser } = useUser();
+const Optional = ({
+  skillOptions,
+  jobOptions,
+  mutateUser,
+}: IOptionalPageProps & UserMutator) => {
   const [signUpLoading, setSignUpLoading] = useState<boolean>(false);
   const [isShowSkillOptions, setIsShowSkillOptions] = useState<boolean>(true);
   const [skillIds, setSkillIds] = useState<number[] | null>(null);

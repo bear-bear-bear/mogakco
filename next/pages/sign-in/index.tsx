@@ -14,7 +14,7 @@ export const pageProps = {
 };
 
 const SignIn = () => {
-  const { user } = useUser({
+  const { user, mutateUser } = useUser({
     redirectTo: '/dashboard',
     redirectIfFound: true,
   });
@@ -24,7 +24,7 @@ const SignIn = () => {
     <>
       <CustomHead {...pageProps} />
       <AuthContainer progressBar={<ProgressBar fill={0} />}>
-        <SignInForm />
+        <SignInForm mutateUser={mutateUser} />
       </AuthContainer>
     </>
   );

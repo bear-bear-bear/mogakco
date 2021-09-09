@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
-import useUser from '@hooks/useUser';
+import type { UserMutator } from '@hooks/useUser';
 import Form from '@components/common/Form';
 import Input from '@components/common/Input';
 import InputWrapper from '@components/common/InputWrapper';
@@ -23,8 +23,7 @@ export type FormInputs = {
   password: string;
 };
 
-const SignInForm = () => {
-  const { mutateUser } = useUser();
+const SignInForm = ({ mutateUser }: UserMutator) => {
   const [signInLoading, setLoginLoading] = useState<boolean>(false);
   const [isVisiblePassword, setIsVisiblePassword] = useState<boolean>(false);
   const onClickEye = () => setIsVisiblePassword((prev) => !prev);
