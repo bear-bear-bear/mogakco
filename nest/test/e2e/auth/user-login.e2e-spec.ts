@@ -125,7 +125,9 @@ describe('사용자 로그인 테스트', () => {
     it('로그인 상태가 아니라면 401이 반환된다.', async () => {
       await agent
         .post(APIs.LOGOUT)
-        .then(({ body: res }) => evalResponseBodyMessage(res, 401, 'Unauthorized'));
+        .then(({ body: res }) =>
+          evalResponseBodyMessage(res, 401, '유저 인증 권한이 존재하지 않습니다.'),
+        );
     });
 
     it('로그아웃을 정상적으로 수행한다.', async () => {
