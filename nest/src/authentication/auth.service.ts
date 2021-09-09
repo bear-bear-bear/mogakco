@@ -65,7 +65,7 @@ export default class AuthService {
       token,
       maxAge: 6.048e8,
       path: '/',
-      httpOnly: true,
+      httpOnly: false,
     } as ICookieProps;
   }
 

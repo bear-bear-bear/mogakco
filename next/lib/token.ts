@@ -30,7 +30,7 @@ const token = {
   },
 
   /**
-   * @decs
+   * @desc
    * 로그아웃과 함께 사용. 사전 합의된 위치의 액세스 토큰과 expiration을 삭제.
    * 리프레쉬 토큰은 서버단에서 쿠키에 자동으로 세팅해줌을 인지할 것
    */
@@ -43,3 +43,17 @@ const token = {
 } as const;
 
 export default token;
+
+/**
+ * @desc refreshToken 이 존재하는 지 검사한다.
+ */
+export const isRefreshTokenInCookie = () => {
+  if (typeof document === 'undefined') {
+    return false;
+  }
+
+  const { cookie } = document;
+  const tokenRegex = /refreshToken=[^;]+;?/;
+
+  return tokenRegex.test(cookie);
+};

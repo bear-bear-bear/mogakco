@@ -23,7 +23,7 @@ export interface IOptionalPageProps {
 }
 
 const SignUpOptional = (props: IOptionalPageProps) => {
-  const { user } = useUser({
+  const { user, mutateUser } = useUser({
     redirectTo: '/dashboard',
     redirectIfFound: true,
   });
@@ -33,7 +33,7 @@ const SignUpOptional = (props: IOptionalPageProps) => {
     <>
       <CustomHead {...pageProps} />
       <AuthContainer progressBar={<ProgressBar fill={100} />}>
-        <Optional {...props} />
+        <Optional mutateUser={mutateUser} {...props} />
       </AuthContainer>
     </>
   );

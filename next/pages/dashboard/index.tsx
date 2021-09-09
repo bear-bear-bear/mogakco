@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
-import useUser from '@hooks/useUser';
 
+import useUser from '@hooks/useUser';
 import Button from '@components/common/Button';
 import CustomHead from '@components/common/CustomHead';
 import Container from '@components/dashboard/Container';
@@ -30,9 +30,10 @@ const Dashboard = () => {
 
   const handleSignOut = async () => {
     try {
-      await signOutApi();
-      mutateUser(undefined);
+      mutateUser({ isLoggedIn: false }, false);
       token.delete();
+      await signOutApi();
+      mutateUser();
     } catch (error) {
       logAxiosError(error as GeneralAxiosError);
     }
