@@ -3,20 +3,20 @@ import { useRouter } from 'next/router';
 import useSWR from 'swr';
 import type { SWRConfiguration } from 'swr';
 
+import { isRefreshTokenInCookie } from '@lib/token';
 import fetcher from '@lib/fetcher';
-// import devModeLog from '@lib/devModeLog';
+
 import type {
   IUserGetSuccessResponse,
   IUserGetFailureResponse,
 } from 'typings/auth';
 
-// useUser props
 interface IProps {
   redirectTo?: `/${string}`;
   redirectIfFound?: boolean;
 }
 
-// SWRConfiguration
+const SWRKey = isRefreshTokenInCookie() ? '/api/auth/user' : null;
 const SWROptions: SWRConfiguration<
   IUserGetSuccessResponse,
   IUserGetFailureResponse
@@ -61,15 +61,13 @@ export default function useUser({
   const { data: user, mutate: mutateUser } = useSWR<
     IUserGetSuccessResponse,
     IUserGetFailureResponse
-  >('/api/auth/user', fetcher, SWROptions);
+  >(SWRKey, fetcher, SWROptions);
 
   useEffect(() => {
     // 리디렉트가 필요하지 않다면 return (예: 이미 /dashboard에 있음)
     if (!redirectTo) return;
     // 사용자 데이터가 아직 존재하지 않으면 return (패치 진행 중 일때 등)
     if (!user) return;
-
-    // devModeLog({ redirectTo, redirectIfFound, user });
 
     if (
       // redirectTo가 설정되어 있을 시, 사용자가 없을 때 리디렉션
