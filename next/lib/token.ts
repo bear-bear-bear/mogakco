@@ -47,8 +47,9 @@ export default token;
 /**
  * @desc refreshToken 이 존재하는 지 검사한다.
  */
-export function isRefreshTokenByCookie(): boolean {
+export const isRefreshTokenInCookie = () => {
   const { cookie } = document;
-  const match = cookie.match(/^(refreshToken=).*/);
-  return match !== null;
-}
+  const tokenRegex = /refreshToken=[^;]+;?/;
+
+  return tokenRegex.test(cookie);
+};

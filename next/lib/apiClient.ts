@@ -6,7 +6,7 @@ import token, {
   memoryStorage,
   ACCESS_TOKEN,
   REFRESH_TOKEN,
-  isRefreshTokenByCookie,
+  isRefreshTokenInCookie,
 } from '@lib/token';
 import type { GeneralAxiosError } from 'typings/common';
 
@@ -95,11 +95,9 @@ export const refreshAccessToken = async (config: AxiosRequestConfig) => {
     if (response?.status === 401) {
       devModeLog('UnAuthorized - 기존 토큰 정보를 삭제합니다');
       // 401일땐 로그아웃 처리 (다른 탭과 동기화)
-      // 이 경우는 서버단에서 쿠키의 refresh토큰을 지워주지 않기 때문에 클라이언트단에서 직접 삭제합니다
+      // refresh토큰 또한 직접 삭제 (서버단에선 로그아웃 요청시에만 refresh 토큰을 삭제해줌)
       token.delete();
-
-      // WARN: 쿠키에 httponly가 설정됨에 따라 document.cookie 사용이 불가해졌으므로 일단 주석 처리합니다. 주석 처리 함으로써 추후 발생되는 문제 확인할 것
-      // document.cookie = `${REFRESH_TOKEN}=;expires=Thu, 01 Jan 1970 00:00:01 GMT;
+      document.cookie = `${REFRESH_TOKEN}=;expires=Thu, 01 Jan 1970 00:00:01 GMT`;
     }
     return config;
   }
@@ -108,8 +106,8 @@ export const refreshAccessToken = async (config: AxiosRequestConfig) => {
 const processProlongToken = async (config: AxiosRequestConfig) => {
   if (typeof window === 'undefined') return config;
 
-  const isRefresh = isRefreshTokenByCookie();
-  if (!isRefresh) return config;
+  if (!isRefreshTokenInCookie()) return config;
+
   // 인터셉트를 패스시켜야 할 url인지 검사
   const passUrlList = Object.values(passUrlDict);
   if (passUrlList.includes(config.url as string)) {
