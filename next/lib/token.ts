@@ -11,6 +11,18 @@ export const REFRESH_TOKEN = 'refreshToken';
 export const EXPIRATION = 'expiration';
 
 const token = {
+  get: () => {
+    const accessToken: string | undefined = memoryStorage.get(ACCESS_TOKEN);
+    const expiration =
+      typeof localStorage !== 'undefined'
+        ? localStorage.getItem(EXPIRATION)
+        : null;
+    return {
+      [ACCESS_TOKEN]: accessToken,
+      [EXPIRATION]: expiration,
+    };
+  },
+
   /**
    * @decs
    * 로그인, 회원가입 성공 시의 응답 중 { accessToken, expiration }을 인자로 받아 사전 합의된 위치에 세팅.
@@ -40,20 +52,20 @@ const token = {
       localStorage.removeItem(EXPIRATION);
     }
   },
+
+  /**
+   * @desc refreshToken 이 쿠키 안에 존재하는지 검사.
+   */
+  isRefreshTokenInCookie: () => {
+    if (typeof document === 'undefined') {
+      return false;
+    }
+
+    const { cookie } = document;
+    const tokenRegex = /refreshToken=[^;]+;?/;
+
+    return tokenRegex.test(cookie);
+  },
 } as const;
 
 export default token;
-
-/**
- * @desc refreshToken 이 존재하는 지 검사한다.
- */
-export const isRefreshTokenInCookie = () => {
-  if (typeof document === 'undefined') {
-    return false;
-  }
-
-  const { cookie } = document;
-  const tokenRegex = /refreshToken=[^;]+;?/;
-
-  return tokenRegex.test(cookie);
-};
