@@ -100,7 +100,9 @@ describe('사용자 로그인 테스트', () => {
     it('refreshToken 값이 만료, 존재하지 않으면 401이 반환된다.', async () => {
       await agent
         .get(APIs.REFRESH_TOKEN)
-        .then(({ body: res }) => evalResponseBodyMessage(res, 401, 'Unauthorized'));
+        .then(({ body: res }) =>
+          evalResponseBodyMessage(res, 401, '유저 인증 권한이 존재하지 않습니다.'),
+        );
     });
 
     // TODO: 해당 테스트 확인하기
