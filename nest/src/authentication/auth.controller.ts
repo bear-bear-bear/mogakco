@@ -14,6 +14,7 @@ import {
   Redirect,
   HttpCode,
   InternalServerErrorException,
+  Logger,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { ConfigService } from '@nestjs/config';
@@ -41,6 +42,7 @@ import {
   VerifyEmailSwagger,
 } from '@common/decorators/swagger/auth.decorator';
 import AuthValidateService from '@authentication/auth-validate.service';
+import { IJwtPayload } from '@typing/auth';
 
 /**
  * @desc 회원가입/로그인에 대한 처리 컨트롤러
@@ -48,6 +50,8 @@ import AuthValidateService from '@authentication/auth-validate.service';
 @Controller('auth')
 @UseInterceptors(ClassSerializerInterceptor)
 class AuthController {
+  private readonly logger = new Logger('AuthController');
+
   constructor(
     private userService: UserService,
     private authService: AuthService,
@@ -123,7 +127,7 @@ class AuthController {
   @HttpCode(201)
   @UseGuards(JwtAuthGuardWithRefresh)
   async refresh(@Req() req: Request) {
-    const { id } = req.user as UserEntity;
+    const { id } = req.user as IJwtPayload;
     const user = await this.userService.findUserForLogin(id);
     if (user === null) throw new InternalServerErrorException();
     const { password, ...userProps } = user;
@@ -234,10 +238,11 @@ class AuthController {
   @Get('/user')
   async getAuthentication(@Req() { headers }: Request, @Res({ passthrough: true }) res: Response) {
     const accessToken = this.authService.getAccessTokenByHeaders(headers);
-    if (accessToken === undefined) {
-      return res.status(HttpStatus.UNAUTHORIZED).json({
+    if (!accessToken) {
+      res.clearCookie('refreshToken');
+      return {
         isLoggedIn: false,
-      });
+      };
     }
     const { isLoggedIn, user } = await this.authService.getAuthentication(accessToken);
     return !isLoggedIn ? { isLoggedIn } : { isLoggedIn, ...user };

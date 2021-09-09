@@ -19,15 +19,15 @@ import AuthValidateService from '@authentication/auth-validate.service';
   imports: [
     TypeOrmModule.forFeature([UserVerifyRepository, UserRepository, UserJobRepository]),
     PassportModule.register({
-      defaultStrategy: 'jwt',
+      defaultStrategy: ['jwt', 'jwt-with-refresh'],
     }),
     JwtModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => ({
-        secret: configService.get('JWT_ACCESS_TOKEN_SECRET'),
+        secret: configService.get<string>('JWT_ACCESS_TOKEN_SECRET'),
         signOptions: {
-          expiresIn: `${configService.get('JWT_ACCESS_TOKEN_EXPIRATION_TIME')}s`,
+          expiresIn: `${configService.get<string | number>('JWT_ACCESS_TOKEN_EXPIRATION_TIME')}s`,
         },
       }),
     }),
@@ -43,8 +43,6 @@ import AuthValidateService from '@authentication/auth-validate.service';
     JwtStrategyWithRefresh,
     EmailService,
   ],
-  exports: [AuthService, JwtStrategy, JwtStrategyWithRefresh, EmailService],
+  exports: [AuthService],
 })
-class AuthModule {}
-
-export default AuthModule;
+export default class AuthModule {}
