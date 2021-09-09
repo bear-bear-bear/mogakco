@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { join } from 'path';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 function isLogging(): boolean {
   const mode = process.env.NODE_ENV;
@@ -14,19 +15,23 @@ function isSync(): boolean {
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-      type: 'mariadb',
-      host: process.env.DATABASE_HOST as string,
-      port: parseInt(process.env.DATABASE_PORT as string, 10),
-      username: process.env.DATABASE_USER as string,
-      password: process.env.DATABASE_PASSWORD as string,
-      database: process.env.DATABASE_NAME as string,
-      synchronize: isSync(),
-      logging: isLogging(),
-      migrationsTableName: 'migrations',
-      migrations: ['migrations/*.ts'],
-      cli: { migrationsDir: 'migration' },
-      entities: [join(__dirname, '../../models/**/*.entity{.ts,.js}')],
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: async (configService: ConfigService) => ({
+        type: 'mariadb',
+        host: configService.get<string>('DATABASE_HOST'),
+        port: configService.get<number>('DATABASE_PORT'),
+        username: configService.get<string>('DATABASE_USER'),
+        password: configService.get<string>('DATABASE_PASSWORD'),
+        database: configService.get<string>('DATABASE_NAME'),
+        synchronize: isSync(),
+        logging: isLogging(),
+        migrationsTableName: 'migrations',
+        migrations: ['migrations/*.ts'],
+        cli: { migrationsDir: 'migration' },
+        entities: [join(__dirname, '../../models/**/*.entity{.ts,.js}')],
+      }),
     }),
   ],
 })
