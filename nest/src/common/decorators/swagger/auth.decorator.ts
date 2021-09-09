@@ -41,6 +41,7 @@ export function AccessTokenSwagger() {
 export function SignSwagger() {
   return decoratorHelper(
     SwaggerTag.AUTH,
+    ApiBearerAuth(),
     ApiOperation({ summary: '회원가입 API', description: '회원가입을 수행합니다.' }),
     ApiResponse({
       status: 201,
