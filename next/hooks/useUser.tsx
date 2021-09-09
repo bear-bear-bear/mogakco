@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import useSWR from 'swr';
 import type { SWRConfiguration, KeyedMutator } from 'swr/dist/types';
 
-import { isRefreshTokenInCookie } from '@lib/token';
+import token from '@lib/token';
 import fetcher from '@lib/fetcher';
 
 import type {
@@ -32,7 +32,7 @@ const SWROptions: SWRConfiguration<
 };
 
 const getSWRKeyByRefreshTokenExist = () =>
-  isRefreshTokenInCookie() ? SWR_CACHE_KEY : null;
+  token.isRefreshTokenInCookie() ? SWR_CACHE_KEY : null;
 
 /**
  * @desc
@@ -71,6 +71,8 @@ export default function useUser({
     if (!redirectTo) return;
     // 사용자 데이터가 아직 존재하지 않으면 return (패치 진행 중 일때 등)
     if (!user) return;
+
+    // if(!redirectIfFound && )
 
     if (
       // redirectIfFound false일때, 사용자가 없을 때 리디렉션
