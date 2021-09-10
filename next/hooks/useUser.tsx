@@ -6,10 +6,7 @@ import type { SWRConfiguration, KeyedMutator } from 'swr/dist/types';
 import token, { ACCESS_TOKEN } from '@lib/token';
 import fetcher from '@lib/fetcher';
 
-import type {
-  IUserGetSuccessResponse,
-  IUserGetFailureResponse,
-} from 'typings/auth';
+import type { IUserGetResponse } from 'typings/auth';
 
 interface UseUserProps {
   redirectTo?: `/${string}`;
@@ -17,10 +14,7 @@ interface UseUserProps {
 }
 
 const SWR_CACHE_KEY = '/api/auth/user';
-const SWROptions: SWRConfiguration<
-  IUserGetSuccessResponse,
-  IUserGetFailureResponse
-> = {
+const SWROptions: SWRConfiguration<IUserGetResponse> = {
   onErrorRetry: (error, key, config, revalidate, { retryCount }) => {
     // Never url
     if (key === SWR_CACHE_KEY) return;
@@ -30,6 +24,7 @@ const SWROptions: SWRConfiguration<
 
     setTimeout(() => revalidate({ retryCount }), 5000);
   },
+  fallbackData: { isLoggedIn: false },
 };
 
 const getSWRKeyByRefreshTokenExist = () =>
@@ -63,20 +58,22 @@ export default function useUser({
   const router = useRouter();
 
   const SWRKey = redirectIfFound ? SWR_CACHE_KEY : getSWRKeyByRefreshTokenExist;
-  const { data: user, mutate: mutateUser } = useSWR<
-    IUserGetSuccessResponse,
-    IUserGetFailureResponse
-  >(SWRKey, fetcher, SWROptions);
+  const { data: user, mutate: mutateUser } = useSWR<IUserGetResponse>(
+    SWRKey,
+    fetcher,
+    SWROptions,
+  );
 
   useEffect(() => {
     // 리디렉트가 필요하지 않다면 return (예: 이미 /dashboard에 있음)
     if (!redirectTo) return;
+    if (!user) return;
 
     if (
       // Authorization이 필요한 페이지인데 사용자 비로그인 상태라면 리디렉션
-      (!redirectIfFound && !user?.isLoggedIn) ||
+      (!redirectIfFound && !user.isLoggedIn) ||
       // Authorization이 필요하지 않은 페이지인데 사용자가 로그인 상태라면 리디렉션
-      (redirectIfFound && user?.isLoggedIn) ||
+      (redirectIfFound && user.isLoggedIn) ||
       // Authorization이 필요한 페이지인데, 리프레쉬 토큰이 쿠키에 없는데 액세스 토큰은 메모리에 있는 상황이라면 (사용자가 쿠키를 고의로 지웠을 경우) 리디렉션
       (!redirectIfFound &&
         !token.isRefreshTokenInCookie() &&
@@ -93,5 +90,5 @@ export default function useUser({
  * @desc mutate를 props로 넘겨줄때 사용할 인터페이스
  */
 export interface UserMutator {
-  mutateUser: KeyedMutator<IUserGetSuccessResponse | IUserGetFailureResponse>;
+  mutateUser: KeyedMutator<IUserGetResponse>;
 }

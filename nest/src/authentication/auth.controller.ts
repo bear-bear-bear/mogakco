@@ -250,11 +250,8 @@ class AuthController {
       };
     }
     const { isLoggedIn, user } = await this.authService.getAuthentication(accessToken);
-    if (!isLoggedIn) {
-      res.status(HttpStatus.UNAUTHORIZED);
-      return { statusCode: HttpStatus.UNAUTHORIZED, message: '인증 권한이 없습니다.' };
-    }
-    return { statusCode: HttpStatus.OK, ...user, message: '유저가 존재합니다.' };
+
+    return !isLoggedIn ? { isLoggedIn } : { isLoggedIn, ...user };
   }
 }
 
