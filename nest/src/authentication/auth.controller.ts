@@ -245,15 +245,16 @@ class AuthController {
     const accessToken = this.authService.getAccessTokenByHeaders(headers);
     if (!accessToken) {
       res.clearCookie('refreshToken');
-      return {
-        isLoggedIn: false,
-      };
+      res.status(HttpStatus.UNAUTHORIZED);
+      return { statusCode: HttpStatus.UNAUTHORIZED, message: '액세스 토큰이 존재하지 않습니다.' };
     }
-    const { isLoggedIn, user } = await this.authService.getAuthentication(accessToken);
-    if (!isLoggedIn) {
+
+    const user = await this.authService.getAuthentication(accessToken);
+    if (!user) {
       res.status(HttpStatus.UNAUTHORIZED);
       return { statusCode: HttpStatus.UNAUTHORIZED, message: '인증 권한이 없습니다.' };
     }
+
     return { statusCode: HttpStatus.OK, ...user, message: '유저가 존재합니다.' };
   }
 }

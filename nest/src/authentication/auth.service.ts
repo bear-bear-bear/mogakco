@@ -164,9 +164,9 @@ export default class AuthService {
         secret: secretKey,
       });
       const user = await this.userRepository.findUserShallow(decodedToken.id);
-      return { isLoggedIn: true, user };
+      return user;
     } catch {
-      return { isLoggedIn: false };
+      return null;
     }
   }
 }

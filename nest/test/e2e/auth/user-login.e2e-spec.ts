@@ -141,16 +141,16 @@ describe('사용자 로그인 테스트', () => {
   });
 
   describe('GET /api/auth/user 유저 인증여부 검사', () => {
-    it('로그인 상태가 아니라면 boolean 값이 false 가 된다.', async () => {
+    it('로그인 상태가 아니라면 user 정보가 존재하지 않는다.', async () => {
       await agent
         .get(APIs.GET_AUTHENTICATION)
         .set('Authorization', `Bearer killMeBaby`)
         .then(({ body: res }) => {
-          expect(res.isLoggedIn).toBeFalsy();
+          expect(res.id).toBeFalsy();
         });
     });
 
-    it('로그인 상태라면 boolean 값이 true 가 된다. ( user 정보 포함 )', async () => {
+    it('로그인 상태라면 유저 정보가 존재한다.', async () => {
       let temporalToken;
       await agent
         .post(APIs.LOGIN)
@@ -162,7 +162,7 @@ describe('사용자 로그인 테스트', () => {
         .get(APIs.GET_AUTHENTICATION)
         .set('Authorization', `Bearer ${temporalToken}`)
         .then(({ body: res }) => {
-          expect(res.isLoggedIn).toBeTruthy();
+          expect(res.id).toBeTruthy();
         });
     });
   });
