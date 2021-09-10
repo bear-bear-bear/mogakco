@@ -9,14 +9,16 @@ const InputBox = () => {
   const [chat, onChangeChat, setChat] = useInput('');
   const { client } = useSocket();
   const handleChat = (e: KeyboardEvent<HTMLTextAreaElement>) => {
+    console.log('altKey: ', e.altKey);
     if (chat.trim() !== '') {
-      if (e.code === 'Enter' && !e.altKey) {
+      const isEnter = e.code === 'Enter';
+      if (isEnter && !e.altKey) {
         client?.emit('chat', chat);
         setChat('');
       }
-      if (e.code === 'Enter' && e.altKey) {
-        setChat((prev) => `${prev}\n`);
-      }
+      // if (isEnter && e.altKey) {
+      //   setChat((prev) => `${prev}\n`);
+      // }
     }
   };
 

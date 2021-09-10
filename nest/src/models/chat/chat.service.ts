@@ -75,6 +75,18 @@ class ChatService {
       userId: user,
     });
   }
+
+  /**
+   * @desc 채팅 응답 객체를 생성합니다.
+   */
+  createChatResponse(chatId: number, username: string, message: string, isOwner: boolean) {
+    return {
+      id: chatId,
+      username,
+      message,
+      type: isOwner ? 'my-chat' : 'chat',
+    };
+  }
 }
 
 export default ChatService;

@@ -11,6 +11,18 @@ export const ChatWrapper = styled.section`
   }
 `;
 
+// TODO: Temp galaxy4276
+export const MyChatWrapper = styled.section`
+  display: flex;
+  flex-direction: column;
+  text-align: right;
+
+  & + & {
+    margin-top: 0.66rem;
+    margin-bottom: 0.66rem;
+  }
+`;
+
 const announcementColorStyles = ({ type }: any) => {
   const colors: { [AnnounceType: string]: string } = {
     enter: 'var(--color-gray-5)',

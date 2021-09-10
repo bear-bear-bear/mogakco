@@ -10,6 +10,7 @@ import { InternalServerErrorException, Logger, UnauthorizedException } from '@ne
 import ChatService from './chat.service';
 import UserRepository from '@models/user/repositories/user.repository';
 import RoomRepository from '@models/chat/repositories/room.repository';
+import ChatRepository from '@models/user/repositories/chat.repository';
 
 interface IJoinChatRoom {
   userId: number;
@@ -30,6 +31,7 @@ class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
     private readonly chatService: ChatService,
     private readonly userRepository: UserRepository,
     private readonly roomRepository: RoomRepository,
+    private readonly chatRepository: ChatRepository,
   ) {}
 
   handleConnection(client: Socket) {
@@ -69,12 +71,17 @@ class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   // TODO: 개발 중
   @SubscribeMessage('chat')
   async chat(client: Socket, message: string) {
-    const username = client.handshake.headers['user-name'] as string;
-    client.broadcast.emit('chat', {
-      username,
-      message,
-      type: 'chat',
-    });
+    const userId = client.handshake.headers['user-id'] as string;
+    const roomId = client.handshake.headers['room-id'] as string;
+    const user = await this.userRepository.findOne({ id: Number(userId) });
+    const room = await this.roomRepository.findOne({ id: Number(roomId) });
+    if (!(user && room)) throw new InternalServerErrorException();
+    const { id: chatId } = await this.chatRepository.createChat(user, room, message);
+    const response = this.chatService.createChatResponse(chatId, user.username, message, false);
+    const ownerResponse = this.chatService.createChatResponse(chatId, user.username, message, true);
+
+    client.broadcast.emit('chat', response);
+    client.emit('chat', ownerResponse);
   }
 }
 
