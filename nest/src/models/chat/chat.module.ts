@@ -6,9 +6,16 @@ import RoomRepository from './repositories/room.repository';
 import ChatController from './chat.controller';
 import ChatGateway from './chat.gateway';
 import ChatService from './chat.service';
+import RoomUserRepository from '@models/chat/repositories/room-user.repository';
+import UserRepository from '@models/user/repositories/user.repository';
+import ChatRepository from '@models/user/repositories/chat.repository';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([RoomRepository]), AuthModule, UserModule],
+  imports: [
+    TypeOrmModule.forFeature([RoomRepository, RoomUserRepository, UserRepository, ChatRepository]),
+    AuthModule,
+    UserModule,
+  ],
   controllers: [ChatController],
   providers: [ChatGateway, ChatService],
 })

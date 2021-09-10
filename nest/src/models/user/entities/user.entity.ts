@@ -30,7 +30,7 @@ class UserEntity extends BaseEntitySoftDelete {
   job!: UserJobEntity | null;
 
   @OneToMany(() => RoomUserEntity, room => room.userId)
-  RoomUser?: RoomUserEntity;
+  RoomUser!: RoomUserEntity;
 }
 
 export default UserEntity;

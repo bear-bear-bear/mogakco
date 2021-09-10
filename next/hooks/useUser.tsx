@@ -18,7 +18,8 @@ interface UseUserProps {
 
 const SWR_CACHE_KEY = '/api/auth/user';
 const SWROptions: SWRConfiguration<
-  IUserGetSuccessResponse | IUserGetFailureResponse
+  IUserGetSuccessResponse,
+  IUserGetFailureResponse
 > = {
   onErrorRetry: (error, key, config, revalidate, { retryCount }) => {
     // Never url
@@ -63,7 +64,8 @@ export default function useUser({
 
   const SWRKey = redirectIfFound ? SWR_CACHE_KEY : getSWRKeyByRefreshTokenExist;
   const { data: user, mutate: mutateUser } = useSWR<
-    IUserGetSuccessResponse | IUserGetFailureResponse
+    IUserGetSuccessResponse,
+    IUserGetFailureResponse
   >(SWRKey, fetcher, SWROptions);
 
   useEffect(() => {
