@@ -19,7 +19,7 @@ const SignUpStart = () => {
     redirectIfFound: true,
   });
 
-  if (user?.isLoggedIn) return null;
+  if (user) return null;
   return (
     <>
       <CustomHead {...pageProps} />

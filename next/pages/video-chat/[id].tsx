@@ -27,7 +27,7 @@ const ChatRoom = () => {
   devModeLog({ client, user });
 
   useEffect(() => {
-    if (!client || !user?.isLoggedIn) return;
+    if (!client || !user) return;
 
     const { id: userId } = user;
     const props: { userId: number; roomId: string } = {
@@ -44,7 +44,7 @@ const ChatRoom = () => {
     );
   }, [router.query.id, client, user]);
 
-  if (!user?.isLoggedIn) return null;
+  if (!user) return null;
   return (
     <>
       <CustomHead {...pageProps} />

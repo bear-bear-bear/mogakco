@@ -42,16 +42,14 @@ export interface IUserInfo {
 /**
  * 토큰으로 유저 정보를 요청했을 떄의 성공 응답
  */
-export interface IUserGetSuccessResponse extends IUserInfo {
-  isLoggedIn: boolean; // true
-}
+export interface IUserGetSuccessResponse
+  extends IUserInfo,
+    Partial<IGeneralServerResponse> {}
 
 /**
  * 토큰으로 유저 정보를 요청했을 떄의 실패 응답
  */
-export interface IUserGetFailureResponse {
-  isLoggedIn: boolean; // false
-}
+export type IUserGetFailureResponse = IGeneralServerResponse;
 
 /**
  * 회원가입 optional 페이지에서 서버로부터 받는 선택 옵션들의 타입

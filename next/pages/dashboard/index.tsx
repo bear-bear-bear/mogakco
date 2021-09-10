@@ -30,7 +30,7 @@ const Dashboard = () => {
 
   const handleSignOut = async () => {
     try {
-      mutateUser({ isLoggedIn: false }, false);
+      mutateUser(undefined);
       token.delete();
       await signOutApi();
       mutateUser();
@@ -40,17 +40,17 @@ const Dashboard = () => {
   };
 
   // TODO: 로그아웃 버튼 스타일, 위치 등 수정하기 (공용 헤더혹은 공용 버튼그룹으로 묶기)
-  if (!user?.isLoggedIn) return null;
+  if (!user) return null;
   return (
     <>
       <CustomHead {...pageProps} />
-      {user?.isLoggedIn && (
+      {user && (
         // 임시 위치, 임시 스타일
         <Button style={{ float: 'right' }} outline onClick={handleSignOut}>
           로그아웃
         </Button>
       )}
-      {user?.isLoggedIn && isDevelopment && (
+      {user && isDevelopment && (
         // 임시 위치, 임시 스타일
         <Button
           type="button"

@@ -24,7 +24,7 @@ const Landing = () => {
 
   const emailEl = useRef<HTMLInputElement>(null);
 
-  if (user?.isLoggedIn) return null;
+  if (user) return null;
   return (
     <>
       <CustomHead {...pageProps} />

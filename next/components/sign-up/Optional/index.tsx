@@ -53,10 +53,7 @@ const Optional = ({
       const {
         data: { accessToken, expiration, user },
       } = await signUpApi(signUpInfo);
-      mutateUser({
-        ...user,
-        isLoggedIn: true,
-      });
+      mutateUser({ ...user });
       token.set({ accessToken, expiration });
     } catch (error) {
       logAxiosError(error as GeneralAxiosError);

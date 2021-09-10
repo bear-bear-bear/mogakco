@@ -50,7 +50,7 @@ const getSWRKeyByRefreshTokenExist = () =>
  *  const MyPageRequiredAuthentication = () => {
       const { user } = useUser({ redirectTo: '/' });
       
-      if (!user?.isLoggedIn) return null;
+      if (!user) return null;
       return (
         // ... page content ....
       )
@@ -74,9 +74,9 @@ export default function useUser({
 
     if (
       // Authorization이 필요한 페이지인데 사용자 비로그인 상태라면 리디렉션
-      (!redirectIfFound && !user?.isLoggedIn) ||
+      (!redirectIfFound && !user?.id) ||
       // Authorization이 필요하지 않은 페이지인데 사용자가 로그인 상태라면 리디렉션
-      (redirectIfFound && user?.isLoggedIn) ||
+      (redirectIfFound && user?.id) ||
       // Authorization이 필요한 페이지인데, 리프레쉬 토큰이 쿠키에 없는데 액세스 토큰은 메모리에 있는 상황이라면 (사용자가 쿠키를 고의로 지웠을 경우) 리디렉션
       (!redirectIfFound &&
         !token.isRefreshTokenInCookie() &&
@@ -93,5 +93,5 @@ export default function useUser({
  * @desc mutate를 props로 넘겨줄때 사용할 인터페이스
  */
 export interface UserMutator {
-  mutateUser: KeyedMutator<IUserGetSuccessResponse | IUserGetFailureResponse>;
+  mutateUser: KeyedMutator<IUserGetSuccessResponse>;
 }

@@ -47,10 +47,7 @@ const SignInForm = ({ mutateUser }: UserMutator) => {
       const {
         data: { accessToken, expiration, user },
       } = await signInApi(signInInfo);
-      mutateUser({
-        ...user,
-        isLoggedIn: true,
-      });
+      mutateUser({ ...user });
       token.set({ accessToken, expiration });
     } catch (error) {
       logAxiosError(error as GeneralAxiosError);
