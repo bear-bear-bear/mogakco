@@ -1,16 +1,23 @@
 import useSWR from 'swr';
-import SocketIOClient from 'socket.io-client';
+import { io } from 'socket.io-client';
 import { useEffect } from 'react';
+import devModeLog from '@lib/devModeLog';
+import useUser from '@hooks/useUser';
 
 export const SOCKET_TEST_KEY = 'socket-test';
 const SOCKET_SERVER = 'http://localhost:8001/chat';
 
 export default function useSocket() {
+  const { user } = useUser();
   const { data: client, mutate } = useSWR(
     SOCKET_TEST_KEY,
     () =>
-      SocketIOClient(SOCKET_SERVER, {
+      io(SOCKET_SERVER, {
         reconnectionDelay: 2000,
+        extraHeaders: {
+          'user-id': String(user?.id),
+          'user-name': user?.username || 'no-user',
+        },
       }),
     {
       revalidateOnFocus: false,
@@ -18,6 +25,7 @@ export default function useSocket() {
   );
   useEffect(() => {
     return () => {
+      devModeLog('disconnect');
       client?.disconnect();
     };
   }, [client]);
