@@ -1,7 +1,15 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import useSocket from '@hooks/useSocket';
 import Chat from '../Chat';
 
 import * as S from './style';
+
+interface Message {
+  id: number;
+  username: string;
+  message: string;
+  type: 'enter' | 'chat' | 'kick' | 'file';
+}
 
 const dummyChatData = [
   {
@@ -44,6 +52,19 @@ const dummyChatData = [
 ];
 
 const ChatList = () => {
+  const { client } = useSocket();
+
+  useEffect(() => {
+    client?.on('chat', (message: string) => {
+      console.log('chat: ', message);
+    });
+    client?.on('exitUser', (message: string) => {
+      console.log(message);
+    });
+    client?.on('enterRoom', (message: string) => {
+      console.log(message);
+    });
+  });
   return (
     <S.ChatList>
       {dummyChatData.map((chat) => (
