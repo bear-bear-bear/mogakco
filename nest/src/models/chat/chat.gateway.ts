@@ -9,6 +9,7 @@ import { Server, Socket } from 'socket.io';
 import { InternalServerErrorException, Logger, UnauthorizedException } from '@nestjs/common';
 import ChatService from './chat.service';
 import UserRepository from '@models/user/repositories/user.repository';
+import RoomRepository from '@models/chat/repositories/room.repository';
 
 interface IJoinChatRoom {
   userId: number;
@@ -28,6 +29,7 @@ class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   constructor(
     private readonly chatService: ChatService,
     private readonly userRepository: UserRepository,
+    private readonly roomRepository: RoomRepository,
   ) {}
 
   handleConnection(client: Socket) {
@@ -39,11 +41,13 @@ class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   // TODO: 단순화 가능성 보임
   async handleDisconnect(client: Socket) {
-    const userId = client.handshake.headers['user-id'];
-    if (!userId) throw new InternalServerErrorException();
+    const userId = client.handshake.headers['user-id'] as string;
+    const roomId = client.handshake.headers['room-id'] as string;
+    if (!(userId && roomId)) throw new InternalServerErrorException();
     const user = await this.userRepository.findOne({ id: Number(userId) });
     if (!user) throw new InternalServerErrorException();
-    const room = await this.chatService.findBelongToRoomByUserId(user);
+    const room = await this.roomRepository.findOne({ id: Number(roomId) });
+    if (!room) throw new InternalServerErrorException();
     await this.chatService.exitRoom(user, room);
     client.broadcast.emit('exitUser', `${user.username} 유저가 퇴장하였습니다.`);
     this.logger.log(`${user.username} 유저가 ${room.id} 방에서 퇴장하였습니다.`);
