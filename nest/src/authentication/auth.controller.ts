@@ -1,21 +1,21 @@
 import {
-  Get,
-  Post,
   Body,
-  Controller,
-  UseGuards,
-  Req,
-  Res,
-  UseInterceptors,
   ClassSerializerInterceptor,
-  Query,
-  HttpStatus,
-  HttpException,
-  Redirect,
+  Controller,
+  Get,
   HttpCode,
+  HttpException,
+  HttpStatus,
   InternalServerErrorException,
   Logger,
+  Post,
+  Query,
+  Redirect,
+  Req,
+  Res,
   UseFilters,
+  UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { ConfigService } from '@nestjs/config';
@@ -250,7 +250,11 @@ class AuthController {
       };
     }
     const { isLoggedIn, user } = await this.authService.getAuthentication(accessToken);
-    return !isLoggedIn ? { isLoggedIn } : { isLoggedIn, ...user };
+    if (!isLoggedIn) {
+      res.status(HttpStatus.UNAUTHORIZED);
+      return { statusCode: HttpStatus.UNAUTHORIZED, message: '인증 권한이 없습니다.' };
+    }
+    return { statusCode: HttpStatus.OK, ...user, message: '유저가 존재합니다.' };
   }
 }
 
