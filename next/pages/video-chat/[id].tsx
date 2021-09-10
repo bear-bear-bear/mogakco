@@ -12,6 +12,7 @@ import token from '@lib/token';
 import { useRouter } from 'next/router';
 import useSocket from '@hooks/useSocket';
 import { useEffect } from 'react';
+import type { IUserInfo } from 'typings/auth';
 
 const pageProps = {
   title: '화상채팅 - Mogakco',
@@ -28,9 +29,9 @@ const ChatRoom = () => {
 
   useEffect(() => {
     if (!client || !user?.isLoggedIn) return;
+    const { id: userId } = user as IUserInfo;
 
-    const { id: userId } = user;
-    const props: { userId: number; roomId: string } = {
+    const props = {
       userId,
       roomId: String(router.query.id),
     };

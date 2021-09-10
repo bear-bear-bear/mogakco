@@ -31,8 +31,8 @@ const Dashboard = () => {
   const handleSignOut = async () => {
     try {
       mutateUser({ isLoggedIn: false }, false);
-      token.delete();
       await signOutApi();
+      token.delete();
       mutateUser();
     } catch (error) {
       logAxiosError(error as GeneralAxiosError);
