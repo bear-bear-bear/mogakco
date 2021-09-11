@@ -1,10 +1,13 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import ImageLogo from '@assets/svg/logo2.svg';
 import useUser from '@hooks/useUser';
 import type { IUserInfo } from 'typings/auth';
 
 import * as S from './style';
+
+const PARENT_ID = 'togglableProfile';
+const PARENT_TAGNAME = 'article'; // S.Profile 과 element 동일해야함
 
 const Profile = () => {
   const { user } = useUser();
@@ -14,13 +17,29 @@ const Profile = () => {
     setIsShowModal((prev) => !prev);
   };
 
+  useEffect(() => {
+    const closeModal = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      const parent = target.closest(PARENT_TAGNAME);
+      if (!isShowModal) return;
+      if (parent?.id === PARENT_ID) return;
+
+      setIsShowModal(false);
+    };
+
+    window.addEventListener('click', closeModal);
+    return () => window.removeEventListener('click', closeModal);
+  }, [isShowModal]);
+
   return (
-    <S.Profile>
+    <S.Profile id={PARENT_ID}>
       <S.LogoWrapper>
         <ImageLogo onClick={toggleModal} />
       </S.LogoWrapper>
-      <S.ProfileModal isShow={isShowModal}>
-        <p>준재김</p>
+      <S.ProfileModal id={MODAL_ID} isShow={isShowModal}>
+        <section>현재 로그인 계정</section>
+        <section>현재 로그인 계정</section>
+        <section>현재 로그인 계정</section>
       </S.ProfileModal>
     </S.Profile>
   );
