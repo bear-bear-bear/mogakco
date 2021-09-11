@@ -9,8 +9,10 @@ import { Server, Socket } from 'socket.io';
 import { InternalServerErrorException, Logger, UnauthorizedException } from '@nestjs/common';
 import ChatService from './chat.service';
 import UserRepository from '@models/user/repositories/user.repository';
-import RoomRepository from '@models/chat/repositories/room.repository';
-import ChatRepository from '@models/user/repositories/chat.repository';
+import RoomRepository from './repositories/room.repository';
+import ChatRepository from './repositories/chat.repository';
+import RoomUserRepository from './repositories/room-user.repository';
+import { IChatGateway } from '@models/chat/interface/gateway';
 
 interface IJoinChatRoom {
   userId: number;
@@ -21,7 +23,7 @@ interface IJoinChatRoom {
   namespace: 'chat',
   cors: { origin: '*', credentials: true },
 })
-class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
+class ChatGateway implements IChatGateway, OnGatewayConnection, OnGatewayDisconnect {
   @WebSocketServer()
   server!: Server;
 
@@ -31,6 +33,7 @@ class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
     private readonly chatService: ChatService,
     private readonly userRepository: UserRepository,
     private readonly roomRepository: RoomRepository,
+    private readonly roomUserRepository: RoomUserRepository,
     private readonly chatRepository: ChatRepository,
   ) {}
 
@@ -41,47 +44,31 @@ class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
     this.logger.debug(`client ${client.conn.id} connection!`);
   }
 
-  // TODO: 단순화 가능성 보임
   async handleDisconnect(client: Socket) {
-    const userId = client.handshake.headers['user-id'] as string;
-    const roomId = client.handshake.headers['room-id'] as string;
-    if (!(userId && roomId)) throw new InternalServerErrorException();
-    const user = await this.userRepository.findOne({ id: Number(userId) });
-    if (!user) throw new InternalServerErrorException();
-    const room = await this.roomRepository.findOne({ id: Number(roomId) });
-    if (!room) throw new InternalServerErrorException();
-    await this.chatService.exitRoom(user, room);
-    client.broadcast.emit('exitUser', `${user.username} 유저가 퇴장하였습니다.`);
-    this.logger.log(`${user.username} 유저가 ${room.id} 방에서 퇴장하였습니다.`);
+    const { username, roomId } = await this.chatService.leaveRoom(client.handshake.headers);
+    client.broadcast.emit('exitUser', `${username} 유저가 퇴장하였습니다.`);
+    this.logger.log(`${username} 유저가 ${roomId} 방에서 퇴장하였습니다.`);
     this.logger.debug(`client ${client.conn.id} disconnected`);
   }
 
   @SubscribeMessage('joinChatRoom')
-  async joinChatRoom(client: Socket, { roomId, userId }: IJoinChatRoom) {
+  async join(client: Socket, { roomId, userId }: IJoinChatRoom) {
     const user = await this.userRepository.findOne({ id: userId });
     if (!user) throw new UnauthorizedException();
     await this.chatService.joinRoom(user, Number(roomId));
     this.server.to(roomId).emit('joinUserMessage', client.conn.id);
     return {
       joinedUserName: user.username,
-      joinedRoomId: roomId,
+      joinedRoomId: Number(roomId),
     };
   }
 
-  // TODO: 개발 중
   @SubscribeMessage('chat')
   async chat(client: Socket, message: string) {
-    const userId = client.handshake.headers['user-id'] as string;
-    const roomId = client.handshake.headers['room-id'] as string;
-    const user = await this.userRepository.findOne({ id: Number(userId) });
-    const room = await this.roomRepository.findOne({ id: Number(roomId) });
-    if (!(user && room)) throw new InternalServerErrorException();
-    const { id: chatId } = await this.chatRepository.createChat(user, room, message);
-    const response = this.chatService.createChatResponse(chatId, user.username, message, false);
-    const ownerResponse = this.chatService.createChatResponse(chatId, user.username, message, true);
-
-    client.broadcast.emit('chat', response);
-    client.emit('chat', ownerResponse);
+    const { headers } = client.handshake;
+    const [globalChat, myChat] = await this.chatService.makeAndSaveChat(headers, message);
+    client.broadcast.emit('chat', globalChat);
+    client.emit('chat', myChat);
   }
 }
 

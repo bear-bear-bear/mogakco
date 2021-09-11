@@ -4,10 +4,17 @@ import {
   ChatAvailableSwagger,
   GetRoomMembersSwagger,
 } from '@common/decorators/swagger/chat.decorator';
+import RoomUserRepository from './repositories/room-user.repository';
+import RoomRepository from './repositories/room.repository';
+import { AvailableRoom, IChatController, MemberCount } from './interface/controller';
 
 @Controller('chat')
-class ChatController {
-  constructor(private readonly chatService: ChatService) {}
+export default class ChatController implements IChatController {
+  constructor(
+    private readonly chatService: ChatService,
+    private readonly roomRepository: RoomRepository,
+    private readonly roomUserRepository: RoomUserRepository,
+  ) {}
 
   /**
    * @desc 채팅방 이용 가능 여부를 검사합니다.
@@ -17,8 +24,8 @@ class ChatController {
   async isAvailableChatRoom(
     @Param('id', ParseIntPipe)
     roomId: number,
-  ) {
-    const available = await this.chatService.isAvailable(roomId);
+  ): Promise<AvailableRoom> {
+    const available = await this.roomRepository.isAvailable(roomId);
     if (available) {
       return {
         message: '채팅방이 존재합니다',
@@ -33,14 +40,12 @@ class ChatController {
    */
   @GetRoomMembersSwagger()
   @Get('/:id/members')
-  async getMembers(@Param('id', ParseIntPipe) roomId: number) {
-    const isAvailable = await this.chatService.isAvailable(roomId);
+  async getMembers(@Param('id', ParseIntPipe) roomId: number): Promise<MemberCount> {
+    const isAvailable = await this.roomRepository.isAvailable(roomId);
     if (!isAvailable) throw new BadRequestException('채팅방이 존재하지 않습니다.');
-    const memberCount = await this.chatService.getRoomMembers(roomId);
+    const memberCount = await this.roomUserRepository.getRoomMembers(roomId);
     return {
       memberCount,
     };
   }
 }
-
-export default ChatController;
