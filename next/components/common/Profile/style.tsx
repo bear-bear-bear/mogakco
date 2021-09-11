@@ -25,15 +25,18 @@ export const ProfileModal = styled.section<ProfileModalProps>`
   display: ${({ isShow }) => (isShow ? 'flex' : 'none')};
   flex-direction: column;
   gap: 1.33rem;
-  padding: 1.33rem;
+  padding: 1.33rem 1rem;
   box-shadow: 0 0 1px var(--color-gray-2), 0 0 2px var(--color-gray-2);
   border-radius: 16px;
 
-  section.profile-section {
+  .profile-section {
     header {
       color: var(--color-gray-8);
       font-weight: 300;
+      font-size: 0.9rem;
+      letter-spacing: -0.01rem;
       margin-bottom: 1rem;
+      padding: 0 0.33rem;
     }
 
     &__account {
@@ -61,18 +64,48 @@ export const ProfileModal = styled.section<ProfileModalProps>`
       p {
         &:nth-of-type(1) {
           grid-area: username;
-          font-size: 1.33rem;
+          padding-top: 0.33rem;
+          font-size: 1.15rem;
           font-weight: 500;
+          letter-spacing: 0.03rem;
+          color: var(--color-black);
         }
         &:nth-of-type(2) {
           grid-area: email;
-          color: var(--color-gray-4);
+          padding-bottom: 0.33rem;
           letter-spacing: -0.03rem;
+          color: var(--color-gray-4);
         }
       }
     }
 
     &__list {
+      button {
+        // reset button style
+        background-color: inherit;
+        border: none;
+        outline: none;
+        cursor: pointer;
+        text-align: start;
+      }
+
+      &__item {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        height: 2rem;
+        font-size: 1.15rem;
+        font-weight: 500;
+        letter-spacing: 0.03rem;
+        color: var(--color-black);
+        border-radius: 5px;
+        padding: 0 0.33rem;
+
+        &:hover,
+        &:focus {
+          background-color: var(--color-gray-0);
+        }
+      }
     }
   }
 `;

@@ -47,11 +47,15 @@ const ProfileModal = ({ isShow, direction }: ProfileModalProps) => {
         <ul className="profile-section__list">
           <li>
             <Link href="/my-page/account-setting">
-              <a>설정</a>
+              <a className="profile-section__list__item">설정</a>
             </Link>
           </li>
           <li>
-            <button type="button" onClick={handleSignOut}>
+            <button
+              className="profile-section__list__item"
+              type="button"
+              onClick={handleSignOut}
+            >
               로그아웃
             </button>
           </li>
