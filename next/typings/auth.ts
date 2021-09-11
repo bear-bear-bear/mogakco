@@ -42,15 +42,8 @@ export interface IUserInfo {
 /**
  * 토큰으로 유저 정보를 요청했을 떄의 성공 응답
  */
-export interface IUserGetSuccessResponse extends IUserInfo {
+export interface IUserGetResponse extends Partial<IUserInfo> {
   isLoggedIn: boolean; // true
-}
-
-/**
- * 토큰으로 유저 정보를 요청했을 떄의 실패 응답
- */
-export interface IUserGetFailureResponse {
-  isLoggedIn: boolean; // false
 }
 
 /**

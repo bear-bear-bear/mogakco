@@ -2,12 +2,7 @@ import axios, { AxiosRequestConfig } from 'axios';
 import log from 'loglevel';
 import devModeLog from '@lib/devModeLog';
 import { refreshAccessTokenApi } from '@lib/apis';
-import token, {
-  memoryStorage,
-  ACCESS_TOKEN,
-  REFRESH_TOKEN,
-  isRefreshTokenInCookie,
-} from '@lib/token';
+import token, { REFRESH_TOKEN } from '@lib/token';
 import type { GeneralAxiosError } from 'typings/common';
 
 export const logAxiosError = (axiosError: GeneralAxiosError) => {
@@ -83,8 +78,10 @@ export const refreshAccessToken = async (config: AxiosRequestConfig) => {
     const {
       data: { accessToken: newAccessToken, expiration: newExpiration },
     } = await refreshAccessTokenApi();
-    localStorage.setItem('expiration', newExpiration);
-    memoryStorage.set(ACCESS_TOKEN, newAccessToken);
+    token.set({
+      accessToken: newAccessToken,
+      expiration: newExpiration,
+    });
     config.headers.Authorization = `Bearer ${newAccessToken}`;
     devModeLog('토큰 갱신 성공');
     return config;
@@ -93,7 +90,7 @@ export const refreshAccessToken = async (config: AxiosRequestConfig) => {
     // logAxiosError(err as GeneralAxiosError);
     const { response } = err as GeneralAxiosError;
     if (response?.status === 401) {
-      devModeLog('UnAuthorized - 기존 토큰 정보를 삭제합니다');
+      devModeLog('401 UnAuthorized - 기존 토큰 정보를 삭제합니다');
       // 401일땐 로그아웃 처리 (다른 탭과 동기화)
       // refresh토큰 또한 직접 삭제 (서버단에선 로그아웃 요청시에만 refresh 토큰을 삭제해줌)
       token.delete();
@@ -106,7 +103,7 @@ export const refreshAccessToken = async (config: AxiosRequestConfig) => {
 const processProlongToken = async (config: AxiosRequestConfig) => {
   if (typeof window === 'undefined') return config;
 
-  if (!isRefreshTokenInCookie()) return config;
+  if (!token.isRefreshTokenInCookie()) return config;
 
   // 인터셉트를 패스시켜야 할 url인지 검사
   const passUrlList = Object.values(passUrlDict);
@@ -119,7 +116,7 @@ const processProlongToken = async (config: AxiosRequestConfig) => {
 
   // 패스할 url이 아니라면 사용자가 기존에 가지고 있던 accessToken의 유효성 검사 시작 (검사 실패 시 refresh)
   // 검사 1. 로컬 스토리지 내 access-token 만료기한 유무 검사
-  const expiration = localStorage.getItem('expiration');
+  const { accessToken, expiration } = token.get();
   if (expiration === null) {
     const settedNewTokenReqConfig = await refreshAccessToken(config);
     return settedNewTokenReqConfig;
@@ -134,7 +131,6 @@ const processProlongToken = async (config: AxiosRequestConfig) => {
   }
 
   // 검사 3. 브라우저 리다이렉션 또는 외부요인으로 인해 액세스 토큰이 소실 되었는지 검사
-  const accessToken: string | undefined = memoryStorage.get(ACCESS_TOKEN);
   if (accessToken === undefined) {
     const settedNewTokenReqConfig = await refreshAccessToken(config);
     return settedNewTokenReqConfig;
@@ -146,6 +142,6 @@ const processProlongToken = async (config: AxiosRequestConfig) => {
   return config;
 };
 
-apiClient.interceptors.request.use(processProlongToken, undefined);
+apiClient.interceptors.request.use(processProlongToken);
 
 export default apiClient;

@@ -1,7 +1,19 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import useSocket from '@hooks/useSocket';
 import Chat from '../Chat';
 
 import * as S from './style';
+
+interface Message {
+  id: number;
+  username: string;
+  message: string;
+  type: 'enter' | 'chat' | 'kick' | 'file' | 'my-chat';
+}
+
+interface Announcement {
+  type: 'kick' | 'enter' | 'exit';
+}
 
 const dummyChatData = [
   {
@@ -44,9 +56,34 @@ const dummyChatData = [
 ];
 
 const ChatList = () => {
+  const [message, setMessage] = useState<Message[]>([]);
+  const [announcements, setAnnouncements] = useState<Announcement[]>([]);
+  const { client } = useSocket();
+
+  useEffect(() => {
+    client?.on('chat', (info: Message) => {
+      setMessage((prevState) => prevState.concat(info));
+    });
+    client?.on('exitUser', (msg: string) => {
+      console.log(msg);
+    });
+    client?.on('enterRoom', (msg: string) => {
+      console.log(msg);
+    });
+    return () => {
+      client?.off('chat');
+      client?.off('exitUser');
+      client?.off('enterRoom');
+    };
+  });
+
+  useEffect(() => {
+    console.log({ message });
+  }, [message]);
+
   return (
     <S.ChatList>
-      {dummyChatData.map((chat) => (
+      {message?.map((chat) => (
         <Chat key={chat.id} {...chat} />
       ))}
     </S.ChatList>
