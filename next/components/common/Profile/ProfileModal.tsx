@@ -32,14 +32,19 @@ const ProfileModal = ({ isShow, direction }: ProfileModalProps) => {
   const { username, email } = user as IUserInfo;
   return (
     <S.ProfileModal isShow={isShow} direction={direction}>
-      <section>
+      <section className="profile-section">
         <header>현재 로그인 계정</header>
-        <p>{username}</p>
-        <p>{email}</p>
+        <section className="profile-section__account">
+          <Link href="/my-page">
+            <a>{username.substring(0, 2)}</a>
+          </Link>
+          <p>{username}</p>
+          <p>{email}</p>
+        </section>
       </section>
-      <section>
+      <section className="profile-section">
         <header>옵션 더 보기</header>
-        <ul>
+        <ul className="profile-section__list">
           <li>
             <Link href="/my-page/account-setting">
               <a>설정</a>
