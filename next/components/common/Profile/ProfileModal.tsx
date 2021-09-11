@@ -1,6 +1,12 @@
 import Link from 'next/link';
+
 import useUser from '@hooks/useUser';
+import { signOutApi } from '@lib/apis';
+import token from '@lib/token';
+import { logAxiosError } from '@lib/apiClient';
+import type { GeneralAxiosError } from 'typings/common';
 import type { IUserInfo } from 'typings/auth';
+
 import * as S from './style';
 
 export interface ProfileModalProps {
@@ -9,7 +15,18 @@ export interface ProfileModalProps {
 }
 
 const ProfileModal = ({ isShow, direction }: ProfileModalProps) => {
-  const { user } = useUser();
+  const { user, mutateUser } = useUser();
+
+  const handleSignOut = async () => {
+    try {
+      mutateUser({ isLoggedIn: false }, false);
+      await signOutApi();
+      token.delete();
+      mutateUser();
+    } catch (error) {
+      logAxiosError(error as GeneralAxiosError);
+    }
+  };
 
   if (!user?.isLoggedIn) return null;
   const { username, email } = user as IUserInfo;
@@ -29,7 +46,9 @@ const ProfileModal = ({ isShow, direction }: ProfileModalProps) => {
             </Link>
           </li>
           <li>
-            <button type="button">로그아웃</button>
+            <button type="button" onClick={handleSignOut}>
+              로그아웃
+            </button>
           </li>
         </ul>
       </section>
