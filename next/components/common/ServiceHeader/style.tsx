@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 
-export const Header = styled.header`
+export const ServiceHeader = styled.header`
   grid-area: header;
   width: 100%;
   display: flex;
