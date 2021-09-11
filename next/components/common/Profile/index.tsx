@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import Link from 'next/link';
 
 import ImageLogo from '@assets/svg/logo2.svg';
 import useUser from '@hooks/useUser';
@@ -36,10 +37,23 @@ const Profile = () => {
       <S.LogoWrapper>
         <ImageLogo onClick={toggleModal} />
       </S.LogoWrapper>
-      <S.ProfileModal id={MODAL_ID} isShow={isShowModal}>
-        <section>현재 로그인 계정</section>
-        <section>현재 로그인 계정</section>
-        <section>현재 로그인 계정</section>
+      <S.ProfileModal isShow={isShowModal}>
+        <section>
+          <header>현재 로그인 계정</header>
+        </section>
+        <section>
+          <header>옵션 더 보기</header>
+          <ul>
+            <li>
+              <Link href="/my-page/account-setting">
+                <a>설정</a>
+              </Link>
+            </li>
+            <li>
+              <button type="button">로그아웃</button>
+            </li>
+          </ul>
+        </section>
       </S.ProfileModal>
     </S.Profile>
   );
