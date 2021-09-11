@@ -3,7 +3,7 @@ import ChatModule from '@models/chat/chat.module';
 import ConfigModule from '@config/app/config.module';
 import MariadbModule from '@config/database/mariadb.module';
 import MailModule from '@mail/mail.module';
-import AuthModule from './authentication/auth.module';
+import AuthModule from '@authentication/modules/auth.module';
 
 @Module({
   imports: [ConfigModule, MariadbModule, AuthModule, MailModule, ChatModule],
