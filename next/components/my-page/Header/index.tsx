@@ -1,6 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
-import Logo from '@assets/svg/logo1.svg';
+import TextLogo from '@assets/svg/logo1.svg';
+import Profile from '@components/common/Profile';
 
 import * as S from './style';
 
@@ -8,9 +9,10 @@ const Header = () => (
   <S.Header>
     <Link href="/dashboard">
       <a>
-        <Logo />
+        <TextLogo />
       </a>
     </Link>
+    <Profile />
   </S.Header>
 );
 
