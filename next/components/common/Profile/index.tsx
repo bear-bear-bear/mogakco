@@ -1,21 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import Link from 'next/link';
-
 import ImageLogo from '@assets/svg/logo2.svg';
-import useUser from '@hooks/useUser';
-import type { IUserInfo } from 'typings/auth';
+import ProfileModal from './ProfileModal';
 
 import * as S from './style';
 
-export interface ProfileProps {
-  modalPosition: 'left' | 'right';
+interface ProfileProps {
+  modalDirection: 'left' | 'right';
 }
 
 const PARENT_ID = 'togglableProfile';
 const PARENT_TAGNAME = 'article'; // S.Profile 과 element 동일해야함
 
-const Profile = ({ modalPosition }: ProfileProps) => {
-  const { user } = useUser();
+const Profile = ({ modalDirection }: ProfileProps) => {
   const [isShowModal, setIsShowModal] = useState(false);
 
   const toggleModal = () => {
@@ -41,24 +37,7 @@ const Profile = ({ modalPosition }: ProfileProps) => {
       <S.LogoWrapper>
         <ImageLogo onClick={toggleModal} />
       </S.LogoWrapper>
-      <S.ProfileModal isShow={isShowModal} modalPosition={modalPosition}>
-        <section>
-          <header>현재 로그인 계정</header>
-        </section>
-        <section>
-          <header>옵션 더 보기</header>
-          <ul>
-            <li>
-              <Link href="/my-page/account-setting">
-                <a>설정</a>
-              </Link>
-            </li>
-            <li>
-              <button type="button">로그아웃</button>
-            </li>
-          </ul>
-        </section>
-      </S.ProfileModal>
+      <ProfileModal isShow={isShowModal} direction={modalDirection} />
     </S.Profile>
   );
 };

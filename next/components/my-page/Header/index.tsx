@@ -12,7 +12,7 @@ const Header = () => (
         <TextLogo />
       </a>
     </Link>
-    <Profile modalPosition="left" />
+    <Profile modalDirection="left" />
   </S.Header>
 );
 
