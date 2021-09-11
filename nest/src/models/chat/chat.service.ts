@@ -5,43 +5,75 @@ import {
   Logger,
 } from '@nestjs/common';
 import RoomRepository from './repositories/room.repository';
-import UserRepository from '@models/user/repositories/user.repository';
 import UserEntity from '@models/user/entities/user.entity';
 import RoomUserRepository from '@models/chat/repositories/room-user.repository';
-import RoomEntity from '@models/chat/entities/room.entity';
+import { IncomingHttpHeaders } from 'http';
+import UserRepository from '@models/user/repositories/user.repository';
+import { Chat, IChatService, LeaveRoom, UserAndRoom } from '@models/chat/interface/service';
+import ChatRepository from '@models/chat/repositories/chat.repository';
 
 @Injectable()
-class ChatService {
+class ChatService implements IChatService {
   private readonly logger = new Logger('ChatService');
 
   constructor(
     private readonly roomRepository: RoomRepository,
     private readonly roomUserRepository: RoomUserRepository,
     private readonly userRepository: UserRepository,
+    private readonly chatRepository: ChatRepository,
   ) {}
 
   /**
-   * @desc 해당 번호에 해당하는 채팅방이 이용가능한 지 여부를 반환합니다.
+   * @desc 해당 유저를 채팅방(Room) 에서 퇴장시킵니다.
    */
-  async isAvailable(id: number): Promise<boolean> {
-    const room = await this.roomRepository.findOne(id);
-    return room !== undefined;
+  async leaveRoom(headers: IncomingHttpHeaders): Promise<LeaveRoom> {
+    const [userId, roomId] = this.getIdsFromHeader(headers);
+    const { user, room } = await this.findUserAndRoom(userId, roomId);
+    await this.roomUserRepository.leave(user, room);
+    return { username: user.username, roomId: room.id };
   }
 
   /**
-   * @desc 채팅방에 존재하는 모든 유저 수를 찾습니다.
+   * @desc 채팅을 만들고, DB 저장 후 반환합니다.
    */
-  async getRoomMembers(id: number) {
-    const [, count] = await this.roomUserRepository.findAndCount({
-      where: { roomId: id },
-    });
-    return count;
+  async makeAndSaveChat(headers: IncomingHttpHeaders, message: string): Promise<Chat[]> {
+    const [userId, roomId] = this.getIdsFromHeader(headers);
+    const { user, room } = await this.findUserAndRoom(userId, roomId);
+    if (!(user && room)) throw new InternalServerErrorException();
+    const { id: chatId } = await this.chatRepository.createChat(user, room, message);
+    const globalChat = this.createChatResponse(chatId, user.username, message, false);
+    const myChat = this.createChatResponse(chatId, user.username, message, true);
+    return [globalChat, myChat];
+  }
+
+  /**
+   * @desc 유저와 채팅방(Room)을 찾아서 반환합니다.
+   */
+  async findUserAndRoom(userId: number, roomId: number): Promise<UserAndRoom> {
+    try {
+      const user = await this.userRepository.findOne({ id: userId });
+      const room = await this.roomRepository.findOne({ id: roomId });
+      if (!(user && room)) throw new InternalServerErrorException();
+      return { user, room };
+    } catch (e) {
+      throw new InternalServerErrorException('데이터베이스에서 오류가 발생하였습니다.');
+    }
+  }
+
+  /**
+   * @desc headers 에서 id 를 추출하고 반환합니다.
+   */
+  getIdsFromHeader(headers: IncomingHttpHeaders): number[] {
+    const userId = headers['user-id'];
+    const roomId = headers['room-id'];
+    if (!(userId && roomId)) throw new InternalServerErrorException();
+    return [Number(userId), Number(roomId)];
   }
 
   /**
    * @desc 해당 유저가 채팅방(Room)에 입장합니다.
    */
-  async joinRoom(user: UserEntity, roomId: number) {
+  async joinRoom(user: UserEntity, roomId: number): Promise<void> {
     const room = await this.roomRepository.findOne({ id: roomId });
     if (!room) throw new BadRequestException();
 
@@ -54,32 +86,9 @@ class ChatService {
   }
 
   /**
-   * @desc 해당 유저가 속한 채팅방 번호를 찾습니다.
-   */
-  async findBelongToRoomByUserId(user: UserEntity) {
-    if (!user) throw new InternalServerErrorException();
-    const roomUser = await this.roomUserRepository.findOne({
-      where: { userId: user?.id },
-      relations: ['roomId'],
-    });
-    if (!roomUser) throw new InternalServerErrorException();
-    return roomUser.roomId;
-  }
-
-  /**
-   * @desc 해당 유저를 해당 룸에서 퇴장 처리합니다.
-   */
-  async exitRoom(user: UserEntity, room: RoomEntity) {
-    await this.roomUserRepository.delete({
-      roomId: room,
-      userId: user,
-    });
-  }
-
-  /**
    * @desc 채팅 응답 객체를 생성합니다.
    */
-  createChatResponse(chatId: number, username: string, message: string, isOwner: boolean) {
+  createChatResponse(chatId: number, username: string, message: string, isOwner: boolean): Chat {
     return {
       id: chatId,
       username,
