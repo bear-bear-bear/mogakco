@@ -7,10 +7,14 @@ import type { IUserInfo } from 'typings/auth';
 
 import * as S from './style';
 
+export interface ProfileProps {
+  modalPosition: 'left' | 'right';
+}
+
 const PARENT_ID = 'togglableProfile';
 const PARENT_TAGNAME = 'article'; // S.Profile 과 element 동일해야함
 
-const Profile = () => {
+const Profile = ({ modalPosition }: ProfileProps) => {
   const { user } = useUser();
   const [isShowModal, setIsShowModal] = useState(false);
 
@@ -37,7 +41,7 @@ const Profile = () => {
       <S.LogoWrapper>
         <ImageLogo onClick={toggleModal} />
       </S.LogoWrapper>
-      <S.ProfileModal isShow={isShowModal}>
+      <S.ProfileModal isShow={isShowModal} modalPosition={modalPosition}>
         <section>
           <header>현재 로그인 계정</header>
         </section>

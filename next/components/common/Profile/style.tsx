@@ -1,6 +1,7 @@
 import styled from '@emotion/styled';
+import { ProfileProps } from './index';
 
-interface ProfileModalProps {
+interface ProfileModalProps extends ProfileProps {
   isShow: boolean;
 }
 
@@ -21,6 +22,9 @@ export const ProfileModal = styled.dialog<ProfileModalProps>`
   width: 16rem;
   max-width: 100vw;
   position: absolute;
-  transform: translateX(calc(-100% + ${iconLength}rem));
+  transform: ${({ modalPosition }) =>
+    modalPosition === 'left'
+      ? `translateX(calc(-100% + ${iconLength}rem))`
+      : 'none'};
   display: ${({ isShow }) => (isShow ? 'block' : 'none')};
 `;
