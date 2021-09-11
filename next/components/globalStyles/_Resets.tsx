@@ -132,6 +132,21 @@ const Resets = css`
     border-collapse: collapse;
     border-spacing: 0;
   }
+  button {
+    font-family: inherit;
+    font-size: 100%;
+    line-height: 1.15;
+    margin: 0;
+    overflow: visible;
+    text-transform: none;
+  }
+
+  button,
+  [type='button'],
+  [type='reset'],
+  [type='submit'] {
+    -webkit-appearance: button;
+  }
 `;
 
 export default Resets;
