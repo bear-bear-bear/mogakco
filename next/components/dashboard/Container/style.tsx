@@ -3,12 +3,8 @@ import media, { mediaBreakpoints } from '@components/globalStyles/media';
 
 export const Container = styled.main`
   width: 100%;
-  height: 100%;
   max-width: ${mediaBreakpoints.lg}px;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -16,6 +12,10 @@ export const Container = styled.main`
 
   ${media.sm} {
     height: initial;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
     flex-direction: row;
     align-items: initial;
     justify-content: space-around;

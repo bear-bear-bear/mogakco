@@ -12,6 +12,14 @@ export const customGlobalStyles = css`
     box-sizing: border-box;
   }
 
+  html,
+  body,
+  body > div:first-child,
+  div#__next,
+  div#__next > div {
+    min-height: 100vh;
+  }
+
   html {
     font-family: sans-serif;
     -ms-text-size-adjust: 100%;

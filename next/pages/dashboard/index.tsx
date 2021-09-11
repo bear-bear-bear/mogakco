@@ -1,15 +1,10 @@
-import React, { useCallback, useState } from 'react';
+import React from 'react';
 
 import useUser from '@hooks/useUser';
-import Button from '@components/common/Button';
 import CustomHead from '@components/common/CustomHead';
 import Container from '@components/dashboard/Container';
 import CardLink from '@components/dashboard/CardLink';
-import { authProlongTestApi, signOutApi } from '@lib/apis';
-import token from '@lib/token';
-import { logAxiosError } from '@lib/apiClient';
-import type { GeneralAxiosError } from 'typings/common';
-import { isDevelopment } from '@lib/enviroment';
+import ServiceHeader from '@components/common/ServiceHeader';
 
 export const pageProps = {
   title: '대시보드 - Mogakco',
@@ -19,49 +14,14 @@ export const pageProps = {
 };
 
 const Dashboard = () => {
-  const { user, mutateUser } = useUser({ redirectTo: '/' });
-  const [isTestBtnLoading, setIsTestBtnLoading] = useState<boolean>(false);
-
-  const onClickTestButton = useCallback(async () => {
-    setIsTestBtnLoading(true);
-    await authProlongTestApi();
-    setIsTestBtnLoading(false);
-  }, []);
-
-  const handleSignOut = async () => {
-    try {
-      mutateUser({ isLoggedIn: false }, false);
-      await signOutApi();
-      token.delete();
-      mutateUser();
-    } catch (error) {
-      logAxiosError(error as GeneralAxiosError);
-    }
-  };
+  const { user } = useUser({ redirectTo: '/' });
 
   // TODO: 로그아웃 버튼 스타일, 위치 등 수정하기 (공용 헤더혹은 공용 버튼그룹으로 묶기)
   if (!user?.isLoggedIn) return null;
   return (
     <>
       <CustomHead {...pageProps} />
-      {user?.isLoggedIn && (
-        // 임시 위치, 임시 스타일
-        <Button style={{ float: 'right' }} outline onClick={handleSignOut}>
-          로그아웃
-        </Button>
-      )}
-      {user?.isLoggedIn && isDevelopment && (
-        // 임시 위치, 임시 스타일
-        <Button
-          type="button"
-          outline
-          style={{ float: 'right' }}
-          onClick={onClickTestButton}
-          $loading={isTestBtnLoading}
-        >
-          로그인 연장 테스트
-        </Button>
-      )}
+      <ServiceHeader />
       <Container>
         {/* <Link href={`/video-chat/${id}`}> */}
         {/* 임시로 화상채팅 1번 룸으로 가도록 설정 */}

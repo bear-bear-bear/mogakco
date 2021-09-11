@@ -21,8 +21,8 @@ const MyPageDashboard = () => {
   return (
     <>
       <CustomHead {...pageProps} />
+      <ServiceHeader />
       <Container>
-        <ServiceHeader />
         <Aside />
         <Main />
       </Container>

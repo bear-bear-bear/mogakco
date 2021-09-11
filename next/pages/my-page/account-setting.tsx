@@ -21,8 +21,8 @@ const MyPageAccountSetting = () => {
   return (
     <>
       <CustomHead {...pageProps} />
+      <ServiceHeader />
       <Container>
-        <ServiceHeader />
         <Aside />
         <Main />
       </Container>

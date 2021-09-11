@@ -21,8 +21,8 @@ const MyPageCalendar = () => {
   return (
     <>
       <CustomHead {...pageProps} />
+      <ServiceHeader />
       <Container>
-        <ServiceHeader />
         <Aside />
         <Main />
       </Container>

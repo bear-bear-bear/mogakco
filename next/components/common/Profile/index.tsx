@@ -4,7 +4,7 @@ import ProfileModal from './ProfileModal';
 
 import * as S from './style';
 
-interface ProfileProps {
+export interface ProfileProps {
   modalDirection: 'left' | 'right';
 }
 
