@@ -8,7 +8,7 @@ import ChatGateway from './chat.gateway';
 import ChatService from './chat.service';
 import UserRepository from '@models/user/repositories/user.repository';
 import RoomUserRepository from '@models/chat/repositories/room-user.repository';
-import ChatRepository from '@models/user/repositories/chat.repository';
+import ChatRepository from '@models/chat/repositories/chat.repository';
 
 @Module({
   imports: [
