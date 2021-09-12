@@ -50,7 +50,7 @@ const apiClient = axios.create({
   baseURL:
     process.env.NODE_ENV === 'development'
       ? 'http://localhost:8001/'
-      : 'http://localhost:8001/',
+      : 'http://146.56.139.188/:8001/',
   withCredentials: true,
 });
 
