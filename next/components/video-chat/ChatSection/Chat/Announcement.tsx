@@ -8,13 +8,13 @@ const explains: { [AnnounceType: string]: string } = {
   kick: '강제퇴장 되었습니다.',
 };
 
-const Announcement = ({ type, target }: ChatAnnouncement) => {
+const Announcement = ({ type, username }: ChatAnnouncement) => {
   const announce = (announceType: string, name: string) =>
     `${name} 님이 ${explains[announceType]}`;
 
   return (
     <S.ChatWrapper>
-      <S.Announcement type={type}>{announce(type, target)}</S.Announcement>
+      <S.Announcement type={type}>{announce(type, username)}</S.Announcement>
     </S.ChatWrapper>
   );
 };
