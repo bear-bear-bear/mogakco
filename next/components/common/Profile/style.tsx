@@ -18,6 +18,7 @@ export const ProfileModal = styled.section<ProfileModalProps>`
   width: 18rem;
   max-width: 100vw;
   position: absolute;
+  z-index: 9999;
   transform: ${({ direction }) =>
     direction === 'left'
       ? `translateX(calc(-100% + ${iconLength}rem))`
@@ -28,6 +29,7 @@ export const ProfileModal = styled.section<ProfileModalProps>`
   padding: 1.33rem 1rem;
   box-shadow: 0 0 1px var(--color-gray-2), 0 0 2px var(--color-gray-2);
   border-radius: 16px;
+  background-color: var(--color-white);
 
   .profile-section {
     header {
