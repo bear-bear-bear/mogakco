@@ -1,7 +1,14 @@
-import { Module } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { join } from 'path';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import UserRepository from '@models/user/repositories/user.repository';
+import UserJobRepository from '@models/user/repositories/ user-job.reposity';
+import UserFieldRepository from '@models/user/repositories/user-field.repository';
+import RoomRepository from '@models/chat/repositories/room.repository';
+import RoomUserRepository from '@models/chat/repositories/room-user.repository';
+import ChatRepository from '@models/chat/repositories/chat.repository';
+import UserVerifyRepository from '@models/user/repositories/user-verify.repository';
 
 function isLogging(): boolean {
   const mode = process.env.NODE_ENV;
@@ -13,6 +20,7 @@ function isSync(): boolean {
   return mode === ('development' || 'test');
 }
 
+@Global()
 @Module({
   imports: [
     TypeOrmModule.forRootAsync({
@@ -33,6 +41,16 @@ function isSync(): boolean {
         entities: [join(__dirname, '../../models/**/*.entity{.ts,.js}')],
       }),
     }),
+    TypeOrmModule.forFeature([
+      UserRepository,
+      UserJobRepository,
+      UserFieldRepository,
+      UserVerifyRepository,
+      RoomRepository,
+      RoomUserRepository,
+      ChatRepository,
+    ]),
   ],
+  exports: [TypeOrmModule],
 })
 export default class MariadbModule {}
