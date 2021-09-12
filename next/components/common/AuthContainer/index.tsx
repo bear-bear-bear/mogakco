@@ -1,6 +1,6 @@
 import React, { FC, ReactElement } from 'react';
 import { useRouter } from 'next/router';
-import Image from 'next/Image';
+import Image from 'next/image';
 
 import * as S from './style';
 
