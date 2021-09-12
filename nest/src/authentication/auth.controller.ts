@@ -10,7 +10,6 @@ import {
   Logger,
   Post,
   Query,
-  Redirect,
   Req,
   Res,
   UseFilters,
@@ -196,21 +195,21 @@ class AuthController {
   // TODO: Domain ( Production )
   @BeforeRegisterSwagger()
   @Get('/verify-email/before-register')
-  @Redirect(`http://localhost:3000/sign-up/required`, 307)
   async processVerifyEmail(
     @Query()
     { id, token }: { id: string; token: string },
+    @Res() res: Response,
   ) {
-    const redirection = `http://localhost:${this.configService.get(
-      'FRONTEND_PORT',
-    )}/sign-up/required`;
+    const domain = this.configService.get<string>('FRONTEND_DOMAIN');
+    const port = this.configService.get<number>('FRONTEND_PORT');
+    const redirection = `http://${domain}:${port}/sign-up/required`;
     const verification = await this.authValidateService.verifyEmail(id, token);
     if (!verification) {
-      return { url: `${redirection}?success=false` };
+      return res.status(401).redirect(`${redirection}?success=false`);
     }
 
     const { email } = verification;
-    return { url: `${redirection}?email=${email}&success=true` };
+    return res.status(307).redirect(`${redirection}?email=${email}&success=true`);
   }
 
   /**
