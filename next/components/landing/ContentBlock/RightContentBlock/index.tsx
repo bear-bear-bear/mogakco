@@ -2,7 +2,7 @@ import React from 'react';
 import Fade from 'react-reveal/Fade';
 import { Box, Flex } from '@chakra-ui/react';
 
-import Image from 'next/Image';
+import Image from 'next/image';
 import type { IRightContentBlockProps } from '@components/landing/ContentBlock';
 
 import * as S from './style';

@@ -1,7 +1,7 @@
 import React, { SyntheticEvent } from 'react';
 import { useRouter } from 'next/router';
 import Fade from 'react-reveal/Fade';
-import Image from 'next/Image';
+import Image from 'next/image';
 import { Box, Flex } from '@chakra-ui/react';
 
 import useInput from '@hooks/useInput';
