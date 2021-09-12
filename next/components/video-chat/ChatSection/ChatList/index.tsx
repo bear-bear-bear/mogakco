@@ -3,17 +3,9 @@ import useSocket from '@hooks/useSocket';
 import Chat from '../Chat';
 
 import * as S from './style';
+import { ChatAnnouncement, ChatMessage } from '../../../../typings/chat';
 
-interface Message {
-  id: number;
-  username: string;
-  message: string;
-  type: 'enter' | 'chat' | 'kick' | 'file' | 'my-chat';
-}
-
-interface Announcement {
-  type: 'kick' | 'enter' | 'exit';
-}
+type Message = ChatMessage | ChatAnnouncement;
 
 const dummyChatData = [
   {
@@ -57,29 +49,24 @@ const dummyChatData = [
 
 const ChatList = () => {
   const [message, setMessage] = useState<Message[]>([]);
-  const [announcements, setAnnouncements] = useState<Announcement[]>([]);
   const { client } = useSocket();
 
   useEffect(() => {
-    client?.on('chat', (info: Message) => {
+    client?.on('chat', (info: ChatMessage) => {
       setMessage((prevState) => prevState.concat(info));
     });
-    client?.on('exitUser', (msg: string) => {
-      console.log(msg);
+    client?.on('exit', (info: ChatAnnouncement) => {
+      setMessage((prevState) => prevState.concat(info));
     });
-    client?.on('enterRoom', (msg: string) => {
-      console.log(msg);
+    client?.on('enter', (info: ChatAnnouncement) => {
+      setMessage((prevState) => prevState.concat(info));
     });
     return () => {
       client?.off('chat');
-      client?.off('exitUser');
-      client?.off('enterRoom');
+      client?.off('exit');
+      client?.off('enter');
     };
   });
-
-  useEffect(() => {
-    console.log({ message });
-  }, [message]);
 
   return (
     <S.ChatList>

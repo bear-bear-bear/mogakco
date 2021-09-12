@@ -7,11 +7,10 @@ import {
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { InternalServerErrorException, Logger, UnauthorizedException } from '@nestjs/common';
+import { v1 as uuid } from 'uuid';
+
 import ChatService from './chat.service';
 import UserRepository from '@models/user/repositories/user.repository';
-import RoomRepository from './repositories/room.repository';
-import ChatRepository from './repositories/chat.repository';
-import RoomUserRepository from './repositories/room-user.repository';
 import { IChatGateway } from '@models/chat/interface/gateway';
 
 interface IJoinChatRoom {
@@ -23,7 +22,7 @@ interface IJoinChatRoom {
   namespace: 'chat',
   cors: { origin: '*', credentials: true },
 })
-class ChatGateway implements IChatGateway, OnGatewayConnection, OnGatewayDisconnect {
+export default class ChatGateway implements IChatGateway, OnGatewayConnection, OnGatewayDisconnect {
   @WebSocketServer()
   server!: Server;
 
@@ -32,21 +31,26 @@ class ChatGateway implements IChatGateway, OnGatewayConnection, OnGatewayDisconn
   constructor(
     private readonly chatService: ChatService,
     private readonly userRepository: UserRepository,
-    private readonly roomRepository: RoomRepository,
-    private readonly roomUserRepository: RoomUserRepository,
-    private readonly chatRepository: ChatRepository,
   ) {}
 
   handleConnection(client: Socket) {
     const username = client.handshake.headers['user-name'];
-    if (username === 'no-user') throw new InternalServerErrorException();
-    client.broadcast.emit('enterRoom', `${username} 이 입장하였습니다.`);
+    if (username === 'no-user' || !username) throw new InternalServerErrorException();
+    client.broadcast.emit('enter', {
+      id: uuid(),
+      type: 'enter',
+      username,
+    });
     this.logger.debug(`client ${client.conn.id} connection!`);
   }
 
   async handleDisconnect(client: Socket) {
     const { username, roomId } = await this.chatService.leaveRoom(client.handshake.headers);
-    client.broadcast.emit('exitUser', `${username} 유저가 퇴장하였습니다.`);
+    client.broadcast.emit('exit', {
+      id: uuid(),
+      username,
+      type: 'exit',
+    });
     this.logger.log(`${username} 유저가 ${roomId} 방에서 퇴장하였습니다.`);
     this.logger.debug(`client ${client.conn.id} disconnected`);
   }
@@ -71,5 +75,3 @@ class ChatGateway implements IChatGateway, OnGatewayConnection, OnGatewayDisconn
     client.emit('chat', myChat);
   }
 }
-
-export default ChatGateway;
