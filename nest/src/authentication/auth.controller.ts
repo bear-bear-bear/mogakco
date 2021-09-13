@@ -90,7 +90,7 @@ class AuthController {
 
     const expiration = this.authService.getAccessTokenExpirationTime();
 
-    if (!this.configService.get<string>('NODE_ENV')) {
+    if (this.configService.get<string>('NODE_ENV') !== 'development') {
       const domain = this.configService.get<string>('FRONTEND_DOMAIN');
       const port = this.configService.get<number>('FRONTEND_PORT');
       res.setHeader('Access-Control-Allow-Origin', `http://${domain}:${port}`);
@@ -120,7 +120,7 @@ class AuthController {
   @HttpCode(200)
   async logout(@Req() req: { user: UserEntity }, @Res({ passthrough: true }) res: Response) {
     await this.authService.removeRefreshToken(req.user.id);
-    if (!this.configService.get<string>('NODE_ENV')) {
+    if (this.configService.get<string>('NODE_ENV') !== 'development') {
       const domain = this.configService.get<string>('FRONTEND_DOMAIN');
       const port = this.configService.get<number>('FRONTEND_PORT');
       res.setHeader('Access-Control-Allow-Origin', `http://${domain}:${port}`);
