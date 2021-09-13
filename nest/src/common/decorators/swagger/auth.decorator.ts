@@ -1,4 +1,4 @@
-import { ApiBearerAuth, ApiOperation, ApiQuery, ApiResponse } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiOperation, ApiQuery, ApiResponse } from '@nestjs/swagger';
 import { SwaggerTag } from '@common/helpers/enum.helper';
 import decoratorHelper from '@common/helpers/decorator.helper';
 import { HttpStatus } from '@nestjs/common';
@@ -131,6 +131,14 @@ export function SendTokenSwagger() {
       summary: '이메일 전송 API',
       description:
         '입력 이메일 정보로 인증정보를 전송하고 이메일 전송 여부에 대한 객체를 반환합니다.',
+    }),
+    ApiBody({
+      schema: {
+        type: 'object',
+        example: {
+          email: 'email',
+        },
+      },
     }),
     ApiResponse({
       status: HttpStatus.OK,

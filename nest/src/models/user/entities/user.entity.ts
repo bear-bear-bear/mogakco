@@ -3,6 +3,7 @@ import { Exclude } from 'class-transformer';
 import { BaseEntitySoftDelete } from '@common/helpers/entity.helper';
 import RoomUserEntity from '@models/chat/entities/room-user.entity';
 import UserJobEntity from './users-job.entity';
+import AnonymousRoomUserEntity from '@models/chat/entities/anonymous-room-user.entity';
 
 @Entity({
   name: 'users',
@@ -31,6 +32,9 @@ class UserEntity extends BaseEntitySoftDelete {
 
   @OneToMany(() => RoomUserEntity, room => room.userId)
   RoomUser!: RoomUserEntity;
+
+  @OneToMany(() => AnonymousRoomUserEntity, anonymous => anonymous.user)
+  anonymousUser!: AnonymousRoomUserEntity[];
 }
 
 export default UserEntity;
