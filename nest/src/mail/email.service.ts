@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { MailerService } from '@nestjs-modules/mailer';
 import { ConfigService } from '@nestjs/config';
 import { join } from 'path';
@@ -12,6 +12,8 @@ import { UserVerifyEmailDto } from '@typing/auth';
 
 @Injectable()
 export default class EmailService {
+  private readonly logger = new Logger('MailService');
+
   constructor(
     private readonly mailerService: MailerService,
     private readonly configService: ConfigService,
@@ -20,8 +22,8 @@ export default class EmailService {
   /**
    * @desc 사용자에게 이메일을 전송합니다.
    */
-  userVerify({ email, token, id }: UserVerifyEmailDto): void {
-    this.mailerService.sendMail({
+  async sendEmail({ email, token, id }: UserVerifyEmailDto): Promise<void> {
+    await this.mailerService.sendMail({
       to: email,
       from: this.configService.get('EMAIL_ADMIN'),
       subject: 'Mogakco forwards Autentication to your email 🥰',
@@ -31,9 +33,11 @@ export default class EmailService {
         id,
         to: email,
         verifyToken: token,
-        isDev: this.configService.get('NODE_ENV') === 'development',
-        port: this.configService.get('SERVER_PORT'),
+        isDev: this.configService.get<string>('NODE_ENV') === 'development',
+        domain: this.configService.get<string>('FRONTEND_PORT'),
+        port: this.configService.get<number>('SERVER_PORT'),
       },
     });
+    this.logger.log(`${email} 에게 ${token} 이 포함된 메일을 발송하였습니다.`);
   }
 }

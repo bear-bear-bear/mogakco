@@ -90,6 +90,12 @@ class AuthController {
 
     const expiration = this.authService.getAccessTokenExpirationTime();
 
+    if (!this.configService.get<string>('NODE_ENV')) {
+      const domain = this.configService.get<string>('FRONTEND_DOMAIN');
+      const port = this.configService.get<number>('FRONTEND_PORT');
+      res.setHeader('Access-Control-Allow-Origin', `http://${domain}:${port}`);
+      res.setHeader('Access-Control-Allow-Credentials', 'true');
+    }
     res.cookie('refreshToken', refreshToken, {
       ...refreshCookieOptions,
     });
@@ -114,6 +120,12 @@ class AuthController {
   @HttpCode(200)
   async logout(@Req() req: { user: UserEntity }, @Res({ passthrough: true }) res: Response) {
     await this.authService.removeRefreshToken(req.user.id);
+    if (!this.configService.get<string>('NODE_ENV')) {
+      const domain = this.configService.get<string>('FRONTEND_DOMAIN');
+      const port = this.configService.get<number>('FRONTEND_PORT');
+      res.setHeader('Access-Control-Allow-Origin', `http://${domain}:${port}`);
+      res.setHeader('Access-Control-Allow-Credentials', 'true');
+    }
     res.clearCookie('refreshToken');
     return {
       message: `${req.user.username} 유저가 로그아웃 되었습니다.`,
@@ -177,7 +189,7 @@ class AuthController {
       email: destinatedEmail,
       id,
     } = await this.authValidateService.getEmailVerifyToken(email);
-    this.emailService.userVerify({
+    await this.emailService.sendEmail({
       email: destinatedEmail,
       token,
       id,
