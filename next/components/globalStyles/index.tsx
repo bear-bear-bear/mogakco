@@ -14,7 +14,7 @@ export const customGlobalStyles = css`
 
   html,
   body,
-  body > div:first-child,
+  body > div:first-of-type,
   div#__next,
   div#__next > div {
     min-height: 100vh;

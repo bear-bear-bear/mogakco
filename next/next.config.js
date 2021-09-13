@@ -1,22 +1,16 @@
 /**
- * @type {import('next/dist/next-server/server/config').NextConfig}
- * */
-module.exports = {
-  webpack5: false,
-  excludeFile: (str) => /test\/*/.test(str),
+ * @type {import('next').NextConfig}
+ */
+const nextConfig = {
   webpack: (config) => {
     config.module.rules.push({
       test: /\.svg$/,
-      issuer: {
-        test: /\.(js|ts)x?$/,
-      },
+      issuer: /\.(js|ts)x?$/,
       use: ['@svgr/webpack'],
-    });
-    config.module.rules.push({
-      test: /\.(test|spec).(js|ts|tsx)$/,
-      loader: 'ignore-loader',
     });
 
     return config;
   },
 };
+
+module.exports = nextConfig;
