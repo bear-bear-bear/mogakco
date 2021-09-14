@@ -11,7 +11,6 @@ const nextConfig = {
 
     return config;
   },
-
   async headers() {
     return [
       // if the header `x-add-header` is present,
@@ -20,7 +19,9 @@ const nextConfig = {
         source: '/:path*',
         has: [
           {
-            type: 'Set-Cookie',
+            type: 'header',
+            key: 'Set-Cookie',
+            value: '*',
           },
         ],
         headers: [
