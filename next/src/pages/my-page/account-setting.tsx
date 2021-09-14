@@ -5,7 +5,8 @@ import CustomHead from '@components/common/CustomHead';
 import ServiceHeader from '@components/common/ServiceHeader';
 import Container from '@components/my-page/Container';
 import Aside from '@components/my-page/Aside';
-import Main from '@components/my-page/Main';
+import AccountSetting from '@components/my-page/AccountSetting';
+import type { IUserInfo } from 'typings/auth';
 
 export const pageProps = {
   title: '마이페이지 - Mogakco',
@@ -15,7 +16,8 @@ export const pageProps = {
 };
 
 const MyPageAccountSetting = () => {
-  const { user } = useUser({ redirectTo: '/' });
+  // const { user } = useUser({ redirectTo: '/' });
+  const { user } = useUser();
 
   if (!user?.isLoggedIn) return null;
   return (
@@ -24,7 +26,7 @@ const MyPageAccountSetting = () => {
       <ServiceHeader />
       <Container>
         <Aside />
-        <Main />
+        <AccountSetting user={user as IUserInfo} />
       </Container>
     </>
   );
