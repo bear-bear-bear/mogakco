@@ -4,9 +4,10 @@ import useSWR from 'swr';
 import type { SWRConfiguration, KeyedMutator } from 'swr/dist/types';
 
 import token, { ACCESS_TOKEN } from '@lib/token';
-import fetcher from '@lib/fetcher';
+import apiClient, { logAxiosError } from '@lib/apiClient';
 
 import type { IUserGetResponse } from 'typings/auth';
+import { GeneralAxiosError } from 'typings/common';
 
 interface UseUserProps {
   redirectTo?: `/${string}`;
@@ -27,8 +28,23 @@ const SWROptions: SWRConfiguration<IUserGetResponse> = {
   fallbackData: { isLoggedIn: false },
 };
 
-const getSWRKeyByRefreshTokenExist = () =>
-  token.isRefreshTokenInCookie() ? SWR_CACHE_KEY : null;
+const getSWRKeyByRefreshTokenExist = () => {
+  const isRefreshTokenExist = token.isRefreshTokenInCookie();
+  if (!isRefreshTokenExist) return null;
+
+  // 리프레쉬 토큰이 존재한다면,
+  // 요청 전 axios interceptor 에서 리프레쉬 토큰을 통해 액세스 토큰의 존재를 대부분의 경우 보장합니다.
+  const accessToken = token.get()[ACCESS_TOKEN];
+  return [SWR_CACHE_KEY, accessToken];
+};
+
+const fetcher = async (url: string, accessToken: string) => {
+  const header = {
+    headers: { Authorization: `Bearer ${accessToken}` },
+  };
+  const res = await apiClient.get<IUserGetResponse>(url, header);
+  return res.data;
+};
 
 /**
  * @desc
@@ -56,13 +72,16 @@ export default function useUser({
   redirectIfFound = false,
 }: UseUserProps = {}) {
   const router = useRouter();
-
   const SWRKey = redirectIfFound ? SWR_CACHE_KEY : getSWRKeyByRefreshTokenExist;
-  const { data: user, mutate: mutateUser } = useSWR<IUserGetResponse>(
-    SWRKey,
-    fetcher,
-    SWROptions,
-  );
+  const {
+    data: user,
+    error,
+    mutate: mutateUser,
+  } = useSWR<IUserGetResponse>(SWRKey, fetcher, SWROptions);
+
+  if (error) {
+    console.error(error);
+  }
 
   useEffect(() => {
     // 리디렉트가 필요하지 않다면 return (예: 이미 /dashboard에 있음)
