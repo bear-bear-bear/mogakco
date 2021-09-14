@@ -4,10 +4,9 @@ import useSWR from 'swr';
 import type { SWRConfiguration, KeyedMutator } from 'swr/dist/types';
 
 import token, { ACCESS_TOKEN } from '@lib/token';
-import apiClient, { logAxiosError } from '@lib/apiClient';
+import apiClient from '@lib/apiClient';
 
 import type { IUserGetResponse } from 'typings/auth';
-import { GeneralAxiosError } from 'typings/common';
 
 interface UseUserProps {
   redirectTo?: `/${string}`;
