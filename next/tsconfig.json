@@ -21,14 +21,13 @@
     "jsxImportSource": "@emotion/react",
     "baseUrl": ".",
     "paths": {
-      "@assets/*": ["./public/assets/*"],
-      "@components/*": ["./components/*"],
-      "@hooks/*": ["./hooks/*"],
-      "@lib/*": ["./lib/*"],
-      "@pages/*":  ["./pages/*"],
       "@public/*":  ["./public/*"],
-      "@redux/*": ["./redux/*"],
-      "@test/*": ["./test/*"]
+      "@components/*": ["./src/components/*"],
+      "@globalStyles/*": ["./src/globalStyles/*"],
+      "@globalStyles": ["./src/globalStyles"],
+      "@hooks/*": ["./src/hooks/*"],
+      "@lib/*": ["./src/lib/*"],
+      "@pages/*":  ["./src/pages/*"],
     },
     "typeRoots": ["./node_modules/@types", "./typings"]
   },
