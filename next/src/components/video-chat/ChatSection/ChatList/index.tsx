@@ -1,17 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
+import { SocketContext } from '@pages/video-chat/[id]';
 import Chat from '../Chat';
 
 import * as S from './style';
-import {
-  ChatAnnouncement,
-  ChatMessage,
-  ComponentSocketProps,
-} from '../../../../../typings/chat';
+import { ChatAnnouncement, ChatMessage } from '../../../../../typings/chat';
 
 type Message = ChatMessage | ChatAnnouncement;
 
-const ChatList = ({ client }: ComponentSocketProps) => {
+const ChatList = () => {
   const [message, setMessage] = useState<Message[]>([]);
+  const client = useContext(SocketContext);
 
   useEffect(() => {
     client?.on('chat', (info: ChatMessage) => {

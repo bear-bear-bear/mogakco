@@ -7,6 +7,7 @@ export default function useSocket() {
   const [socket, setSocket] = useState<Socket | null>(null);
   const { user } = useUser();
   const { query } = useRouter();
+
   useEffect(() => {
     const client = io('http://localhost:8001/chat', {
       auth: {
@@ -26,5 +27,5 @@ export default function useSocket() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  return socket;
+  return user?.isLoggedIn ? socket : null;
 }

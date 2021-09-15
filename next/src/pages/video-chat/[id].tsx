@@ -11,8 +11,9 @@ import { refreshAccessTokenApiSSR } from '@lib/apis';
 import token from '@lib/token';
 import { useRouter } from 'next/router';
 import useSocket from '@hooks/useSocket';
-import { useEffect } from 'react';
+import { createContext, useEffect } from 'react';
 import type { IUserInfo } from 'typings/auth';
+import { Socket } from 'socket.io-client';
 
 const pageProps = {
   title: '화상채팅 - Mogakco',
@@ -20,6 +21,8 @@ const pageProps = {
   url: '', // TODO: 도메인 정해지면 url에 추가하기
   locale: 'ko_KR',
 };
+
+export const SocketContext = createContext<Socket | null>(null);
 
 const ChatRoom = () => {
   const router = useRouter();
@@ -49,10 +52,12 @@ const ChatRoom = () => {
   return (
     <>
       <CustomHead {...pageProps} />
-      <Container>
-        <CamSection />
-        <ChatSection client={client} />
-      </Container>
+      <SocketContext.Provider value={client}>
+        <Container>
+          <CamSection />
+          <ChatSection />
+        </Container>
+      </SocketContext.Provider>
     </>
   );
 };

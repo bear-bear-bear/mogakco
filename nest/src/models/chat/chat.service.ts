@@ -9,9 +9,17 @@ import UserEntity from '@models/user/entities/user.entity';
 import RoomUserRepository from '@models/chat/repositories/room-user.repository';
 import { IncomingHttpHeaders } from 'http';
 import UserRepository from '@models/user/repositories/user.repository';
-import { Chat, IChatService, LeaveRoom, UserAndRoom } from '@models/chat/interface/service';
+import {
+  Chat,
+  HandShakeAuth,
+  IChatService,
+  LeaveRoom,
+  UserAndRoom,
+} from '@models/chat/interface/service';
 import ChatRepository from '@models/chat/repositories/chat.repository';
 import AnonymousRoomUserRepository from '@models/chat/repositories/anonymous-room-user.repository';
+import { Server, Socket } from 'socket.io';
+import { v1 as uuid } from 'uuid';
 
 @Injectable()
 class ChatService implements IChatService {
@@ -111,6 +119,36 @@ class ChatService implements IChatService {
       message,
       type: isOwner ? 'my-chat' : 'chat',
     };
+  }
+
+  /**
+   * @desc 채팅 이벤트를 emit 합니다.
+   */
+  emitChatEvent(client: Socket, globalChat: Chat, ownChat: Chat): void {
+    client.broadcast.emit('chat', globalChat);
+    client.emit('chat', ownChat);
+  }
+
+  /**
+   * @desc 채팅방의 멤버수를 구해서 멤버수 카운트 이벤트를 emit 합니다.
+   */
+  async emitMemberCountEvent(server: Server, auth: HandShakeAuth): Promise<void> {
+    const roomId = auth['room-id'];
+    const memberCount = await this.roomUserRepository.count({
+      where: { roomId },
+    });
+    server.emit('member-count', memberCount);
+  }
+
+  /**
+   * @desc 입장 또는 퇴장 이벤트를 emit 합니다.
+   */
+  emitEnterOrExitEvent(server: Server, username: string, type: 'enter' | 'exit'): void {
+    server.emit(type, {
+      id: uuid(),
+      type,
+      username,
+    });
   }
 }
 
