@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { Socket } from 'socket.io-client';
 import Chat from '../Chat';
 
 import * as S from './style';
-import { ChatAnnouncement, ChatMessage } from '../../../../../typings/chat';
+import {
+  ChatAnnouncement,
+  ChatMessage,
+  ComponentSocketProps,
+} from '../../../../../typings/chat';
 
 type Message = ChatMessage | ChatAnnouncement;
 
-const ChatList = ({ client }: { client: Socket | null }) => {
+const ChatList = ({ client }: ComponentSocketProps) => {
   const [message, setMessage] = useState<Message[]>([]);
 
   useEffect(() => {

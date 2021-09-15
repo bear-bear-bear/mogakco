@@ -2,10 +2,11 @@ import React, { KeyboardEvent } from 'react';
 
 import useInput from '@hooks/useInput';
 
-import { Socket } from 'socket.io-client';
+import { ComponentSocketProps } from '../../../../../typings/chat';
+
 import * as S from './style';
 
-const InputBox = ({ client }: { client: Socket | null }) => {
+const InputBox = ({ client }: ComponentSocketProps) => {
   const [chat, onChangeChat, setChat] = useInput('');
 
   const handleChat = (e: KeyboardEvent<HTMLTextAreaElement>) => {

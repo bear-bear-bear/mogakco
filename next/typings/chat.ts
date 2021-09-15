@@ -1,3 +1,9 @@
+import { Socket } from 'socket.io-client';
+
+export interface ComponentSocketProps {
+  client: Socket | null;
+}
+
 export interface ChatAnnouncement {
   id: string;
   username: string;

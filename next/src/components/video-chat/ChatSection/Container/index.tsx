@@ -1,17 +1,16 @@
 import React, { ReactNode, useEffect, useState } from 'react';
-import { Socket } from 'socket.io-client';
 import * as S from './style';
+import { ComponentSocketProps } from '../../../../../typings/chat';
 
 interface IProps {
   children?: ReactNode;
-  client: Socket | null;
 }
 
-const Container = ({ children, client }: IProps) => {
+const Container = ({ children, client }: IProps & ComponentSocketProps) => {
   const [memberCount, setMemberCount] = useState<number>(0);
 
   useEffect(() => {
-    client?.on('member-count', async (count: number) => {
+    client?.on('member-count', (count: number) => {
       setMemberCount(count);
     });
 

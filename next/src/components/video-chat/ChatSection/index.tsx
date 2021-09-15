@@ -1,9 +1,9 @@
-import { Socket } from 'socket.io-client';
 import Container from './Container';
 import ChatList from './ChatList';
 import InputBox from './InputBox';
+import { ComponentSocketProps } from '../../../../typings/chat';
 
-const ChatSection = ({ client }: { client: Socket | null }) => {
+const ChatSection = ({ client }: ComponentSocketProps) => {
   return (
     <Container client={client}>
       <ChatList client={client} />
