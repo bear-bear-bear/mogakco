@@ -10,6 +10,7 @@ export interface ICookieProps {
   httpOnly: boolean;
   maxAge: number;
   secure?: boolean;
+  sameSite?: boolean | 'lax' | 'none' | 'strict' | undefined;
 }
 
 export interface IJwtPayload {

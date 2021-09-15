@@ -51,6 +51,7 @@ export default class AuthService {
   /**
    * @return RefreshToken 을 생성하여 객체정보로 반환한다.
    */
+
   getRefreshTokenCookie({ id, username }: JwtUserProps): ICookieProps {
     const refreshTokenExpirationTime = Number(
       this.configService.get('JWT_REFRESH_TOKEN_EXPIRATION_TIME'),
@@ -61,12 +62,24 @@ export default class AuthService {
       expiresIn: `${refreshTokenExpirationTime}s`,
     });
 
-    return {
-      token,
-      maxAge: 6.048e8,
-      path: '/',
-      httpOnly: false,
-    } as ICookieProps;
+    const mode = this.configService.get<string>('NODE_ENV');
+    if (mode === 'development') {
+      return {
+        token,
+        maxAge: 6.048e8,
+        path: '/',
+        httpOnly: false,
+      } as ICookieProps;
+    } else {
+      return {
+        token,
+        maxAge: 6.048e8,
+        path: '/',
+        httpOnly: false,
+        secure: true,
+        sameSite: 'none',
+      } as ICookieProps;
+    }
   }
 
   /**
