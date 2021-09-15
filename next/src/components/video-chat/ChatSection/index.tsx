@@ -1,12 +1,13 @@
 import Container from './Container';
 import ChatList from './ChatList';
 import InputBox from './InputBox';
+import { ComponentSocketProps } from '../../../../typings/chat';
 
-const ChatSection = () => {
+const ChatSection = ({ client }: ComponentSocketProps) => {
   return (
-    <Container>
-      <ChatList />
-      <InputBox />
+    <Container client={client}>
+      <ChatList client={client} />
+      <InputBox client={client} />
     </Container>
   );
 };

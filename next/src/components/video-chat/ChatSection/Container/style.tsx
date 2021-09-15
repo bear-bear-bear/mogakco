@@ -23,6 +23,12 @@ export const ChatTitle = styled.h1`
   font-weight: 500;
 `;
 
+export const ChatMemberCount = styled.span`
+  font-size: 1rem;
+  font-weight: 500;
+  padding-left: 0.2rem;
+`;
+
 export const DropdownButton = styled(HiOutlineChevronDown)`
   position: absolute;
   left: 1rem;

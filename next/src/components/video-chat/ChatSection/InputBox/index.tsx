@@ -2,23 +2,23 @@ import React, { KeyboardEvent } from 'react';
 
 import useInput from '@hooks/useInput';
 
-import useSocket from '@hooks/useSocket';
+import { ComponentSocketProps } from '../../../../../typings/chat';
+
 import * as S from './style';
 
-const InputBox = () => {
+const InputBox = ({ client }: ComponentSocketProps) => {
   const [chat, onChangeChat, setChat] = useInput('');
-  const { client } = useSocket();
+
   const handleChat = (e: KeyboardEvent<HTMLTextAreaElement>) => {
-    console.log('altKey: ', e.altKey);
     if (chat.trim() !== '') {
       const isEnter = e.code === 'Enter';
       if (isEnter && !e.altKey) {
         client?.emit('chat', chat);
         setChat('');
       }
-      // if (isEnter && e.altKey) {
-      //   setChat((prev) => `${prev}\n`);
-      // }
+      if (isEnter && e.altKey) {
+        setChat((prev) => `${prev}\n`);
+      }
     }
   };
 
