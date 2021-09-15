@@ -10,11 +10,9 @@ const InputBox = ({ client }: ComponentSocketProps) => {
   const [chat, onChangeChat, setChat] = useInput('');
 
   const handleChat = (e: KeyboardEvent<HTMLTextAreaElement>) => {
-    console.log('altKey: ', e.altKey);
     if (chat.trim() !== '') {
       const isEnter = e.code === 'Enter';
       if (isEnter && !e.altKey) {
-        console.log(chat);
         client?.emit('chat', chat);
         setChat('');
       }

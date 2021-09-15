@@ -83,7 +83,6 @@ class ChatService implements IChatService {
   getIdsFromHeader(headers: IncomingHttpHeaders): number[] {
     const userId = headers['user-id'];
     const roomId = headers['room-id'];
-    console.log({ headers });
     if (!(userId && roomId)) throw new InternalServerErrorException();
     return [Number(userId), Number(roomId)];
   }

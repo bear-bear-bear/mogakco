@@ -41,7 +41,6 @@ const ChatRoom = () => {
 
   useEffect(() => {
     return () => {
-      devModeLog('disconnect');
       client?.disconnect();
     };
   }, [client]);

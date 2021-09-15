@@ -8,7 +8,6 @@ export default function useSocket() {
   const { user } = useUser();
   const { query } = useRouter();
   useEffect(() => {
-    console.log('소켓 클라이언트 생성');
     const client = io('http://localhost:8001/chat', {
       auth: {
         'user-id': user?.id,
