@@ -11,6 +11,7 @@ import { IncomingHttpHeaders } from 'http';
 import UserRepository from '@models/user/repositories/user.repository';
 import { Chat, IChatService, LeaveRoom, UserAndRoom } from '@models/chat/interface/service';
 import ChatRepository from '@models/chat/repositories/chat.repository';
+import AnonymousRoomUserRepository from '@models/chat/repositories/anonymous-room-user.repository';
 
 @Injectable()
 class ChatService implements IChatService {
@@ -21,7 +22,22 @@ class ChatService implements IChatService {
     private readonly roomUserRepository: RoomUserRepository,
     private readonly userRepository: UserRepository,
     private readonly chatRepository: ChatRepository,
+    private readonly anonymousRoomUserRepository: AnonymousRoomUserRepository,
   ) {}
+
+  /**
+   * @desc 익명 이름을 생성하여 반환합니다.
+   */
+  async findOrCreateAnonymousName(headers: IncomingHttpHeaders) {
+    try {
+      const [userId, roomId] = this.getIdsFromHeader(headers);
+      const anonymousName = await this.anonymousRoomUserRepository.findOrCreate(userId, roomId);
+      return anonymousName;
+    } catch (e) {
+      this.logger.error(e);
+      throw new InternalServerErrorException();
+    }
+  }
 
   /**
    * @desc 해당 유저를 채팅방(Room) 에서 퇴장시킵니다.
@@ -40,9 +56,10 @@ class ChatService implements IChatService {
     const [userId, roomId] = this.getIdsFromHeader(headers);
     const { user, room } = await this.findUserAndRoom(userId, roomId);
     if (!(user && room)) throw new InternalServerErrorException();
+    const { username } = await this.findOrCreateAnonymousName(headers);
     const { id: chatId } = await this.chatRepository.createChat(user, room, message);
-    const globalChat = this.createChatResponse(chatId, user.username, message, false);
-    const myChat = this.createChatResponse(chatId, user.username, message, true);
+    const globalChat = this.createChatResponse(chatId, username, message, false);
+    const myChat = this.createChatResponse(chatId, username, message, true);
     return [globalChat, myChat];
   }
 
@@ -66,6 +83,7 @@ class ChatService implements IChatService {
   getIdsFromHeader(headers: IncomingHttpHeaders): number[] {
     const userId = headers['user-id'];
     const roomId = headers['room-id'];
+    console.log({ headers });
     if (!(userId && roomId)) throw new InternalServerErrorException();
     return [Number(userId), Number(roomId)];
   }
@@ -82,7 +100,6 @@ class ChatService implements IChatService {
       userId: user,
     });
     await enter.save();
-    this.logger.log(`${user.username} 유저가 ${roomId} 번 방에 참여되었습니다.`);
   }
 
   /**
