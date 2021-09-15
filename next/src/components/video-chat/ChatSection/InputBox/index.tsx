@@ -1,13 +1,13 @@
-import React, { KeyboardEvent } from 'react';
+import React, { KeyboardEvent, useContext } from 'react';
 
 import useInput from '@hooks/useInput';
-
-import { ComponentSocketProps } from '../../../../../typings/chat';
+import { SocketContext } from '@pages/video-chat/[id]';
 
 import * as S from './style';
 
-const InputBox = ({ client }: ComponentSocketProps) => {
+const InputBox = () => {
   const [chat, onChangeChat, setChat] = useInput('');
+  const client = useContext(SocketContext);
 
   const handleChat = (e: KeyboardEvent<HTMLTextAreaElement>) => {
     if (chat.trim() !== '') {

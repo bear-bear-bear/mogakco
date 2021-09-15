@@ -1,13 +1,14 @@
-import React, { ReactNode, useEffect, useState } from 'react';
+import React, { ReactNode, useContext, useEffect, useState } from 'react';
+import { SocketContext } from '@pages/video-chat/[id]';
 import * as S from './style';
-import { ComponentSocketProps } from '../../../../../typings/chat';
 
 interface IProps {
   children?: ReactNode;
 }
 
-const Container = ({ children, client }: IProps & ComponentSocketProps) => {
+const Container = ({ children }: IProps) => {
   const [memberCount, setMemberCount] = useState<number>(0);
+  const client = useContext(SocketContext);
 
   useEffect(() => {
     client?.on('member-count', (count: number) => {
