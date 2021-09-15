@@ -1,8 +1,4 @@
 html
   body
-    if isDev
       h3 인증을 완료하기 위해 해당 링크를 클릭해주세요.
-      p http://localhost:#{port}/api/auth/verify-email/before-register?id=#{id}&token=#{verifyToken}
-    else
-      h3 인증을 완료하기 위해 해당 링크를 클릭해주세요.
-      p http://#{domain}:#{port}/api/auth/verify-email/before-register?id=#{id}&token=#{verifyToken}
+      p #{url}/api/auth/verify-email/before-register?id=#{id}&token=#{verifyToken}

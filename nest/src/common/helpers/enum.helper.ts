@@ -9,3 +9,9 @@ export enum ServerMessage {
   MISSING_FORM = '폼 요청 정보가 잘못되었습니다.',
   BAD_REQUEST = '잘못된 접근입니다.',
 }
+
+export enum ServerEnviroment {
+  DEV = 'development',
+  TEST = 'test',
+  PROD = 'production',
+}

@@ -5,6 +5,7 @@ import morgan from 'morgan';
 import helmet from 'helmet';
 import AppModule from '@src/app.module';
 import { setSwaggerModule, showListeningLog } from '@common/helpers/app.helper';
+import { ServerEnviroment } from '@common/helpers/enum.helper';
 
 async function bootstrap() {
   const log = new Logger();
@@ -13,15 +14,25 @@ async function bootstrap() {
 
   app.use(helmet());
   const mode = process.env.NODE_ENV as string;
-  if (mode === 'development') {
+  if (mode === ServerEnviroment.DEV) {
     setSwaggerModule(app);
     app.enableCors({
       origin: true,
       credentials: true,
     });
-  } else {
+  }
+
+  if (mode === ServerEnviroment.TEST) {
+    setSwaggerModule(app);
     app.enableCors({
-      origin: 'galaxyhi4276.co',
+      origin: process.env.TEST_FRONTEND_URL,
+      credentials: true,
+    });
+  }
+
+  if (mode === ServerEnviroment.PROD) {
+    app.enableCors({
+      origin: process.env.PROD_FRONTEND_URL,
       credentials: true,
     });
   }

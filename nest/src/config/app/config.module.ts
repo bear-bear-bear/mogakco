@@ -26,6 +26,8 @@ import Joi from 'joi';
         JWT_REFRESH_TOKEN_EXPIRATION_TIME: Joi.number().required(),
         FRONTEND_PORT: Joi.number().required(),
         TYPEORM_LOGGING: Joi.boolean().required(),
+        TEST_FRONTEND_URL: Joi.string().required(),
+        PROD_FRONTEND_URL: Joi.string().required(),
       }),
     }),
   ],
