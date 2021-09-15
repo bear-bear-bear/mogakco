@@ -20,7 +20,7 @@ export default class ChatController implements IChatController {
    * @desc 채팅방 이용 가능 여부를 검사합니다.
    */
   @ChatAvailableSwagger()
-  @Get('/available/:id')
+  @Get('/:id/available')
   async isAvailableChatRoom(
     @Param('id', ParseIntPipe)
     roomId: number,
