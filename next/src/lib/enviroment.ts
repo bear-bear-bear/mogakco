@@ -1,5 +1,9 @@
 const { NODE_ENV, TEST_SERVER_URL, PROD_SERVER_URL } = process.env;
 
+export const isDevelopment = NODE_ENV === 'development';
+export const isTest = NODE_ENV === 'test';
+export const isProduction = NODE_ENV === 'production';
+
 /**
  * @desc 환경과 모드에 맞는 서버 url 을 반환합니다.
  * @param mode 채팅 서버인 지, http 서버인 지 판별
