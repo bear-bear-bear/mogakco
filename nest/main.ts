@@ -10,13 +10,22 @@ async function bootstrap() {
   const log = new Logger();
   const app = await NestFactory.create(AppModule);
   app.setGlobalPrefix('api');
-  setSwaggerModule(app);
 
   app.use(helmet());
-  app.enableCors({
-    origin: true,
-    credentials: true,
-  });
+  const mode = process.env.NODE_ENV as string;
+  if (mode === 'development') {
+    setSwaggerModule(app);
+    app.enableCors({
+      origin: true,
+      credentials: true,
+    });
+  } else {
+    app.enableCors({
+      origin: 'galaxyhi4276.co',
+      credentials: true,
+    });
+  }
+
   app.use(morgan('tiny'));
   app.use(cookieParser());
   app.useGlobalPipes(
