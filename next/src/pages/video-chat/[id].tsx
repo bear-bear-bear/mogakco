@@ -24,11 +24,11 @@ const pageProps = {
 const ChatRoom = () => {
   const router = useRouter();
   const { user } = useUser({ redirectTo: '/' });
-  const { client } = useSocket();
-  devModeLog({ client, user });
+  const client = useSocket();
 
   useEffect(() => {
     if (!client || !user?.isLoggedIn) return;
+
     const { id: userId } = user as IUserInfo;
 
     const props = {
@@ -36,14 +36,15 @@ const ChatRoom = () => {
       roomId: String(router.query.id),
     };
 
-    client.emit(
-      'joinChatRoom',
-      props,
-      (data: { joinedUserName: string; joinedRoomId: string }) => {
-        console.log(data);
-      },
-    );
+    client.emit('join-room', props);
   }, [router.query.id, client, user]);
+
+  useEffect(() => {
+    return () => {
+      devModeLog('disconnect');
+      client?.disconnect();
+    };
+  }, [client]);
 
   if (!user?.isLoggedIn) return null;
   return (
@@ -51,7 +52,7 @@ const ChatRoom = () => {
       <CustomHead {...pageProps} />
       <Container>
         <CamSection />
-        <ChatSection />
+        <ChatSection client={client} />
       </Container>
     </>
   );
@@ -71,7 +72,7 @@ export const getServerSideProps: GetServerSideProps = async ({
     const { data } = await apiClient.get<{
       message: boolean;
       statusCode: number;
-    }>(`/api/chat/available/${id}`);
+    }>(`/api/chat/${id}/available/`);
     devModeLog(`Server Response Message: ${data.message}`);
     devModeLog(`Response Status Code: ${data.statusCode}`);
 
