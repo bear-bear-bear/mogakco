@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { PugAdapter } from '@nestjs-modules/mailer/dist/adapters/pug.adapter';
 import { join } from 'path';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 /**
  * @description MailerModule 에 어떠한 모듈을 설정해야 하는 지 기술함.
@@ -36,7 +36,7 @@ import { ConfigModule } from '@nestjs/config';
       }),
     }),
   ],
-  providers: [],
+  providers: [ConfigService],
   exports: [],
 })
 export default class MailModule {}
