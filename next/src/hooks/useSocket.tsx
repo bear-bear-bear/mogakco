@@ -2,6 +2,7 @@ import { io, Socket } from 'socket.io-client';
 import { useEffect, useState } from 'react';
 import useUser from '@hooks/useUser';
 import { useRouter } from 'next/router';
+import { getServerUrl } from '@lib/enviroment';
 
 export default function useSocket() {
   const [socket, setSocket] = useState<Socket | null>(null);
@@ -9,7 +10,8 @@ export default function useSocket() {
   const { query } = useRouter();
 
   useEffect(() => {
-    const client = io('http://localhost:8001/chat', {
+    const serverUrl = getServerUrl('socket');
+    const client = io(serverUrl, {
       auth: {
         'user-id': user?.id,
         'room-id': query.id,
