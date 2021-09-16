@@ -3,8 +3,6 @@ import { ChakraProvider } from '@chakra-ui/react';
 import { SWRConfig } from 'swr';
 import GlobalStyles, { customGlobalStyles } from '@globalStyles';
 
-// export const END_POINT = 'http://localhost:8001/chat';
-
 /**
  * @url SWR Options Description https://swr.vercel.app/docs/options
  */
