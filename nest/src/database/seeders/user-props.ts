@@ -1,5 +1,5 @@
 import { Factory, Seeder } from 'typeorm-seeding';
-import { getCustomRepository } from 'typeorm';
+import { getCustomRepository, getManager } from 'typeorm';
 import UserJobEntity from '@models/user/entities/users-job.entity';
 import UserFieldEntity from '@models/user/entities/user-field.entity';
 import UserEntity from '@models/user/entities/user.entity';
@@ -34,6 +34,7 @@ export default class CreateUserProps implements Seeder {
       })
       .createMany(30);
 
-    await getCustomRepository(RoomRepository).createRoom(1);
+    const owner = (await getManager().findOne(UserEntity, { id: 1 })) as UserEntity;
+    await getCustomRepository(RoomRepository).createRoom(owner);
   }
 }
