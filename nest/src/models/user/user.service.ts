@@ -31,26 +31,18 @@ class UserService {
    * @return 분야정보 리스트를 반환합니다.
    */
   async findAllFields(userId: number): Promise<UserFieldEntity[] | null> {
-    try {
-      const user = await this.userRepository.findOne({ id: userId });
-      if (!user) throw new InternalServerErrorException('유저 정보를 불러올 수 없습니다.');
-      const fields = await this.userRepository.getUserFields(user.skills);
-      return fields;
-    } catch (err) {
-      throw new InternalServerErrorException(`필드 정보를 불러올 수 없습니다.`);
-    }
+    const user = await this.userRepository.findOne({ id: userId });
+    if (!user) throw new InternalServerErrorException('유저 정보를 불러올 수 없습니다.');
+    const fields = await this.userRepository.getUserFields(user.skills);
+    return fields;
   }
 
   /**
    * @return 직업정보 리스트를 반환합니다.
    */
   async findAllJobs(): Promise<UserJobEntity[]> {
-    try {
-      const jobList = await this.jobRepository.find();
-      return jobList;
-    } catch (err) {
-      throw new InternalServerErrorException(`직업 정보를 불러올 수 없습니다.`);
-    }
+    const jobList = await this.jobRepository.find();
+    return jobList;
   }
 }
 
