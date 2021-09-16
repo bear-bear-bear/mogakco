@@ -18,7 +18,7 @@ import * as S from './style';
 interface AccountSettingProps extends SelectsOptions {
   user: IUserInfo;
 }
-type ChangableInfo = Omit<IUserInfo, 'id'>;
+type RequiredInfo = Pick<IUserInfo, 'username' | 'email'>;
 
 const AccountSetting = ({
   user: { id, skills, job, ...requiredInfo },
@@ -36,7 +36,7 @@ const AccountSetting = ({
     handleSubmit,
     watch,
     formState: { errors, isValid },
-  } = useForm<ChangableInfo>({
+  } = useForm<RequiredInfo>({
     mode: 'all',
     defaultValues,
   });
@@ -55,7 +55,7 @@ const AccountSetting = ({
     if (!isSubmittable()) return;
     hiddenSubmitButtonEl.current?.click();
   };
-  const handleFormSubmit = (info: ChangableInfo) => {
+  const handleFormSubmit = (info: RequiredInfo) => {
     alert('submit');
     // TODO: 유저 정보 저장 요청 (PUT)
   };
