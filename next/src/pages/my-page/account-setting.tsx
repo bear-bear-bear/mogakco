@@ -6,6 +6,8 @@ import ServiceHeader from '@components/common/ServiceHeader';
 import Container from '@components/my-page/Container';
 import Aside from '@components/my-page/Aside';
 import AccountSetting from '@components/my-page/AccountSetting';
+import { getServerSideProps as _getServerSideProps } from '@pages/sign-up/optional';
+import type { IOptionalPageProps as SelectsOptions } from '@pages/sign-up/optional';
 import type { IUserInfo } from 'typings/auth';
 
 export const pageProps = {
@@ -15,7 +17,7 @@ export const pageProps = {
   locale: 'ko_KR',
 };
 
-const MyPageAccountSetting = () => {
+const MyPageAccountSetting = (props: SelectsOptions) => {
   // const { user } = useUser({ redirectTo: '/' });
   const { user } = useUser();
 
@@ -26,10 +28,12 @@ const MyPageAccountSetting = () => {
       <ServiceHeader />
       <Container>
         <Aside />
-        <AccountSetting user={user as IUserInfo} />
+        <AccountSetting user={user as IUserInfo} {...props} />
       </Container>
     </>
   );
 };
+
+export const getServerSideProps = _getServerSideProps;
 
 export default MyPageAccountSetting;

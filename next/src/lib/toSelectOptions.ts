@@ -6,10 +6,21 @@ import type { IOptionalProps } from 'typings/auth';
  */
 // TODO typings/auth.ts 로 옮기기
 
-const toSelectOptions = (list: IOptionalProps[] | null) => {
-  if (list === null) return [];
+const toSelectOptions = (
+  options: IOptionalProps[] | IOptionalProps | null,
+): SelectProps[] => {
+  if (options === null) return [];
 
-  return list.map(
+  if (!Array.isArray(options)) {
+    return [
+      {
+        value: options.id.toString(),
+        label: options.name,
+      },
+    ];
+  }
+
+  return options.map(
     ({ id, name }): SelectProps => ({
       value: id.toString(),
       label: name,

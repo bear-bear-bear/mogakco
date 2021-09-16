@@ -7,20 +7,28 @@ import Warning from '@components/common/Warning';
 import InputWrapper from '@components/common/InputWrapper';
 import Label from '@components/common/Label';
 import { usernameRule, emailRule } from '@lib/regex';
+import JobSelect from '@components/sign-up/Optional/JobSelect';
+import SkillsSelect from '@components/sign-up/Optional/SkillsSelect';
+import type { IOptionalPageProps as SelectsOptions } from '@pages/sign-up/optional';
 import type { IUserInfo } from 'typings/auth';
 
+import toSelectOptions from '@lib/toSelectOptions';
 import * as S from './style';
 
-interface AccountSettingProps {
+interface AccountSettingProps extends SelectsOptions {
   user: IUserInfo;
 }
 type ChangableInfo = Omit<IUserInfo, 'id'>;
 
 const AccountSetting = ({
-  user: { id, ...changableInfo },
+  user: { id, skills, job, ...requiredInfo },
+  skillOptions,
+  jobOptions,
 }: AccountSettingProps) => {
-  const defaultValues = changableInfo;
+  const defaultValues = requiredInfo;
 
+  const [skillIds, setSkillIds] = useState<string[] | null>(null);
+  const [jobId, setJobId] = useState<string | null>(null);
   const hiddenSubmitButtonEl = useRef<HTMLButtonElement>(null);
   const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(true);
   const {
@@ -95,6 +103,18 @@ const AccountSetting = ({
           />
         </InputWrapper>
         {errors.email && <Warning>{errors.email.message}</Warning>}
+
+        {/* TODO: select option 정상 렌더링 되는지 확인 */}
+        <JobSelect
+          options={jobOptions}
+          setId={setJobId}
+          defaultValue={toSelectOptions(job)[0]}
+        />
+        <SkillsSelect
+          options={skillOptions}
+          setIds={setSkillIds}
+          defaultValue={toSelectOptions(skills)}
+        />
 
         <S.HiddenButton ref={hiddenSubmitButtonEl} type="submit" />
       </S.Form>

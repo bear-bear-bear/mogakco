@@ -18,8 +18,8 @@ const pageProps = {
 };
 
 export interface IOptionalPageProps {
-  skillOptions: ReturnType<typeof toSelectOptions>;
   jobOptions: ReturnType<typeof toSelectOptions>;
+  skillOptions: ReturnType<typeof toSelectOptions>;
 }
 
 const SignUpOptional = (props: IOptionalPageProps) => {
@@ -40,8 +40,8 @@ const SignUpOptional = (props: IOptionalPageProps) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async () => {
-  const getSkillsAPI = '/api/user/skills';
   const getJobsAPI = '/api/user/jobs';
+  const getSkillsAPI = '/api/user/skills';
   const optionalInfoListApi = (url: string) =>
     apiClient
       .get<IOptionalProps[] | null>(url)
@@ -52,14 +52,14 @@ export const getServerSideProps: GetServerSideProps = async () => {
       });
 
   const [skills, jobs] = await Promise.all([
-    optionalInfoListApi(getSkillsAPI),
     optionalInfoListApi(getJobsAPI),
+    optionalInfoListApi(getSkillsAPI),
   ]).then((fetchResults) => fetchResults);
 
   return {
     props: {
-      skillOptions: toSelectOptions(skills),
       jobOptions: toSelectOptions(jobs),
+      skillOptions: toSelectOptions(skills),
     },
   };
 };

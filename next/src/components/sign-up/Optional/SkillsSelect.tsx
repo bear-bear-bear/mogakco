@@ -11,10 +11,11 @@ const SKILLS_LIMIT = 5;
 interface SkillsSelectProps {
   options: SelectProps[];
   setIds: React.Dispatch<React.SetStateAction<string[] | null>>;
+  defaultValue?: SelectProps[]; // For use in my-page/account-setting
 }
 type Skills = ValueType<SelectProps, true> | null;
 
-const SkillsSelect = ({ options, setIds }: SkillsSelectProps) => {
+const SkillsSelect = ({ options, setIds, defaultValue }: SkillsSelectProps) => {
   const [isShowOptions, setIsShowOptions] = useState<boolean>(true);
 
   // react-select 에서 onChange 는 해당 Select 에서 선택되어 있는 현재 데이터를 반환합니다.
@@ -40,6 +41,7 @@ const SkillsSelect = ({ options, setIds }: SkillsSelectProps) => {
         onChange={(data) => {
           onChangeSkills(data as Skills);
         }}
+        defaultValue={defaultValue}
       />
     </InputWrapper>
   );
