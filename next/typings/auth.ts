@@ -55,3 +55,7 @@ export interface IOptionalProps {
   createdAt: Date;
   updatedAt: Date;
 }
+
+export interface IGetChatRoomProps extends IGeneralServerResponse {
+  roomId: number;
+}

@@ -5,6 +5,7 @@ import CustomHead from '@components/common/CustomHead';
 import Container from '@components/dashboard/Container';
 import CardLink from '@components/dashboard/CardLink';
 import ServiceHeader from '@components/common/ServiceHeader';
+import Card from '@components/dashboard/CardLink/Card';
 
 export const pageProps = {
   title: '대시보드 - Mogakco',
@@ -25,8 +26,7 @@ const Dashboard = () => {
       <Container>
         {/* <Link href={`/video-chat/${id}`}> */}
         {/* 임시로 화상채팅 1번 룸으로 가도록 설정 */}
-        <CardLink
-          href="/video-chat/1"
+        <Card
           svgName="video-chat.svg"
           title="화상 채팅"
           desc="모각코를 시작해요!"
