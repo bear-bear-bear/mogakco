@@ -63,16 +63,36 @@ export function JoinChatRoomSwagger() {
       description: '사용자 희망 분야를 분석해서 채팅방을 찾고 없으면 생성하여 입장 처리합니다.',
     }),
     ApiResponse({
-      status: 200,
+      status: HttpStatus.OK,
       description: '채팅방 입장',
+      schema: {
+        example: {
+          statusCode: HttpStatus.OK,
+          roomId: 2,
+          message: '채팅방을 찾았습니다.',
+        },
+      },
     }),
     ApiResponse({
-      status: 201,
+      status: HttpStatus.CREATED,
       description: '채팅방 생성 및 입장',
+      schema: {
+        example: {
+          statusCode: HttpStatus.CREATED,
+          roomId: 2,
+          message: '채팅방이 생성되었습니다.',
+        },
+      },
     }),
     ApiResponse({
-      status: 401,
+      status: HttpStatus.UNAUTHORIZED,
       description: '인증 권한이 없음',
+      schema: {
+        example: {
+          statusCode: HttpStatus.UNAUTHORIZED,
+          message: 'Unauthorized',
+        },
+      },
     }),
   );
 }

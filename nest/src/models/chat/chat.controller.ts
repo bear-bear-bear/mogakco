@@ -2,9 +2,11 @@ import {
   BadRequestException,
   Controller,
   Get,
+  HttpStatus,
   Param,
   ParseIntPipe,
   Req,
+  Res,
   UseGuards,
 } from '@nestjs/common';
 import ChatService from './chat.service';
@@ -15,9 +17,9 @@ import {
 } from '@common/decorators/swagger/chat.decorator';
 import RoomUserRepository from './repositories/room-user.repository';
 import RoomRepository from './repositories/room.repository';
-import { AvailableRoom, IChatController, MemberCount } from './interface/controller';
+import { AvailableRoom, ChatRoomJoin, IChatController, MemberCount } from './interface/controller';
 import JwtAuthGuard from '@common/guards/jwt-auth.guard';
-import { Request } from 'express';
+import { Request, Response } from 'express';
 import UserService from '@models/user/user.service';
 import UserEntity from '@models/user/entities/user.entity';
 
@@ -30,13 +32,33 @@ export default class ChatController implements IChatController {
     private readonly roomUserRepository: RoomUserRepository,
   ) {}
 
+  /**
+   * @desc 방을 찾거나, 생성합니다.
+   */
   @JoinChatRoomSwagger()
   @UseGuards(JwtAuthGuard)
-  @Get()
-  async join(@Req() req: Request & { user: UserEntity }): Promise<any> {
+  @Get('/recommend/join')
+  async join(
+    @Req() req: Request & { user: UserEntity },
+    @Res({ passthrough: true }) res: Response,
+  ): Promise<ChatRoomJoin | Pick<ChatRoomJoin, 'message'>> {
     const userId = req.user.id;
-    const fields = await this.userService.findAllFields(userId);
-    return fields;
+    const roomItem = await this.chatService.getRecommendRoom(userId);
+
+    if ('isCreated' in roomItem) {
+      res.status(HttpStatus.CREATED);
+      return {
+        statusCode: HttpStatus.CREATED,
+        roomId: roomItem.room.id,
+        message: '채팅방이 생성되었습니다.',
+      };
+    }
+    res.status(HttpStatus.OK);
+    return {
+      statusCode: HttpStatus.OK,
+      roomId: roomItem.id,
+      message: '채팅방을 찾았습니다.',
+    };
   }
 
   /**
