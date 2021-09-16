@@ -12,7 +12,7 @@ export interface Join {
 }
 
 export interface IChatGateway {
-  join(client: Socket, { roomId, userId }: JoinChatRoom): Promise<Join>;
+  join(client: Socket, { roomId, userId }: JoinChatRoom): Promise<void>;
 
   chat(client: Socket, message: string): Promise<void>;
 }

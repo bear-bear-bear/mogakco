@@ -8,7 +8,7 @@ import {
   ChatAnnouncement,
   ChatFile,
   ChatMessage,
-} from '../../../../typings/chat';
+} from '../../../../../typings/chat';
 
 const Chat = (schema: ChatAnnouncement | ChatMessage | ChatFile) => {
   switch (schema.type) {

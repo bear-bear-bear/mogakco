@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React from 'react';
 import Link from 'next/link';
 
 import useUser from '@hooks/useUser';

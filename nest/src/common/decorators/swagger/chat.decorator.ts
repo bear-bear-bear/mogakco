@@ -1,6 +1,6 @@
 import decoratorHelper from '@common/helpers/decorator.helper';
 import { SwaggerTag } from '@common/helpers/enum.helper';
-import { ApiOperation, ApiParam, ApiResponse } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiParam, ApiResponse } from '@nestjs/swagger';
 import { HttpStatus } from '@nestjs/common';
 
 export function ChatAvailableSwagger() {
@@ -50,6 +50,29 @@ export function GetRoomMembersSwagger() {
     ApiResponse({
       status: HttpStatus.BAD_REQUEST,
       description: '존재하지 않는 채팅방',
+    }),
+  );
+}
+
+export function JoinChatRoomSwagger() {
+  return decoratorHelper(
+    SwaggerTag.CHAT,
+    ApiBearerAuth(),
+    ApiOperation({
+      summary: '채팅방 입장 또는 생성 API',
+      description: '사용자 희망 분야를 분석해서 채팅방을 찾고 없으면 생성하여 입장 처리합니다.',
+    }),
+    ApiResponse({
+      status: 200,
+      description: '채팅방 입장',
+    }),
+    ApiResponse({
+      status: 201,
+      description: '채팅방 생성 및 입장',
+    }),
+    ApiResponse({
+      status: 401,
+      description: '인증 권한이 없음',
     }),
   );
 }

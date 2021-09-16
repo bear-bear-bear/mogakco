@@ -4,6 +4,7 @@ import devModeLog from '@lib/devModeLog';
 import { refreshAccessTokenApi } from '@lib/apis';
 import token, { REFRESH_TOKEN } from '@lib/token';
 import type { GeneralAxiosError } from 'typings/common';
+import { getServerUrl } from '@lib/enviroment';
 
 export const logAxiosError = (axiosError: GeneralAxiosError) => {
   if (process.env.NODE_ENV === 'production') {
@@ -46,11 +47,9 @@ export const logAxiosError = (axiosError: GeneralAxiosError) => {
 /**
  * @desc api 요청 클라이언트
  */
+
 const apiClient = axios.create({
-  baseURL:
-    process.env.NODE_ENV === 'development'
-      ? 'http://localhost:8001/'
-      : 'http://146.56.139.188/:8001/',
+  baseURL: getServerUrl(),
   withCredentials: true,
 });
 

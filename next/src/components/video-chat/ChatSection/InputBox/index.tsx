@@ -1,24 +1,24 @@
-import React, { KeyboardEvent } from 'react';
+import React, { KeyboardEvent, useContext } from 'react';
 
 import useInput from '@hooks/useInput';
+import { SocketContext } from '@pages/video-chat/[id]';
 
-import useSocket from '@hooks/useSocket';
 import * as S from './style';
 
 const InputBox = () => {
   const [chat, onChangeChat, setChat] = useInput('');
-  const { client } = useSocket();
+  const client = useContext(SocketContext);
+
   const handleChat = (e: KeyboardEvent<HTMLTextAreaElement>) => {
-    console.log('altKey: ', e.altKey);
     if (chat.trim() !== '') {
       const isEnter = e.code === 'Enter';
       if (isEnter && !e.altKey) {
         client?.emit('chat', chat);
         setChat('');
       }
-      // if (isEnter && e.altKey) {
-      //   setChat((prev) => `${prev}\n`);
-      // }
+      if (isEnter && e.altKey) {
+        setChat((prev) => `${prev}\n`);
+      }
     }
   };
 

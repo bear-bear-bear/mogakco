@@ -28,10 +28,15 @@ const SignInForm = ({ mutateUser }: UserMutator) => {
   const [isVisiblePassword, setIsVisiblePassword] = useState<boolean>(false);
   const onClickEye = () => setIsVisiblePassword((prev) => !prev);
   const { watch, register, handleSubmit, setValue } = useForm<FormInputs>({
-    defaultValues: {
-      email: isDevelopment ? 'mogakco35@gmail.com' : '',
-      password: isDevelopment ? 'mogapass' : '',
-    },
+    defaultValues: isDevelopment
+      ? {
+          email: 'mogakco35@gmail.com',
+          password: 'mogapass',
+        }
+      : {
+          email: '',
+          password: '',
+        },
   });
 
   const { email } = watch();

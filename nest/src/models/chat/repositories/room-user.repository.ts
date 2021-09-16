@@ -46,4 +46,10 @@ export default class RoomUserRepository extends Repository<RoomUserEntity> {
     if (!roomUser) throw new InternalServerErrorException();
     return roomUser.roomId;
   }
+
+  getMemberCount(roomId: number) {
+    this.count({
+      where: { roomId },
+    });
+  }
 }

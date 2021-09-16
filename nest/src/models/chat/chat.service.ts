@@ -9,8 +9,17 @@ import UserEntity from '@models/user/entities/user.entity';
 import RoomUserRepository from '@models/chat/repositories/room-user.repository';
 import { IncomingHttpHeaders } from 'http';
 import UserRepository from '@models/user/repositories/user.repository';
-import { Chat, IChatService, LeaveRoom, UserAndRoom } from '@models/chat/interface/service';
+import {
+  Chat,
+  HandShakeAuth,
+  IChatService,
+  LeaveRoom,
+  UserAndRoom,
+} from '@models/chat/interface/service';
 import ChatRepository from '@models/chat/repositories/chat.repository';
+import AnonymousRoomUserRepository from '@models/chat/repositories/anonymous-room-user.repository';
+import { Server, Socket } from 'socket.io';
+import { v1 as uuid } from 'uuid';
 
 @Injectable()
 class ChatService implements IChatService {
@@ -21,7 +30,22 @@ class ChatService implements IChatService {
     private readonly roomUserRepository: RoomUserRepository,
     private readonly userRepository: UserRepository,
     private readonly chatRepository: ChatRepository,
+    private readonly anonymousRoomUserRepository: AnonymousRoomUserRepository,
   ) {}
+
+  /**
+   * @desc 익명 이름을 생성하여 반환합니다.
+   */
+  async findOrCreateAnonymousName(headers: IncomingHttpHeaders) {
+    try {
+      const [userId, roomId] = this.getIdsFromHeader(headers);
+      const anonymousName = await this.anonymousRoomUserRepository.findOrCreate(userId, roomId);
+      return anonymousName;
+    } catch (e) {
+      this.logger.error(e);
+      throw new InternalServerErrorException();
+    }
+  }
 
   /**
    * @desc 해당 유저를 채팅방(Room) 에서 퇴장시킵니다.
@@ -40,9 +64,10 @@ class ChatService implements IChatService {
     const [userId, roomId] = this.getIdsFromHeader(headers);
     const { user, room } = await this.findUserAndRoom(userId, roomId);
     if (!(user && room)) throw new InternalServerErrorException();
+    const { username } = await this.findOrCreateAnonymousName(headers);
     const { id: chatId } = await this.chatRepository.createChat(user, room, message);
-    const globalChat = this.createChatResponse(chatId, user.username, message, false);
-    const myChat = this.createChatResponse(chatId, user.username, message, true);
+    const globalChat = this.createChatResponse(chatId, username, message, false);
+    const myChat = this.createChatResponse(chatId, username, message, true);
     return [globalChat, myChat];
   }
 
@@ -82,7 +107,6 @@ class ChatService implements IChatService {
       userId: user,
     });
     await enter.save();
-    this.logger.log(`${user.username} 유저가 ${roomId} 번 방에 참여되었습니다.`);
   }
 
   /**
@@ -95,6 +119,36 @@ class ChatService implements IChatService {
       message,
       type: isOwner ? 'my-chat' : 'chat',
     };
+  }
+
+  /**
+   * @desc 채팅 이벤트를 emit 합니다.
+   */
+  emitChatEvent(client: Socket, globalChat: Chat, ownChat: Chat): void {
+    client.broadcast.emit('chat', globalChat);
+    client.emit('chat', ownChat);
+  }
+
+  /**
+   * @desc 채팅방의 멤버수를 구해서 멤버수 카운트 이벤트를 emit 합니다.
+   */
+  async emitMemberCountEvent(server: Server, auth: HandShakeAuth): Promise<void> {
+    const roomId = auth['room-id'];
+    const memberCount = await this.roomUserRepository.count({
+      where: { roomId },
+    });
+    server.emit('member-count', memberCount);
+  }
+
+  /**
+   * @desc 입장 또는 퇴장 이벤트를 emit 합니다.
+   */
+  emitEnterOrExitEvent(server: Server, username: string, type: 'enter' | 'exit'): void {
+    server.emit(type, {
+      id: uuid(),
+      type,
+      username,
+    });
   }
 }
 

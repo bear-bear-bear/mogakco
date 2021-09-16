@@ -1,41 +1,33 @@
-import useSWR from 'swr';
-import { io } from 'socket.io-client';
-import { useEffect } from 'react';
-import devModeLog from '@lib/devModeLog';
+import { io, Socket } from 'socket.io-client';
+import { useEffect, useState } from 'react';
 import useUser from '@hooks/useUser';
 import { useRouter } from 'next/router';
-
-export const SOCKET_TEST_KEY = 'socket-test';
-const SOCKET_SERVER = 'http://localhost:8001/chat';
+import { getServerUrl } from '@lib/enviroment';
 
 export default function useSocket() {
-  const { query } = useRouter();
-  const roomId = query.id as string;
+  const [socket, setSocket] = useState<Socket | null>(null);
   const { user } = useUser();
-  const { data: client, mutate } = useSWR(
-    SOCKET_TEST_KEY,
-    () =>
-      io(SOCKET_SERVER, {
-        reconnectionDelay: 2000,
-        extraHeaders: {
-          'user-id': String(user?.id),
-          'user-name': user?.username || 'no-user',
-          'room-id': roomId,
-        },
-      }),
-    {
-      revalidateOnFocus: false,
-    },
-  );
-  useEffect(() => {
-    return () => {
-      devModeLog('disconnect');
-      client?.disconnect();
-    };
-  }, [client]);
+  const { query } = useRouter();
 
-  return {
-    client,
-    mutate,
-  };
+  useEffect(() => {
+    const uri = `${getServerUrl()}/chat`;
+    const client = io(uri, {
+      auth: {
+        'user-id': user?.id,
+        'room-id': query.id,
+        'user-name': user?.username,
+      },
+    });
+    setSocket(client);
+
+    function cleanup() {
+      client.disconnect();
+    }
+
+    return cleanup;
+    // 한번 만 렌더링 되어야 합니다.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  return user?.isLoggedIn ? socket : null;
 }

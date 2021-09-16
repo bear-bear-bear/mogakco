@@ -11,8 +11,9 @@ import { refreshAccessTokenApiSSR } from '@lib/apis';
 import token from '@lib/token';
 import { useRouter } from 'next/router';
 import useSocket from '@hooks/useSocket';
-import { useEffect } from 'react';
+import { createContext, useEffect } from 'react';
 import type { IUserInfo } from 'typings/auth';
+import { Socket } from 'socket.io-client';
 
 const pageProps = {
   title: '화상채팅 - Mogakco',
@@ -21,14 +22,16 @@ const pageProps = {
   locale: 'ko_KR',
 };
 
+export const SocketContext = createContext<Socket | null>(null);
+
 const ChatRoom = () => {
   const router = useRouter();
   const { user } = useUser({ redirectTo: '/' });
-  const { client } = useSocket();
-  devModeLog({ client, user });
+  const client = useSocket();
 
   useEffect(() => {
     if (!client || !user?.isLoggedIn) return;
+
     const { id: userId } = user as IUserInfo;
 
     const props = {
@@ -36,23 +39,25 @@ const ChatRoom = () => {
       roomId: String(router.query.id),
     };
 
-    client.emit(
-      'joinChatRoom',
-      props,
-      (data: { joinedUserName: string; joinedRoomId: string }) => {
-        console.log(data);
-      },
-    );
+    client.emit('join-room', props);
   }, [router.query.id, client, user]);
+
+  useEffect(() => {
+    return () => {
+      client?.disconnect();
+    };
+  }, [client]);
 
   if (!user?.isLoggedIn) return null;
   return (
     <>
       <CustomHead {...pageProps} />
-      <Container>
-        <CamSection />
-        <ChatSection />
-      </Container>
+      <SocketContext.Provider value={client}>
+        <Container>
+          <CamSection />
+          <ChatSection />
+        </Container>
+      </SocketContext.Provider>
     </>
   );
 };
@@ -71,7 +76,7 @@ export const getServerSideProps: GetServerSideProps = async ({
     const { data } = await apiClient.get<{
       message: boolean;
       statusCode: number;
-    }>(`/api/chat/available/${id}`);
+    }>(`/api/chat/${id}/available/`);
     devModeLog(`Server Response Message: ${data.message}`);
     devModeLog(`Response Status Code: ${data.statusCode}`);
 
