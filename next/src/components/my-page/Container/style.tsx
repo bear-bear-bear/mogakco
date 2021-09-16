@@ -9,6 +9,7 @@ export const Container = styled.section`
     'main' max-content/
     1fr;
   gap: 2rem;
+  margin-top: 1.66rem;
   padding-left: 1.33rem;
   padding-right: 1.33rem;
 

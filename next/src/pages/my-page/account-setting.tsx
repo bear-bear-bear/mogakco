@@ -5,7 +5,10 @@ import CustomHead from '@components/common/CustomHead';
 import ServiceHeader from '@components/common/ServiceHeader';
 import Container from '@components/my-page/Container';
 import Aside from '@components/my-page/Aside';
-import Main from '@components/my-page/Main';
+import AccountSetting from '@components/my-page/AccountSetting';
+import { getServerSideProps as _getServerSideProps } from '@pages/sign-up/optional';
+import type { IOptionalPageProps as SelectsOptions } from '@pages/sign-up/optional';
+import type { IUserInfo } from 'typings/auth';
 
 export const pageProps = {
   title: '마이페이지 - Mogakco',
@@ -14,8 +17,9 @@ export const pageProps = {
   locale: 'ko_KR',
 };
 
-const MyPageAccountSetting = () => {
-  const { user } = useUser({ redirectTo: '/' });
+const MyPageAccountSetting = (props: SelectsOptions) => {
+  // const { user } = useUser({ redirectTo: '/' });
+  const { user } = useUser();
 
   if (!user?.isLoggedIn) return null;
   return (
@@ -24,10 +28,12 @@ const MyPageAccountSetting = () => {
       <ServiceHeader />
       <Container>
         <Aside />
-        <Main />
+        <AccountSetting user={user as IUserInfo} {...props} />
       </Container>
     </>
   );
 };
+
+export const getServerSideProps = _getServerSideProps;
 
 export default MyPageAccountSetting;

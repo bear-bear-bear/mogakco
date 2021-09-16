@@ -22,6 +22,7 @@ const defaultInputStyles = ({ scale }: { scale: 'small' | 'medium' }) => {
     width: 100%;
     font-size: ${fontSize};
     padding: ${padding};
+    outline: none;
   `;
 };
 
