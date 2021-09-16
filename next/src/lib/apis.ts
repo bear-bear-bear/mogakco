@@ -1,4 +1,4 @@
-import apiClient from '@lib/apiClient';
+import apiClient, { logAxiosError } from '@lib/apiClient';
 import type { IGeneralServerResponse } from 'typings/common';
 import type {
   ISignInProps,
@@ -80,6 +80,4 @@ export const getRecommendChatRoom = () =>
   apiClient
     .get<IGetChatRoomProps>(`/api/chat/recommend/join`)
     .then(({ data: { roomId } }) => roomId)
-    .catch((e) => {
-      devModeLog(e);
-    });
+    .catch((e) => logAxiosError(e));
