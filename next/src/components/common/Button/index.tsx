@@ -3,14 +3,29 @@ import { ThemeProvider } from '@emotion/react';
 
 import * as S from './style';
 
+export interface Theme {
+  palette: Record<IButtonProps['color'], string>;
+}
+
 export interface IButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  color: 'white' | 'yellow' | 'black' | 'blue';
+  color: 'white' | 'yellow' | 'black' | 'blue' | 'red';
   scale: 'small' | 'medium' | 'large';
   fullWidth: boolean;
   outline: boolean;
   underline: boolean;
   $loading: boolean;
+  theme?: Theme;
 }
+
+const theme: Theme = {
+  palette: {
+    white: '#ffffff',
+    black: '#000000',
+    yellow: '#fdc500',
+    blue: '#003f88',
+    red: '#f23f31',
+  },
+};
 
 const Button = forwardRef<HTMLButtonElement, Partial<IButtonProps>>(
   (
@@ -26,15 +41,6 @@ const Button = forwardRef<HTMLButtonElement, Partial<IButtonProps>>(
     },
     ref,
   ) => {
-    const theme = {
-      palette: {
-        white: '#ffffff',
-        black: '#000000',
-        yellow: '#fdc500',
-        blue: '#003f88',
-      },
-    };
-
     return (
       <ThemeProvider theme={theme}>
         <S.Button

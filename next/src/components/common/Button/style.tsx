@@ -2,17 +2,7 @@ import styled from '@emotion/styled';
 import { css, keyframes } from '@emotion/react';
 import { VscLoading } from 'react-icons/vsc';
 import { darken, lighten } from 'polished';
-import type { IButtonProps } from '@components/common/Button/index';
-
-type ButtonColor = 'white' | 'black' | 'yellow' | 'blue';
-type Theme = {
-  palette: Record<ButtonColor, string>;
-};
-
-type ButtonColorPropNames = 'color' | 'outline' | 'underline' | 'disabled';
-type IColorStyleProps = Pick<IButtonProps, ButtonColorPropNames> & {
-  theme: Theme;
-};
+import type { IButtonProps } from './index';
 
 const colorStyles = ({
   theme,
@@ -20,15 +10,16 @@ const colorStyles = ({
   outline,
   underline,
   disabled,
-}: IColorStyleProps) => {
-  const mainColor = theme.palette[color as ButtonColor];
+}: IButtonProps) => {
+  const mainColor = theme?.palette[color] as string;
   const subColors = {
     white: '#000',
     black: '#fff',
     yellow: '#000',
     blue: '#fff',
+    red: '#fff',
   };
-  const subColor = subColors[color as ButtonColor];
+  const subColor = subColors[color];
 
   return css`
     color: ${subColor};
