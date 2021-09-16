@@ -5,8 +5,10 @@ import type {
   ISignUpProps,
   IOptionalProps,
   IAuthSuccessResponse,
+  IGetChatRoomProps,
 } from 'typings/auth';
 import { IncomingHttpHeaders } from 'http';
+import devModeLog from '@lib/devModeLog';
 
 // TODO: 각 API 사용 시 res.data와 catch err 반복 제거해보기
 
@@ -68,3 +70,16 @@ export const loadSkillsApi = () =>
 // 직업 목록 불러오기
 export const loadJobsApi = () =>
   apiClient.get<IOptionalProps>(`/api/user/jobs`);
+
+// ********************************************************************************************************************
+// chat
+// ********************************************************************************************************************
+// 채팅방 찾기 또는 만들기
+// TODO: 에러 처리 보충, 어떻게 할 지 이야기 하고 구현하기
+export const getRecommendChatRoom = () =>
+  apiClient
+    .get<IGetChatRoomProps>(`/api/chat/recommend/join`)
+    .then(({ data: { roomId } }) => roomId)
+    .catch((e) => {
+      devModeLog(e);
+    });
