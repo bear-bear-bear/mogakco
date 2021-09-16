@@ -1,15 +1,15 @@
 import React, { useCallback, useState, SyntheticEvent } from 'react';
-import { OptionsType } from 'react-select';
+import { ValueType } from 'react-select';
 
 import type { UserMutator } from '@hooks/useUser';
 import getSessionStorageValues from '@lib/getSessionStorageValues';
 import Select from '@components/common/Select';
+import type { SelectProps } from '@components/common/Select';
 import Desc from '@components/common/Desc';
 import Form from '@components/common/Form';
 import InputWrapper from '@components/common/InputWrapper';
 import Label from '@components/common/Label';
 import type { IOptionalPageProps } from '@pages/sign-up/optional';
-import type { SelectProps } from '@lib/toSelectOptions';
 import { signUpApi } from '@lib/apis';
 import token from '@lib/token';
 import { logAxiosError } from '@lib/apiClient';
@@ -20,6 +20,9 @@ import * as CS from '../common/styles';
 
 const SKILLS_LIMIT = 5;
 
+type Skills = ValueType<SelectProps, true> | null;
+type Job = ValueType<SelectProps, false> | null;
+
 const Optional = ({
   skillOptions,
   jobOptions,
@@ -27,17 +30,17 @@ const Optional = ({
 }: IOptionalPageProps & UserMutator) => {
   const [signUpLoading, setSignUpLoading] = useState<boolean>(false);
   const [isShowSkillOptions, setIsShowSkillOptions] = useState<boolean>(true);
-  const [skillIds, setSkillIds] = useState<number[] | null>(null);
-  const [jobId, setJobId] = useState<number | null>(null);
+  const [skillIds, setSkillIds] = useState<string[] | null>(null);
+  const [jobId, setJobId] = useState<string | null>(null);
 
   // react-select 에서 onChange 는 해당 Select 에서 선택되어 있는 현재 데이터를 반환합니다.
-  const onChangeSkills = useCallback((list: OptionsType<SelectProps>) => {
-    setIsShowSkillOptions(list?.length < SKILLS_LIMIT);
-    const ids = list?.map(({ value }) => value);
+  const onChangeSkills = useCallback((list: Skills) => {
+    setIsShowSkillOptions((list?.length || 0) < SKILLS_LIMIT);
+    const ids = list?.map(({ value }) => value) || null;
     setSkillIds(ids);
   }, []);
 
-  const onChangeJob = (job: SelectProps) => setJobId(job.value);
+  const onChangeJob = (job: Job) => setJobId(job?.label || null);
 
   const onSubmit = async (e: SyntheticEvent) => {
     e.preventDefault();
@@ -81,7 +84,7 @@ const Optional = ({
             options={isShowSkillOptions ? skillOptions : []}
             placeholder="관심 분야를 선택해 주세요... (5개까지 선택 가능)"
             onChange={(data) => {
-              onChangeSkills(data as OptionsType<SelectProps>);
+              onChangeSkills(data as Skills);
             }}
           />
         </InputWrapper>
@@ -95,7 +98,7 @@ const Optional = ({
             options={jobOptions}
             placeholder="직업을 선택해 주세요..."
             onChange={(data) => {
-              onChangeJob(data as SelectProps);
+              onChangeJob(data as Job);
             }}
           />
         </InputWrapper>
