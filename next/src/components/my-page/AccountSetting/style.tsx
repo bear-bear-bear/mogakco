@@ -1,7 +1,6 @@
 import styled from '@emotion/styled';
 import _Input from '@components/common/Input';
 import _Form from '@components/common/Form';
-import Button from '@components/common/Button';
 import media from '@globalStyles/media';
 
 const FOOTER_HEIGHT = '5rem';

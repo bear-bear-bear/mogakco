@@ -47,13 +47,16 @@ const AccountSetting = ({
     [defaultValues, isValid, watchedFields],
   );
 
-  const handleAccountDeleteButtonClick = () => {};
+  const handleAccountDeleteButtonClick = () => {
+    alert('유저 삭제 미구현');
+    // TODO: 유저 삭제 요청 (DELETE))
+  };
   const handleSaveButtonClick = () => {
     if (!isSubmittable()) return;
     hiddenSubmitButtonEl.current?.click();
   };
   const handleFormSubmit = (info: ChangableInfo) => {
-    console.log('submit');
+    alert('submit');
     // TODO: 유저 정보 저장 요청 (PUT)
   };
 
