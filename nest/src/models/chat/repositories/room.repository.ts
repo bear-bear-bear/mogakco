@@ -8,7 +8,6 @@ export default class RoomRepository extends Repository<RoomEntity> {
    * @desc 채팅방 생성 ( userId 가 방장이 됨 )
    */
   async createRoom(user: UserEntity): Promise<RoomEntity> {
-    console.log(user);
     const skills = user.skills?.length !== 0 ? user.skills : null;
     const room = this.create({
       ownerId: user,
