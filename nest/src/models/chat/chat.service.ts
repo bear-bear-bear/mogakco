@@ -11,6 +11,7 @@ import { IncomingHttpHeaders } from 'http';
 import UserRepository from '@models/user/repositories/user.repository';
 import {
   Chat,
+  FindRoomAndJoin,
   HandShakeAuth,
   IChatService,
   LeaveRoom,
@@ -20,9 +21,10 @@ import ChatRepository from '@models/chat/repositories/chat.repository';
 import AnonymousRoomUserRepository from '@models/chat/repositories/anonymous-room-user.repository';
 import { Server, Socket } from 'socket.io';
 import { v1 as uuid } from 'uuid';
+import RoomEntity from '@models/chat/entities/room.entity';
 
 @Injectable()
-class ChatService implements IChatService {
+export default class ChatService implements IChatService {
   private readonly logger = new Logger('ChatService');
 
   constructor(
@@ -32,6 +34,35 @@ class ChatService implements IChatService {
     private readonly chatRepository: ChatRepository,
     private readonly anonymousRoomUserRepository: AnonymousRoomUserRepository,
   ) {}
+
+  /**
+   * @desc 사용자의 추천 방을 찾아서 반환합니다.
+   */
+  async getRecommendRoom(id: number): Promise<RoomEntity | FindRoomAndJoin> {
+    const user = await this.userRepository.findOne({ id });
+    if (!user) throw new BadRequestException('사용자가 존재하지 않습니다.');
+    if (user.skills === null) {
+      const randRoom = await this.roomRepository.getRandomRoom();
+      if (randRoom) return randRoom;
+      const createdRoom = await this.roomRepository.createEmptyRoom(user);
+      return {
+        room: createdRoom,
+        isCreated: true,
+      };
+    }
+
+    const strictRoom = await this.roomRepository.getRoomStrictEqualSkills(user.skills);
+    if (strictRoom) return strictRoom;
+
+    const randSkillRoom = await this.roomRepository.findRoomByRandSkills(user.skills);
+    if (randSkillRoom) return randSkillRoom;
+
+    const createdRoom = await this.roomRepository.createRoom(user);
+    return {
+      room: createdRoom,
+      isCreated: true,
+    };
+  }
 
   /**
    * @desc 익명 이름을 생성하여 반환합니다.
@@ -151,5 +182,3 @@ class ChatService implements IChatService {
     });
   }
 }
-
-export default ChatService;

@@ -24,7 +24,14 @@ export interface HandShakeAuth {
   [p: string]: any;
 }
 
+export interface FindRoomAndJoin {
+  room: RoomEntity;
+  isCreated: boolean;
+}
+
 export interface IChatService {
+  getRecommendRoom(id: number): Promise<RoomEntity | FindRoomAndJoin>;
+
   leaveRoom(headers: IncomingHttpHeaders): Promise<LeaveRoom>;
 
   makeAndSaveChat(headers: IncomingHttpHeaders, message: string): Promise<Chat[]>;
