@@ -1,27 +1,20 @@
-import React, { useCallback, useState, SyntheticEvent } from 'react';
-import { ValueType } from 'react-select';
+import React, { useState, SyntheticEvent } from 'react';
 
-import type { UserMutator } from '@hooks/useUser';
 import getSessionStorageValues from '@lib/getSessionStorageValues';
-import Select from '@components/common/Select';
-import type { SelectProps } from '@components/common/Select';
 import Desc from '@components/common/Desc';
 import Form from '@components/common/Form';
-import InputWrapper from '@components/common/InputWrapper';
-import Label from '@components/common/Label';
-import type { IOptionalPageProps } from '@pages/sign-up/optional';
 import { signUpApi } from '@lib/apis';
 import token from '@lib/token';
 import { logAxiosError } from '@lib/apiClient';
+import type { IOptionalPageProps } from '@pages/sign-up/optional';
+import type { UserMutator } from '@hooks/useUser';
 import type { ISignUpProps } from 'typings/auth';
-import { GeneralAxiosError } from 'typings/common';
+import type { GeneralAxiosError } from 'typings/common';
+
+import JobSelect from './JobSelect';
+import SkillsSelect from './SkillsSelect';
 
 import * as CS from '../common/styles';
-
-const SKILLS_LIMIT = 5;
-
-type Skills = ValueType<SelectProps, true> | null;
-type Job = ValueType<SelectProps, false> | null;
 
 const Optional = ({
   skillOptions,
@@ -29,18 +22,8 @@ const Optional = ({
   mutateUser,
 }: IOptionalPageProps & UserMutator) => {
   const [signUpLoading, setSignUpLoading] = useState<boolean>(false);
-  const [isShowSkillOptions, setIsShowSkillOptions] = useState<boolean>(true);
   const [skillIds, setSkillIds] = useState<string[] | null>(null);
   const [jobId, setJobId] = useState<string | null>(null);
-
-  // react-select 에서 onChange 는 해당 Select 에서 선택되어 있는 현재 데이터를 반환합니다.
-  const onChangeSkills = useCallback((list: Skills) => {
-    setIsShowSkillOptions((list?.length || 0) < SKILLS_LIMIT);
-    const ids = list?.map(({ value }) => value) || null;
-    setSkillIds(ids);
-  }, []);
-
-  const onChangeJob = (job: Job) => setJobId(job?.label || null);
 
   const onSubmit = async (e: SyntheticEvent) => {
     e.preventDefault();
@@ -74,34 +57,8 @@ const Optional = ({
       <Desc>아래 항목들은 선택 사항입니다.</Desc>
       <Desc>작성하시면 랭킹 시스템에 참여할 수 있어요</Desc>
       <Form action="" onSubmit={onSubmit}>
-        <InputWrapper>
-          <Label htmlFor="skills" direction="bottom">
-            관심 분야
-          </Label>
-          <Select
-            id="skills"
-            closeMenuOnSelect={false}
-            options={isShowSkillOptions ? skillOptions : []}
-            placeholder="관심 분야를 선택해 주세요... (5개까지 선택 가능)"
-            onChange={(data) => {
-              onChangeSkills(data as Skills);
-            }}
-          />
-        </InputWrapper>
-        <InputWrapper>
-          <Label htmlFor="job" direction="bottom">
-            직업
-          </Label>
-          <Select
-            isMulti={false}
-            id="job"
-            options={jobOptions}
-            placeholder="직업을 선택해 주세요..."
-            onChange={(data) => {
-              onChangeJob(data as Job);
-            }}
-          />
-        </InputWrapper>
+        <SkillsSelect options={skillOptions} setIds={setSkillIds} />
+        <JobSelect options={jobOptions} setId={setJobId} />
         <CS.SubmitButton type="submit" $loading={signUpLoading}>
           완료
         </CS.SubmitButton>
