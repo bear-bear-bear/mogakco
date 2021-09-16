@@ -104,6 +104,7 @@ const AccountSetting = ({
         </InputWrapper>
         {errors.email && <Warning>{errors.email.message}</Warning>}
 
+        <S.DevideTextLine>선택 정보</S.DevideTextLine>
         {/* TODO: select option 정상 렌더링 되는지 확인 */}
         <JobSelect
           options={jobOptions}

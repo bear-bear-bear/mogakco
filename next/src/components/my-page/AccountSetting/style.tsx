@@ -20,6 +20,7 @@ export const MainTitle = styled.h1`
 `;
 
 export const Form = styled(_Form)`
+  position: relative;
   // my-page Container의 breakpoint에 맞춤
   ${media.lg} {
     max-width: 30rem;
@@ -28,6 +29,27 @@ export const Form = styled(_Form)`
 
 export const Input = styled(_Input)`
   border-radius: 10px;
+`;
+
+export const DevideTextLine = styled.p`
+  display: flex;
+  align-items: center;
+  margin-top: 4rem;
+  margin-bottom: 1.33rem;
+  padding-left: 0.33rem;
+  padding-right: 0.33rem;
+  color: var(--color-gray-3);
+  background-color: var(--color-white);
+
+  &::before {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background-color: var(--color-gray-3);
+  }
 `;
 
 export const HiddenButton = styled.button`
