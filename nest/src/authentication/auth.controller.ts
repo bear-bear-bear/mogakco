@@ -42,7 +42,6 @@ import {
   VerifyEmailSwagger,
 } from '@common/decorators/swagger/auth.decorator';
 import AuthValidateService from '@authentication/auth-validate.service';
-import { IJwtPayload } from '@typing/auth';
 import NoUserException from '@common/exceptions/no-user-exception.filter';
 
 /**
@@ -50,7 +49,7 @@ import NoUserException from '@common/exceptions/no-user-exception.filter';
  */
 @Controller('auth')
 @UseInterceptors(ClassSerializerInterceptor)
-class AuthController {
+export default class AuthController {
   private readonly logger = new Logger('AuthController');
 
   constructor(
@@ -129,8 +128,8 @@ class AuthController {
   @Get('/refresh-token')
   @HttpCode(201)
   @UseGuards(JwtAuthGuardWithRefresh)
-  async refresh(@Req() req: Request) {
-    const { id } = req.user as IJwtPayload;
+  async refresh(@Req() req: Request & { user: UserEntity }) {
+    const { id } = req.user;
     const user = await this.userService.findUserForLogin(id);
     if (user === null) throw new InternalServerErrorException();
     const { password, ...userProps } = user;
@@ -253,5 +252,3 @@ class AuthController {
     return !isLoggedIn ? { isLoggedIn } : { isLoggedIn, ...user };
   }
 }
-
-export default AuthController;

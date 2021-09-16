@@ -62,24 +62,12 @@ export default class AuthService {
       expiresIn: `${refreshTokenExpirationTime}s`,
     });
 
-    const mode = this.configService.get<string>('NODE_ENV');
-    if (mode === 'development') {
-      return {
-        token,
-        maxAge: 6.048e8,
-        path: '/',
-        httpOnly: false,
-      } as ICookieProps;
-    } else {
-      return {
-        token,
-        maxAge: 6.048e8,
-        path: '/',
-        httpOnly: false,
-        secure: true,
-        sameSite: 'none',
-      } as ICookieProps;
-    }
+    return {
+      token,
+      maxAge: 6.048e8,
+      path: '/',
+      httpOnly: false,
+    } as ICookieProps;
   }
 
   /**

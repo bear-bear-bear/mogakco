@@ -127,6 +127,7 @@ class UserRepository extends Repository<UserEntity> {
    */
   getUserJob(id: number) {
     return getManager().findOne(UserFieldEntity, {
+      select: ['id', 'name'],
       where: {
         id,
       },
