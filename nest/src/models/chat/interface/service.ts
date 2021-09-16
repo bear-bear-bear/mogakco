@@ -32,15 +32,15 @@ export interface FindRoomAndJoin {
 export interface IChatService {
   getRecommendRoom(id: number): Promise<RoomEntity | FindRoomAndJoin>;
 
+  joinRoom(user: UserEntity, roomId: number): Promise<void>;
+
   leaveRoom(headers: IncomingHttpHeaders): Promise<LeaveRoom>;
 
-  makeAndSaveChat(headers: IncomingHttpHeaders, message: string): Promise<Chat[]>;
+  checkDeleteRoom(headers: IncomingHttpHeaders): Promise<void>;
 
   findUserAndRoom(userId: number, roomId: number): Promise<UserAndRoom>;
 
-  getIdsFromHeader(headers: IncomingHttpHeaders): number[];
-
-  joinRoom(user: UserEntity, roomId: number): Promise<void>;
+  makeAndSaveChat(headers: IncomingHttpHeaders, message: string): Promise<Chat[]>;
 
   createChatResponse(chatId: number, username: string, message: string, isOwner: boolean): Chat;
 
@@ -49,4 +49,6 @@ export interface IChatService {
   emitMemberCountEvent(server: Server, auth: HandShakeAuth): Promise<void>;
 
   emitEnterOrExitEvent(server: Server, username: string, type: 'enter' | 'exit'): void;
+
+  getIdsFromHeader(headers: IncomingHttpHeaders): number[];
 }
