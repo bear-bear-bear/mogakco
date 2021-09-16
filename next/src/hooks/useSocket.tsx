@@ -10,8 +10,8 @@ export default function useSocket() {
   const { query } = useRouter();
 
   useEffect(() => {
-    const serverUrl = getServerUrl('socket');
-    const client = io(serverUrl, {
+    const uri = `${getServerUrl()}/chat`;
+    const client = io(uri, {
       auth: {
         'user-id': user?.id,
         'room-id': query.id,

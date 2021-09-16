@@ -44,13 +44,12 @@ export const logAxiosError = (axiosError: GeneralAxiosError) => {
   log.debug('Axios config:', config);
 };
 
-const baseURL = getServerUrl('http');
 /**
  * @desc api 요청 클라이언트
  */
 
 const apiClient = axios.create({
-  baseURL,
+  baseURL: getServerUrl(),
   withCredentials: true,
 });
 
