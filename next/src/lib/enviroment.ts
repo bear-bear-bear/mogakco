@@ -7,8 +7,8 @@ export const isProduction = process.env.NODE_ENV === 'production';
  * @param mode 채팅 서버인 지, http 서버인 지 판별
  */
 export const getServerUrl = (): string => {
-  if (process.env.NODE_ENV === 'development') {
-    return `${process.env.NEXT_PUBLIC_LOCALHOST_SERVER_URL}`;
+  if (process.env.NODE_ENV === 'test') {
+    return `${process.env.NEXT_PUBLIC_TEST_SERVER_URL}`; // .env.production
   }
-  return `${process.env.NEXT_PUBLIC_SERVER_URL}`;
+  return `${process.env.NEXT_PUBLIC_SERVER_URL}`; // .env.development
 };
