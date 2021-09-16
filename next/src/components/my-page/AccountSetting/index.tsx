@@ -47,13 +47,14 @@ const AccountSetting = ({
     [defaultValues, isValid, watchedFields],
   );
 
-  const handleFormSubmit = (info: ChangableInfo) => {
-    console.log('submit');
-    // TODO: 유저 정보 저장 요청 (PUT)
-  };
+  const handleAccountDeleteButtonClick = () => {};
   const handleSaveButtonClick = () => {
     if (!isSubmittable()) return;
     hiddenSubmitButtonEl.current?.click();
+  };
+  const handleFormSubmit = (info: ChangableInfo) => {
+    console.log('submit');
+    // TODO: 유저 정보 저장 요청 (PUT)
   };
 
   useEffect(() => {
@@ -116,6 +117,16 @@ const AccountSetting = ({
           setIds={setSkillIds}
           defaultValue={toSelectOptions(skills)}
         />
+
+        <S.DevideTextLine />
+        <Button
+          color="red"
+          outline
+          fullWidth
+          onClick={handleAccountDeleteButtonClick}
+        >
+          계정 삭제
+        </Button>
 
         <S.HiddenButton ref={hiddenSubmitButtonEl} type="submit" />
       </S.Form>
