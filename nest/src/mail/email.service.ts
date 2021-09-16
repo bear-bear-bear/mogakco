@@ -26,12 +26,11 @@ export default class EmailService {
   getUrl() {
     const mode = this.configService.get<string>('NODE_ENV');
     const port = this.configService.get<number>('SERVER_PORT');
+    const url = this.configService.get<string>('DOMAIN');
     if (mode === ServerEnviroment.TEST) {
-      const url = this.configService.get<string>('TEST_FRONTEND_URL');
       return `${url}:${port}`;
     }
     if (mode === ServerEnviroment.PROD) {
-      const url = this.configService.get<string>('PROD_FRONTEND_URL');
       return `${url}:${port}`;
     }
     return `http://localhost:${port}`;
@@ -44,7 +43,7 @@ export default class EmailService {
     await this.mailerService.sendMail({
       to: email,
       from: this.configService.get('EMAIL_ADMIN'),
-      subject: 'Mogakco forwards Autentication to your email 🥰',
+      subject: 'Mogakco forwards Authentication to your email 🥰',
       encoding: 'utf8',
       template: join(__dirname, 'assets', 'user-verify'),
       context: {
