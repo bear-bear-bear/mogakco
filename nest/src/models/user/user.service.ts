@@ -1,4 +1,4 @@
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import UserFieldEntity from '@models/user/entities/user-field.entity';
 import UserJobEntity from '@models/user/entities/users-job.entity';
@@ -30,10 +30,8 @@ class UserService {
   /**
    * @return 분야정보 리스트를 반환합니다.
    */
-  async findAllFields(userId: number): Promise<UserFieldEntity[] | null> {
-    const user = await this.userRepository.findOne({ id: userId });
-    if (!user) throw new InternalServerErrorException('유저 정보를 불러올 수 없습니다.');
-    const fields = await this.userRepository.getUserFields(user.skills);
+  async findAllFields(): Promise<UserFieldEntity[] | null> {
+    const fields = await this.fieldRepository.find({ select: ['id', 'name'] });
     return fields;
   }
 
@@ -41,7 +39,7 @@ class UserService {
    * @return 직업정보 리스트를 반환합니다.
    */
   async findAllJobs(): Promise<UserJobEntity[]> {
-    const jobList = await this.jobRepository.find();
+    const jobList = await this.jobRepository.find({ select: ['id', 'name'] });
     return jobList;
   }
 }
