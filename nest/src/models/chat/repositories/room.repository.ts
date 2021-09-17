@@ -75,12 +75,13 @@ export default class RoomRepository extends Repository<RoomEntity> {
         ` 
         SELECT *
         FROM rooms
-        WHERE skills
+        WHERE deleted_at IS NULL
+        AND skills
         LIKE ('%${tempSkills[randomIndex]}%');
       `,
       );
       if (findRoom.length !== 0) {
-        return findRoom;
+        return findRoom[0];
       } else {
         tempSkills.splice(randomIndex, 1);
       }
