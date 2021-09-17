@@ -33,8 +33,6 @@ const AccountSetting = ({
   skillOptions,
   jobOptions,
 }: AccountSettingProps) => {
-  // FIXME: 새로고침마다 2~3회의 렌더링 발생 중
-  console.log('렌더링');
   const initialRequiredFields: RequiredFields = useMemo(
     () => ({
       username,
@@ -80,17 +78,6 @@ const AccountSetting = ({
     const isRequiredFieldsChanged = () =>
       !_.isEqual(initialRequiredFields, watchedRequiredFields);
 
-    console.log('검사', new Date().getSeconds());
-    console.log({
-      initialOptionalFieldsValue,
-      currOptionalFieldsValue,
-    });
-    console.log({
-      isRequiredFieldsValid,
-      isOptionalFieldsChanged: isOptionalFieldsChanged(),
-      isRequiredFieldsChanged: isRequiredFieldsChanged(),
-    });
-
     return (
       isRequiredFieldsValid &&
       (isOptionalFieldsChanged() || isRequiredFieldsChanged())
@@ -132,7 +119,6 @@ const AccountSetting = ({
 
         <S.DevideTextLine>선택 정보</S.DevideTextLine>
 
-        {/* TODO: select option 정상 렌더링 되는지 확인 */}
         <JobSelectSection
           options={jobOptions}
           setId={setJobId}
@@ -174,4 +160,4 @@ const AccountSetting = ({
   );
 };
 
-export default AccountSetting;
+export default React.memo(AccountSetting);
