@@ -1,16 +1,18 @@
 import { INestApplication } from '@nestjs/common';
 import request from 'supertest';
-import { ISimpleItemProps } from '@test/type/mock-data-type';
 import getTestAppModule from '@test/e2e/helper/module';
+import { GetSelectableProps } from '@models/user/interface/controller';
 
-const validateSimpleItemProps = (
-  item: ISimpleItemProps & { createdAt: string; updatedAt: string },
-) => {
-  expect(item).toBeTruthy();
-  expect(item).toHaveProperty('id');
-  expect(item).toHaveProperty('name');
-  expect(item).toHaveProperty('createdAt');
-  expect(item).toHaveProperty('updatedAt');
+const validateSimpleItemProps = (item: GetSelectableProps) => {
+  const { statusCode, message, list } = item;
+  expect(typeof message).toBe('string');
+  expect(typeof statusCode).toBe('number');
+  if (list === null) {
+    expect(list).toBeNull();
+  } else {
+    expect(list[0]).toHaveProperty('id');
+    expect(list[0]).toHaveProperty('name');
+  }
 };
 
 describe('사용자 관련 데이터 테스트', () => {
@@ -20,19 +22,19 @@ describe('사용자 관련 데이터 테스트', () => {
     app = await getTestAppModule();
   });
 
+  afterAll(async () => {
+    await app.close();
+  });
+
   it.skip('GET /api/users/skills - 희망 분야 리스트 불러오기 Api', async () => {
     await request(app.getHttpServer())
       .get('/api/user/skills')
-      .then(({ body: fields }) => validateSimpleItemProps(fields[0]));
+      .then(({ body: fields }) => validateSimpleItemProps(fields));
   });
 
   it.skip('GET /api/user/jobs - 직업 목록 리스트 불러오기 Api', async () => {
     await request(app.getHttpServer())
       .get('/api/user/jobs')
-      .then(({ body: jobs }) => validateSimpleItemProps(jobs[0]));
-  });
-
-  afterAll(async () => {
-    await app.close();
+      .then(({ body: jobs }) => validateSimpleItemProps(jobs));
   });
 });
