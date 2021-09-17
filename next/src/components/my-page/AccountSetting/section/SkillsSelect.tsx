@@ -11,7 +11,7 @@ const SKILLS_LIMIT = 5;
 interface Props {
   options: SelectProps[];
   setIds: React.Dispatch<React.SetStateAction<string[] | null>>;
-  defaultValue: SelectProps[]; // For use in my-page/account-setting
+  defaultValue: SelectProps[];
 }
 type Skills = ValueType<SelectProps, true> | null;
 

@@ -12,10 +12,10 @@ import Button from '@components/common/Button';
 import toSelectOptions from '@lib/toSelectOptions';
 import token from '@lib/token';
 import { logAxiosError } from '@lib/apiClient';
-import { deleteAccountApi } from '@lib/apis';
+import { deleteAccountApi, editAccountApi } from '@lib/apis';
 import type { UserMutator } from '@hooks/useUser';
 import type { IOptionalPageProps as SelectsOptions } from '@pages/sign-up/optional';
-import type { IUserInfo } from 'typings/auth';
+import type { IAccountEditProps, IUserInfo } from 'typings/auth';
 import type { GeneralAxiosError } from 'typings/common';
 
 import UsernameSection from './section/Username';
@@ -40,20 +40,16 @@ const AccountSetting = ({
   skillOptions,
   jobOptions,
 }: AccountSettingProps) => {
-  const initialRequiredFields: RequiredFields = useMemo(
-    () => ({
+  const [initialRequiredFields, setInitialRequiredFields] =
+    useState<RequiredFields>({
       username,
       email,
-    }),
-    [email, username],
-  );
-  const initialOptionalFieldsValue: OptionalFieldsValue = useMemo(
-    () => ({
-      skills: skills?.map((skill) => skill.id.toString()) || null,
-      job: job?.id?.toString() || null,
-    }),
-    [skills, job],
-  );
+    });
+  const [initialOptionalFieldsValue, setInitialOptionalFieldsValue] =
+    useState<OptionalFieldsValue>({
+      skills: skills && skills.map((skill) => skill.id.toString()),
+      job: job && job.id.toString(),
+    });
 
   const [skillIds, setSkillIds] = useState<string[] | null>(
     initialOptionalFieldsValue.skills,
@@ -61,6 +57,7 @@ const AccountSetting = ({
   const [jobId, setJobId] = useState<string | null>(
     initialOptionalFieldsValue.job,
   );
+
   const hiddenSubmitButtonEl = useRef<HTMLButtonElement>(null);
   const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(true);
   const {
@@ -113,9 +110,36 @@ const AccountSetting = ({
     if (!isSubmittable()) return;
     hiddenSubmitButtonEl.current?.click();
   };
-  const handleFormSubmit = (info: RequiredFields) => {
-    alert('submit');
-    // TODO: 유저 정보 저장 요청 (PUT)
+  const handleFormSubmit = async (requiredFields: RequiredFields) => {
+    const requestBody: IAccountEditProps = {
+      email: requiredFields.email,
+      username: requiredFields.username,
+      skills: skillIds && skillIds?.map((skillIdStr) => Number(skillIdStr)),
+      job: jobId ? Number(jobId) : null,
+    };
+
+    try {
+      const edittedUser = await editAccountApi(requestBody);
+
+      setInitialRequiredFields({
+        email: edittedUser.email,
+        username: edittedUser.username,
+      });
+      setInitialOptionalFieldsValue({
+        skills:
+          edittedUser.skills &&
+          edittedUser.skills.map((skill) => skill.id.toString()),
+        job: edittedUser.job && edittedUser.job.id.toString(),
+      });
+
+      console.log({
+        edittedUser,
+        initialRequiredFields,
+        initialOptionalFieldsValue,
+      });
+    } catch (err) {
+      logAxiosError(err as GeneralAxiosError);
+    }
   };
 
   useEffect(() => {

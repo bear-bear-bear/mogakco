@@ -7,6 +7,8 @@ import type {
   IOptionalPropsResponse,
   IAuthSuccessResponse,
   IGetChatRoomProps,
+  IAccountEditProps,
+  IUserInfo,
 } from 'typings/auth';
 import { IncomingHttpHeaders } from 'http';
 
@@ -49,6 +51,11 @@ export const authProlongTestApi = () =>
     .catch(() => {
       window.alert('로그인 연장 실패, 로그를 확인해주세요.');
     });
+
+// 유저 정보 수정
+// TODO: nest API 추가시 axios > apiClient로 변경하기
+export const editAccountApi = (data: IAccountEditProps) =>
+  axios.put<IUserInfo>(`/api/user`, data).then((res) => res.data);
 
 // 계정 삭제
 // TODO: nest API 추가시 axios > apiClient로 변경하기
