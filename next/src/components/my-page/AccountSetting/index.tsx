@@ -10,8 +10,13 @@ import _ from 'lodash';
 
 import Button from '@components/common/Button';
 import toSelectOptions from '@lib/toSelectOptions';
+import token from '@lib/token';
+import { logAxiosError } from '@lib/apiClient';
+import { deleteAccountApi } from '@lib/apis';
+import type { UserMutator } from '@hooks/useUser';
 import type { IOptionalPageProps as SelectsOptions } from '@pages/sign-up/optional';
 import type { IUserInfo } from 'typings/auth';
+import type { GeneralAxiosError } from 'typings/common';
 
 import UsernameSection from './section/Username';
 import EmailSection from './section/Email';
@@ -19,9 +24,10 @@ import JobSelectSection from './section/JobSelect';
 import SkillsSelectSection from './section/SkillsSelect';
 import * as S from './style';
 
-interface AccountSettingProps extends SelectsOptions {
+interface AccountSettingProps extends UserMutator, SelectsOptions {
   user: IUserInfo;
 }
+
 type RequiredFields = Pick<IUserInfo, 'username' | 'email'>;
 type OptionalFieldsValue = {
   skills: string[] | null;
@@ -30,6 +36,7 @@ type OptionalFieldsValue = {
 
 const AccountSetting = ({
   user: { id, skills, job, username, email },
+  mutateUser,
   skillOptions,
   jobOptions,
 }: AccountSettingProps) => {
@@ -91,10 +98,17 @@ const AccountSetting = ({
     watchedRequiredFields,
   ]);
 
-  const handleAccountDeleteButtonClick = () => {
-    alert('유저 삭제 미구현');
-    // TODO: 유저 삭제 요청 (DELETE))
+  const handleAccountDeleteButtonClick = async () => {
+    // TODO: 모달 추가 후 '정말로 삭제하시겠습니까?' 추가
+    try {
+      await deleteAccountApi(id);
+      mutateUser({ isLoggedIn: false });
+      token.delete();
+    } catch (err) {
+      logAxiosError(err as GeneralAxiosError);
+    }
   };
+
   const handleSaveButtonClick = () => {
     if (!isSubmittable()) return;
     hiddenSubmitButtonEl.current?.click();

@@ -18,8 +18,8 @@ export const pageProps = {
 };
 
 const MyPageAccountSetting = (props: SelectsOptions) => {
-  // const { user } = useUser({ redirectTo: '/' });
-  const { user } = useUser();
+  // const { user, mutateUser } = useUser({ redirectTo: '/' });
+  const { user, mutateUser } = useUser();
 
   if (!user?.isLoggedIn) return null;
   return (
@@ -28,7 +28,11 @@ const MyPageAccountSetting = (props: SelectsOptions) => {
       <ServiceHeader />
       <Container>
         <Aside />
-        <AccountSetting user={user as IUserInfo} {...props} />
+        <AccountSetting
+          user={user as IUserInfo}
+          mutateUser={mutateUser}
+          {...props}
+        />
       </Container>
     </>
   );
