@@ -6,9 +6,8 @@ import CustomHead from '@components/common/CustomHead';
 import AuthContainer from '@components/common/AuthContainer';
 import ProgressBar from '@components/sign-up/ProgressBar';
 import Optional from '@components/sign-up/Optional';
-import apiClient, { logAxiosError } from '@lib/apiClient';
 import toSelectOptions from '@lib/toSelectOptions';
-import { IOptionalProps } from 'typings/auth';
+import { loadJobsApi, loadSkillsApi } from '@lib/apis';
 
 const pageProps = {
   title: '회원가입 - Mogakco',
@@ -40,20 +39,9 @@ const SignUpOptional = (props: IOptionalPageProps) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async () => {
-  const getJobsAPI = '/api/user/jobs';
-  const getSkillsAPI = '/api/user/skills';
-  const optionalInfoListApi = (url: string) =>
-    apiClient
-      .get<IOptionalProps[] | null>(url)
-      .then((res) => res.data)
-      .catch((err) => {
-        logAxiosError(err);
-        return null;
-      });
-
   const [skills, jobs] = await Promise.all([
-    optionalInfoListApi(getJobsAPI),
-    optionalInfoListApi(getSkillsAPI),
+    loadSkillsApi(),
+    loadJobsApi(),
   ]).then((fetchResults) => fetchResults);
 
   return {

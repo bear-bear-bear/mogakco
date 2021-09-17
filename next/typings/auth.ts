@@ -55,7 +55,13 @@ export interface IOptionalProps {
   createdAt: Date;
   updatedAt: Date;
 }
+export interface IOptionalPropsResponse extends IGeneralServerResponse {
+  list: IOptionalProps[] | null;
+}
 
+/**
+ * 회원가입 optional 페이지에서 서버로부터 받는 선택 옵션들의 타입
+ */
 export interface IGetChatRoomProps extends IGeneralServerResponse {
   roomId: number;
 }
