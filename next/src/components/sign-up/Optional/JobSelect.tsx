@@ -14,7 +14,7 @@ type Job = ValueType<SelectProps, false> | null;
 
 const JobSelect = ({ options, setId, defaultValue }: JobSelectProps) => {
   // react-select 에서 onChange 는 해당 Select 에서 선택되어 있는 현재 데이터를 반환합니다.
-  const onChangeJob = (job: Job) => setId(job?.label || null);
+  const onChangeJob = (job: Job) => setId(job?.value || null);
 
   return (
     <InputWrapper>
