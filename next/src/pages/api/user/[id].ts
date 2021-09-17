@@ -15,9 +15,9 @@ const handler = (req: NextApiRequest, res: NextApiResponse) => {
   console.log(`${id}번 계정을 가짜로 삭제하지롱`);
 
   res.setHeader('Set-Cookie', `${REFRESH_TOKEN}=; path=/; expires=-1`);
-  res.status(200).json({
+  res.status(204).json({
     message: '계정이 성공적으로 삭제되었습니다.',
-    statusCode: 200,
+    statusCode: 204,
   });
 };
 

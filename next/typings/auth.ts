@@ -20,6 +20,16 @@ export interface ISignUpProps {
 }
 
 /**
+ * 유저 정보 수정 요청 데이터 타입, 응답 데이터 타입
+ */
+export interface IAccountEditProps {
+  email: string;
+  username: string;
+  skills: number[] | null;
+  job: number | null;
+}
+
+/**
  * 회원가입/로그인/액세스토큰연장 성공 응답 스키마
  */
 export interface IAuthSuccessResponse extends IGeneralServerResponse {
@@ -52,8 +62,6 @@ export interface IUserGetResponse extends Partial<IUserInfo> {
 export interface IOptionalProps {
   id: number;
   name: string;
-  createdAt: Date;
-  updatedAt: Date;
 }
 export interface IOptionalPropsResponse extends IGeneralServerResponse {
   list: IOptionalProps[] | null;
