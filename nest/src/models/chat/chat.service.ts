@@ -106,15 +106,15 @@ export default class ChatService implements IChatService {
   /**
    * @desc 채팅을 만들고, DB 저장 후 반환합니다.
    */
-  async makeAndSaveChat(headers: IncomingHttpHeaders, message: string): Promise<Chat[]> {
+  async makeAndSaveChat(headers: IncomingHttpHeaders, message: string): Promise<Chat> {
     const [userId, roomId] = this.getIdsFromHeader(headers);
     const { user, room } = await this.findUserAndRoom(userId, roomId);
     if (!(user && room)) throw new InternalServerErrorException();
-    const { username } = await this.findOrCreateAnonymousName(headers);
+    const {
+      anonymousUser: { username },
+    } = await this.findOrCreateAnonymousName(headers);
     const { id: chatId } = await this.chatRepository.createChat(user, room, message);
-    const globalChat = this.createChatResponse(chatId, username, message, false);
-    const myChat = this.createChatResponse(chatId, username, message, true);
-    return [globalChat, myChat];
+    return this.createChatResponse(chatId, user.id, username, message);
   }
 
   /**
@@ -158,21 +158,14 @@ export default class ChatService implements IChatService {
   /**
    * @desc 채팅 응답 객체를 생성합니다.
    */
-  createChatResponse(chatId: number, username: string, message: string, isOwner: boolean): Chat {
+  createChatResponse(chatId: number, ownerId: number, username: string, message: string): Chat {
     return {
       id: chatId,
+      ownerId,
       username,
       message,
-      type: isOwner ? 'my-chat' : 'chat',
+      type: 'chat',
     };
-  }
-
-  /**
-   * @desc 채팅 이벤트를 emit 합니다.
-   */
-  emitChatEvent(client: Socket, globalChat: Chat, ownChat: Chat): void {
-    client.broadcast.emit('chat', globalChat);
-    client.emit('chat', ownChat);
   }
 
   /**
