@@ -51,6 +51,7 @@ export default class ChatService implements IChatService {
       };
     }
 
+    // FIX ME: strictRoom 동작 안함 확인
     const strictRoom = await this.roomRepository.getRoomStrictEqualSkills(user.skills);
     if (strictRoom) return strictRoom;
 
@@ -64,18 +65,32 @@ export default class ChatService implements IChatService {
     };
   }
 
+  async checkDeleteRoom(headers: IncomingHttpHeaders): Promise<void> {
+    const [, roomId] = this.getIdsFromHeader(headers);
+    const room = await this.roomRepository.findOne(
+      { id: roomId },
+      {
+        relations: ['ownerId'],
+      },
+    );
+    const userCount = await this.roomUserRepository.count({
+      where: {
+        roomId,
+      },
+    });
+    if (userCount === 0) {
+      this.logger.log(`${room?.ownerId.username} 가 방장인 ${room?.id} 번 방을 제거하였습니다.`);
+      await room?.softRemove();
+    }
+  }
+
   /**
    * @desc 익명 이름을 생성하여 반환합니다.
    */
   async findOrCreateAnonymousName(headers: IncomingHttpHeaders) {
-    try {
-      const [userId, roomId] = this.getIdsFromHeader(headers);
-      const anonymousName = await this.anonymousRoomUserRepository.findOrCreate(userId, roomId);
-      return anonymousName;
-    } catch (e) {
-      this.logger.error(e);
-      throw new InternalServerErrorException();
-    }
+    const [userId, roomId] = this.getIdsFromHeader(headers);
+    const anonymousName = await this.anonymousRoomUserRepository.findOrCreate(userId, roomId);
+    return anonymousName;
   }
 
   /**
