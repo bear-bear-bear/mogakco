@@ -9,7 +9,10 @@ export default class AnonymousRoomUserRepository extends Repository<AnonymousRoo
   /**
    * @desc 익명 이름을 찾거나 생성합니다.
    */
-  async findOrCreate(userId: number, roomId: number): Promise<AnonymousRoomUserEntity> {
+  async findOrCreate(
+    userId: number,
+    roomId: number,
+  ): Promise<{ anonymousUser: AnonymousRoomUserEntity; isCreated: boolean }> {
     const user = await getManager().findOne(UserEntity, { id: userId });
     if (!user) throw new BadRequestException('사용자가 존재하지 않습니다.');
     const room = await getManager().findOne(RoomEntity, { id: roomId });
@@ -25,10 +28,30 @@ export default class AnonymousRoomUserRepository extends Repository<AnonymousRoo
         username: this.createAnonymousName(),
       });
       await newAnonymousName.save();
-      return newAnonymousName;
+      return {
+        anonymousUser: newAnonymousName,
+        isCreated: true,
+      };
     }
 
-    return prevAnonymousName;
+    return {
+      anonymousUser: prevAnonymousName,
+      isCreated: false,
+    };
+  }
+
+  /**
+   * @desc 익명이름이 존재하는 지 여부를 반환합니다.
+   */
+  async isPrevAnonymousUser(userId: number): Promise<boolean> {
+    const anonymousUser = await this.findOne({
+      where: {
+        user: userId,
+      },
+      select: ['id'],
+    });
+    if (!anonymousUser) return false;
+    return true;
   }
 
   /**
