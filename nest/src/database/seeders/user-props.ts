@@ -14,12 +14,22 @@ export default class CreateUserProps implements Seeder {
   async run(factory: Factory) {
     await factory(UserJobEntity)().createMany(jobDataLength);
     await factory(UserFieldEntity)().createMany(fieldDataLength);
+    const email = process.env.EMAIL_ADMIN as string;
+    const skills = await getRandomFieldList();
+    const job = await getRandomJob();
     await getCustomRepository(UserRepository).createUserOne({
       username: 'mogauser',
       password: await makeHash('mogapass'),
-      email: process.env.EMAIL_ADMIN as string,
-      skills: await getRandomFieldList(),
-      job: await getRandomJob(),
+      email,
+      skills,
+      job,
+    });
+    await getCustomRepository(UserRepository).createUserOne({
+      username: 'mogauser2',
+      password: await makeHash('mogapass'),
+      email: `${email}a`,
+      skills,
+      job,
     });
     await factory(UserEntity)()
       .map(async ({ username, email, password: plain }: UserEntity): Promise<UserEntity> => {

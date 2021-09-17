@@ -4,6 +4,7 @@ import { BaseEntitySoftDelete } from '@common/helpers/entity.helper';
 import RoomUserEntity from '@models/chat/entities/room-user.entity';
 import UserJobEntity from './users-job.entity';
 import AnonymousRoomUserEntity from '@models/chat/entities/anonymous-room-user.entity';
+import RoomEntity from '@models/chat/entities/room.entity';
 
 @Entity({
   name: 'users',
@@ -35,6 +36,9 @@ class UserEntity extends BaseEntitySoftDelete {
 
   @OneToMany(() => AnonymousRoomUserEntity, anonymous => anonymous.user)
   anonymousUser!: AnonymousRoomUserEntity[];
+
+  @OneToMany(() => RoomEntity, room => room.ownerId)
+  room!: RoomEntity[];
 }
 
 export default UserEntity;

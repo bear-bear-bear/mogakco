@@ -3,6 +3,7 @@ import {
   Controller,
   Get,
   HttpStatus,
+  Logger,
   Param,
   ParseIntPipe,
   Req,
@@ -25,6 +26,8 @@ import UserEntity from '@models/user/entities/user.entity';
 
 @Controller('chat')
 export default class ChatController implements IChatController {
+  private readonly logger = new Logger('ChatController');
+
   constructor(
     private readonly chatService: ChatService,
     private readonly userService: UserService,
@@ -47,6 +50,7 @@ export default class ChatController implements IChatController {
 
     if ('isCreated' in roomItem) {
       res.status(HttpStatus.CREATED);
+      this.logger.log(`${roomItem.room.id} 방을 생성하였습니다.`);
       return {
         statusCode: HttpStatus.CREATED,
         roomId: roomItem.room.id,
@@ -54,6 +58,7 @@ export default class ChatController implements IChatController {
       };
     }
     res.status(HttpStatus.OK);
+    this.logger.log(`${roomItem.id} 방을 찾았습니다.`);
     return {
       statusCode: HttpStatus.OK,
       roomId: roomItem.id,
