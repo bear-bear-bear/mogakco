@@ -1,7 +1,7 @@
 import { IncomingHttpHeaders } from 'http';
 import UserEntity from '@models/user/entities/user.entity';
 import RoomEntity from '@models/chat/entities/room.entity';
-import { Server, Socket } from 'socket.io';
+import { Server } from 'socket.io';
 
 export interface LeaveRoom {
   username: string;
@@ -10,9 +10,10 @@ export interface LeaveRoom {
 
 export interface Chat {
   id: number;
+  ownerId: number;
   username: string;
   message: string;
-  type: 'my-chat' | 'chat';
+  type: 'chat';
 }
 
 export interface UserAndRoom {
@@ -40,11 +41,9 @@ export interface IChatService {
 
   findUserAndRoom(userId: number, roomId: number): Promise<UserAndRoom>;
 
-  makeAndSaveChat(headers: IncomingHttpHeaders, message: string): Promise<Chat[]>;
+  makeAndSaveChat(headers: IncomingHttpHeaders, message: string): Promise<Chat>;
 
-  createChatResponse(chatId: number, username: string, message: string, isOwner: boolean): Chat;
-
-  emitChatEvent(client: Socket, globalChat: Chat, ownChat: Chat): void;
+  createChatResponse(chatId: number, ownerId: number, username: string, message: string): Chat;
 
   emitMemberCountEvent(server: Server, auth: HandShakeAuth): Promise<void>;
 

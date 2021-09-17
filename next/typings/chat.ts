@@ -12,9 +12,10 @@ export interface ChatAnnouncement {
 
 export interface ChatMessage {
   id: number;
+  ownerId: number;
   username: string;
   message: string;
-  type: 'my-chat' | 'chat';
+  type: 'chat';
 }
 
 export interface ChatFile {

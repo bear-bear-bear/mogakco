@@ -12,7 +12,6 @@ import token from '@lib/token';
 import { useRouter } from 'next/router';
 import useSocket from '@hooks/useSocket';
 import { createContext, useEffect } from 'react';
-import type { IUserInfo } from 'typings/auth';
 import { Socket } from 'socket.io-client';
 
 const pageProps = {
@@ -30,17 +29,15 @@ const ChatRoom = () => {
   const client = useSocket();
 
   useEffect(() => {
-    if (!client || !user?.isLoggedIn) return;
-
-    const { id: userId } = user as IUserInfo;
-
-    const props = {
-      userId,
-      roomId: String(router.query.id),
+    client?.on('check-multiple-user', (id: number) => {
+      if (user?.id === id) {
+        router.push('/dashboard');
+      }
+    });
+    return () => {
+      client?.off('check-multiple-user');
     };
-
-    client.emit('join-room', props);
-  }, [router.query.id, client, user]);
+  }, [client, router, user?.id]);
 
   useEffect(() => {
     return () => {
