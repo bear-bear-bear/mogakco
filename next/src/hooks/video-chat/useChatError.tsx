@@ -2,6 +2,7 @@ import { Socket } from 'socket.io-client';
 import useUser from '@hooks/useUser';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
+import devModeLog from '@lib/devModeLog';
 
 export default function useChatError(client: Socket | null) {
   const { user } = useUser({ redirectTo: '/' });
@@ -14,6 +15,7 @@ export default function useChatError(client: Socket | null) {
       }
     });
     client?.on('connect_error', (err) => {
+      devModeLog(err.message);
       router.push('/dashboard');
     });
 
