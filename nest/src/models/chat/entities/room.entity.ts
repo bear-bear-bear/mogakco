@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, OneToMany, OneToOne } from 'typeorm';
+import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
 import UserEntity from '@models/user/entities/user.entity';
 import { BaseEntitySoftDelete } from '@common/helpers/entity.helper';
 import RoomUserEntity from './room-user.entity';
@@ -8,8 +8,7 @@ import AnonymousRoomUserEntity from '@models/chat/entities/anonymous-room-user.e
   name: 'rooms',
 })
 export default class RoomEntity extends BaseEntitySoftDelete {
-  @OneToOne(() => UserEntity)
-  @JoinColumn({ name: 'owner_id', referencedColumnName: 'id' })
+  @ManyToOne(() => UserEntity, user => user.room)
   ownerId!: UserEntity;
 
   @Column({ nullable: true, type: 'simple-array' })
