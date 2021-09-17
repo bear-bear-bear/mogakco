@@ -19,7 +19,7 @@ import {
 } from '@models/chat/interface/service';
 import ChatRepository from '@models/chat/repositories/chat.repository';
 import AnonymousRoomUserRepository from '@models/chat/repositories/anonymous-room-user.repository';
-import { Server, Socket } from 'socket.io';
+import { Server } from 'socket.io';
 import { v1 as uuid } from 'uuid';
 import RoomEntity from '@models/chat/entities/room.entity';
 

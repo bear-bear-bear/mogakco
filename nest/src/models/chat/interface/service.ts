@@ -1,7 +1,7 @@
 import { IncomingHttpHeaders } from 'http';
 import UserEntity from '@models/user/entities/user.entity';
 import RoomEntity from '@models/chat/entities/room.entity';
-import { Server, Socket } from 'socket.io';
+import { Server } from 'socket.io';
 
 export interface LeaveRoom {
   username: string;
