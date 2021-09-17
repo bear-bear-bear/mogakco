@@ -26,13 +26,13 @@ describe('사용자 관련 데이터 테스트', () => {
     await app.close();
   });
 
-  it.skip('GET /api/users/skills - 희망 분야 리스트 불러오기 Api', async () => {
+  it('GET /api/users/skills - 희망 분야 리스트 불러오기 Api', async () => {
     await request(app.getHttpServer())
       .get('/api/user/skills')
       .then(({ body: fields }) => validateSimpleItemProps(fields));
   });
 
-  it.skip('GET /api/user/jobs - 직업 목록 리스트 불러오기 Api', async () => {
+  it('GET /api/user/jobs - 직업 목록 리스트 불러오기 Api', async () => {
     await request(app.getHttpServer())
       .get('/api/user/jobs')
       .then(({ body: jobs }) => validateSimpleItemProps(jobs));
