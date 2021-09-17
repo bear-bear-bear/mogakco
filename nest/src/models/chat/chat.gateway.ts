@@ -51,11 +51,10 @@ export default class ChatGateway implements IChatGateway, OnGatewayConnection, O
     const { username } = await this.chatService.findOrCreateAnonymousName(auth);
     await this.anonymousRoomUserRepository.deleteName(username);
     this.chatService.emitEnterOrExitEvent(this.server, username, 'exit');
-    await this.chatService.checkDeleteRoom(auth);
-    await this.chatService.emitMemberCountEvent(this.server, auth);
-
     this.logger.log(`${username} 유저가 ${roomId} 방에서 퇴장하였습니다.`);
     this.logger.debug(`client ${client.conn.id} disconnected`);
+    await this.chatService.checkDeleteRoom(auth);
+    await this.chatService.emitMemberCountEvent(this.server, auth);
   }
 
   @SubscribeMessage('join-room')
