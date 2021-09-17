@@ -30,6 +30,8 @@ export interface FindRoomAndJoin {
   isCreated: boolean;
 }
 
+export type AuthProp = string | undefined;
+
 export interface IChatService {
   getRecommendRoom(id: number): Promise<RoomEntity | FindRoomAndJoin>;
 
@@ -50,4 +52,6 @@ export interface IChatService {
   emitEnterOrExitEvent(server: Server, username: string, type: 'enter' | 'exit'): void;
 
   getIdsFromHeader(headers: IncomingHttpHeaders): number[];
+
+  validateAuth(auth: HandShakeAuth): boolean;
 }
