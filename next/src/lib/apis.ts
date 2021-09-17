@@ -3,12 +3,11 @@ import type { IGeneralServerResponse } from 'typings/common';
 import type {
   ISignInProps,
   ISignUpProps,
-  IOptionalProps,
+  IOptionalPropsResponse,
   IAuthSuccessResponse,
   IGetChatRoomProps,
 } from 'typings/auth';
 import { IncomingHttpHeaders } from 'http';
-import devModeLog from '@lib/devModeLog';
 
 // TODO: 각 API 사용 시 res.data와 catch err 반복 제거해보기
 
@@ -66,10 +65,22 @@ export const verifyEmailApi = (email: string) =>
   );
 // 개발 분야 목록 불러오기
 export const loadSkillsApi = () =>
-  apiClient.get<IOptionalProps>(`/api/user/skills`);
+  apiClient
+    .get<IOptionalPropsResponse>(`/api/user/skills`)
+    .then((res) => res.data.list)
+    .catch((err) => {
+      logAxiosError(err);
+      return null;
+    });
 // 직업 목록 불러오기
 export const loadJobsApi = () =>
-  apiClient.get<IOptionalProps>(`/api/user/jobs`);
+  apiClient
+    .get<IOptionalPropsResponse>(`/api/user/jobs`)
+    .then((res) => res.data.list)
+    .catch((err) => {
+      logAxiosError(err);
+      return null;
+    });
 
 // ********************************************************************************************************************
 // chat
