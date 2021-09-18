@@ -191,7 +191,6 @@ export default class AuthController {
   /**
    * @redirect 이메일 인증 검증 여부와 함께 회원가입 페이지로 리다이렉션한다.
    */
-  // TODO: Domain ( Production )
   @BeforeRegisterSwagger()
   @Get('/verify-email/before-register')
   async processVerifyEmail(
