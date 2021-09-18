@@ -12,6 +12,7 @@ import UserEntity from '@models/user/entities/user.entity';
 import UserService from '@models/user/user.service';
 import CreateUserDto from '@authentication/dto/create-user.dto';
 import AuthValidateService from '@authentication/auth-validate.service';
+import UserRolesRepository from '@models/user/repositories/user-roles.repository';
 
 @Injectable()
 export default class AuthService {
@@ -22,6 +23,7 @@ export default class AuthService {
     private jwtService: JwtService,
     private userVerifyRepository: UserVerifyRepository,
     private userRepository: UserRepository,
+    private userRoleRepository: UserRolesRepository,
   ) {}
 
   /**
@@ -98,6 +100,7 @@ export default class AuthService {
       skills,
       job: job ? job.id : null,
     } as CreateUserDto);
+    await this.userRoleRepository.createUserRoleWithJoinUser(user);
 
     const { id } = user;
     const { password: pw, hashedRefreshToken, ...userProps } = user;
