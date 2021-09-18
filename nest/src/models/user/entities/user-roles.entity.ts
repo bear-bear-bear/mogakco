@@ -21,5 +21,8 @@ export default class UserRolesEntity extends BaseEntitySoftDelete {
     nullable: false,
     onUpdate: 'CASCADE',
   })
-  role!: UserRolesEntity;
+  @JoinColumn({
+    name: 'role_id',
+  })
+  role!: RolesEntity;
 }
