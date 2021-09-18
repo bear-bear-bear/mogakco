@@ -3,48 +3,41 @@ import { Connection } from 'typeorm';
 import { getRandomFieldList, getRandomJob } from '@common/helpers/test.helper';
 import UserEntity from '@models/user/entities/user.entity';
 import makeHashHelper from '@common/helpers/make-hash.helper';
-import RolesEntity from '@models/user/entities/roles.entity';
-import UserRolesEntity from '@src/models/user/entities/user-roles.entity';
 import { ServerEnviroment } from '@common/helpers/enum.helper';
+import UserRolesRepository from '@models/user/repositories/user-roles.repository';
+import RolesRepository from '@models/user/repositories/roles.repository';
+import UserRepository from '@models/user/repositories/user.repository';
 
 /**
  * @desc mogauser, mogauser2 에게 일반 사용자 권한을 부여합니다.
  */
 async function setTestUserRoles(connection: Connection) {
-  const role = await connection
-    .createQueryBuilder()
-    .select()
-    .from(RolesEntity, 'roles')
-    .where('roles.name = :name', { name: '일반 사용자' })
-    .getOne();
+  const role = await connection.getCustomRepository(RolesRepository).findOne({
+    where: {
+      name: '일반 사용자',
+    },
+  });
 
+  const mogauser = await connection.getCustomRepository(UserRepository).findOne({
+    where: { username: 'mogauser' },
+  });
   await connection
-    .createQueryBuilder()
-    .insert()
-    .into(UserRolesEntity)
-    .values({
-      user: await connection
-        .createQueryBuilder()
-        .select()
-        .from(UserEntity, 'user')
-        .where('user.username = :username', { username: 'mogauser' })
-        .getOne(),
+    .getCustomRepository(UserRolesRepository)
+    .create({
+      user: mogauser,
       role,
-    });
-
+    })
+    .save();
+  const mogauser2 = await connection.getCustomRepository(UserRepository).findOne({
+    where: { username: 'mogauser2' },
+  });
   await connection
-    .createQueryBuilder()
-    .insert()
-    .into(UserRolesEntity)
-    .values({
-      user: await connection
-        .createQueryBuilder()
-        .select()
-        .from(UserEntity, 'user')
-        .where('user.username = :username', { username: 'mogauser2' })
-        .getOne(),
+    .getCustomRepository(UserRolesRepository)
+    .create({
+      user: mogauser2,
       role,
-    });
+    })
+    .save();
 }
 
 export default class TestUserSeed implements Seeder {
