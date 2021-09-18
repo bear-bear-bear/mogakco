@@ -1,4 +1,4 @@
-import React, { ComponentProps, VFC } from 'react';
+import React, { ComponentProps } from 'react';
 import ReactSelect from 'react-select';
 import makeAnimated from 'react-select/animated';
 

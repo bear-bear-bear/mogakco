@@ -12,7 +12,6 @@ import type { IOptionalPageProps as SelectsOptions } from '@pages/sign-up/option
 import type { IAccountEditProps, IUserInfo } from 'typings/auth';
 import type { GeneralAxiosError } from 'typings/common';
 
-import { cp } from 'fs/promises';
 import UsernameSection from './section/Username';
 import EmailSection from './section/Email';
 import JobSelectSection from './section/JobSelect';
