@@ -11,8 +11,8 @@ import ChatRepository from '@models/chat/repositories/chat.repository';
 import UserVerifyRepository from '@models/user/repositories/user-verify.repository';
 import AnonymousRoomUserRepository from '@models/chat/repositories/anonymous-room-user.repository';
 import ChatFileRepository from '@models/chat/repositories/chat-file.repository';
-import UserRolesRepository from '@models/chat/repositories/user-roles.repository';
-import RolesRepository from '@models/chat/repositories/roles.repository';
+import UserRolesRepository from '@src/models/user/repositories/user-roles.repository';
+import RolesRepository from '@models/user/repositories/roles.repository';
 
 function isLogging(): boolean {
   const mode = process.env.NODE_ENV;
@@ -37,7 +37,7 @@ function isSync(): boolean {
         username: configService.get<string>('DATABASE_USER'),
         password: configService.get<string>('DATABASE_PASSWORD'),
         database: configService.get<string>('DATABASE_NAME'),
-        synchronize: isSync(),
+        synchronize: false,
         logging: isLogging(),
         migrationsTableName: 'migrations',
         migrations: ['migrations/*.ts'],
