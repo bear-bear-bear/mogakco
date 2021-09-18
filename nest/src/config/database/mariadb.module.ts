@@ -19,11 +19,6 @@ function isLogging(): boolean {
   return mode === 'development';
 }
 
-function isSync(): boolean {
-  const mode = process.env.NODE_ENV;
-  return mode === ('development' || 'test');
-}
-
 @Global()
 @Module({
   imports: [
