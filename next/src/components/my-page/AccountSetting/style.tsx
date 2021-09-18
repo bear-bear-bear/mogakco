@@ -4,6 +4,7 @@ import _Form from '@components/common/Form';
 import media from '@globalStyles/media';
 
 const FOOTER_HEIGHT = '5rem';
+const PARENT_BREAKPOINT = media.lg;
 
 export const Main = styled.main`
   grid-area: main;
@@ -21,8 +22,8 @@ export const MainTitle = styled.h1`
 
 export const Form = styled(_Form)`
   position: relative;
-  // my-page Container의 breakpoint에 맞춤
-  ${media.lg} {
+
+  ${PARENT_BREAKPOINT} {
     max-width: 30rem;
   }
 `;
@@ -67,10 +68,18 @@ export const Footer = styled.footer`
   position: fixed; // relative to <body>
   left: 0;
   bottom: 0;
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
   padding-left: 1rem;
   padding-right: 1rem;
   background-color: var(--color-gray-0);
+
+  button {
+    position: absolute;
+    top: 50%;
+    left: calc(100% - 3.5rem);
+    transform: translate(-50%, -50%);
+
+    ${PARENT_BREAKPOINT} {
+      left: 66%;
+    }
+  }
 `;

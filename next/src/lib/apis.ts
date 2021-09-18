@@ -1,3 +1,4 @@
+import axios from 'axios'; // temp
 import apiClient, { logAxiosError } from '@lib/apiClient';
 import type { IGeneralServerResponse } from 'typings/common';
 import type {
@@ -6,6 +7,8 @@ import type {
   IOptionalPropsResponse,
   IAuthSuccessResponse,
   IGetChatRoomProps,
+  IAccountEditProps,
+  IAccountEditResponse,
 } from 'typings/auth';
 import { IncomingHttpHeaders } from 'http';
 
@@ -48,6 +51,18 @@ export const authProlongTestApi = () =>
     .catch(() => {
       window.alert('로그인 연장 실패, 로그를 확인해주세요.');
     });
+
+// 유저 정보 수정
+// TODO: nest API 추가시 axios > apiClient로 변경하기
+export const editAccountApi = (data: IAccountEditProps) =>
+  axios
+    .put<IAccountEditResponse>(`/api/user`, data)
+    .then((res) => res.data.user);
+
+// 계정 삭제
+// TODO: nest API 추가시 axios > apiClient로 변경하기
+export const deleteAccountApi = (id: number) =>
+  axios.delete<IGeneralServerResponse>(`/api/user/${id}`);
 
 // ********************************************************************************************************************
 // sign-up

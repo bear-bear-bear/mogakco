@@ -1,4 +1,4 @@
-import React, { ComponentProps, VFC } from 'react';
+import React, { ComponentProps } from 'react';
 import ReactSelect from 'react-select';
 import makeAnimated from 'react-select/animated';
 
@@ -9,7 +9,9 @@ export interface SelectProps {
   value: string;
 }
 
-const MultipleSelect: VFC<ComponentProps<typeof ReactSelect>> = ({ props }) => (
+type Props = ComponentProps<typeof ReactSelect>;
+
+const MultipleSelect = (props: Props) => (
   <ReactSelect
     isMulti
     components={makeAnimated()}

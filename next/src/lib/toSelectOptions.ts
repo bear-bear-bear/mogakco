@@ -12,18 +12,19 @@ const toSelectOptions = (
   if (options === null) return [];
 
   if (!Array.isArray(options)) {
+    const { id, name } = options;
     return [
       {
-        value: options.id.toString(),
-        label: options.name,
+        label: name,
+        value: id.toString(),
       },
     ];
   }
 
   return options.map(
     ({ id, name }): SelectProps => ({
-      value: id.toString(),
       label: name,
+      value: id.toString(),
     }),
   );
 };
