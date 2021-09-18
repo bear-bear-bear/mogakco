@@ -10,6 +10,7 @@ import RoomUserRepository from '@models/chat/repositories/room-user.repository';
 import { IncomingHttpHeaders } from 'http';
 import UserRepository from '@models/user/repositories/user.repository';
 import {
+  AuthProp,
   Chat,
   FindRoomAndJoin,
   HandShakeAuth,
@@ -188,5 +189,15 @@ export default class ChatService implements IChatService {
       type,
       username,
     });
+  }
+
+  /**
+   * @desc 클라이언트에서 auth 가 제대로 설정되어 오는 지 검사합니다.
+   */
+  validateAuth(auth: HandShakeAuth): boolean {
+    const userId = auth['user-id'] as AuthProp;
+    const roomId = auth['room-id'] as AuthProp;
+    const userName = auth['user-name'] as AuthProp;
+    return [userId, roomId, userName].filter(Boolean).length === 3;
   }
 }

@@ -4,6 +4,8 @@ import {
   SubscribeMessage,
   WebSocketGateway,
   WebSocketServer,
+  ConnectedSocket,
+  MessageBody,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { Logger, UnauthorizedException } from '@nestjs/common';
@@ -29,7 +31,7 @@ export default class ChatGateway implements IChatGateway, OnGatewayConnection, O
     private readonly anonymousRoomUserRepository: AnonymousRoomUserRepository,
   ) {}
 
-  async handleConnection(client: Socket) {
+  async handleConnection(@ConnectedSocket() client: Socket) {
     const { auth } = client.handshake;
     const [userId, roomId] = this.chatService.getIdsFromHeader(auth);
     const {
@@ -47,7 +49,7 @@ export default class ChatGateway implements IChatGateway, OnGatewayConnection, O
     this.logger.log(`${username} 유저가 ${auth['room-id']} 번 방에 참여되었습니다.`);
   }
 
-  async handleDisconnect(client: Socket) {
+  async handleDisconnect(@ConnectedSocket() client: Socket) {
     const { auth } = client.handshake;
     const [userId, roomId] = this.chatService.getIdsFromHeader(auth);
     await this.chatService.leaveRoom(auth);
@@ -64,7 +66,7 @@ export default class ChatGateway implements IChatGateway, OnGatewayConnection, O
   }
 
   @SubscribeMessage('chat')
-  async chat(client: Socket, message: string): Promise<void> {
+  async chat(@ConnectedSocket() client: Socket, @MessageBody() message: string): Promise<void> {
     const { auth } = client.handshake;
     const chat = await this.chatService.makeAndSaveChat(auth, message);
     this.server.emit('chat', chat);

@@ -9,10 +9,10 @@ import type { GeneralAxiosError } from 'typings/common';
 import { GetServerSideProps } from 'next';
 import { refreshAccessTokenApiSSR } from '@lib/apis';
 import token from '@lib/token';
-import { useRouter } from 'next/router';
 import useSocket from '@hooks/useSocket';
 import { createContext, useEffect } from 'react';
 import { Socket } from 'socket.io-client';
+import useChatError from '@hooks/video-chat/useChatError';
 
 const pageProps = {
   title: '화상채팅 - Mogakco',
@@ -24,20 +24,10 @@ const pageProps = {
 export const SocketContext = createContext<Socket | null>(null);
 
 const ChatRoom = () => {
-  const router = useRouter();
   const { user } = useUser({ redirectTo: '/' });
   const client = useSocket();
 
-  useEffect(() => {
-    client?.on('check-multiple-user', (id: number) => {
-      if (user?.id === id) {
-        router.push('/dashboard');
-      }
-    });
-    return () => {
-      client?.off('check-multiple-user');
-    };
-  }, [client, router, user?.id]);
+  useChatError(client);
 
   useEffect(() => {
     return () => {
