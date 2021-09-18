@@ -1,6 +1,7 @@
-import { CanActivate, ExecutionContext, UnauthorizedException } from '@nestjs/common';
+import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
 import { GuardReturnType } from '@typing/auth';
 
+@Injectable()
 export default class NonAuthGuard implements CanActivate {
   canActivate(context: ExecutionContext): GuardReturnType {
     const request = context.switchToHttp().getRequest();

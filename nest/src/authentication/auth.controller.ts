@@ -33,6 +33,7 @@ import AuthService from './auth.service';
 
 import {
   AccessTokenSwagger,
+  AdminTestSwagger,
   BeforeRegisterSwagger,
   GetAuthenticationSwagger,
   LoginSwagger,
@@ -43,6 +44,7 @@ import {
 } from '@common/decorators/swagger/auth.decorator';
 import AuthValidateService from '@authentication/auth-validate.service';
 import NoUserException from '@common/exceptions/no-user-exception.filter';
+import AdminGuard from '@common/guards/admin.guard';
 
 /**
  * @desc 회원가입/로그인에 대한 처리 컨트롤러
@@ -61,6 +63,20 @@ export default class AuthController {
   ) {}
 
   /**
+   * @desc 어드민 테스트
+   */
+  @AdminTestSwagger()
+  @Get('/test/admin')
+  @UseGuards(AdminGuard)
+  @HttpCode(200)
+  adminTest(@Req() req: Request) {
+    return {
+      user: req.user,
+      message: '어드민 접근 성공입니다.',
+    };
+  }
+
+  /**
    * @returns 사용자 accessToken, 정보를 반환한다.
    */
   @Get('/test')
@@ -74,6 +90,7 @@ export default class AuthController {
   /**
    * @returns 로그인을 수행하고 로그인 정보를 반환합니다.
    */
+  // TODO: 로그인 상태에서 접근 막기
   @LoginSwagger()
   @Post('/login')
   @HttpCode(200)
