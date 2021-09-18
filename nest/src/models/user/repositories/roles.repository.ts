@@ -1,4 +1,4 @@
-import RolesEntity from '@models/chat/entities/roles.entity';
+import RolesEntity from '@models/user/entities/roles.entity';
 import { EntityRepository, Repository } from 'typeorm';
 
 @EntityRepository(RolesEntity)
