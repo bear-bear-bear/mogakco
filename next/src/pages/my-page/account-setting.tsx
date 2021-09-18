@@ -18,8 +18,7 @@ export const pageProps = {
 };
 
 const MyPageAccountSetting = (props: SelectsOptions) => {
-  // const { user, mutateUser } = useUser({ redirectTo: '/' });
-  const { user, mutateUser } = useUser();
+  const { user, mutateUser } = useUser({ redirectTo: '/' });
 
   if (!user?.isLoggedIn) return null;
   return (
