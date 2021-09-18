@@ -224,3 +224,14 @@ export function GetAuthenticationSwagger() {
     }),
   );
 }
+
+export function AdminTestSwagger() {
+  return decoratorHelper(
+    SwaggerTag.AUTH,
+    ApiOperation({
+      summary: '어드민 테스트 API',
+      description: '어드민이 접근 할 수 있는 지 테스트 합니다.',
+    }),
+    ApiBearerAuth(),
+  );
+}
