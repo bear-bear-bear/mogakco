@@ -5,7 +5,7 @@ import { useEffect } from 'react';
 import devModeLog from '@lib/devModeLog';
 
 export default function useChatError(client: Socket | null) {
-  const { user } = useUser({ redirectTo: '/' });
+  const { user } = useUser();
   const router = useRouter();
 
   useEffect(() => {
