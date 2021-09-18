@@ -1,10 +1,4 @@
-import React, {
-  useEffect,
-  useCallback,
-  useState,
-  useRef,
-  useMemo,
-} from 'react';
+import { useEffect, useCallback, useState, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import _ from 'lodash';
 
@@ -18,6 +12,7 @@ import type { IOptionalPageProps as SelectsOptions } from '@pages/sign-up/option
 import type { IAccountEditProps, IUserInfo } from 'typings/auth';
 import type { GeneralAxiosError } from 'typings/common';
 
+import { cp } from 'fs/promises';
 import UsernameSection from './section/Username';
 import EmailSection from './section/Email';
 import JobSelectSection from './section/JobSelect';
@@ -40,6 +35,7 @@ const AccountSetting = ({
   skillOptions,
   jobOptions,
 }: AccountSettingProps) => {
+  console.log('렌더링');
   const [initialRequiredFields, setInitialRequiredFields] =
     useState<RequiredFields>({
       username,
@@ -73,7 +69,7 @@ const AccountSetting = ({
 
   const isSubmittable = useCallback(() => {
     const currOptionalFieldsValue: OptionalFieldsValue = {
-      skills: skillIds,
+      skills: skillIds && skillIds.sort((a, b) => Number(a) - Number(b)),
       job: jobId,
     };
 
@@ -119,23 +115,21 @@ const AccountSetting = ({
     };
 
     try {
-      const edittedUser = await editAccountApi(requestBody);
+      const {
+        email: edittedEmail,
+        username: edittedUsername,
+        skills: edittedSkills,
+        job: edittedJob,
+      } = await editAccountApi(requestBody);
 
       setInitialRequiredFields({
-        email: edittedUser.email,
-        username: edittedUser.username,
+        email: edittedEmail,
+        username: edittedUsername,
       });
       setInitialOptionalFieldsValue({
         skills:
-          edittedUser.skills &&
-          edittedUser.skills.map((skill) => skill.id.toString()),
-        job: edittedUser.job && edittedUser.job.id.toString(),
-      });
-
-      console.log({
-        edittedUser,
-        initialRequiredFields,
-        initialOptionalFieldsValue,
+          edittedSkills && edittedSkills.map((skill) => skill.id.toString()),
+        job: edittedJob && edittedJob.id.toString(),
       });
     } catch (err) {
       logAxiosError(err as GeneralAxiosError);
@@ -198,4 +192,4 @@ const AccountSetting = ({
   );
 };
 
-export default React.memo(AccountSetting);
+export default AccountSetting;

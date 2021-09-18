@@ -8,7 +8,7 @@ import type {
   IAuthSuccessResponse,
   IGetChatRoomProps,
   IAccountEditProps,
-  IUserInfo,
+  IAccountEditResponse,
 } from 'typings/auth';
 import { IncomingHttpHeaders } from 'http';
 
@@ -55,7 +55,9 @@ export const authProlongTestApi = () =>
 // 유저 정보 수정
 // TODO: nest API 추가시 axios > apiClient로 변경하기
 export const editAccountApi = (data: IAccountEditProps) =>
-  axios.put<IUserInfo>(`/api/user`, data).then((res) => res.data);
+  axios
+    .put<IAccountEditResponse>(`/api/user`, data)
+    .then((res) => res.data.user);
 
 // 계정 삭제
 // TODO: nest API 추가시 axios > apiClient로 변경하기

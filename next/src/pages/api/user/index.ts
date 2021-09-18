@@ -16,9 +16,13 @@ const handler = (req: NextApiRequest, res: NextApiResponse) => {
 
   const changedUser: IUserInfo = {
     id: 1,
-    email: 'changed@gmail.com',
-    username: 'changed',
+    email: 'mogakco35@gmail.com',
+    username: 'mogauser',
     skills: [
+      {
+        id: 1,
+        name: '리눅스',
+      },
       {
         id: 13,
         name: '풀스택',

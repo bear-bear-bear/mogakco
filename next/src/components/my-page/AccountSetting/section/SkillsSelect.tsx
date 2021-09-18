@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import type { ValueType } from 'react-select';
 
 import Select from '@components/common/Select';

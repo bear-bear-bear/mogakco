@@ -20,13 +20,20 @@ export interface ISignUpProps {
 }
 
 /**
- * 유저 정보 수정 요청 데이터 타입, 응답 데이터 타입
+ * 유저 정보 수정 요청 데이터 타입
  */
 export interface IAccountEditProps {
   email: string;
   username: string;
   skills: number[] | null;
   job: number | null;
+}
+
+/**
+ * 유저 정보 수정 요청 응답 데이터 타입
+ */
+export interface IAccountEditResponse extends IGeneralServerResponse {
+  user: IUserInfo;
 }
 
 /**
