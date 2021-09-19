@@ -11,8 +11,14 @@ export enum APIs {
   SEND_EMAIL = '/api/auth/send-token/before-register',
   EMAIL_VERIFICATION = '/api/auth/verify-email/before-register',
   GET_EMAIL_VERIFICATION = '/api/auth/is-verified/before-register',
+
+  // User
+  UPDATE_USER_SELF = '/api/user',
+  DELETE_USER_SELF = '/api/user',
 }
 
 export enum TestUtil {
-  EMAIL = 'mockTest@test.com',
+  EMAIL = 'mocktest@test.com',
+  USERNAME = 'testuser',
+  PASSWORD = '@Testmo12',
 }
