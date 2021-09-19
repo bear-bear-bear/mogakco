@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { keyframes } from '@emotion/react';
+import { css, keyframes } from '@emotion/react';
 
 import media from '@globalStyles/media';
 
@@ -15,14 +15,15 @@ const fadeAnimation = keyframes`
   }
 `;
 
-export const CardAnchor = styled.a`
+const cardStyles = () => css`
+  flex: 1;
   position: relative;
   width: 100%;
   height: 100%;
   display: grid;
   grid-template-rows: 1fr max-content max-content;
-  margin: 1rem;
   padding: 2rem;
+  border-top: 1px solid var(--color-gray-1);
   cursor: pointer;
   transition: box-shadow 0.15s ease-in-out;
   animation: ${fadeAnimation} 0.5s ease-in-out forwards;
@@ -40,11 +41,15 @@ export const CardAnchor = styled.a`
     color: var(--color-gray-4);
   }
 
-  & + & {
-    border-top: 1px solid var(--color-gray-1);
+  &:hover,
+  &:focus {
+    box-shadow: 0 0 1px var(--color-gray-0) inset,
+      0 0 4px var(--color-gray-0) inset, 0 0 10px var(--color-gray-0) inset,
+      0 0 30px var(--color-gray-0) inset;
   }
 
   ${media.sm} {
+    flex: initial;
     width: 22rem;
     max-width: 100%;
     height: 28rem;
@@ -56,4 +61,16 @@ export const CardAnchor = styled.a`
         0 0 10px var(--color-gray-0), 0 0 30px var(--color-gray-0);
     }
   }
+`;
+
+export const CardAnchor = styled.a`
+  ${cardStyles}
+`;
+export const CardButton = styled.button`
+  // Init button style
+  background-color: inherit;
+  align-items: initial;
+  border: none;
+
+  ${cardStyles}
 `;

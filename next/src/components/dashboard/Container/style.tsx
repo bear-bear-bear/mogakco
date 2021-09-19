@@ -1,8 +1,10 @@
 import styled from '@emotion/styled';
 import media, { mediaBreakpoints } from '@globalStyles/media';
+import { pageHeaderHeight } from '@components/common/ServiceHeader/style';
 
 export const Container = styled.main`
   width: 100%;
+  height: calc(100vh - ${pageHeaderHeight});
   max-width: ${mediaBreakpoints.lg}px;
   position: relative;
   display: flex;
