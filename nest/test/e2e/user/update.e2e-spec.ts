@@ -26,6 +26,7 @@ describe('사용자 정보 업데이트 e2e 테스트', () => {
   });
 
   it('AccessToken 을 획득한다.', async () => {
+    console.log(testUser);
     await agent
       .post(APIs.LOGIN)
       .send({
