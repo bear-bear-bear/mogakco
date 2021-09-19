@@ -1,18 +1,18 @@
-import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import UserFieldEntity from '@models/user/entities/user-field.entity';
 import UserJobEntity from '@models/user/entities/users-job.entity';
 import UserFieldRepository from '@models/user/repositories/user-field.repository';
 import UserJobRepository from '@models/user/repositories/ user-job.reposity';
 import UserRepository from '@models/user/repositories/user.repository';
+import UpdateUserDto from '@authentication/dto/update-user.dto';
+import { ShallowUser } from '@models/user/interface/service';
 
 @Injectable()
-class UserService {
+export default class UserService {
   constructor(
-    @InjectRepository(UserRepository)
-    private userRepository: UserRepository,
-    private fieldRepository: UserFieldRepository,
-    private jobRepository: UserJobRepository,
+    private readonly userRepository: UserRepository,
+    private readonly fieldRepository: UserFieldRepository,
+    private readonly jobRepository: UserJobRepository,
   ) {}
 
   deleteUser(id: number) {
@@ -42,6 +42,17 @@ class UserService {
     const jobList = await this.jobRepository.find({ select: ['id', 'name'] });
     return jobList;
   }
-}
 
-export default UserService;
+  /**
+   * @desc 사용자 정보를 수정합니다.
+   */
+  async changeUserInfo(id: number, updateUserDto: UpdateUserDto): Promise<ShallowUser | undefined> {
+    const user = await this.userRepository.findOne({ id });
+    if (!user) throw new NotFoundException('유저가 존재하지 않습니다.');
+    await this.userRepository.save({
+      ...user,
+      ...updateUserDto,
+    });
+    return this.userRepository.findUserShallow(user.id);
+  }
+}
