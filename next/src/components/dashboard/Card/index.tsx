@@ -6,6 +6,7 @@ export interface CardProps {
   title: string;
   desc: string;
   svgName: `${string}.svg`;
+  isShow: boolean;
 }
 
 export interface CardAnchorProps extends CardProps {

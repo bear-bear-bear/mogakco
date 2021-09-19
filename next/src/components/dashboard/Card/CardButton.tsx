@@ -5,8 +5,14 @@ import type { CardButtonProps } from '.';
 
 import * as S from './style';
 
-const CardAnchor = ({ svgName, title, desc, onClick }: CardButtonProps) => (
-  <S.CardButton onClick={onClick}>
+const CardAnchor = ({
+  svgName,
+  title,
+  desc,
+  onClick,
+  isShow,
+}: CardButtonProps) => (
+  <S.CardButton onClick={onClick} isShow={isShow}>
     <Image
       src={`/svg/${svgName}`}
       layout="intrinsic"
