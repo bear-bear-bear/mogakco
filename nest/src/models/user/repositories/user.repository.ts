@@ -1,13 +1,14 @@
 import { EntityRepository, getManager, Repository } from 'typeorm';
-import { InternalServerErrorException } from '@nestjs/common';
+import { InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import CreateUserDto from '@authentication/dto/create-user.dto';
 import UserFieldEntity from '../entities/user-field.entity';
 import UserEntity from '../entities/user.entity';
+import { FindShallowUserRepository, ShallowUser } from '@models/user/interface/service';
 
 type UserEntityType = UserEntity | undefined;
 
 @EntityRepository(UserEntity)
-class UserRepository extends Repository<UserEntity> {
+export default class UserRepository extends Repository<UserEntity> {
   /**
    * @desc 유저 생성
    */
@@ -54,8 +55,8 @@ class UserRepository extends Repository<UserEntity> {
   }
 
   /**
-   * @return 로그인 성공 시 전달 될 유저 객체를 만들어 반환한다.
    * @desc 클라이언트, 사용자에게 제공되어야 할 객체만을 전달합니다.
+   * @return 로그인 성공 시 전달 될 유저 객체를 만들어 반환한다.
    */
   async findUserByEmailForLogin(email: string) {
     const user = await this.getJoinJobQueryBuilder()
@@ -80,17 +81,17 @@ class UserRepository extends Repository<UserEntity> {
   }
 
   /**
-   * @description 민감한 데이터 제거
+   * @desc 기존 유저 불러오기에서 민감한 데이터를 제거합니다.
    */
-  async findUserShallow(id: number) {
-    const user = await this.findOne(
+  async findUserShallow(id: number): Promise<ShallowUser | undefined> {
+    const user = (await this.findOne(
       { id },
       {
-        select: ['id', 'username', 'email', 'skills', 'job', 'createdAt'],
+        select: ['id', 'username', 'email', 'skills', 'job'],
         relations: ['job'],
       },
-    );
-    if (user === undefined) return null;
+    )) as FindShallowUserRepository | undefined;
+    if (user === undefined) throw new NotFoundException('유저가 존재하지 않습니다.');
     const skills = await this.getUserFields(user.skills);
     return {
       ...user,
@@ -141,5 +142,3 @@ class UserRepository extends Repository<UserEntity> {
     return this.createQueryBuilder('user').leftJoinAndSelect('user.job', 'user_job');
   }
 }
-
-export default UserRepository;
