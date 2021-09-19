@@ -1,11 +1,12 @@
 import React from 'react';
+import { useRouter } from 'next/router';
 
 import useUser from '@hooks/useUser';
 import CustomHead from '@components/common/CustomHead';
 import Container from '@components/dashboard/Container';
-import CardLink from '@components/dashboard/CardLink';
 import ServiceHeader from '@components/common/ServiceHeader';
-import Card from '@components/dashboard/CardLink/Card';
+import Card from '@components/dashboard/Card';
+import { getRecommendChatRoom } from '@lib/apis';
 
 export const pageProps = {
   title: '대시보드 - Mogakco',
@@ -16,8 +17,13 @@ export const pageProps = {
 
 const Dashboard = () => {
   const { user } = useUser({ redirectTo: '/' });
+  const router = useRouter();
 
-  // TODO: 로그아웃 버튼 스타일, 위치 등 수정하기 (공용 헤더혹은 공용 버튼그룹으로 묶기)
+  const handleVideoChatCardClick = async () => {
+    const roomId = await getRecommendChatRoom();
+    await router.push(`/video-chat/${roomId}`);
+  };
+
   if (!user?.isLoggedIn) return null;
   return (
     <>
@@ -27,11 +33,12 @@ const Dashboard = () => {
         {/* <Link href={`/video-chat/${id}`}> */}
         {/* 임시로 화상채팅 1번 룸으로 가도록 설정 */}
         <Card
+          onClick={handleVideoChatCardClick}
           svgName="video-chat.svg"
           title="화상 채팅"
           desc="모각코를 시작해요!"
         />
-        <CardLink
+        <Card
           href="/my-page"
           svgName="chart-line-alt1.svg"
           title="마이페이지"
