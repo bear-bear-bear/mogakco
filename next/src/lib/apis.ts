@@ -6,7 +6,7 @@ import type {
   ISignUpProps,
   IOptionalPropsResponse,
   IAuthSuccessResponse,
-  IGetChatRoomProps,
+  IGetChatRoomIdResponse,
   IAccountEditProps,
   IAccountEditResponse,
 } from 'typings/auth';
@@ -102,8 +102,7 @@ export const loadJobsApi = () =>
 // ********************************************************************************************************************
 // 채팅방 찾기 또는 만들기
 // TODO: 에러 처리 보충, 어떻게 할 지 이야기 하고 구현하기
-export const getRecommendChatRoom = () =>
+export const getVideoChatRoomIdApi = () =>
   apiClient
-    .get<IGetChatRoomProps>(`/api/chat/recommend/join`)
-    .then(({ data: { roomId } }) => roomId)
-    .catch((e) => logAxiosError(e));
+    .get<IGetChatRoomIdResponse>(`/api/chat/recommend/join`)
+    .then(({ data: { roomId } }) => roomId);

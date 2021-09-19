@@ -1,11 +1,12 @@
-import { ReactNode } from 'react';
+import type { ReactNode } from 'react';
+
 import * as S from './style';
 
-interface IProps {
+export interface ContainerProps {
   children?: ReactNode;
 }
 
-const Container = ({ children }: IProps) => {
+const Container = ({ children }: ContainerProps) => {
   return <S.Container>{children}</S.Container>;
 };
 

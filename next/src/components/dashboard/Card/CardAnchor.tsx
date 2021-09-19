@@ -6,9 +6,15 @@ import type { CardAnchorProps } from '.';
 
 import * as S from './style';
 
-const CardAnchor = ({ href, svgName, title, desc }: CardAnchorProps) => (
+const CardAnchor = ({
+  href,
+  svgName,
+  title,
+  desc,
+  isShow,
+}: CardAnchorProps) => (
   <Link href={href} passHref>
-    <S.CardAnchor>
+    <S.CardAnchor isShow={isShow}>
       <Image
         src={`/svg/${svgName}`}
         layout="intrinsic"

@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import { css, keyframes } from '@emotion/react';
-import { VscLoading } from 'react-icons/vsc';
 import { darken, lighten } from 'polished';
+import { VscLoading } from 'react-icons/vsc';
 import type { IButtonProps } from './index';
 
 const colorStyles = ({

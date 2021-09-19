@@ -2,20 +2,36 @@ import styled from '@emotion/styled';
 import { css, keyframes } from '@emotion/react';
 
 import media from '@globalStyles/media';
+import type { CardProps, CardAnchorProps, CardButtonProps } from '.';
 
-const fadeAnimation = keyframes`
+type IsShow = Pick<CardProps, 'isShow'>;
+
+const fadeInAnimation = keyframes`
   ${'0%'} {
-    opacity: 0;
     top: 2rem;
+    opacity: 0;
   }
 
   ${'100%'} {
-    opacity: 100%;
     top: 0;
+    opacity: 100%;
+  }
+`;
+const fadeOutAnimation = keyframes`
+  ${'0%'} {
+    top: 0;
+    opacity: 100%;
+    visibility: initial;
+  }
+
+  ${'100%'} {
+    top: 2rem;
+    opacity: 0;
+    visibility: hidden;
   }
 `;
 
-const cardStyles = () => css`
+const cardStyles = ({ isShow }: IsShow) => css`
   flex: 1;
   position: relative;
   width: 100%;
@@ -26,7 +42,8 @@ const cardStyles = () => css`
   border-top: 1px solid var(--color-gray-1);
   cursor: pointer;
   transition: box-shadow 0.15s ease-in-out;
-  animation: ${fadeAnimation} 0.5s ease-in-out forwards;
+  animation: ${isShow ? fadeInAnimation : fadeOutAnimation} 0.5s ease-in-out
+    forwards;
 
   & > h1 {
     font-size: 2rem;
@@ -63,10 +80,10 @@ const cardStyles = () => css`
   }
 `;
 
-export const CardAnchor = styled.a`
+export const CardAnchor = styled.a<CardAnchorProps>`
   ${cardStyles}
 `;
-export const CardButton = styled.button`
+export const CardButton = styled.button<CardButtonProps>`
   // Init button style
   background-color: inherit;
   align-items: initial;
