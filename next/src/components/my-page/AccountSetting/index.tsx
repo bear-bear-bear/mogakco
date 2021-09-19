@@ -34,7 +34,6 @@ const AccountSetting = ({
   skillOptions,
   jobOptions,
 }: AccountSettingProps) => {
-  console.log('렌더링');
   const [initialRequiredFields, setInitialRequiredFields] =
     useState<RequiredFields>({
       username,
@@ -107,6 +106,7 @@ const AccountSetting = ({
   };
   const handleFormSubmit = async (requiredFields: RequiredFields) => {
     const requestBody: IAccountEditProps = {
+      id,
       email: requiredFields.email,
       username: requiredFields.username,
       skills: skillIds && skillIds?.map((skillIdStr) => Number(skillIdStr)),
