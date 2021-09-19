@@ -33,13 +33,12 @@ describe('사용자 정보 업데이트 e2e 테스트', () => {
         password: TestUtil.PASSWORD,
       })
       .then(({ body }) => {
+        console.log(body);
         accessToken = body.accessToken;
       });
   });
 
   it('이메일을 수정한다.', async () => {
-    console.log(testUser);
-    console.log(accessToken);
     const { email, skills, job, id, username } = testUser;
     await agent
       .put(APIs.UPDATE_USER_SELF)
@@ -48,7 +47,7 @@ describe('사용자 정보 업데이트 e2e 테스트', () => {
         id,
         email,
         username,
-        skills: [skills],
+        skills: skills ? [skills] : null,
         job,
       })
       .then(({ body }) => {
