@@ -2,7 +2,7 @@ import { HttpStatus, INestApplication } from '@nestjs/common';
 import request, { SuperTest, Test } from 'supertest';
 import getTestAppModule from '@test/e2e/helper/module';
 import { createTestUser, removeTestUser } from '@test/e2e/helper/user';
-import { APIs, TestUtil } from '@test/e2e/helper/enum';
+import { APIs } from '@test/e2e/helper/enum';
 import { evalResponseBodyMessage } from '@test/e2e/helper/support';
 
 describe('사용자 삭제 e2e 테스트', () => {
@@ -25,8 +25,8 @@ describe('사용자 삭제 e2e 테스트', () => {
     await agent
       .post(APIs.LOGIN)
       .send({
-        email: TestUtil.EMAIL,
-        password: TestUtil.PASSWORD,
+        email: 'mogakco35@gmail.com',
+        password: 'mogapass',
       })
       .then(({ body }) => {
         accessToken = body.accessToken;

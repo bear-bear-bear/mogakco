@@ -1,46 +1,46 @@
 import { HttpStatus, INestApplication } from '@nestjs/common';
 import getTestAppModule from '@test/e2e/helper/module';
-import { createTestUser, findTestUser, removeTestUser } from '@test/e2e/helper/user';
 import request from 'supertest';
 import { SuperTest, Test } from 'supertest';
-import { APIs, TestUtil } from '@test/e2e/helper/enum';
-import UserEntity from '@models/user/entities/user.entity';
+import { APIs } from '@test/e2e/helper/enum';
 import { evalResponseBodyMessage } from '@test/e2e/helper/support';
+import { getConnection } from 'typeorm';
+import UserRepository from '@models/user/repositories/user.repository';
 
 describe('사용자 정보 업데이트 e2e 테스트', () => {
   let app: INestApplication;
   let agent: SuperTest<Test>;
   let accessToken: string;
-  let testUser: UserEntity;
 
   beforeAll(async () => {
     app = await getTestAppModule({ isValid: true, isCookieAble: true });
     agent = request(app.getHttpServer());
-    await createTestUser();
-    testUser = (await findTestUser()) as UserEntity;
   });
 
   afterAll(async () => {
-    await removeTestUser();
     await app.close();
   });
 
   it('AccessToken 을 획득한다.', async () => {
-    console.log(testUser);
     await agent
       .post(APIs.LOGIN)
       .send({
-        email: TestUtil.EMAIL,
-        password: TestUtil.PASSWORD,
+        email: 'mogakco35@gmail.com',
+        password: 'mogapass',
       })
       .then(({ body }) => {
-        console.log(body);
         accessToken = body.accessToken;
       });
   });
 
   it('이메일을 수정한다.', async () => {
-    const { email, skills, job, id, username } = testUser;
+    const user = await getConnection()
+      .getCustomRepository(UserRepository)
+      .findOne({
+        where: { email: 'mogakco35@gmail.com' },
+      });
+    if (!user) throw new Error('유저가 없습니다.');
+    const { id, email, username, skills, job } = user;
     await agent
       .put(APIs.UPDATE_USER_SELF)
       .set('Authorization', `Bearer ${accessToken}`)
@@ -48,7 +48,7 @@ describe('사용자 정보 업데이트 e2e 테스트', () => {
         id,
         email,
         username,
-        skills: skills ? [skills] : null,
+        skills,
         job,
       })
       .then(({ body }) => {

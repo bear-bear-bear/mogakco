@@ -27,6 +27,7 @@ export const findTestUser = async (): Promise<UserEntity | undefined> => {
     .execute();
   return result[0];
 };
+
 export const removeTestUser = (): Promise<DeleteResult> =>
   getConnection()
     .createQueryBuilder()
