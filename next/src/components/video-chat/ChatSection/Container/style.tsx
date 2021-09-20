@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { HiOutlineChevronDown } from 'react-icons/hi';
+import { HiChevronLeft } from 'react-icons/hi';
 
 export const Container = styled.section`
   /* display: none; */
@@ -29,7 +29,7 @@ export const ChatMemberCount = styled.span`
   padding-left: 0.2rem;
 `;
 
-export const DropdownButton = styled(HiOutlineChevronDown)`
+export const ChatCloseButton = styled(HiChevronLeft)`
   position: absolute;
   left: 1rem;
   top: 50%;

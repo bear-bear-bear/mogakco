@@ -23,7 +23,7 @@ const Container = ({ children }: IProps) => {
   return (
     <S.Container>
       <S.Header>
-        <S.DropdownButton />
+        <S.ChatCloseButton />
         <S.ChatTitle>채팅</S.ChatTitle>
         <S.ChatMemberCount>{memberCount}</S.ChatMemberCount>
       </S.Header>

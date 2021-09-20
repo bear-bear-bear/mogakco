@@ -41,8 +41,8 @@ const ChatRoom = () => {
       <CustomHead {...pageProps} />
       <SocketContext.Provider value={client}>
         <Container>
-          <CamSection />
           <ChatSection />
+          <CamSection />
         </Container>
       </SocketContext.Provider>
     </>
