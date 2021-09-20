@@ -7,13 +7,14 @@ import { ChatAnnouncement, ChatMessage } from '../../../../../typings/chat';
 import * as S from './style';
 
 type Message = ChatMessage | ChatAnnouncement;
+const returnVoid = () => undefined;
 
 const ChatList = () => {
   const [message, setMessage] = useState<Message[]>([]);
   const client = useContext(SocketContext);
 
   useEffect(() => {
-    if (!client) return;
+    if (!client) return returnVoid;
 
     const addMessage = (info: Message) => {
       setMessage((prevState) => prevState.concat(info));
