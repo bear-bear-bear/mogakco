@@ -11,16 +11,17 @@ export interface ChatAnnouncement {
 }
 
 export interface ChatMessage {
+  type: 'chat';
   id: number;
   ownerId: number;
   username: string;
   message: string;
-  type: 'chat';
 }
 
 export interface ChatFile {
-  id: string;
+  type: 'file';
+  id: number;
+  ownerId: number;
   username: string;
   info: { filename: string; size: number; url: string };
-  type: 'file';
 }
