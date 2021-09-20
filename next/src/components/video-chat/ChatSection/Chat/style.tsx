@@ -24,7 +24,7 @@ const announcementColorStyles = ({ type }: any) => {
 };
 
 export const Announcement = styled.p<{ type: string }>`
-  margin: 0 auto;
+  margin: 1rem auto;
   font-size: 0.95rem;
 
   ${announcementColorStyles}
