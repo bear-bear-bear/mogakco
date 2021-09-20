@@ -24,7 +24,8 @@ const pageProps = {
 export const SocketContext = createContext<typeof Socket | null>(null);
 
 const ChatRoom = () => {
-  const { user } = useUser({ redirectTo: '/' });
+  // const { user } = useUser({ redirectTo: '/' });
+  const { user } = useUser();
   const client = useSocket();
 
   useChatError(client);
