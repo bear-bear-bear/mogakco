@@ -1,17 +1,18 @@
+import { GetServerSideProps } from 'next';
+import { createContext, useEffect } from 'react';
+
 import CustomHead from '@components/common/CustomHead';
 import Container from '@components/video-chat/Container';
 import CamSection from '@components/video-chat/CamSection';
 import ChatSection from '@components/video-chat/ChatSection';
-import useUser from '@hooks/useUser';
 import apiClient, { logAxiosError } from '@lib/apiClient';
 import devModeLog from '@lib/devModeLog';
-import type { GeneralAxiosError } from 'typings/common';
-import { GetServerSideProps } from 'next';
 import { refreshAccessTokenApiSSR } from '@lib/apis';
 import token from '@lib/token';
+import useUser from '@hooks/useUser';
 import useSocket from '@hooks/useSocket';
-import { createContext, useEffect } from 'react';
 import useChatError from '@hooks/video-chat/useChatError';
+import type { GeneralAxiosError } from 'typings/common';
 
 const pageProps = {
   title: '화상채팅 - Mogakco',

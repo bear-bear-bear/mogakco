@@ -5,7 +5,7 @@ export const Container = styled.section`
   /* display: none; */
   display: grid;
   grid-template-rows: [Header] max-content [chatList] 1fr [InputBox] max-content;
-  width: 25rem;
+  width: 28rem;
   height: 100vh;
   background-color: white;
 `;

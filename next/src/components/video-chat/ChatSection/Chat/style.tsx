@@ -1,26 +1,14 @@
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 
-export const ChatWrapper = styled.section`
+interface ChatDirection {
+  isMyChat: boolean;
+}
+
+export const ChatWrapper = styled.section<ChatDirection>`
   display: flex;
   flex-direction: column;
-
-  & + & {
-    margin-top: 0.66rem;
-    margin-bottom: 0.66rem;
-  }
-`;
-
-// TODO: Temp galaxy4276
-export const MyChatWrapper = styled.section`
-  display: flex;
-  flex-direction: column;
-  text-align: right;
-
-  & + & {
-    margin-top: 0.66rem;
-    margin-bottom: 0.66rem;
-  }
+  text-align: ${({ isMyChat }) => (isMyChat ? 'right' : 'left')};
 `;
 
 const announcementColorStyles = ({ type }: any) => {

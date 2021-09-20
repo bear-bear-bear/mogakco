@@ -28,7 +28,6 @@ const InputBox = () => {
         <S.FileAddButton />
       </S.Header>
       <S.TempTextArea
-        maxRows={10}
         value={chat}
         onKeyDown={handleChat}
         onChange={onChangeChat}
