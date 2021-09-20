@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { HiChevronLeft } from 'react-icons/hi';
+import { FiChevronLeft } from 'react-icons/fi';
 
 export const Container = styled.section`
   /* display: none; */
@@ -19,7 +19,7 @@ export const Header = styled.header`
 `;
 
 export const ChatTitle = styled.h1`
-  font-size: 1.1rem;
+  font-size: 1.33rem;
   font-weight: 500;
 `;
 
@@ -29,10 +29,11 @@ export const ChatMemberCount = styled.span`
   padding-left: 0.2rem;
 `;
 
-export const ChatCloseButton = styled(HiChevronLeft)`
+export const ChatCloseButton = styled(FiChevronLeft)`
   position: absolute;
-  left: 1rem;
+  right: 1.5rem;
   top: 50%;
-  transform: translateY(-50%);
+  transform: translate(50%, -50%);
   cursor: pointer;
+  font-size: 1.8rem;
 `;

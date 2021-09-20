@@ -8,8 +8,9 @@ export const InputBox = styled.div`
 `;
 
 export const Header = styled.header`
-  height: 2rem;
-  padding: 0.33rem 1rem;
+  /* height: 2rem; */
+  /* padding: 0.33rem 1rem; */
+  padding: 0.33rem;
   display: flex;
   align-items: center;
   justify-content: flex-end;
