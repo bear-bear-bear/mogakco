@@ -9,7 +9,7 @@ import Card from '@components/dashboard/Card';
 import { logAxiosError } from '@lib/apiClient';
 import { getVideoChatRoomIdApi } from '@lib/apis';
 import type { GeneralAxiosError } from 'typings/common';
-import Loading from '@components/video-chat/Loading';
+import Loading from '@components/dashboard/Loading';
 
 export const pageProps = {
   title: '대시보드 - Mogakco',
