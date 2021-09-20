@@ -11,7 +11,6 @@ import { refreshAccessTokenApiSSR } from '@lib/apis';
 import token from '@lib/token';
 import useSocket from '@hooks/useSocket';
 import { createContext, useEffect } from 'react';
-import { Socket } from 'socket.io-client';
 import useChatError from '@hooks/video-chat/useChatError';
 
 const pageProps = {
@@ -21,7 +20,7 @@ const pageProps = {
   locale: 'ko_KR',
 };
 
-export const SocketContext = createContext<typeof Socket | null>(null);
+export const SocketContext = createContext<ReturnType<typeof useSocket>>(null);
 
 const ChatRoom = () => {
   // const { user } = useUser({ redirectTo: '/' });
