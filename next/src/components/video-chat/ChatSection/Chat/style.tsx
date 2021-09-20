@@ -5,6 +5,15 @@ interface ChatDirection {
   isMyChat: boolean;
 }
 
+export const AnnouncemnetWrapper = styled.section`
+  margin: 1rem auto;
+
+  &:first-of-type,
+  & + & {
+    margin-top: 0;
+  }
+`;
+
 export const ChatWrapper = styled.section<ChatDirection>`
   display: flex;
   flex-direction: column;
@@ -24,7 +33,6 @@ const announcementColorStyles = ({ type }: any) => {
 };
 
 export const Announcement = styled.p<{ type: string }>`
-  margin: 1rem auto;
   font-size: 0.95rem;
 
   ${announcementColorStyles}
