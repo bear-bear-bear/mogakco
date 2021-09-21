@@ -1,13 +1,16 @@
 import styled from '@emotion/styled';
 import { FiChevronLeft } from 'react-icons/fi';
 
-export const Container = styled.section`
-  /* display: none; */
-  display: grid;
-  grid-template-rows: [Header] max-content [chatList] 1fr [InputBox] max-content;
-  width: 28rem;
+interface ContainerStyleProps {
+  isShow: boolean;
+}
+
+export const Container = styled.section<ContainerStyleProps>`
+  width: 20rem;
   height: 100vh;
-  background-color: white;
+  display: ${({ isShow }) => (isShow ? 'grid' : 'none')};
+  grid-template-rows: [Header] max-content [chatList] 1fr [InputBox] max-content;
+  background-color: var(--color-white);
 `;
 
 export const Header = styled.header`

@@ -4,13 +4,13 @@ import CalendarSvg from '@public/svg/calendar.svg';
 import ChatSvg from '@public/svg/conversation.svg';
 
 export const Sidebar = styled.aside`
-  width: 6rem;
+  width: 4.5rem;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  padding-top: 0.66em;
-  padding-bottom: 0.66em;
+  padding-top: 0.8rem;
+  padding-bottom: 0.8rem;
   background-color: var(--color-gray-0);
   border-right: 1px solid var(--color-gray-1);
 `;

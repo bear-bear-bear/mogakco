@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 
 const CAM_SIZE = '30rem';
 export const Container = styled.section`
-  width: 100%;
+  flex: 1;
   height: 100vh;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(${CAM_SIZE}, 1fr));
