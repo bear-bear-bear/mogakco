@@ -1,10 +1,16 @@
+import type { Dispatch, SetStateAction } from 'react';
 import Container from './Container';
 import ChatList from './ChatList';
 import InputBox from './InputBox';
 
-const ChatSection = () => {
+export interface ChatSectionProps {
+  isShowChat: boolean;
+  setIsShowChat: Dispatch<SetStateAction<boolean>>;
+}
+
+const ChatSection = (props: ChatSectionProps) => {
   return (
-    <Container>
+    <Container {...props}>
       <ChatList />
       <InputBox />
     </Container>

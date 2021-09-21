@@ -1,10 +1,11 @@
 import { GetServerSideProps } from 'next';
-import { createContext, useEffect } from 'react';
+import { createContext, useEffect, useState } from 'react';
 
 import CustomHead from '@components/common/CustomHead';
 import Container from '@components/video-chat/Container';
 import CamSection from '@components/video-chat/CamSection';
 import ChatSection from '@components/video-chat/ChatSection';
+import Sidebar from '@components/video-chat/Sidebar';
 import apiClient, { logAxiosError } from '@lib/apiClient';
 import devModeLog from '@lib/devModeLog';
 import { refreshAccessTokenApiSSR } from '@lib/apis';
@@ -27,6 +28,7 @@ const ChatRoom = () => {
   // const { user } = useUser({ redirectTo: '/' });
   const { user } = useUser();
   const client = useSocket();
+  const [isShowChat, setIsShowChat] = useState<boolean>(true);
 
   useChatError(client);
 
@@ -42,7 +44,8 @@ const ChatRoom = () => {
       <CustomHead {...pageProps} />
       <SocketContext.Provider value={client}>
         <Container>
-          <ChatSection />
+          <Sidebar setIsShowChat={setIsShowChat} />
+          <ChatSection isShowChat={isShowChat} setIsShowChat={setIsShowChat} />
           <CamSection />
         </Container>
       </SocketContext.Provider>
