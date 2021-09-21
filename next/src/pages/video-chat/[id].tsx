@@ -5,6 +5,7 @@ import CustomHead from '@components/common/CustomHead';
 import Container from '@components/video-chat/Container';
 import CamSection from '@components/video-chat/CamSection';
 import ChatSection from '@components/video-chat/ChatSection';
+import Sidebar from '@components/video-chat/Sidebar';
 import apiClient, { logAxiosError } from '@lib/apiClient';
 import devModeLog from '@lib/devModeLog';
 import { refreshAccessTokenApiSSR } from '@lib/apis';
@@ -42,6 +43,7 @@ const ChatRoom = () => {
       <CustomHead {...pageProps} />
       <SocketContext.Provider value={client}>
         <Container>
+          <Sidebar />
           <ChatSection />
           <CamSection />
         </Container>
