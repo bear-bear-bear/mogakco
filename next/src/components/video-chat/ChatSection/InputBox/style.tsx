@@ -26,15 +26,17 @@ export const TempTextArea = styled.textarea`
   padding: 0.33rem 0.5rem;
   border: none;
   font-size: 1rem;
+  font-family: inherit;
   resize: none;
-  font-weight: 500;
   letter-spacing: -0.01rem;
   color: var(--color-black);
+  line-height: 1.1;
 
   &::placeholder {
     font-size: inherit;
     font-weight: inherit;
     color: var(--color-gray-3);
+    vertical-align: middle;
   }
 
   &:focus {
