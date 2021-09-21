@@ -1,26 +1,23 @@
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 
-export const ChatWrapper = styled.section`
-  display: flex;
-  flex-direction: column;
+interface ChatDirection {
+  isMyChat: boolean;
+}
 
+export const AnnouncemnetWrapper = styled.section`
+  margin: 1rem auto;
+
+  &:first-of-type,
   & + & {
-    margin-top: 0.66rem;
-    margin-bottom: 0.66rem;
+    margin-top: 0;
   }
 `;
 
-// TODO: Temp galaxy4276
-export const MyChatWrapper = styled.section`
+export const ChatWrapper = styled.section<ChatDirection>`
   display: flex;
   flex-direction: column;
-  text-align: right;
-
-  & + & {
-    margin-top: 0.66rem;
-    margin-bottom: 0.66rem;
-  }
+  text-align: ${({ isMyChat }) => (isMyChat ? 'right' : 'left')};
 `;
 
 const announcementColorStyles = ({ type }: any) => {
@@ -36,7 +33,6 @@ const announcementColorStyles = ({ type }: any) => {
 };
 
 export const Announcement = styled.p<{ type: string }>`
-  margin: 0 auto;
   font-size: 0.95rem;
 
   ${announcementColorStyles}

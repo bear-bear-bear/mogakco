@@ -13,9 +13,9 @@ const Announcement = ({ type, username }: ChatAnnouncement) => {
     `${name} 님이 ${explains[announceType]}`;
 
   return (
-    <S.ChatWrapper>
+    <S.AnnouncemnetWrapper>
       <S.Announcement type={type}>{announce(type, username)}</S.Announcement>
-    </S.ChatWrapper>
+    </S.AnnouncemnetWrapper>
   );
 };
 
