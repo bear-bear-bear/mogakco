@@ -13,8 +13,8 @@ export const Header = styled.header`
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  border-top: 1px solid var(--color-gray-3);
-  border-bottom: 1px solid var(--color-gray-3);
+  border-top: 1px solid var(--color-gray-1);
+  border-bottom: 1px solid var(--color-gray-1);
 `;
 
 export const FileAddButton = styled(BsFileEarmarkArrowUp)`
