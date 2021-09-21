@@ -1,9 +1,11 @@
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
+import type { ChatAnnouncement } from 'typings/chat';
 
 interface ChatDirection {
   isMyChat: boolean;
 }
+type AnnounceType = Pick<ChatAnnouncement, 'type'>;
 
 export const AnnouncemnetWrapper = styled.section`
   margin: 1rem auto;
@@ -20,8 +22,8 @@ export const ChatWrapper = styled.section<ChatDirection>`
   text-align: ${({ isMyChat }) => (isMyChat ? 'right' : 'left')};
 `;
 
-const announcementColorStyles = ({ type }: any) => {
-  const colors: { [AnnounceType: string]: string } = {
+const announcementColorStyles = ({ type }: AnnounceType) => {
+  const colors: { [key in AnnounceType['type']]: string } = {
     enter: 'var(--color-gray-5)',
     exit: 'var(--color-gray-5)',
     kick: 'var(--color-red-1)',
@@ -32,7 +34,7 @@ const announcementColorStyles = ({ type }: any) => {
   `;
 };
 
-export const Announcement = styled.p<{ type: string }>`
+export const Announcement = styled.p<AnnounceType>`
   font-size: 0.95rem;
 
   ${announcementColorStyles}
