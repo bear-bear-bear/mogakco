@@ -3,6 +3,7 @@ import { BsFileEarmarkArrowUp } from 'react-icons/bs';
 import { AiOutlineSend } from 'react-icons/ai';
 
 export const InputBox = styled.div`
+  position: relative;
   display: flex;
   flex-direction: column;
   height: 10rem;
