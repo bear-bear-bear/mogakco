@@ -1,6 +1,7 @@
 import React from 'react';
+import type { ChatAnnouncement } from 'typings/chat';
+
 import * as S from '../Chat/style';
-import { ChatAnnouncement } from '../../../../../typings/chat';
 
 const explains: { [AnnounceType: string]: string } = {
   enter: '입장하셨습니다.',

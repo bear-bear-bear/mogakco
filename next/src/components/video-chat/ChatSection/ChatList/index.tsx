@@ -1,9 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react';
+
 import { SocketContext } from '@pages/video-chat/[id]';
+import { ChatAnnouncement, ChatMessage } from 'typings/chat';
 
 import Chat from '../Chat';
-import { ChatAnnouncement, ChatMessage } from '../../../../../typings/chat';
-
 import * as S from './style';
 
 type Message = ChatMessage | ChatAnnouncement;

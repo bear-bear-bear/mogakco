@@ -1,13 +1,9 @@
 import React from 'react';
 
+import type { ChatAnnouncement, ChatFile, ChatMessage } from 'typings/chat';
 import Announcement from './Announcement';
 import TextChat from './TextChat';
 import FileChat from './FileChat';
-import {
-  ChatAnnouncement,
-  ChatFile,
-  ChatMessage,
-} from '../../../../../typings/chat';
 
 const Chat = (schema: ChatAnnouncement | ChatMessage | ChatFile) => {
   switch (schema.type) {
