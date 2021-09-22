@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import useUser from '@hooks/useUser';
 import { useRouter } from 'next/router';
 import { getServerUrl } from '@lib/enviroment';
+import token, { ACCESS_TOKEN } from '@lib/token';
 
 export default function useSocket() {
   const [socket, setSocket] = useState<Socket | null>(null);
@@ -13,9 +14,12 @@ export default function useSocket() {
     const uri = `${getServerUrl()}/chat`;
     const client = io(uri, {
       auth: {
-        'user-id': user?.id,
-        'room-id': query.id,
-        'user-name': user?.username,
+        userId: user?.id,
+        roomId: query.id,
+        userName: user?.username,
+      },
+      extraHeaders: {
+        Authorization: `Bearer ${token.get()[ACCESS_TOKEN]}`,
       },
     });
     setSocket(client);
