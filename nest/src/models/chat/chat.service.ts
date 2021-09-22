@@ -7,14 +7,13 @@ import {
 import RoomRepository from './repositories/room.repository';
 import UserEntity from '@models/user/entities/user.entity';
 import RoomUserRepository from '@models/chat/repositories/room-user.repository';
-import { IncomingHttpHeaders } from 'http';
 import UserRepository from '@models/user/repositories/user.repository';
 import {
-  AuthProp,
   Chat,
   FindRoomAndJoin,
   HandShakeAuth,
   IChatService,
+  InfoFromHeader,
   LeaveRoom,
   UserAndRoom,
 } from '@models/chat/interface/service';
@@ -23,6 +22,9 @@ import AnonymousRoomUserRepository from '@models/chat/repositories/anonymous-roo
 import { Server } from 'socket.io';
 import { v1 as uuid } from 'uuid';
 import RoomEntity from '@models/chat/entities/room.entity';
+import { getRepository } from 'typeorm';
+import AnonymousPrefixEntity from '@models/chat/entities/anonymous_prefix.entity';
+import AnonymousNameEntity from '@models/chat/entities/anonymous_names.entity';
 
 @Injectable()
 export default class ChatService implements IChatService {
@@ -66,8 +68,8 @@ export default class ChatService implements IChatService {
     };
   }
 
-  async checkDeleteRoom(headers: IncomingHttpHeaders): Promise<void> {
-    const [, roomId] = this.getIdsFromHeader(headers);
+  async checkDeleteRoom(auth: HandShakeAuth): Promise<void> {
+    const { roomId } = this.getInfoFromHeader(auth);
     const room = await this.roomRepository.findOne(
       { id: roomId },
       {
@@ -88,8 +90,8 @@ export default class ChatService implements IChatService {
   /**
    * @desc 익명 이름을 생성하여 반환합니다.
    */
-  async findOrCreateAnonymousName(headers: IncomingHttpHeaders) {
-    const [userId, roomId] = this.getIdsFromHeader(headers);
+  async findOrCreateAnonymousName(auth: HandShakeAuth) {
+    const { userId, roomId } = this.getInfoFromHeader(auth);
     const anonymousName = await this.anonymousRoomUserRepository.findOrCreate(userId, roomId);
     return anonymousName;
   }
@@ -97,8 +99,8 @@ export default class ChatService implements IChatService {
   /**
    * @desc 해당 유저를 채팅방(Room) 에서 퇴장시킵니다.
    */
-  async leaveRoom(headers: IncomingHttpHeaders): Promise<LeaveRoom> {
-    const [userId, roomId] = this.getIdsFromHeader(headers);
+  async leaveRoom(auth: HandShakeAuth): Promise<LeaveRoom> {
+    const { userId, roomId } = this.getInfoFromHeader(auth);
     const { user, room } = await this.findUserAndRoom(userId, roomId);
     await this.roomUserRepository.leave(user, room);
     return { username: user.username, roomId: room.id };
@@ -107,13 +109,13 @@ export default class ChatService implements IChatService {
   /**
    * @desc 채팅을 만들고, DB 저장 후 반환합니다.
    */
-  async makeAndSaveChat(headers: IncomingHttpHeaders, message: string): Promise<Chat> {
-    const [userId, roomId] = this.getIdsFromHeader(headers);
+  async makeAndSaveChat(auth: HandShakeAuth, message: string): Promise<Chat> {
+    const { userId, roomId } = this.getInfoFromHeader(auth);
     const { user, room } = await this.findUserAndRoom(userId, roomId);
     if (!(user && room)) throw new InternalServerErrorException();
     const {
       anonymousUser: { username },
-    } = await this.findOrCreateAnonymousName(headers);
+    } = await this.findOrCreateAnonymousName(auth);
     const { id: chatId } = await this.chatRepository.createChat(user, room, message);
     return this.createChatResponse(chatId, user.id, username, message);
   }
@@ -135,11 +137,12 @@ export default class ChatService implements IChatService {
   /**
    * @desc headers 에서 id 를 추출하고 반환합니다.
    */
-  getIdsFromHeader(headers: IncomingHttpHeaders): number[] {
-    const userId = headers['user-id'];
-    const roomId = headers['room-id'];
+  getInfoFromHeader({ userId, roomId }: HandShakeAuth): InfoFromHeader {
     if (!(userId && roomId)) throw new InternalServerErrorException();
-    return [Number(userId), Number(roomId)];
+    return {
+      userId,
+      roomId,
+    };
   }
 
   /**
@@ -173,7 +176,7 @@ export default class ChatService implements IChatService {
    * @desc 채팅방의 멤버수를 구해서 멤버수 카운트 이벤트를 emit 합니다.
    */
   async emitMemberCountEvent(server: Server, auth: HandShakeAuth): Promise<void> {
-    const roomId = auth['room-id'];
+    const { roomId } = this.getInfoFromHeader(auth);
     const memberCount = await this.roomUserRepository.count({
       where: { roomId },
     });
@@ -192,12 +195,28 @@ export default class ChatService implements IChatService {
   }
 
   /**
-   * @desc 클라이언트에서 auth 가 제대로 설정되어 오는 지 검사합니다.
+   * @desc 익명 사용자 접두어를 추가합니다.
    */
-  validateAuth(auth: HandShakeAuth): boolean {
-    const userId = auth['user-id'] as AuthProp;
-    const roomId = auth['room-id'] as AuthProp;
-    const userName = auth['user-name'] as AuthProp;
-    return [userId, roomId, userName].filter(Boolean).length === 3;
+  async addAnonymousPrefixName(adminId: number, name: string): Promise<void> {
+    const admin = await this.userRepository.findOne({ id: adminId });
+    await getRepository(AnonymousPrefixEntity)
+      .create({
+        name,
+        user: admin,
+      })
+      .save();
+  }
+
+  /**
+   * @desc 익명 사용자 이름을 추가합니다.
+   */
+  async addAnonymousName(adminId: number, name: string): Promise<void> {
+    const admin = await this.userRepository.findOne({ id: adminId });
+    await getRepository(AnonymousNameEntity)
+      .create({
+        name,
+        user: admin,
+      })
+      .save();
   }
 }

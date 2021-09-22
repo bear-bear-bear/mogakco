@@ -1,17 +1,24 @@
 import {
   BadRequestException,
+  Body,
   Controller,
   Get,
+  HttpCode,
   HttpStatus,
   Logger,
   Param,
   ParseIntPipe,
+  Post,
   Req,
   Res,
+  UploadedFile,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import ChatService from './chat.service';
 import {
+  AddAnonymousNameSwagger,
+  AddAnonymousPrefixSwagger,
   ChatAvailableSwagger,
   GetRoomMembersSwagger,
   JoinChatRoomSwagger,
@@ -23,6 +30,11 @@ import JwtAuthGuard from '@common/guards/jwt-auth.guard';
 import { Request, Response } from 'express';
 import UserService from '@models/user/user.service';
 import UserEntity from '@models/user/entities/user.entity';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { AuthRequest } from '@models/user/interface/controller';
+import { GeneralResponse } from '@common/interface/global';
+import AnonymousPropDto from '@models/chat/dto/anonymous-prop.dto';
+import AdminGuard from '@common/guards/admin.guard';
 
 @Controller('chat')
 export default class ChatController implements IChatController {
@@ -66,6 +78,20 @@ export default class ChatController implements IChatController {
     };
   }
 
+  @Get('/download')
+  @UseGuards(JwtAuthGuard)
+  chatFileDownload(req: Request): any {
+    console.log(req);
+  }
+
+  @Post('/upload')
+  @UseGuards(JwtAuthGuard)
+  @UseInterceptors(FileInterceptor(''))
+  chatFileUpload(@UploadedFile() file: Express.Multer.File): Promise<any> {
+    console.log(file);
+    return Promise.resolve();
+  }
+
   /**
    * @desc 채팅방 이용 가능 여부를 검사합니다.
    */
@@ -96,6 +122,42 @@ export default class ChatController implements IChatController {
     const memberCount = await this.roomUserRepository.getRoomMembers(roomId);
     return {
       memberCount,
+    };
+  }
+
+  /**
+   * @desc 어드민의 권한으로 익명 사용자의 접두어를 추가합니다.
+   */
+  @AddAnonymousPrefixSwagger()
+  @Post('/anonymous/prefix-name')
+  @UseGuards(AdminGuard)
+  @HttpCode(HttpStatus.OK)
+  async addAnonymousPrefixRuleByAdmin(
+    @Req() { user: { id: adminId } }: AuthRequest,
+    @Body() { name }: AnonymousPropDto,
+  ): Promise<GeneralResponse> {
+    await this.chatService.addAnonymousPrefixName(adminId, name);
+    return {
+      statusCode: HttpStatus.OK,
+      message: '익명 사용자 접두어 추가를 성공하였습니다.',
+    };
+  }
+
+  /**
+   * @desc 어드민의 권한으로 익명 사용자의 이름을 추가합니다.
+   */
+  @AddAnonymousNameSwagger()
+  @Post('/anonymous/name')
+  @UseGuards(AdminGuard)
+  @HttpCode(HttpStatus.OK)
+  async addAnonymousNameRuleByAdmin(
+    { user: { id: adminId } }: AuthRequest,
+    { name }: AnonymousPropDto,
+  ): Promise<GeneralResponse> {
+    await this.chatService.addAnonymousPrefixName(adminId, name);
+    return {
+      statusCode: HttpStatus.OK,
+      message: '익명 사용자 이름 추가를 성공하였습니다.',
     };
   }
 }

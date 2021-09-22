@@ -8,17 +8,19 @@ import {
   MessageBody,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
-import { Logger, UnauthorizedException } from '@nestjs/common';
+import { Logger, UnauthorizedException, UseGuards } from '@nestjs/common';
 
 import ChatService from './chat.service';
 import UserRepository from '@models/user/repositories/user.repository';
 import { IChatGateway } from '@models/chat/interface/gateway';
 import AnonymousRoomUserRepository from '@models/chat/repositories/anonymous-room-user.repository';
+import JwtAuthGuard from '@common/guards/jwt-auth.guard';
 
 @WebSocketGateway({
   namespace: 'chat',
   cors: { origin: '*', credentials: true },
 })
+@UseGuards(JwtAuthGuard)
 export default class ChatGateway implements IChatGateway, OnGatewayConnection, OnGatewayDisconnect {
   @WebSocketServer()
   server!: Server;
@@ -31,9 +33,13 @@ export default class ChatGateway implements IChatGateway, OnGatewayConnection, O
     private readonly anonymousRoomUserRepository: AnonymousRoomUserRepository,
   ) {}
 
+  /**
+   * @desc 사용자를 입장처리 합니다.
+   * @desc 방이 존재하지 않으면 사용자 희망분야 기반으로 생성하고 입장처리합니다.
+   */
   async handleConnection(@ConnectedSocket() client: Socket) {
     const { auth } = client.handshake;
-    const [userId, roomId] = this.chatService.getIdsFromHeader(auth);
+    const { userId, roomId } = this.chatService.getInfoFromHeader(auth);
     const {
       anonymousUser: { username },
       isCreated,
@@ -46,12 +52,16 @@ export default class ChatGateway implements IChatGateway, OnGatewayConnection, O
     }
     await this.chatService.emitMemberCountEvent(this.server, client.handshake.auth);
     this.logger.debug(`client ${client.conn.id} connection!`);
-    this.logger.log(`${username} 유저가 ${auth['room-id']} 번 방에 참여되었습니다.`);
+    this.logger.log(`${username} 유저가 ${roomId} 번 방에 참여되었습니다.`);
   }
 
+  /**
+   * @desc 사용자를 퇴장처리 합니다.
+   * @desc 해당 방에서 인원 수가 0명이면 방을 삭제합니다.
+   */
   async handleDisconnect(@ConnectedSocket() client: Socket) {
     const { auth } = client.handshake;
-    const [userId, roomId] = this.chatService.getIdsFromHeader(auth);
+    const { userId, roomId } = this.chatService.getInfoFromHeader(auth);
     await this.chatService.leaveRoom(auth);
     const {
       anonymousUser: { username },
@@ -65,10 +75,17 @@ export default class ChatGateway implements IChatGateway, OnGatewayConnection, O
     this.server.emit('check-multiple-user', userId);
   }
 
+  /**
+   * @desc 사용자가 존재하는 방에 채팅 이벤트를 발생시킵니다.
+   */
   @SubscribeMessage('chat')
   async chat(@ConnectedSocket() client: Socket, @MessageBody() message: string): Promise<void> {
     const { auth } = client.handshake;
     const chat = await this.chatService.makeAndSaveChat(auth, message);
     this.server.emit('chat', chat);
+  }
+
+  async fileUpload(client: Socket, file: Express.Multer.File): Promise<void> {
+    console.log(client, file);
   }
 }
