@@ -1,6 +1,6 @@
 import decoratorHelper from '@common/helpers/decorator.helper';
 import { SwaggerTag } from '@common/helpers/enum.helper';
-import { ApiBearerAuth, ApiOperation, ApiParam, ApiResponse } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiOperation, ApiParam, ApiResponse } from '@nestjs/swagger';
 import { HttpStatus } from '@nestjs/common';
 
 export function ChatAvailableSwagger() {
@@ -93,6 +93,78 @@ export function JoinChatRoomSwagger() {
           message: 'Unauthorized',
         },
       },
+    }),
+  );
+}
+
+export function AddAnonymousPrefixSwagger() {
+  return decoratorHelper(
+    SwaggerTag.CHAT,
+    ApiOperation({
+      summary: '익명 사용자 접두어 추가 API',
+      description: '15글자 이하 이름을 받아서 익명 사용자 이름에 부여되는 접두어를 추가합니다.',
+    }),
+    ApiBearerAuth(),
+    ApiBody({
+      description: '15글자 이하의 이름',
+      schema: {
+        example: {
+          name: '안경을 박살낸',
+        },
+      },
+    }),
+    ApiResponse({
+      status: HttpStatus.OK,
+      schema: {
+        example: {
+          statusCode: HttpStatus.OK,
+          message: '익명 사용자 접두어 추가를 성공하였습니다.',
+        },
+      },
+    }),
+    ApiResponse({
+      status: HttpStatus.BAD_REQUEST,
+      description: '요청 양식이 잘못 됨',
+    }),
+    ApiResponse({
+      status: HttpStatus.UNAUTHORIZED,
+      description: '어드민 권한이 없음',
+    }),
+  );
+}
+
+export function AddAnonymousNameSwagger() {
+  return decoratorHelper(
+    SwaggerTag.CHAT,
+    ApiOperation({
+      summary: '익명 사용자 이름 추가 API',
+      description: '15글자 이하 이름을 받아서 익명 사용자 이름에 부여되는 접두어를 추가합니다.',
+    }),
+    ApiBearerAuth(),
+    ApiBody({
+      description: '15글자 이하의 이름',
+      schema: {
+        example: {
+          name: '호이스팅',
+        },
+      },
+    }),
+    ApiResponse({
+      status: HttpStatus.OK,
+      schema: {
+        example: {
+          statusCode: HttpStatus.OK,
+          message: '익명 사용자 이름 추가를 성공하였습니다.',
+        },
+      },
+    }),
+    ApiResponse({
+      status: HttpStatus.BAD_REQUEST,
+      description: '요청 양식이 잘못 됨',
+    }),
+    ApiResponse({
+      status: HttpStatus.UNAUTHORIZED,
+      description: '어드민 권한이 없음',
     }),
   );
 }

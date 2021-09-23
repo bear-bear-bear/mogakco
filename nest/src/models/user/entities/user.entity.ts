@@ -5,11 +5,13 @@ import RoomUserEntity from '@models/chat/entities/room-user.entity';
 import UserJobEntity from './users-job.entity';
 import AnonymousRoomUserEntity from '@models/chat/entities/anonymous-room-user.entity';
 import RoomEntity from '@models/chat/entities/room.entity';
+import AnonymousPrefixEntity from '@models/chat/entities/anonymous_prefix.entity';
+import AnonymousNameEntity from '@models/chat/entities/anonymous_names.entity';
 
 @Entity({
   name: 'users',
 })
-class UserEntity extends BaseEntitySoftDelete {
+export default class UserEntity extends BaseEntitySoftDelete {
   @Column({ nullable: false, length: 10 })
   username!: string;
 
@@ -39,6 +41,10 @@ class UserEntity extends BaseEntitySoftDelete {
 
   @OneToMany(() => RoomEntity, room => room.ownerId)
   room!: RoomEntity[];
-}
 
-export default UserEntity;
+  @OneToMany(() => AnonymousPrefixEntity, prefix => prefix.user)
+  prefixNames!: AnonymousPrefixEntity[];
+
+  @OneToMany(() => AnonymousNameEntity, prefix => prefix.user)
+  anonymousNames!: AnonymousNameEntity[];
+}

@@ -1,8 +1,10 @@
-import { EntityRepository, getManager, Repository } from 'typeorm';
+import { EntityRepository, getManager, getRepository, Repository } from 'typeorm';
 import AnonymousRoomUserEntity from '@models/chat/entities/anonymous-room-user.entity';
 import UserEntity from '@models/user/entities/user.entity';
-import { BadRequestException } from '@nestjs/common';
+import { BadRequestException, InternalServerErrorException } from '@nestjs/common';
 import RoomEntity from '@models/chat/entities/room.entity';
+import AnonymousPrefixEntity from '@models/chat/entities/anonymous_prefix.entity';
+import AnonymousNameEntity from '@models/chat/entities/anonymous_names.entity';
 
 @EntityRepository(AnonymousRoomUserEntity)
 export default class AnonymousRoomUserRepository extends Repository<AnonymousRoomUserEntity> {
@@ -25,7 +27,7 @@ export default class AnonymousRoomUserRepository extends Repository<AnonymousRoo
       const newAnonymousName = this.create({
         user,
         room,
-        username: this.createAnonymousName(),
+        username: await this.createAnonymousName(),
       });
       await newAnonymousName.save();
       return {
@@ -41,28 +43,25 @@ export default class AnonymousRoomUserRepository extends Repository<AnonymousRoo
   }
 
   /**
-   * @desc 익명이름이 존재하는 지 여부를 반환합니다.
-   */
-  async isPrevAnonymousUser(userId: number): Promise<boolean> {
-    const anonymousUser = await this.findOne({
-      where: {
-        user: userId,
-      },
-      select: ['id'],
-    });
-    if (!anonymousUser) return false;
-    return true;
-  }
-
-  /**
    * @desc 랜덤 닉네임을 생성합니다.
    */
-  createAnonymousName(): string {
+  async createAnonymousName(): Promise<string> {
     // TODO: 해당 부분 DB 로 관리하게 끔 ( 어드민에서 추가 설정 ) 할 예정
-    const prefix = ['총명한', '세상에서 가장 나다운', '코가 대단한'];
-    const name = ['제이지', '루삥뽕', '어피치'];
-    const cal = () => Math.floor(Math.random() * 3);
-    return `${prefix[cal()]} ${name[cal()]}`;
+    const prefixQueryResult = await getRepository(AnonymousPrefixEntity)
+      .createQueryBuilder('prefix')
+      .orderBy('RAND()')
+      .getOne();
+    if (!prefixQueryResult)
+      throw new InternalServerErrorException('anonymousPrefix 쿼리 결과를 불러올 수 없습니다.');
+    const { name: prefix } = prefixQueryResult;
+    const nameQueryResult = await getRepository(AnonymousNameEntity)
+      .createQueryBuilder('name')
+      .orderBy('RAND()')
+      .getOne();
+    if (!nameQueryResult)
+      throw new InternalServerErrorException('anonymousName 쿼리 결과를 불러올 수 없습니다.');
+    const { name } = nameQueryResult;
+    return `${prefix} ${name}`;
   }
 
   /**

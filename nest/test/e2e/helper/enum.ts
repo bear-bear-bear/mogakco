@@ -15,10 +15,18 @@ export enum APIs {
   // User
   UPDATE_USER_SELF = '/api/user',
   DELETE_USER_SELF = '/api/user',
+
+  // Chat
+  ADD_ANONYMOUS_PREFIX_NAME = '/api/chat/anonymous/prefix-name',
+  ADD_ANONYMOUS_NAME = '/api/chat/anonymous/name',
 }
 
 export enum TestUtil {
   EMAIL = 'mocktest@test.com',
   USERNAME = 'testuser',
   PASSWORD = '@Testmo12',
+
+  ADMIN_EMAIL = 'admin@admin.com',
+  ADMIN_USERNAME = 'admin',
+  ADMIN_PASSWORD = 'admin',
 }
