@@ -43,7 +43,7 @@ export const Writer = styled.p<DiscernMyChat>`
   width: fit-content;
   color: var(--color-gray-4);
   margin-bottom: 0.5rem;
-  background-color: ${({ isMyChat }) => (isMyChat ? '#ffffb6' : 'inherit')};
+  background-color: ${({ isMyChat }) => (isMyChat ? '#ffffb6' : '#dcedfd')};
 
   &::after {
     content: ':';
