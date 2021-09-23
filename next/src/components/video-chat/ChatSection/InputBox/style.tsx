@@ -6,7 +6,6 @@ export const InputBox = styled.div`
   position: relative;
   display: flex;
   flex-direction: column;
-  height: 10rem;
 `;
 
 export const Header = styled.header`
