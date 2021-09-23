@@ -2,6 +2,8 @@ import { IncomingHttpHeaders } from 'http';
 import UserEntity from '@models/user/entities/user.entity';
 import RoomEntity from '@models/chat/entities/room.entity';
 import { Server } from 'socket.io';
+import AnonymousPrefixEntity from '@models/chat/entities/anonymous_prefix.entity';
+import AnonymousNameEntity from '@models/chat/entities/anonymous_names.entity';
 
 export interface LeaveRoom {
   username: string;
@@ -59,6 +61,13 @@ export interface IChatService {
   getInfoFromHeader(auth: HandShakeAuth): InfoFromHeader;
 
   addAnonymousPrefixName(adminId: number, name: string): Promise<void>;
+  modifyAnonymousPrefixName(id: number, name: string): Promise<void>;
+  deleteAnonymousPrefixName(id: number): Promise<void>;
 
   addAnonymousName(adminId: number, name: string): Promise<void>;
+  modifyAnonymousName(id: number, name: string): Promise<void>;
+  deleteAnonymousName(id: number): Promise<void>;
+
+  findAllAnonymousPrefix(): Promise<AnonymousPrefixEntity[] | null>;
+  findAllAnonymousName(): Promise<AnonymousNameEntity[] | null>;
 }

@@ -207,6 +207,19 @@ export default class ChatService implements IChatService {
       .save();
   }
 
+  async modifyAnonymousPrefixName(id: number, name: string): Promise<void> {
+    await getRepository(AnonymousPrefixEntity).update(
+      { id },
+      {
+        name,
+      },
+    );
+  }
+
+  async deleteAnonymousPrefixName(id: number): Promise<void> {
+    await getRepository(AnonymousPrefixEntity).delete({ id });
+  }
+
   /**
    * @desc 익명 사용자 이름을 추가합니다.
    */
@@ -218,5 +231,25 @@ export default class ChatService implements IChatService {
         user: admin,
       })
       .save();
+  }
+
+  async modifyAnonymousName(id: number, name: string): Promise<void> {
+    await getRepository(AnonymousNameEntity).update({ id }, { name });
+  }
+
+  async deleteAnonymousName(id: number): Promise<void> {
+    await getRepository(AnonymousNameEntity).delete({ id });
+  }
+
+  async findAllAnonymousName(): Promise<AnonymousNameEntity[] | null> {
+    const list = await getRepository(AnonymousNameEntity).find();
+    if (!list) return null;
+    return list;
+  }
+
+  async findAllAnonymousPrefix(): Promise<AnonymousPrefixEntity[] | null> {
+    const list = await getRepository(AnonymousPrefixEntity).find();
+    if (!list) return null;
+    return list;
   }
 }

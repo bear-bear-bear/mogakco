@@ -2,6 +2,7 @@ import {
   BadRequestException,
   Body,
   Controller,
+  Delete,
   Get,
   HttpCode,
   HttpStatus,
@@ -9,6 +10,7 @@ import {
   Param,
   ParseIntPipe,
   Post,
+  Put,
   Req,
   Res,
   UploadedFile,
@@ -20,12 +22,26 @@ import {
   AddAnonymousNameSwagger,
   AddAnonymousPrefixSwagger,
   ChatAvailableSwagger,
+  DeleteAnonymousNameSwagger,
+  DeleteAnonymousPrefixSwagger,
+  FindAllAnonymousNameSwagger,
+  FindAllAnonymousPrefixSwagger,
   GetRoomMembersSwagger,
   JoinChatRoomSwagger,
+  ModifyAnonymousNameSwagger,
+  ModifyAnonymousPrefixSwagger,
 } from '@common/decorators/swagger/chat.decorator';
 import RoomUserRepository from './repositories/room-user.repository';
 import RoomRepository from './repositories/room.repository';
-import { AvailableRoom, ChatRoomJoin, IChatController, MemberCount } from './interface/controller';
+import {
+  AvailableRoom,
+  ChatRoomJoin,
+  DeleteAnonymousProp,
+  FindAllAnonymousProp,
+  IChatController,
+  MemberCount,
+  UpdateAnonymousProp,
+} from './interface/controller';
 import JwtAuthGuard from '@common/guards/jwt-auth.guard';
 import { Request, Response } from 'express';
 import UserService from '@models/user/user.service';
@@ -78,14 +94,14 @@ export default class ChatController implements IChatController {
     };
   }
 
-  @Get('/download')
   @UseGuards(JwtAuthGuard)
+  @Get('/download')
   chatFileDownload(req: Request): any {
     console.log(req);
   }
 
-  @Post('/upload')
   @UseGuards(JwtAuthGuard)
+  @Post('/upload')
   @UseInterceptors(FileInterceptor(''))
   chatFileUpload(@UploadedFile() file: Express.Multer.File): Promise<any> {
     console.log(file);
@@ -129,8 +145,8 @@ export default class ChatController implements IChatController {
    * @desc 어드민의 권한으로 익명 사용자의 접두어를 추가합니다.
    */
   @AddAnonymousPrefixSwagger()
-  @Post('/anonymous/prefix-name')
   @UseGuards(AdminGuard)
+  @Post('/anonymous/prefix-name')
   @HttpCode(HttpStatus.OK)
   async addAnonymousPrefixRuleByAdmin(
     @Req() { user: { id: adminId } }: AuthRequest,
@@ -144,20 +160,124 @@ export default class ChatController implements IChatController {
   }
 
   /**
+   * @desc 어드민의 권한으로 익명 사용자의 접두어를 수정합니다.
+   */
+  @ModifyAnonymousPrefixSwagger()
+  @UseGuards(AdminGuard)
+  @Put('/anonymous/prefix-name/:id')
+  async modifyAnonymousPrefixRuleByAdmin(
+    @Param('id', new ParseIntPipe()) id: number,
+    @Body() { name }: AnonymousPropDto,
+  ): Promise<UpdateAnonymousProp> {
+    await this.chatService.modifyAnonymousPrefixName(id, name);
+    return {
+      statusCode: HttpStatus.OK,
+      message: `${id} 번 데이터를 ${name} 으로 성공적으로 변경하였습니다.`,
+      name,
+      id,
+    };
+  }
+
+  /**
+   * @desc 어드민의 권한으로 익명 사용자의 접두어를 삭제합니다. ( hardDelete )
+   */
+  @DeleteAnonymousPrefixSwagger()
+  @UseGuards(AdminGuard)
+  @Delete('/anonymous/prefix-name/:id')
+  async deleteAnonymousPrefixRuleByAdmin(
+    @Param('id', new ParseIntPipe()) id: number,
+  ): Promise<DeleteAnonymousProp> {
+    await this.chatService.deleteAnonymousPrefixName(id);
+    return {
+      statusCode: HttpStatus.OK,
+      message: `${id} 번 데이터가 성공적으로 삭제되었습니다.`,
+      id,
+    };
+  }
+
+  /**
    * @desc 어드민의 권한으로 익명 사용자의 이름을 추가합니다.
    */
   @AddAnonymousNameSwagger()
-  @Post('/anonymous/name')
   @UseGuards(AdminGuard)
+  @Post('/anonymous/name')
   @HttpCode(HttpStatus.OK)
   async addAnonymousNameRuleByAdmin(
     { user: { id: adminId } }: AuthRequest,
-    { name }: AnonymousPropDto,
+    @Body() { name }: AnonymousPropDto,
   ): Promise<GeneralResponse> {
     await this.chatService.addAnonymousPrefixName(adminId, name);
     return {
       statusCode: HttpStatus.OK,
       message: '익명 사용자 이름 추가를 성공하였습니다.',
+    };
+  }
+
+  /**
+   * @desc 어드민의 권한으로 익명 사용자의 이름을 수정힙니다.
+   */
+  @ModifyAnonymousNameSwagger()
+  @UseGuards(AdminGuard)
+  @Put('/anonymous/name/:id')
+  async modifyAnonymousPrefixNameByAdmin(
+    @Param('id', new ParseIntPipe()) id: number,
+    @Body() { name }: AnonymousPropDto,
+  ): Promise<UpdateAnonymousProp> {
+    await this.chatService.modifyAnonymousName(id, name);
+    return {
+      statusCode: HttpStatus.OK,
+      message: `${id} 번 데이터를 ${name} 으로 성공적으로 변경하였습니다.`,
+      name,
+      id,
+    };
+  }
+
+  /**
+   * @desc 어드민의 권한으로 익명 사용자의 이름을 삭제합니다. ( hardDelete )
+   */
+  @DeleteAnonymousNameSwagger()
+  @UseGuards(AdminGuard)
+  @Delete('/anonymous/name/:id')
+  async deleteAnonymousNameRuleByAdmin(
+    @Param('id', new ParseIntPipe()) id: number,
+  ): Promise<DeleteAnonymousProp> {
+    await this.chatService.deleteAnonymousName(id);
+    return {
+      statusCode: HttpStatus.OK,
+      message: `${id} 번 데이터가 성공적으로 삭제되었습니다.`,
+      id,
+    };
+  }
+
+  /**
+   * @desc 어드민 권한으로 모든 익명 접두어 리스트를 불러옵니다.
+   */
+  // TODO: 페이지네이션 도입 필요성 있음
+  @FindAllAnonymousPrefixSwagger()
+  @UseGuards(AdminGuard)
+  @Get('/anonymous/prefix-name')
+  async findAllAnonymousPrefixRuleByAdmin(): Promise<FindAllAnonymousProp> {
+    const list = await this.chatService.findAllAnonymousPrefix();
+    return {
+      statusCode: HttpStatus.OK,
+      message: '익명 접두어 목록을 성공적으로 불러왔습니다.',
+      list,
+    };
+  }
+
+  /**
+   * @desc 어드민 권한으로 모든 익명 이름 리스트를 불러옵니다.
+   */
+  // TODO: 페이지네이션 도입 필요성 있음
+  @FindAllAnonymousNameSwagger()
+  @UseGuards(AdminGuard)
+  @Get('/anonymous/name')
+  async findAllAnonymousNameRuleByAdmin(): Promise<FindAllAnonymousProp> {
+    const list = await this.chatService.findAllAnonymousName();
+    return {
+      statusCode: HttpStatus.OK,
+      message: '익명 이름 목록을 성공적으로 불러왔습니다.',
+      list,
     };
   }
 }

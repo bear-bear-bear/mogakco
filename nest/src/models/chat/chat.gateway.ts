@@ -8,19 +8,17 @@ import {
   MessageBody,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
-import { Logger, UnauthorizedException, UseGuards } from '@nestjs/common';
+import { Logger, UnauthorizedException } from '@nestjs/common';
 
 import ChatService from './chat.service';
 import UserRepository from '@models/user/repositories/user.repository';
 import { IChatGateway } from '@models/chat/interface/gateway';
 import AnonymousRoomUserRepository from '@models/chat/repositories/anonymous-room-user.repository';
-import JwtAuthGuard from '@common/guards/jwt-auth.guard';
 
 @WebSocketGateway({
   namespace: 'chat',
   cors: { origin: '*', credentials: true },
 })
-@UseGuards(JwtAuthGuard)
 export default class ChatGateway implements IChatGateway, OnGatewayConnection, OnGatewayDisconnect {
   @WebSocketServer()
   server!: Server;
