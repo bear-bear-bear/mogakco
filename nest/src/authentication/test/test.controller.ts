@@ -1,5 +1,5 @@
 import { Controller, Get, UseGuards } from '@nestjs/common';
-import { AdminTest, ExpressUser, ITestController } from '@authentication/interfaces/test';
+import { AdminTest, ExpressUser, ITestController } from '@authentication/interfaces/test-interface';
 import AdminGuard from '@common/guards/admin.guard';
 import { AdminTestSwagger, UserTestSwagger } from '@common/decorators/swagger/auth.decorator';
 import JwtAuthGuard from '@common/guards/jwt-auth.guard';
