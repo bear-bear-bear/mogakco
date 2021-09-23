@@ -1,4 +1,6 @@
-import type { Dispatch, SetStateAction } from 'react';
+import { createContext, Dispatch, SetStateAction } from 'react';
+import dynamic from 'next/dynamic';
+
 import Container from './Container';
 import ChatList from './ChatList';
 import InputBox from './InputBox';
@@ -8,12 +10,19 @@ export interface ChatSectionProps {
   setIsShowChat: Dispatch<SetStateAction<boolean>>;
 }
 
+const MDPreview = dynamic(() => import('@uiw/react-markdown-preview'), {
+  ssr: false,
+});
+export const MDPreviewContext = createContext(MDPreview);
+
 const ChatSection = (props: ChatSectionProps) => {
   return (
-    <Container {...props}>
-      <ChatList />
-      <InputBox />
-    </Container>
+    <MDPreviewContext.Provider value={MDPreview}>
+      <Container {...props}>
+        <ChatList />
+        <InputBox />
+      </Container>
+    </MDPreviewContext.Provider>
   );
 };
 
