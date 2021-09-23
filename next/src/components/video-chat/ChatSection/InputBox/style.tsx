@@ -21,30 +21,30 @@ export const FileAddButton = styled(BsFileEarmarkArrowUp)`
   cursor: pointer;
 `;
 
-export const TempTextArea = styled.textarea`
-  flex: 1;
-  padding: 0.33rem 0.5rem;
-  border: none;
-  font-size: 1rem;
-  font-family: inherit;
-  resize: none;
-  letter-spacing: -0.01rem;
-  color: var(--color-black);
-  line-height: 1.1;
+// export const TempTextArea = styled.textarea`
+//   flex: 1;
+//   padding: 0.33rem 0.5rem;
+//   border: none;
+//   font-size: 1rem;
+//   font-family: inherit;
+//   resize: none;
+//   letter-spacing: -0.01rem;
+//   color: var(--color-black);
+//   line-height: 1.1;
 
-  &::placeholder {
-    font-size: inherit;
-    font-weight: inherit;
-    color: var(--color-gray-3);
-    vertical-align: middle;
-  }
+//   &::placeholder {
+//     font-size: inherit;
+//     font-weight: inherit;
+//     color: var(--color-gray-3);
+//     vertical-align: middle;
+//   }
 
-  &:focus {
-    outline: none;
-  }
-`;
+//   &:focus {
+//     outline: none;
+//   }
+// `;
 
-export const TempSendButton = styled(AiOutlineSend)`
+export const SendButton = styled(AiOutlineSend)`
   position: absolute;
   right: 1rem;
   bottom: 1rem;

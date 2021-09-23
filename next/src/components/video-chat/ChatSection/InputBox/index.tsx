@@ -1,6 +1,6 @@
-import React, { KeyboardEvent, useContext, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import dynamic from 'next/dynamic';
-import { MDEditorCustomProps } from '@uiw/react-md-editor';
+import { MDEditorProps } from '@uiw/react-md-editor';
 
 // https://github.com/uiwjs/react-md-editor/issues/52#issuecomment-848969341
 import '@uiw/react-md-editor/markdown-editor.css';
@@ -28,12 +28,9 @@ import { SocketContext } from '@pages/video-chat/[id]';
 
 import * as S from './style';
 
-const MDEditor = dynamic<MDEditorCustomProps>(
-  () => import('@uiw/react-md-editor'),
-  {
-    ssr: false,
-  },
-);
+const MDEditor = dynamic<MDEditorProps>(() => import('@uiw/react-md-editor'), {
+  ssr: false,
+});
 
 const InputBox = () => {
   const [chat, setChat] = useState<string | undefined>('');
@@ -49,24 +46,11 @@ const InputBox = () => {
     setChat('');
   };
 
-  const handleEnterKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
-    if (e.key !== 'Enter') return; // Not e.code (except composing)
-    e.preventDefault();
-
-    if (e.altKey) {
-      setChat((prev) => `${prev}\n`);
-      return;
-    }
-
-    sendChat();
-  };
-
   return (
     <S.InputBox>
       <MDEditor
         value={chat}
         onChange={setChat}
-        onKeyDown={handleEnterKeyDown}
         preview="edit"
         commands={[
           bold,
@@ -92,6 +76,7 @@ const InputBox = () => {
           }),
         ]}
       />
+      <S.SendButton onClick={sendChat} />
     </S.InputBox>
   );
 };
