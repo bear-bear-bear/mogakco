@@ -2,7 +2,7 @@ import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import type { ChatAnnouncement } from 'typings/chat';
 
-interface ChatDirection {
+interface DiscernMyChat {
   isMyChat: boolean;
 }
 type AnnounceType = Pick<ChatAnnouncement, 'type'>;
@@ -16,10 +16,9 @@ export const AnnouncemnetWrapper = styled.section`
   }
 `;
 
-export const ChatWrapper = styled.section<ChatDirection>`
+export const ChatWrapper = styled.section`
   display: flex;
   flex-direction: column;
-  text-align: ${({ isMyChat }) => (isMyChat ? 'right' : 'left')};
 `;
 
 const announcementColorStyles = ({ type }: AnnounceType) => {
@@ -40,9 +39,11 @@ export const Announcement = styled.p<AnnounceType>`
   ${announcementColorStyles}
 `;
 
-export const Writer = styled.p`
+export const Writer = styled.p<DiscernMyChat>`
+  width: fit-content;
   color: var(--color-gray-4);
   margin-bottom: 0.5rem;
+  background-color: ${({ isMyChat }) => (isMyChat ? '#ffffb6' : 'inherit')};
 
   &::after {
     content: ':';

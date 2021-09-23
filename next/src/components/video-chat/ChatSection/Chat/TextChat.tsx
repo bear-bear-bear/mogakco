@@ -11,8 +11,8 @@ const TextChat = ({ username, message, ownerId }: ChatMessage) => {
   const MDPreview = useContext(MDPreviewContext);
 
   return (
-    <S.ChatWrapper isMyChat={ownerId === user?.id}>
-      <S.Writer>{username}</S.Writer>
+    <S.ChatWrapper>
+      <S.Writer isMyChat={ownerId === user?.id}>{username}</S.Writer>
       <MDPreview source={message} />
     </S.ChatWrapper>
   );
