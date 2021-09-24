@@ -1,4 +1,4 @@
-import React, { KeyboardEvent, useContext } from 'react';
+import React, { KeyboardEvent, useCallback, useContext } from 'react';
 
 import useInput from '@hooks/useInput';
 import { SocketContext } from '@pages/video-chat/[id]';
@@ -9,7 +9,11 @@ const InputBox = () => {
   const [chat, onChangeChat, setChat] = useInput('');
   const client = useContext(SocketContext);
 
-  const sendChat = () => {
+  const handleFileAddButtonClick = () => {
+    alert('파일 업로드 미구현');
+  };
+
+  const sendChat = useCallback(() => {
     if (!client) return;
 
     const clearedChat = chat.trim();
@@ -17,24 +21,27 @@ const InputBox = () => {
 
     client.emit('chat', clearedChat);
     setChat('');
-  };
+  }, [chat, client, setChat]);
 
-  const handleEnterKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
-    if (e.key !== 'Enter') return;
-    e.preventDefault();
+  const handleEnterKeyDown = useCallback(
+    (e: KeyboardEvent<HTMLTextAreaElement>) => {
+      if (e.key !== 'Enter') return;
+      e.preventDefault();
 
-    if (e.shiftKey) {
-      setChat((prev) => `${prev}\n`);
-      return;
-    }
+      if (e.shiftKey) {
+        setChat((prev) => `${prev}\n`);
+        return;
+      }
 
-    sendChat();
-  };
+      sendChat();
+    },
+    [sendChat, setChat],
+  );
 
   return (
     <S.InputBox>
       <S.Header>
-        <S.FileAddButton />
+        <S.FileAddButton onClick={handleFileAddButtonClick} />
       </S.Header>
       <S.TempTextArea
         value={chat}
