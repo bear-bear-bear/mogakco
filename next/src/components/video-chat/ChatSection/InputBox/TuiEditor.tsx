@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef } from 'react';
+import React, { useCallback, useContext, useEffect, useRef } from 'react';
 import type { Dispatch, SetStateAction } from 'react';
 import dynamic from 'next/dynamic';
 import { Editor as EditorType, EditorProps } from '@toast-ui/react-editor';
@@ -25,25 +25,41 @@ const EditorWithForwardedRef = React.forwardRef<
 EditorWithForwardedRef.displayName = 'EditerWithForwardedRef';
 
 interface Props {
+  currChat: string;
+  setChat: Dispatch<SetStateAction<string>>;
   setIsShow: Dispatch<SetStateAction<boolean>>;
 }
 
-const WysiwygEditor = ({ setIsShow }: Props) => {
+const WysiwygEditor = ({ currChat, setChat, setIsShow }: Props) => {
   const client = useContext(SocketContext);
   const editorRef = useRef<EditorType>();
 
-  // const handleChange = React.useCallback(() => {
-  //   console.log();
-  // }, [editorRef]);
+  const getCurrentMarkdown = (): string =>
+    editorRef.current?.getInstance().getMarkdown() || '';
+
+  const handleChange = useCallback(() => {
+    const currentMarkdown = getCurrentMarkdown();
+
+    if (currentMarkdown.length > 255) {
+      alert('채팅 입력 제한 수 초과');
+    }
+  }, []);
 
   const handleCloseButtonClick = () => {
-    // ... 텍스트 이전하는 로직
+    const currentMarkdown = getCurrentMarkdown();
+
+    setChat(currentMarkdown);
     setIsShow(false);
   };
 
   return (
     <S.EditorBackground>
-      <EditorWithForwardedRef height="600px" ref={editorRef} />
+      <EditorWithForwardedRef
+        initialValue={currChat}
+        height="600px"
+        ref={editorRef}
+        onChange={handleChange}
+      />
       <SVGButton
         SvgComponent={S.EditorCloseButton}
         buttonProps={{

@@ -82,7 +82,9 @@ const InputBox = () => {
           onClick={sendChat}
         />
       </S.InputBox>
-      {isShowEditor && <Editor setIsShow={setIsShowEditor} />}
+      {isShowEditor && (
+        <Editor setIsShow={setIsShowEditor} currChat={chat} setChat={setChat} />
+      )}
     </>
   );
 };
