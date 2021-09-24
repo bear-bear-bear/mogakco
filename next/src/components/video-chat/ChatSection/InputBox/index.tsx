@@ -20,10 +20,10 @@ const InputBox = () => {
   };
 
   const handleEnterKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
-    if (e.code !== 'Enter') return;
+    if (e.key !== 'Enter') return;
     e.preventDefault();
 
-    if (e.altKey) {
+    if (e.shiftKey) {
       setChat((prev) => `${prev}\n`);
       return;
     }
@@ -40,6 +40,7 @@ const InputBox = () => {
         value={chat}
         onKeyDown={handleEnterKeyDown}
         onChange={onChangeChat}
+        maxLength={255}
         placeholder="여기에 메세지 입력..."
       />
       <S.TempSendButton onClick={sendChat} />
