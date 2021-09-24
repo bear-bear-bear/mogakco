@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { BsFileEarmarkArrowUp } from 'react-icons/bs';
+import UploadSVG from '@public/svg/upload.svg';
 import { AiOutlineSend } from 'react-icons/ai';
 
 export const InputBox = styled.div`
@@ -18,7 +18,9 @@ export const Header = styled.header`
   border-bottom: 1px solid var(--color-gray-1);
 `;
 
-export const FileAddButton = styled(BsFileEarmarkArrowUp)`
+export const FileAddButton = styled(UploadSVG)`
+  width: 1.33rem;
+  height: 1.33rem;
   cursor: pointer;
 `;
 
