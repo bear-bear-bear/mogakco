@@ -1,14 +1,12 @@
-import React, { useCallback, useContext, useEffect, useRef } from 'react';
+import React, { useCallback, useRef } from 'react';
 import type { Dispatch, SetStateAction } from 'react';
 import dynamic from 'next/dynamic';
 import { Editor as EditorType, EditorProps } from '@toast-ui/react-editor';
 import '@toast-ui/editor/dist/toastui-editor.css';
 
-import { SocketContext } from '@pages/video-chat/[id]';
-
+import SVGButton from './SVGButton';
 import type { TuiEditorWithForwardedProps } from './TuiEditorWrapper';
 import * as S from './style';
-import SVGButton from './SVGButton';
 
 const Editor = dynamic<TuiEditorWithForwardedProps>(
   () => import('./TuiEditorWrapper'),
@@ -28,22 +26,30 @@ interface Props {
   currChat: string;
   setChat: Dispatch<SetStateAction<string>>;
   setIsShow: Dispatch<SetStateAction<boolean>>;
+  sendChat: (message: string) => void;
 }
 
-const WysiwygEditor = ({ currChat, setChat, setIsShow }: Props) => {
-  const client = useContext(SocketContext);
-  const editorRef = useRef<EditorType>();
+const WysiwygEditor = ({ currChat, setChat, setIsShow, sendChat }: Props) => {
+  const editorEl = useRef<EditorType>();
 
   const getCurrentMarkdown = (): string =>
-    editorRef.current?.getInstance().getMarkdown() || '';
+    editorEl.current?.getInstance().getMarkdown() || '';
 
-  const handleChange = useCallback(() => {
+  const verifyChatLengthLimit = useCallback(() => {
     const currentMarkdown = getCurrentMarkdown();
 
-    if (currentMarkdown.length > 255) {
-      alert('채팅 입력 제한 수 초과');
-    }
+    return {
+      isLimit: currentMarkdown.length > 255,
+      currChat: currentMarkdown,
+    };
   }, []);
+
+  const handleEditorChange = () => {
+    if (verifyChatLengthLimit().isLimit) {
+      // TODO: 모달로 바꾸기
+      alert('채팅 길이 상한을 넘었습니다 (255)');
+    }
+  };
 
   const handleCloseButtonClick = () => {
     const currentMarkdown = getCurrentMarkdown();
@@ -52,14 +58,21 @@ const WysiwygEditor = ({ currChat, setChat, setIsShow }: Props) => {
     setIsShow(false);
   };
 
+  const handleSendButtonClick = () => {
+    const { isLimit, currChat: chat } = verifyChatLengthLimit();
+
+    if (isLimit) {
+      // TODO: 모달로 바꾸기
+      alert('채팅 길이 상한을 넘었습니다 (255)');
+      return;
+    }
+
+    sendChat(chat);
+    setIsShow(false);
+  };
+
   return (
     <S.EditorBackground>
-      <EditorWithForwardedRef
-        initialValue={currChat}
-        height="600px"
-        ref={editorRef}
-        onChange={handleChange}
-      />
       <SVGButton
         SvgComponent={S.EditorCloseButton}
         buttonProps={{
@@ -68,6 +81,20 @@ const WysiwygEditor = ({ currChat, setChat, setIsShow }: Props) => {
         }}
         onClick={handleCloseButtonClick}
       />
+      <EditorWithForwardedRef
+        initialValue={currChat}
+        height="600px"
+        ref={editorEl}
+        onChange={handleEditorChange}
+      />
+      <S.SendButton
+        color="white"
+        scale="large"
+        outline
+        onClick={handleSendButtonClick}
+      >
+        Send
+      </S.SendButton>
     </S.EditorBackground>
   );
 };

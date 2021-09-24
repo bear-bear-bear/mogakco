@@ -1,10 +1,9 @@
-import { css } from '@emotion/react';
+import { css, keyframes } from '@emotion/react';
 import styled from '@emotion/styled';
 import UploadSVG from '@public/svg/upload.svg';
 import EditSVG from '@public/svg/edit.svg';
-import SendSVG from '@public/svg/send.svg';
 import CloseSVG from '@public/svg/cross.svg';
-import { AiOutlineSend } from 'react-icons/ai';
+import Button from '@components/common/Button';
 
 export const InputBox = styled.div`
   position: relative;
@@ -21,62 +20,6 @@ export const Header = styled.header`
   padding: 0.1rem 0.33rem;
   border-top: 1px solid var(--color-gray-1);
   border-bottom: 1px solid var(--color-gray-1);
-`;
-
-export const SVGButton = styled.button`
-  background-color: inherit;
-  align-items: initial;
-  border: none;
-  padding: 0;
-  border-left-width: 0;
-  border-right-width: 0;
-  line-height: 0.9;
-  cursor: pointer;
-`;
-
-const svgInButtonSizes = css`
-  width: 1.33rem;
-  height: 1.33rem;
-`;
-
-export const EditorPopUpSVG = styled(EditSVG)`
-  ${svgInButtonSizes}
-`;
-
-export const FileUploadSVG = styled(UploadSVG)`
-  ${svgInButtonSizes}
-`;
-
-const svgInAbsoluteButtonStyles = css`
-  position: absolute;
-
-  &:hover,
-  &:focus {
-    transform: scale(1.2);
-  }
-`;
-
-export const SendButton = styled(SendSVG)`
-  bottom: 1rem;
-  right: 1rem;
-
-  ${svgInButtonSizes}
-  ${svgInAbsoluteButtonStyles}
-`;
-
-export const EditorCloseButton = styled(CloseSVG)`
-  top: 1.33rem;
-  right: 1.33rem;
-
-  width: 2rem;
-  height: 2rem;
-
-  path {
-    stroke-width: 3;
-    stroke: var(--color-white);
-  }
-
-  ${svgInAbsoluteButtonStyles}
 `;
 
 export const TextArea = styled.textarea`
@@ -117,4 +60,68 @@ export const EditorBackground = styled.section`
     // Editor root
     background-color: var(--color-white);
   }
+`;
+
+export const SVGButton = styled.button`
+  background-color: inherit;
+  align-items: initial;
+  border: none;
+  padding: 0;
+  border-left-width: 0;
+  border-right-width: 0;
+  line-height: 0.9;
+  cursor: pointer;
+`;
+
+const svgInHeaderButtonStyles = css`
+  width: 1.33rem;
+  height: 1.33rem;
+`;
+
+export const EditorPopUpSVG = styled(EditSVG)`
+  ${svgInHeaderButtonStyles}
+`;
+
+export const FileUploadSVG = styled(UploadSVG)`
+  ${svgInHeaderButtonStyles}
+`;
+
+export const EditorCloseButton = styled(CloseSVG)`
+  width: 2rem;
+  height: 2rem;
+  position: absolute;
+  top: 1.33rem;
+  right: 1.33rem;
+
+  path {
+    stroke-width: 3;
+    stroke: var(--color-white);
+  }
+
+  &:hover,
+  &:focus {
+    transform: scale(1.2);
+  }
+`;
+
+const boundAnimation = keyframes`
+  ${'0%, 50%, 100%'} {
+    transform: scale(1);
+  }
+
+  ${'25%'} {
+    transform: scale(1.1);
+  }
+
+  ${'75%'} {
+    transform: scale(1.05);
+  }
+`;
+
+export const SendButton = styled(Button)`
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
+
+  animation: ${boundAnimation} 2s ease-in-out infinite;
 `;

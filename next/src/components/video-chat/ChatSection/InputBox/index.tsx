@@ -20,15 +20,18 @@ const InputBox = () => {
     setIsShowEditor(true);
   };
 
-  const sendChat = useCallback(() => {
-    if (!client) return;
+  const sendChat = useCallback(
+    (message: string) => {
+      if (!client) return;
 
-    const clearedChat = chat.trim();
-    if (clearedChat === '') return;
+      const clearedChat = message.trim();
+      if (clearedChat === '') return;
 
-    client.emit('chat', clearedChat);
-    setChat('');
-  }, [chat, client, setChat]);
+      client.emit('chat', clearedChat);
+      setChat('');
+    },
+    [client, setChat],
+  );
 
   const handleEnterKeyDown = useCallback(
     (e: KeyboardEvent<HTMLTextAreaElement>) => {
@@ -40,9 +43,9 @@ const InputBox = () => {
         return;
       }
 
-      sendChat();
+      sendChat(chat);
     },
-    [sendChat, setChat],
+    [chat, sendChat, setChat],
   );
 
   return (
@@ -73,17 +76,14 @@ const InputBox = () => {
           maxLength={255}
           placeholder="여기에 메세지 입력..."
         />
-        <SVGButton
-          SvgComponent={S.SendButton}
-          buttonProps={{
-            title: '메세지 전송',
-            'aria-label': 'Send message',
-          }}
-          onClick={sendChat}
-        />
       </S.InputBox>
       {isShowEditor && (
-        <Editor setIsShow={setIsShowEditor} currChat={chat} setChat={setChat} />
+        <Editor
+          setIsShow={setIsShowEditor}
+          currChat={chat}
+          setChat={setChat}
+          sendChat={sendChat}
+        />
       )}
     </>
   );
