@@ -3,7 +3,7 @@ import styled from '@emotion/styled';
 export const ChatList = styled.ul`
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 0.66rem;
   padding: 0.5rem 1rem;
   overflow-x: hidden;
   overflow-y: scroll;
