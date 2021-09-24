@@ -3,6 +3,7 @@ import styled from '@emotion/styled';
 import UploadSVG from '@public/svg/upload.svg';
 import EditSVG from '@public/svg/edit.svg';
 import SendSVG from '@public/svg/send.svg';
+import CloseSVG from '@public/svg/cross.svg';
 import { AiOutlineSend } from 'react-icons/ai';
 
 export const InputBox = styled.div`
@@ -33,17 +34,49 @@ export const SVGButton = styled.button`
   cursor: pointer;
 `;
 
-const svgInButtonStyles = css`
+const svgInButtonSizes = css`
   width: 1.33rem;
   height: 1.33rem;
 `;
 
 export const EditorPopUpSVG = styled(EditSVG)`
-  ${svgInButtonStyles}
+  ${svgInButtonSizes}
 `;
 
 export const FileUploadSVG = styled(UploadSVG)`
-  ${svgInButtonStyles}
+  ${svgInButtonSizes}
+`;
+
+const svgInAbsoluteButtonStyles = css`
+  position: absolute;
+
+  &:hover,
+  &:focus {
+    transform: scale(1.2);
+  }
+`;
+
+export const SendButton = styled(SendSVG)`
+  bottom: 1rem;
+  right: 1rem;
+
+  ${svgInButtonSizes}
+  ${svgInAbsoluteButtonStyles}
+`;
+
+export const EditorCloseButton = styled(CloseSVG)`
+  top: 1.33rem;
+  right: 1.33rem;
+
+  width: 2rem;
+  height: 2rem;
+
+  path {
+    stroke-width: 3;
+    stroke: var(--color-white);
+  }
+
+  ${svgInAbsoluteButtonStyles}
 `;
 
 export const TextArea = styled.textarea`
@@ -69,15 +102,19 @@ export const TextArea = styled.textarea`
   }
 `;
 
-export const SendButton = styled(SendSVG)`
+export const EditorBackground = styled.section`
+  width: 100%;
+  height: 100%;
   position: absolute;
-  right: 1rem;
-  bottom: 1rem;
+  left: 0;
+  top: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.8);
 
-  ${svgInButtonStyles}
-
-  &:hover,
-  &:focus {
-    transform: scale(1.2);
+  & > div {
+    // Editor root
+    background-color: var(--color-white);
   }
 `;
