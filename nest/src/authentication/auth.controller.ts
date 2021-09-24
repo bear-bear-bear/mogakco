@@ -23,7 +23,6 @@ import UserEntity from '@models/user/entities/user.entity';
 import UserService from '@models/user/user.service';
 import ParseJoinPipe from '@common/pipes/parse-join-pipe';
 import EmailService from '@mail/email.service';
-import JwtAuthGuard from '@common/guards/jwt-auth.guard';
 import NonAuthGuard from '@common/guards/non-auth.guard';
 import JwtAuthGuardWithRefresh from '@common/guards/jwt-refresh.guard';
 
@@ -33,7 +32,6 @@ import AuthService from './auth.service';
 
 import {
   AccessTokenSwagger,
-  AdminTestSwagger,
   BeforeRegisterSwagger,
   GetAuthenticationSwagger,
   LoginSwagger,
@@ -44,7 +42,6 @@ import {
 } from '@common/decorators/swagger/auth.decorator';
 import AuthValidateService from '@authentication/auth-validate.service';
 import NoUserException from '@common/exceptions/no-user-exception.filter';
-import AdminGuard from '@common/guards/admin.guard';
 
 /**
  * @desc 회원가입/로그인에 대한 처리 컨트롤러
@@ -63,34 +60,8 @@ export default class AuthController {
   ) {}
 
   /**
-   * @desc 어드민 테스트
-   */
-  @AdminTestSwagger()
-  @Get('/test/admin')
-  @UseGuards(AdminGuard)
-  @HttpCode(200)
-  adminTest(@Req() req: Request) {
-    return {
-      user: req.user,
-      message: '어드민 접근 성공입니다.',
-    };
-  }
-
-  /**
-   * @returns 사용자 accessToken, 정보를 반환한다.
-   */
-  @Get('/test')
-  @UseGuards(JwtAuthGuard)
-  getTest(@Req() req: Request) {
-    return {
-      user: req.user,
-    };
-  }
-
-  /**
    * @returns 로그인을 수행하고 로그인 정보를 반환합니다.
    */
-  // TODO: 로그인 상태에서 접근 막기
   @LoginSwagger()
   @Post('/login')
   @HttpCode(200)
@@ -217,7 +188,7 @@ export default class AuthController {
   ) {
     const domain = this.configService.get<string>('FRONTEND_DOMAIN');
     const port = this.configService.get<number>('FRONTEND_PORT');
-    const redirection = `http://${domain}:${port}/sign-up/required`;
+    const redirection = `${domain}:${port}/sign-up/required`;
     const verification = await this.authValidateService.verifyEmail(id, token);
     if (!verification) {
       return res.status(401).redirect(`${redirection}?success=false`);
@@ -254,6 +225,7 @@ export default class AuthController {
    */
   @GetAuthenticationSwagger()
   @UseFilters(NoUserException)
+  @HttpCode(HttpStatus.OK)
   @Get('/user')
   async getAuthentication(@Req() { headers }: Request, @Res({ passthrough: true }) res: Response) {
     const accessToken = this.authService.getAccessTokenByHeaders(headers);

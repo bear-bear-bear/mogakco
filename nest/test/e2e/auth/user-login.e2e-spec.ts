@@ -69,24 +69,6 @@ describe('사용자 로그인 테스트', () => {
     });
   });
 
-  describe('GET /api/auth/test - 로그인 상태 여부 ( 테스트 )', () => {
-    it('로그인 한 상태면, accessToken 과 함께 간단한 유저 정보가 반환된다.', async () => {
-      await agent
-        .get(APIs.AUTH_TEST)
-        .set('Authorization', `Bearer ${accessToken}`)
-        .then(({ body: res }) => {
-          expect(res.user).toHaveProperty('id');
-          expect(res.user).toHaveProperty('username');
-        });
-    });
-
-    it('10분이 지나면 401 상태 코드가 반환된다.', async () => {
-      await agent.get(APIs.AUTH_TEST).then(({ body: res }) => {
-        expect(res.statusCode).toBe(401);
-      });
-    });
-  });
-
   describe('GET /api/auth/refresh-token - 새로운 accessToken 발급', () => {
     it('refreshToken 값이 검증되면 accessToken이 새로 발급된다.', async () => {
       await agent
@@ -103,21 +85,6 @@ describe('사용자 로그인 테스트', () => {
         .then(({ body: res }) =>
           evalResponseBodyMessage(res, 401, '유저 인증 권한이 존재하지 않습니다.'),
         );
-    });
-
-    // TODO: 해당 테스트 확인하기
-    it('accessToken 새로 발급 후, /api/auth/test 가 정상적으로 응답된다.', async () => {
-      const newAccessToken = await agent
-        .get(APIs.REFRESH_TOKEN)
-        .set('Cookie', `refreshToken=${refreshToken}`)
-        .then(({ body }) => body.accessToken);
-      await agent
-        .get('/api/auth/test')
-        .set('Authorization', `Bearer ${newAccessToken}`)
-        .then(({ body: res }) => {
-          expect(res.user).toHaveProperty('id');
-          expect(res.user).toHaveProperty('username');
-        });
     });
   });
 

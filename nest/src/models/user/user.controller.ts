@@ -39,16 +39,6 @@ export default class UserController implements IUserController {
     private readonly userRepository: UserRepository,
   ) {}
 
-  /**
-   * @desc 현재 사용 안함 ( 정상작동 체크 안함 )
-   */
-  @Get('/')
-  @UseGuards(JwtAuthGuard)
-  async getUserSelfInfo(@Req() req: AuthRequest): Promise<any> {
-    const userInfo = await this.userService.findUserForLogin(req.user.id);
-    return userInfo;
-  }
-
   @GetAllFieldSwagger()
   @Get('/skills')
   @HttpCode(HttpStatus.OK)

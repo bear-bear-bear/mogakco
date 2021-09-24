@@ -19,8 +19,6 @@ export interface GetSelectableProps extends GeneralResponse {
 }
 
 export interface IUserController {
-  getUserSelfInfo(req: AuthRequest): Promise<any>;
-
   getAllFields(): Promise<GetSelectableProps>;
 
   getAllJobs(): Promise<GetSelectableProps>;

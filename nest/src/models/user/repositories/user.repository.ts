@@ -63,6 +63,8 @@ export default class UserRepository extends Repository<UserEntity> {
       .where('user.email = :email', { email })
       .getOne();
     if (!user) return null;
+    delete user.job?.createdAt;
+    delete user.job?.updatedAt;
     const skills = await this.getUserFields(user.skills);
     return {
       ...user,
@@ -74,6 +76,8 @@ export default class UserRepository extends Repository<UserEntity> {
     const user = await this.getJoinJobQueryBuilder().where('user.id = :id', { id }).getOne();
     if (user === undefined) return null;
     const skills = await this.getUserFields(user.skills);
+    delete user.job?.createdAt;
+    delete user.job?.updatedAt;
     return {
       ...user,
       skills,
