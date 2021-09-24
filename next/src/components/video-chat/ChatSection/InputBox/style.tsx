@@ -1,5 +1,8 @@
+import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import UploadSVG from '@public/svg/upload.svg';
+import EditSVG from '@public/svg/edit.svg';
+import SendSVG from '@public/svg/send.svg';
 import { AiOutlineSend } from 'react-icons/ai';
 
 export const InputBox = styled.div`
@@ -10,21 +13,40 @@ export const InputBox = styled.div`
 `;
 
 export const Header = styled.header`
-  padding: 0.33rem;
   display: flex;
   align-items: center;
   justify-content: flex-end;
+  gap: 0.66rem;
+  padding: 0.1rem 0.33rem;
   border-top: 1px solid var(--color-gray-1);
   border-bottom: 1px solid var(--color-gray-1);
 `;
 
-export const FileAddButton = styled(UploadSVG)`
-  width: 1.33rem;
-  height: 1.33rem;
+export const SVGButton = styled.button`
+  background-color: inherit;
+  align-items: initial;
+  border: none;
+  padding: 0;
+  border-left-width: 0;
+  border-right-width: 0;
+  line-height: 0.9;
   cursor: pointer;
 `;
 
-export const TempTextArea = styled.textarea`
+const svgInButtonStyles = css`
+  width: 1.33rem;
+  height: 1.33rem;
+`;
+
+export const EditorPopUpSVG = styled(EditSVG)`
+  ${svgInButtonStyles}
+`;
+
+export const FileUploadSVG = styled(UploadSVG)`
+  ${svgInButtonStyles}
+`;
+
+export const TextArea = styled.textarea`
   flex: 1;
   padding: 0.33rem 0.5rem;
   border: none;
@@ -47,11 +69,12 @@ export const TempTextArea = styled.textarea`
   }
 `;
 
-export const TempSendButton = styled(AiOutlineSend)`
+export const SendButton = styled(SendSVG)`
   position: absolute;
   right: 1rem;
   bottom: 1rem;
-  cursor: pointer;
+
+  ${svgInButtonStyles}
 
   &:hover,
   &:focus {
