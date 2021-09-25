@@ -53,16 +53,14 @@ export const authProlongTestApi = () =>
     });
 
 // 유저 정보 수정
-// TODO: nest API 추가시 axios > apiClient로 변경하기
 export const editAccountApi = (data: IAccountEditProps) =>
-  axios
-    .put<IAccountEditResponse>(`/api/user`, data)
+  apiClient
+    .put<IAccountEditResponse>('/api/user', data)
     .then((res) => res.data.user);
 
 // 계정 삭제
-// TODO: nest API 추가시 axios > apiClient로 변경하기
-export const deleteAccountApi = (id: number) =>
-  axios.delete<IGeneralServerResponse>(`/api/user/${id}`);
+export const deleteAccountApi = () =>
+  apiClient.delete<IGeneralServerResponse>('/api/user');
 
 // ********************************************************************************************************************
 // sign-up
