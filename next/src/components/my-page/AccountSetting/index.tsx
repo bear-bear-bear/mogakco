@@ -130,6 +130,9 @@ const AccountSetting = ({
           edittedSkills && edittedSkills.map((skill) => skill.id.toString()),
         job: edittedJob && edittedJob.id.toString(),
       });
+
+      // TODO: 모달 추가되면 모달로 변경
+      alert('수정되었습니다.');
     } catch (err) {
       logAxiosError(err as GeneralAxiosError);
     }
