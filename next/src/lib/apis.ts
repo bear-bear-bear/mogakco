@@ -55,12 +55,12 @@ export const authProlongTestApi = () =>
 // 유저 정보 수정
 export const editAccountApi = (data: IAccountEditProps) =>
   apiClient
-    .put<IAccountEditResponse>(`/api/user`, data)
+    .put<IAccountEditResponse>('/api/user', data)
     .then((res) => res.data.user);
 
 // 계정 삭제
-export const deleteAccountApi = (id: number) =>
-  apiClient.delete<IGeneralServerResponse>(`/api/user/${id}`);
+export const deleteAccountApi = () =>
+  apiClient.delete<IGeneralServerResponse>('/api/user');
 
 // ********************************************************************************************************************
 // sign-up

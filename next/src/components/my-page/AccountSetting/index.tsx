@@ -92,7 +92,7 @@ const AccountSetting = ({
   const handleAccountDeleteButtonClick = async () => {
     // TODO: 모달 추가 후 '정말로 삭제하시겠습니까?' 추가
     try {
-      await deleteAccountApi(id);
+      await deleteAccountApi();
       mutateUser({ isLoggedIn: false });
       token.delete();
     } catch (err) {
