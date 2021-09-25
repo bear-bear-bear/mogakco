@@ -37,8 +37,15 @@ const ChatList = () => {
 
     const scrollToBottom = () => {
       if (!chatListRef.current) return;
+
       const chatListEl = chatListRef.current;
-      chatListEl.scrollTop = chatListEl.scrollHeight;
+      const { scrollHeight, clientHeight, scrollTop } = chatListEl;
+
+      const scrollTopMaxPixel = scrollHeight - clientHeight;
+      const isScrollAtNearlyEnd = scrollTop > scrollTopMaxPixel - clientHeight;
+      if (!isScrollAtNearlyEnd) return;
+
+      chatListEl.scrollTop = scrollTopMaxPixel;
     };
 
     const handleAddMessage = (newMessage: Message) => {
