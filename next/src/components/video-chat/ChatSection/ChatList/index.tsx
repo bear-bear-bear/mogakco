@@ -1,17 +1,12 @@
-import React, {
-  createContext,
-  useContext,
-  useEffect,
-  useState,
-  useRef,
-} from 'react';
+import React, { createContext, useEffect, useState, useRef } from 'react';
 import dynamic from 'next/dynamic';
 import { ViewerProps } from '@toast-ui/react-editor';
 import '@toast-ui/editor/dist/toastui-editor-viewer.css';
+import useChatClient from '@hooks/useChatClient';
 
-import { SocketContext } from '@pages/video-chat/[id]';
 import { ChatAnnouncement, ChatMessage } from 'typings/chat';
 
+import { ChatEvent } from '@lib/enum';
 import Chat from '../Chat';
 import * as S from './style';
 
@@ -25,16 +20,12 @@ const Viewer = dynamic<ViewerProps>(
 );
 export const MdViewerContext = createContext(Viewer);
 
-const returnVoid = () => undefined;
-
 const ChatList = () => {
   const [chatList, setChatList] = useState<Message[]>([]);
-  const client = useContext(SocketContext);
+  const socketClient = useChatClient();
   const chatListRef = useRef<HTMLUListElement>(null);
 
   useEffect(() => {
-    if (!client) return returnVoid;
-
     const scrollToBottom = () => {
       if (!chatListRef.current) return;
 
@@ -53,16 +44,16 @@ const ChatList = () => {
       scrollToBottom();
     };
 
-    client.on('chat', handleAddMessage);
-    client.on('exit', handleAddMessage);
-    client.on('enter', handleAddMessage);
+    socketClient.on(ChatEvent.SEND_CHAT, handleAddMessage);
+    socketClient.on(ChatEvent.ROOM_EXIT, handleAddMessage);
+    socketClient.on(ChatEvent.ROOM_ENTER, handleAddMessage);
 
     return () => {
-      client.off('chat');
-      client.off('exit');
-      client.off('enter');
+      socketClient.off(ChatEvent.SEND_CHAT);
+      socketClient.off(ChatEvent.ROOM_EXIT);
+      socketClient.off(ChatEvent.ROOM_ENTER);
     };
-  });
+  }, [socketClient]);
 
   return (
     <MdViewerContext.Provider value={Viewer}>

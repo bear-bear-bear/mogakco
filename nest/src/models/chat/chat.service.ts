@@ -25,6 +25,7 @@ import RoomEntity from '@models/chat/entities/room.entity';
 import { getRepository } from 'typeorm';
 import AnonymousPrefixEntity from '@models/chat/entities/anonymous_prefix.entity';
 import AnonymousNameEntity from '@models/chat/entities/anonymous_names.entity';
+import { ChatEvent } from '@common/helpers/enum.helper';
 
 @Injectable()
 export default class ChatService implements IChatService {
@@ -180,7 +181,7 @@ export default class ChatService implements IChatService {
     const memberCount = await this.roomUserRepository.count({
       where: { roomId },
     });
-    server.emit('member-count', memberCount);
+    server.emit(ChatEvent.SEND_MEMBER_COUNT, memberCount);
   }
 
   /**
