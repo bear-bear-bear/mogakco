@@ -8,6 +8,7 @@ import SVGButton from './SVGButton';
 import type { TuiEditorWithForwardedProps } from './TuiEditorWrapper';
 import * as S from './style';
 
+// 210927 - toast-ui editor 3.1.0 버전(lastest) 기준 SSR 미지원으로 next/dynamic 사용
 const Editor = dynamic<TuiEditorWithForwardedProps>(
   () => import('./TuiEditorWrapper'),
   { ssr: false },
@@ -19,17 +20,21 @@ const EditorWithForwardedRef = React.forwardRef<
 >((props, ref) => (
   <Editor {...props} forwardedRef={ref as React.MutableRefObject<EditorType>} />
 ));
-
 EditorWithForwardedRef.displayName = 'EditerWithForwardedRef';
 
-interface Props {
+interface TuiEditorProps {
   currChat: string;
   setChat: Dispatch<SetStateAction<string>>;
   setIsShow: Dispatch<SetStateAction<boolean>>;
   sendChat: (message: string) => void;
 }
 
-const WysiwygEditor = ({ currChat, setChat, setIsShow, sendChat }: Props) => {
+const TuiEditor = ({
+  currChat,
+  setChat,
+  setIsShow,
+  sendChat,
+}: TuiEditorProps) => {
   const editorEl = useRef<EditorType>();
 
   const getCurrentMarkdown = (): string =>
@@ -99,4 +104,4 @@ const WysiwygEditor = ({ currChat, setChat, setIsShow, sendChat }: Props) => {
   );
 };
 
-export default WysiwygEditor;
+export default TuiEditor;
