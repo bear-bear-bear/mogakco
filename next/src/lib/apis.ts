@@ -11,6 +11,7 @@ import type {
   IAccountEditResponse,
 } from 'typings/auth';
 import { IncomingHttpHeaders } from 'http';
+import { UploadImageResponse } from 'typings/chat';
 
 // TODO: 각 API 사용 시 res.data와 catch err 반복 제거해보기
 
@@ -99,8 +100,15 @@ export const loadJobsApi = () =>
 // chat
 // ********************************************************************************************************************
 // 채팅방 찾기 또는 만들기
-// TODO: 에러 처리 보충, 어떻게 할 지 이야기 하고 구현하기
 export const getVideoChatRoomIdApi = () =>
   apiClient
     .get<IGetChatRoomIdResponse>(`/api/chat/recommend/join`)
     .then(({ data: { roomId } }) => roomId);
+
+// TODO: nest js api 추가 시 axios >> apiClient 로 변경
+export const uploadImage = (formData: FormData) =>
+  axios
+    .post<UploadImageResponse>(`/api/chat/upload`, formData, {
+      headers: { 'content-type': 'multipart/formdata' },
+    })
+    .then((res) => res.data);
