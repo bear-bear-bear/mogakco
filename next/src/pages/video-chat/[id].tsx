@@ -24,7 +24,11 @@ const pageProps = {
   locale: 'ko_KR',
 };
 
-export const SocketContext = createContext<Socket>(io());
+export const SocketContext = createContext<Socket>(
+  io({
+    autoConnect: false,
+  }),
+);
 
 const ChatRoom = () => {
   // const { user } = useUser({ redirectTo: '/' });
