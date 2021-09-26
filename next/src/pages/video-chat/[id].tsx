@@ -1,5 +1,5 @@
 import { GetServerSideProps } from 'next';
-import { createContext, useEffect, useState } from 'react';
+import { createContext, useEffect, useMemo, useState } from 'react';
 
 import CustomHead from '@components/common/CustomHead';
 import Container from '@components/video-chat/Container';
@@ -36,7 +36,10 @@ const ChatRoom = () => {
   const router = useRouter();
   const [isShowChat, setIsShowChat] = useState<boolean>(true);
 
-  const socketClient = getChatSocket(user, router.query);
+  const socketClient = useMemo(
+    () => getChatSocket(user, router.query),
+    [router.query, user],
+  );
 
   /**
    * @desc 채팅 에러를 제어하는 useEffect
