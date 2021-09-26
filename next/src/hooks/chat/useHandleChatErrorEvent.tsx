@@ -5,6 +5,9 @@ import { ChatEvent } from '@lib/enum';
 import devModeLog from '@lib/devModeLog';
 import { IUserGetResponse } from 'typings/auth';
 
+/**
+ * @desc 소켓에서 발생하는 에러 관련 이벤트를 제어합니다.
+ */
 export default function useHandleChatErrorEvent(
   socketClient: Socket,
   user: IUserGetResponse | undefined,
