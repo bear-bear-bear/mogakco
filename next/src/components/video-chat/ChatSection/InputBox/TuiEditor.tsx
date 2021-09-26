@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import type { Dispatch, SetStateAction } from 'react';
 import dynamic from 'next/dynamic';
 import { Editor as EditorType, EditorProps } from '@toast-ui/react-editor';
@@ -6,7 +6,8 @@ import '@toast-ui/editor/dist/toastui-editor.css';
 
 import { uploadImage } from '@lib/apis';
 import { logAxiosError } from '@lib/apiClient';
-import { GeneralAxiosError } from 'typings/common';
+import type { GeneralAxiosError } from 'typings/common';
+
 import SVGButton from './SVGButton';
 import type { TuiEditorWithForwardedProps } from './TuiEditorWrapper';
 import * as S from './style';
