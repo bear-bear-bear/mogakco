@@ -2,7 +2,7 @@ import React, { createContext, useEffect, useState, useRef } from 'react';
 import dynamic from 'next/dynamic';
 import { ViewerProps } from '@toast-ui/react-editor';
 import '@toast-ui/editor/dist/toastui-editor-viewer.css';
-import useChatClient from '@hooks/useChatClient';
+import useChatClient from '@hooks/chat/useChatClient';
 
 import { ChatAnnouncement, ChatMessage } from 'typings/chat';
 

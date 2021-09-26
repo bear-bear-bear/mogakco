@@ -1,7 +1,7 @@
 import React, { KeyboardEvent, useCallback, useState } from 'react';
 
 import useInput from '@hooks/useInput';
-import useChatClient from '@hooks/useChatClient';
+import useChatClient from '@hooks/chat/useChatClient';
 
 import { ChatEvent } from '@lib/enum';
 import Editor from './TuiEditor';

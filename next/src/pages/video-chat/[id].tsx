@@ -15,7 +15,7 @@ import type { GeneralAxiosError } from 'typings/common';
 import getChatSocket from '@lib/getChatSocket';
 import { useRouter } from 'next/router';
 import { io, Socket } from 'socket.io-client';
-import { ChatEvent } from '@lib/enum';
+import useHandleChatErrorEvent from '@hooks/chat/useHandleChatErrorEvent';
 
 const pageProps = {
   title: '화상채팅 - Mogakco',
@@ -44,21 +44,7 @@ const ChatRoom = () => {
   /**
    * @desc 채팅 에러를 제어하는 useEffect
    */
-  useEffect(() => {
-    socketClient.on(ChatEvent.CHECK_MULTIPLE_USER, (id: number) => {
-      if (user?.id === id) {
-        router.push('/dashboard');
-      }
-    });
-    socketClient.on(ChatEvent.CONNECT_ERROR, (err) => {
-      devModeLog(err.message);
-      router.push('/dashboard');
-    });
-    return () => {
-      socketClient.off(ChatEvent.CHECK_MULTIPLE_USER);
-      socketClient.off(ChatEvent.CONNECT_ERROR);
-    };
-  }, [router, socketClient, user?.id]);
+  useHandleChatErrorEvent(socketClient, user, router);
 
   /**
    * @desc ComponentDidUnMount 시 소켓 연결을 종료하는 useEffect

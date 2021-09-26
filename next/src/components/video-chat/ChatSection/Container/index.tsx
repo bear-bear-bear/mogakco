@@ -1,7 +1,8 @@
 import React, { ReactNode, useEffect, useState } from 'react';
-import useChatClient from '@hooks/useChatClient';
 import { ChatEvent } from '@lib/enum';
+import useChatClient from '@hooks/chat/useChatClient';
 import type { ChatSectionProps } from '..';
+
 import * as S from './style';
 
 export interface ContainerProps extends ChatSectionProps {
