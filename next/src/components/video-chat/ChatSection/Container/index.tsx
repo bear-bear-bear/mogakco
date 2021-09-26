@@ -17,12 +17,12 @@ const Container = ({ children, isShowChat, setIsShowChat }: ContainerProps) => {
   };
 
   useEffect(() => {
-    socketClient?.on(ChatEvent.GET_MEMBER_COUNT, (count: number) => {
+    socketClient.on(ChatEvent.GET_MEMBER_COUNT, (count: number) => {
       setMemberCount(count);
     });
 
     return () => {
-      socketClient?.off(ChatEvent.GET_MEMBER_COUNT);
+      socketClient.off(ChatEvent.GET_MEMBER_COUNT);
     };
   }, [socketClient]);
 
