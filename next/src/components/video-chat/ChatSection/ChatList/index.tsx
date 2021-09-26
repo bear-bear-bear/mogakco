@@ -36,10 +36,14 @@ const ChatList = () => {
     if (!chatListRef.current) return;
 
     const chatListEl = chatListRef.current;
-    const { scrollHeight, clientHeight, scrollTop } = chatListEl;
+    const { scrollHeight, clientHeight, scrollTop, lastElementChild } =
+      chatListEl;
 
+    const flexGapPixelLike = S.GAP_REM * 16;
+    const lastElHeight = lastElementChild?.clientHeight || 0;
     const scrollTopMaxPixel = scrollHeight - clientHeight;
-    const isScrollAtNearlyEnd = scrollTop > scrollTopMaxPixel - clientHeight;
+    const isScrollAtNearlyEnd =
+      scrollTop > scrollTopMaxPixel - lastElHeight - flexGapPixelLike;
     if (!isScrollAtNearlyEnd) return;
 
     chatListEl.scrollTop = scrollTopMaxPixel;
