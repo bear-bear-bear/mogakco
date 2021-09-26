@@ -1,8 +1,9 @@
-import React, { KeyboardEvent, useCallback, useContext, useState } from 'react';
+import React, { KeyboardEvent, useCallback, useState } from 'react';
 
 import useInput from '@hooks/useInput';
-import { SocketContext } from '@pages/video-chat/[id]';
+import useChatClient from '@hooks/chat/useChatClient';
 
+import { ChatEvent } from '@lib/enum';
 import Editor from './TuiEditor';
 import SVGButton from './SVGButton';
 import * as S from './style';
@@ -10,7 +11,7 @@ import * as S from './style';
 const InputBox = () => {
   const [isShowEditor, setIsShowEditor] = useState(false);
   const [chat, onChangeChat, setChat] = useInput('');
-  const client = useContext(SocketContext);
+  const socketClient = useChatClient();
 
   const handleFileUploadButtonClick = () => {
     alert('파일 업로드 미구현');
@@ -22,15 +23,15 @@ const InputBox = () => {
 
   const sendChat = useCallback(
     (message: string) => {
-      if (!client) return;
+      if (!socketClient) return;
 
       const clearedChat = message.trim();
       if (clearedChat === '') return;
 
-      client.emit('chat', clearedChat);
+      socketClient.emit(ChatEvent.SEND_CHAT, clearedChat);
       setChat('');
     },
-    [client, setChat],
+    [socketClient, setChat],
   );
 
   const handleEnterKeyDown = useCallback(

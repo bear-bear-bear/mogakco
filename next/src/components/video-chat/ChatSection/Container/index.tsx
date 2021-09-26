@@ -1,6 +1,8 @@
-import React, { ReactNode, useContext, useEffect, useState } from 'react';
-import { SocketContext } from '@pages/video-chat/[id]';
+import React, { ReactNode, useEffect, useState } from 'react';
+import { ChatEvent } from '@lib/enum';
+import useChatClient from '@hooks/chat/useChatClient';
 import type { ChatSectionProps } from '..';
+
 import * as S from './style';
 
 export interface ContainerProps extends ChatSectionProps {
@@ -9,21 +11,21 @@ export interface ContainerProps extends ChatSectionProps {
 
 const Container = ({ children, isShowChat, setIsShowChat }: ContainerProps) => {
   const [memberCount, setMemberCount] = useState<number>(0);
-  const client = useContext(SocketContext);
+  const socketClient = useChatClient();
 
   const handleChatCloseButtonClick = () => {
     setIsShowChat(false);
   };
 
   useEffect(() => {
-    client?.on('member-count', (count: number) => {
+    socketClient.on(ChatEvent.GET_MEMBER_COUNT, (count: number) => {
       setMemberCount(count);
     });
 
     return () => {
-      client?.off('member-count');
+      socketClient.off(ChatEvent.GET_MEMBER_COUNT);
     };
-  }, [client]);
+  }, [socketClient]);
 
   return (
     <S.Container isShow={isShowChat}>

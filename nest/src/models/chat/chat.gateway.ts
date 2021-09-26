@@ -14,6 +14,7 @@ import ChatService from './chat.service';
 import UserRepository from '@models/user/repositories/user.repository';
 import { IChatGateway } from '@models/chat/interface/gateway';
 import AnonymousRoomUserRepository from '@models/chat/repositories/anonymous-room-user.repository';
+import { ChatEvent } from '@common/helpers/enum.helper';
 
 @WebSocketGateway({
   namespace: 'chat',
@@ -38,6 +39,7 @@ export default class ChatGateway implements IChatGateway, OnGatewayConnection, O
   async handleConnection(@ConnectedSocket() client: Socket) {
     const { auth } = client.handshake;
     const { userId, roomId } = this.chatService.getInfoFromHeader(auth);
+    client.join(String(roomId));
     const {
       anonymousUser: { username },
       isCreated,
@@ -61,6 +63,7 @@ export default class ChatGateway implements IChatGateway, OnGatewayConnection, O
     const { auth } = client.handshake;
     const { userId, roomId } = this.chatService.getInfoFromHeader(auth);
     await this.chatService.leaveRoom(auth);
+    client.leave(String(roomId));
     const {
       anonymousUser: { username },
     } = await this.chatService.findOrCreateAnonymousName(auth);
@@ -70,17 +73,17 @@ export default class ChatGateway implements IChatGateway, OnGatewayConnection, O
     this.logger.debug(`client ${client.conn.id} disconnected`);
     await this.chatService.checkDeleteRoom(auth);
     await this.chatService.emitMemberCountEvent(this.server, auth);
-    this.server.emit('check-multiple-user', userId);
+    this.server.to(String(roomId)).emit(ChatEvent.CHECK_MULTIPLE_USER, userId);
   }
 
   /**
    * @desc 사용자가 존재하는 방에 채팅 이벤트를 발생시킵니다.
    */
-  @SubscribeMessage('chat')
+  @SubscribeMessage(ChatEvent.SEND_CHAT)
   async chat(@ConnectedSocket() client: Socket, @MessageBody() message: string): Promise<void> {
     const { auth } = client.handshake;
     const chat = await this.chatService.makeAndSaveChat(auth, message);
-    this.server.emit('chat', chat);
+    this.server.emit(ChatEvent.SEND_CHAT, chat);
   }
 
   async fileUpload(client: Socket, file: Express.Multer.File): Promise<void> {
