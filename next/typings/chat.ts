@@ -1,4 +1,5 @@
 import { Socket } from 'socket.io-client';
+import { IGeneralServerResponse } from './common';
 
 export interface ComponentSocketProps {
   client: Socket | null;
@@ -24,4 +25,8 @@ export interface ChatFile {
   ownerId: number;
   username: string;
   info: { filename: string; size: number; url: string };
+}
+
+export interface UploadImageResponse extends IGeneralServerResponse {
+  url: string;
 }
