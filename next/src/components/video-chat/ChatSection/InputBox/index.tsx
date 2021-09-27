@@ -1,17 +1,14 @@
-import React, { KeyboardEvent, useCallback, useState } from 'react';
+import React, { useCallback, useContext, useState } from 'react';
+import type { KeyboardEvent } from 'react';
 
-import useInput from '@hooks/useInput';
-import useChatClient from '@hooks/chat/useChatClient';
-
-import { ChatEvent } from '@lib/enum';
 import Editor from './TuiEditor';
 import SVGButton from './SVGButton';
+import { ChatContext } from './chatContext';
 import * as S from './style';
 
 const InputBox = () => {
   const [isShowEditor, setIsShowEditor] = useState(false);
-  const [chat, onChangeChat, setChat] = useInput('');
-  const socketClient = useChatClient();
+  const chat = useContext(ChatContext);
 
   const handleFileUploadButtonClick = () => {
     alert('파일 업로드 미구현');
@@ -21,32 +18,19 @@ const InputBox = () => {
     setIsShowEditor(true);
   };
 
-  const sendChat = useCallback(
-    (message: string) => {
-      if (!socketClient) return;
-
-      const clearedChat = message.trim();
-      if (clearedChat === '') return;
-
-      socketClient.emit(ChatEvent.SEND_CHAT, clearedChat);
-      setChat('');
-    },
-    [socketClient, setChat],
-  );
-
   const handleEnterKeyDown = useCallback(
     (e: KeyboardEvent<HTMLTextAreaElement>) => {
       if (e.key !== 'Enter') return;
       e.preventDefault();
 
       if (e.shiftKey) {
-        setChat((prev) => `${prev}\n`);
+        chat.set((prev) => `${prev}\n`);
         return;
       }
 
-      sendChat(chat);
+      chat.send(chat.get());
     },
-    [chat, sendChat, setChat],
+    [chat],
   );
 
   return (
@@ -71,21 +55,14 @@ const InputBox = () => {
           />
         </S.Header>
         <S.TextArea
-          value={chat}
+          value={chat.get()}
           onKeyDown={handleEnterKeyDown}
-          onChange={onChangeChat}
+          onChange={chat.onChange}
           maxLength={255}
           placeholder="여기에 메세지 입력..."
         />
       </S.InputBox>
-      {isShowEditor && (
-        <Editor
-          setIsShow={setIsShowEditor}
-          currChat={chat}
-          setChat={setChat}
-          sendChat={sendChat}
-        />
-      )}
+      {isShowEditor && <Editor setIsShow={setIsShowEditor} />}
     </>
   );
 };

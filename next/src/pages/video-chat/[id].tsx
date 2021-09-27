@@ -5,6 +5,7 @@ import CustomHead from '@components/common/CustomHead';
 import Container from '@components/video-chat/Container';
 import CamSection from '@components/video-chat/CamSection';
 import ChatSection from '@components/video-chat/ChatSection';
+import { ChatProvider } from '@components/video-chat/ChatSection/InputBox/chatContext';
 import Sidebar from '@components/video-chat/Sidebar';
 import apiClient, { logAxiosError } from '@lib/apiClient';
 import devModeLog from '@lib/devModeLog';
@@ -62,7 +63,12 @@ const ChatRoom = () => {
       <SocketContext.Provider value={socketClient}>
         <Container>
           <Sidebar setIsShowChat={setIsShowChat} />
-          <ChatSection isShowChat={isShowChat} setIsShowChat={setIsShowChat} />
+          <ChatProvider>
+            <ChatSection
+              isShowChat={isShowChat}
+              setIsShowChat={setIsShowChat}
+            />
+          </ChatProvider>
           <CamSection />
         </Container>
       </SocketContext.Provider>
