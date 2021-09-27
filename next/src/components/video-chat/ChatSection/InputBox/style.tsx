@@ -7,9 +7,6 @@ import Button from '@components/common/Button';
 
 export const InputBox = styled.div`
   position: relative;
-  display: flex;
-  flex-direction: column;
-  height: 10rem;
 `;
 
 export const Header = styled.header`
@@ -23,7 +20,8 @@ export const Header = styled.header`
 `;
 
 export const TextArea = styled.textarea`
-  flex: 1;
+  width: 100%;
+  height: 8.5rem;
   padding: 0.33rem 0.5rem;
   border: none;
   font-size: 1rem;
