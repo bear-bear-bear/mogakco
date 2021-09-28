@@ -1,7 +1,7 @@
 import React, { useCallback, useContext } from 'react';
 import type { KeyboardEvent } from 'react';
 
-import { ChatContext } from './chatContext';
+import { ChatContext } from '../ChatContext';
 import useCustomDropZone from './useCustomDropzone';
 import * as S from './style';
 

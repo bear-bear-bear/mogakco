@@ -1,22 +1,22 @@
-import { GetServerSideProps } from 'next';
 import { createContext, useEffect, useMemo, useState } from 'react';
+import { GetServerSideProps } from 'next';
+import { useRouter } from 'next/router';
+import { io, Socket } from 'socket.io-client';
 
+import useUser from '@hooks/useUser';
+import useHandleChatErrorEvent from '@hooks/chat/useHandleChatErrorEvent';
 import CustomHead from '@components/common/CustomHead';
 import Container from '@components/video-chat/Container';
 import CamSection from '@components/video-chat/CamSection';
 import ChatSection from '@components/video-chat/ChatSection';
-import { ChatProvider } from '@components/video-chat/ChatSection/InputBox/chatContext';
+import { ChatProvider } from '@components/video-chat/ChatSection/InputBox/ChatContext';
 import Sidebar from '@components/video-chat/Sidebar';
 import apiClient, { logAxiosError } from '@lib/apiClient';
 import devModeLog from '@lib/devModeLog';
 import { refreshAccessTokenApiSSR } from '@lib/apis';
-import token from '@lib/token';
-import useUser from '@hooks/useUser';
-import type { GeneralAxiosError } from 'typings/common';
 import getChatSocket from '@lib/getChatSocket';
-import { useRouter } from 'next/router';
-import { io, Socket } from 'socket.io-client';
-import useHandleChatErrorEvent from '@hooks/chat/useHandleChatErrorEvent';
+import token from '@lib/token';
+import type { GeneralAxiosError } from 'typings/common';
 
 const pageProps = {
   title: '화상채팅 - Mogakco',
