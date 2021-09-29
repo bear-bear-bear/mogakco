@@ -1,4 +1,5 @@
 import { createContext, useEffect, useMemo, useState } from 'react';
+import type { Dispatch, SetStateAction } from 'react';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import { io, Socket } from 'socket.io-client';
@@ -30,11 +31,15 @@ export const SocketContext = createContext<Socket>(
   }),
 );
 
+export const ChatShowContext = createContext<
+  [boolean, Dispatch<SetStateAction<boolean>>]
+>([false, () => undefined]);
+
 const ChatRoom = () => {
   // const { user } = useUser({ redirectTo: '/' });
   const { user } = useUser();
   const router = useRouter();
-  const [isShowChat, setIsShowChat] = useState<boolean>(true);
+  const chatShowState = useState<boolean>(true);
 
   const socketClient = useMemo(
     () => getChatSocket(user, router.query),
@@ -60,11 +65,13 @@ const ChatRoom = () => {
     <>
       <CustomHead {...pageProps} />
       <SocketContext.Provider value={socketClient}>
-        <Container>
-          <Sidebar setIsShowChat={setIsShowChat} />
-          <ChatSection isShowChat={isShowChat} setIsShowChat={setIsShowChat} />
-          <CamSection />
-        </Container>
+        <ChatShowContext.Provider value={chatShowState}>
+          <Container>
+            <Sidebar />
+            <ChatSection />
+            <CamSection />
+          </Container>
+        </ChatShowContext.Provider>
       </SocketContext.Provider>
     </>
   );

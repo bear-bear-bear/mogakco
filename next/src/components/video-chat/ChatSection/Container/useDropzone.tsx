@@ -1,5 +1,5 @@
 import { useCallback, useContext } from 'react';
-import type { DragEvent } from 'react';
+import type { Dispatch, SetStateAction } from 'react';
 import { useDropzone } from 'react-dropzone';
 import type { FileRejection } from 'react-dropzone';
 
@@ -9,11 +9,17 @@ import type { GeneralAxiosError } from 'typings/common';
 
 import { ChatContext } from '../ChatContext';
 
-const useCustomDropZone = () => {
+interface Props {
+  setIsShowDropzoneUI: Dispatch<SetStateAction<boolean>>;
+}
+
+const useCustomDropZone = ({ setIsShowDropzoneUI }: Props) => {
   const chat = useContext(ChatContext);
 
   const onDropAccepted = useCallback(
     async ([acceptedOneFile]: File[]) => {
+      setIsShowDropzoneUI(false);
+
       try {
         const formData = new FormData();
         formData.append('image', acceptedOneFile);
@@ -25,28 +31,31 @@ const useCustomDropZone = () => {
         logAxiosError(err as GeneralAxiosError);
       }
     },
-    [chat],
+    [chat, setIsShowDropzoneUI],
   );
 
-  const onDropRejected = useCallback((fileRejections: FileRejection[]) => {
-    const errorMessages = fileRejections
-      .map(({ errors }) => errors.map((error) => error.message))
-      .flat();
-    const deduplicatedErrorMessages = Array.from(new Set(errorMessages));
+  const onDropRejected = useCallback(
+    (fileRejections: FileRejection[]) => {
+      setIsShowDropzoneUI(false);
 
-    // TODO: Rejection 이유 한글로 매칭해서 모달로 띄워주기
-    alert(deduplicatedErrorMessages.join('\n'));
-  }, []);
+      const errorMessages = fileRejections
+        .map(({ errors }) => errors.map((error) => error.message))
+        .flat();
+      const deduplicatedErrorMessages = Array.from(new Set(errorMessages));
 
-  const onDragEnter = useCallback((e: DragEvent<HTMLTextAreaElement>) => {
-    // TODO: 파일 드롭 UI on
-    console.log('drag enter');
-  }, []);
+      // TODO: Rejection 이유 한글로 매칭해서 모달로 띄워주기
+      alert(deduplicatedErrorMessages.join('\n'));
+    },
+    [setIsShowDropzoneUI],
+  );
 
-  const onDragLeave = useCallback((e: DragEvent<HTMLTextAreaElement>) => {
-    // TODO: 파일 드롭 UI off
-    console.log('drag leave');
-  }, []);
+  const onDragEnter = () => {
+    setIsShowDropzoneUI(true);
+  };
+
+  const onDragLeave = () => {
+    setIsShowDropzoneUI(false);
+  };
 
   return useDropzone({
     accept: 'image/*',

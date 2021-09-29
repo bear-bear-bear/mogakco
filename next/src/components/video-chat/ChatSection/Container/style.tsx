@@ -1,16 +1,37 @@
 import styled from '@emotion/styled';
 import { FiChevronLeft } from 'react-icons/fi';
+import UploadIcon from '@public/svg/upload.svg';
 
 interface ContainerStyleProps {
   isShow: boolean;
+  isShowDropzoneUI: boolean;
 }
 
 export const Container = styled.section<ContainerStyleProps>`
   width: 20rem;
   height: 100vh;
   display: ${({ isShow }) => (isShow ? 'grid' : 'none')};
+  position: ${({ isShowDropzoneUI }) =>
+    isShowDropzoneUI ? 'relative' : 'static'};
   grid-template-rows: [Header] max-content [chatList] 1fr [InputBox] max-content;
   background-color: var(--color-white);
+`;
+
+export const Dropzone = styled.section`
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.95);
+`;
+
+export const FileAddIcon = styled(UploadIcon)`
+  width: 3rem;
+  height: 3rem;
 `;
 
 export const Header = styled.header`

@@ -1,12 +1,11 @@
-import type { Dispatch, SetStateAction } from 'react';
+import { useContext } from 'react';
 import Profile from '@components/common/Profile';
+import { ChatShowContext } from '@pages/video-chat/[id]';
+
 import * as S from './style';
 
-interface SidebarProps {
-  setIsShowChat: Dispatch<SetStateAction<boolean>>;
-}
-
-const Sidebar = ({ setIsShowChat }: SidebarProps) => {
+const Sidebar = () => {
+  const [, setIsShowChat] = useContext(ChatShowContext);
   const handleChatIconClick = () => {
     setIsShowChat((prev) => !prev);
   };
