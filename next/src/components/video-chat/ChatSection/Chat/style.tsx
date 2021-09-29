@@ -7,15 +7,6 @@ interface WriteProps {
 }
 type AnnounceType = Pick<ChatAnnouncement, 'type'>;
 
-export const AnnouncemnetWrapper = styled.section`
-  margin: 1rem auto;
-
-  &:first-of-type,
-  & + & {
-    margin-top: 0;
-  }
-`;
-
 export const ChatWrapper = styled.section`
   display: flex;
   flex-direction: column;
@@ -34,7 +25,19 @@ const announcementColorStyles = ({ type }: AnnounceType) => {
 };
 
 export const Announcement = styled.p<AnnounceType>`
+  margin: 0.5rem auto;
+  padding: 0.5rem 0;
   font-size: 0.95rem;
+  text-align: center;
+  word-break: keep-all;
+  line-height: 1.4;
+  background-color: var(--color-gray-0);
+  border-radius: 10px;
+
+  &:first-of-type,
+  & + & {
+    margin-top: 0;
+  }
 
   ${announcementColorStyles}
 `;
