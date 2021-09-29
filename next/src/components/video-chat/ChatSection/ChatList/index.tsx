@@ -1,10 +1,4 @@
-import React, {
-  createContext,
-  useEffect,
-  useState,
-  useRef,
-  useCallback,
-} from 'react';
+import React, { createContext, useState, useRef, useCallback } from 'react';
 import dynamic from 'next/dynamic';
 import { ViewerProps } from '@toast-ui/react-editor';
 import '@toast-ui/editor/dist/toastui-editor-viewer.css';
@@ -12,7 +6,6 @@ import useChatClient from '@hooks/chat/useChatClient';
 
 import { ChatAnnouncement, ChatMessage } from 'typings/chat';
 
-import { ChatEvent } from '@lib/enum';
 import useChatEvent from '@hooks/chat/useChatEvent';
 import Chat from '../Chat';
 import * as S from './style';

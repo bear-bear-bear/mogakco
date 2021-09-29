@@ -4,7 +4,7 @@ import styled from '@emotion/styled';
 import CloseSVG from '@public/svg/cross.svg';
 import Button from '@components/common/Button';
 
-export const EditorBackground = styled.section`
+export const EditorBackground = styled.div`
   width: 100%;
   height: 100%;
   position: absolute;

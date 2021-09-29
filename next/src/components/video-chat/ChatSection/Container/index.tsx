@@ -1,17 +1,21 @@
-import React, { ReactNode, useEffect, useState } from 'react';
+import React, { ReactNode, useEffect, useState, useContext } from 'react';
 import { ChatEvent } from '@lib/enum';
 import useChatClient from '@hooks/chat/useChatClient';
-import type { ChatSectionProps } from '..';
+import { ChatShowContext } from '@pages/video-chat/[id]';
 
+import useDropzone from './useDropzone';
 import * as S from './style';
 
-export interface ContainerProps extends ChatSectionProps {
+export interface Props {
   children?: ReactNode;
 }
 
-const Container = ({ children, isShowChat, setIsShowChat }: ContainerProps) => {
-  const [memberCount, setMemberCount] = useState<number>(0);
+const Container = ({ children }: Props) => {
   const socketClient = useChatClient();
+  const [memberCount, setMemberCount] = useState<number>(0);
+  const [isShowChat, setIsShowChat] = useContext(ChatShowContext);
+  const [isShowDropzoneUI, setIsShowDropzoneUI] = useState<boolean>(false);
+  const { getRootProps, getInputProps } = useDropzone({ setIsShowDropzoneUI });
 
   const handleChatCloseButtonClick = () => {
     setIsShowChat(false);
@@ -28,14 +32,24 @@ const Container = ({ children, isShowChat, setIsShowChat }: ContainerProps) => {
   }, [socketClient]);
 
   return (
-    <S.Container isShow={isShowChat}>
-      <S.Header>
-        <S.ChatCloseButton onClick={handleChatCloseButtonClick} />
-        <S.ChatTitle>채팅</S.ChatTitle>
-        <S.ChatMemberCount>{memberCount}</S.ChatMemberCount>
-      </S.Header>
-      {children}
-    </S.Container>
+    <div {...getRootProps()}>
+      <input {...getInputProps()} />
+      <S.Container isShow={isShowChat} isShowDropzoneUI={isShowDropzoneUI}>
+        <S.Header>
+          <S.ChatCloseButton onClick={handleChatCloseButtonClick} />
+          <S.ChatTitle>채팅</S.ChatTitle>
+          <S.ChatMemberCount>{memberCount}</S.ChatMemberCount>
+        </S.Header>
+
+        {children}
+
+        {isShowDropzoneUI && (
+          <S.Dropzone>
+            <S.FileAddIcon />
+          </S.Dropzone>
+        )}
+      </S.Container>
+    </div>
   );
 };
 

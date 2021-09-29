@@ -10,6 +10,7 @@ export const TextArea = styled.textarea`
   resize: none;
   letter-spacing: -0.01rem;
   color: var(--color-black);
+  background-color: inherit;
   line-height: 1.1;
 
   &::placeholder {
