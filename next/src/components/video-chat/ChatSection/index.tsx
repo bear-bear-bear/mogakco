@@ -1,4 +1,5 @@
 import type { Dispatch, SetStateAction } from 'react';
+import { ChatProvider } from './ChatContext';
 import Container from './Container';
 import ChatList from './ChatList';
 import InputBox from './InputBox';
@@ -10,10 +11,12 @@ export interface ChatSectionProps {
 
 const ChatSection = (props: ChatSectionProps) => {
   return (
-    <Container {...props}>
-      <ChatList />
-      <InputBox />
-    </Container>
+    <ChatProvider>
+      <Container {...props}>
+        <ChatList />
+        <InputBox />
+      </Container>
+    </ChatProvider>
   );
 };
 
