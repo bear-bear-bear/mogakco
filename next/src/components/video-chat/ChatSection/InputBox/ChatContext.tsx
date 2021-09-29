@@ -24,8 +24,6 @@ export const ChatProvider: FC = ({ children }) => {
     get: () => value,
     set: (v: SetStateAction<string>) => setValue(v),
     send: (message: string) => {
-      if (!socketClient) return;
-
       const clearedChat = message.trim();
       if (clearedChat === '') return;
 
