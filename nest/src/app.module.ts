@@ -5,9 +5,18 @@ import MariadbModule from '@config/database/mariadb.module';
 import MailModule from '@mail/mail.module';
 import AuthModule from '@authentication/modules/auth.module';
 import AuthTestModule from '@authentication/modules/test.module';
+import MogakcoCacheModule from '@config/app/cache.module';
 
 @Module({
-  imports: [ConfigModule, MariadbModule, AuthModule, MailModule, ChatModule, AuthTestModule],
+  imports: [
+    ConfigModule,
+    MariadbModule,
+    AuthModule,
+    MailModule,
+    ChatModule,
+    AuthTestModule,
+    MogakcoCacheModule,
+  ],
   controllers: [],
   providers: [],
 })
