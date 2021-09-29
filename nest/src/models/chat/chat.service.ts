@@ -25,7 +25,7 @@ import RoomEntity from '@models/chat/entities/room.entity';
 import { getRepository } from 'typeorm';
 import AnonymousPrefixEntity from '@models/chat/entities/anonymous_prefix.entity';
 import AnonymousNameEntity from '@models/chat/entities/anonymous_names.entity';
-import { ChatEvent } from '@common/helpers/enum.helper';
+import { ChatEvent } from './interface/enum';
 
 @Injectable()
 export default class ChatService implements IChatService {

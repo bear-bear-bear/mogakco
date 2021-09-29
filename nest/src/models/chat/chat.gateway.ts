@@ -14,7 +14,7 @@ import ChatService from './chat.service';
 import UserRepository from '@models/user/repositories/user.repository';
 import { IChatGateway } from '@models/chat/interface/gateway';
 import AnonymousRoomUserRepository from '@models/chat/repositories/anonymous-room-user.repository';
-import { ChatEvent } from '@common/helpers/enum.helper';
+import { ChatEvent } from './interface/enum';
 
 @WebSocketGateway({
   namespace: 'chat',
@@ -22,7 +22,7 @@ import { ChatEvent } from '@common/helpers/enum.helper';
 })
 export default class ChatGateway implements IChatGateway, OnGatewayConnection, OnGatewayDisconnect {
   @WebSocketServer()
-  server!: Server;
+  private readonly server!: Server;
 
   private logger = new Logger('Chat');
 
