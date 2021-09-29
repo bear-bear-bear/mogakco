@@ -2,9 +2,7 @@ import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import type { ChatAnnouncement } from 'typings/chat';
 
-interface WriteProps {
-  isMyChat: boolean;
-}
+/* announcement */
 type AnnounceType = Pick<ChatAnnouncement, 'type'>;
 
 export const ChatWrapper = styled.section`
@@ -42,6 +40,16 @@ export const Announcement = styled.p<AnnounceType>`
   ${announcementColorStyles}
 `;
 
+/* message */
+export const MessageWrapper = styled.section`
+  display: flex;
+  flex-direction: column;
+`;
+
+interface WriteProps {
+  isMyChat: boolean;
+}
+
 export const Writer = styled.p<WriteProps>`
   width: fit-content;
   color: var(--color-gray-4);
@@ -49,29 +57,5 @@ export const Writer = styled.p<WriteProps>`
 
   &::after {
     content: ':';
-  }
-`;
-
-export const TextContent = styled.p`
-  color: var(--color-gray-9);
-`;
-
-export const FileContent = styled.article`
-  padding: 1.33rem 1rem;
-  border-radius: 5px;
-  background: var(--color-blue-1);
-  cursor: pointer;
-
-  & > p {
-    // filename
-    &:first-of-type {
-      color: var(--color-gray-0);
-    }
-
-    // filesize
-    &:last-child {
-      margin-top: 0.5rem;
-      color: var(--color-gray-1);
-    }
   }
 `;
