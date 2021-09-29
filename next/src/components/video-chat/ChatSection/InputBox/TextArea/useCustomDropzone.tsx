@@ -1,29 +1,41 @@
-import { useCallback } from 'react';
+import { useCallback, useContext } from 'react';
 import type { DragEvent } from 'react';
 import { useDropzone } from 'react-dropzone';
 import type { FileRejection } from 'react-dropzone';
 
-const useCustomDropZone = () => {
-  const onDropAccepted = useCallback((acceptedFiles: File[]) => {
-    console.log(Array.isArray(acceptedFiles));
-    console.log(acceptedFiles);
-    acceptedFiles.forEach((file) => {
-      const reader = new FileReader();
+import { uploadImage } from '@lib/apis';
+import { logAxiosError } from '@lib/apiClient';
+import type { GeneralAxiosError } from 'typings/common';
 
-      reader.onabort = () => console.log('파일 읽기가 중단되었습니다'); // TODO: 모달로 변경
-      reader.onerror = () => console.log('파일 읽기가 실패했습니다.'); // TODO: 모달로 변경
-      reader.onload = () => {
-        // Do whatever you want with the file contents
-        const binaryStr = reader.result;
-        console.log('binaryStr', binaryStr);
-      };
-      reader.readAsArrayBuffer(file);
-    });
-  }, []);
+import { ChatContext } from '../ChatContext';
+
+const useCustomDropZone = () => {
+  const chat = useContext(ChatContext);
+
+  const onDropAccepted = useCallback(
+    async ([acceptedOneFile]: File[]) => {
+      try {
+        const formData = new FormData();
+        formData.append('image', acceptedOneFile);
+        const { url } = await uploadImage(formData);
+
+        const MarkdownImageString = `![image](${url})`;
+        chat.set((prev) => prev + MarkdownImageString);
+      } catch (err) {
+        logAxiosError(err as GeneralAxiosError);
+      }
+    },
+    [chat],
+  );
 
   const onDropRejected = useCallback((fileRejections: FileRejection[]) => {
+    const errorMessages = fileRejections
+      .map(({ errors }) => errors.map((error) => error.message))
+      .flat();
+    const deduplicatedErrorMessages = Array.from(new Set(errorMessages));
+
     // TODO: Rejection 이유 한글로 매칭해서 모달로 띄워주기
-    console.log('drop rejected', fileRejections);
+    alert(deduplicatedErrorMessages.join('\n'));
   }, []);
 
   const onDragEnter = useCallback((e: DragEvent<HTMLTextAreaElement>) => {
