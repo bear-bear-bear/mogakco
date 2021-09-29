@@ -5,16 +5,16 @@ import type { ChatMessage } from 'typings/chat';
 import { MdViewerContext } from '../ChatList';
 import * as S from './style';
 
-const TextChat = ({ username, message, ownerId }: ChatMessage) => {
+const Message = ({ username, message, ownerId }: ChatMessage) => {
   const { user } = useUser();
   const MdViewer = useContext(MdViewerContext);
 
   return (
-    <S.ChatWrapper>
+    <S.MessageWrapper>
       <S.Writer isMyChat={ownerId === user?.id}>{username}</S.Writer>
       <MdViewer initialValue={message} />
-    </S.ChatWrapper>
+    </S.MessageWrapper>
   );
 };
 
-export default TextChat;
+export default Message;

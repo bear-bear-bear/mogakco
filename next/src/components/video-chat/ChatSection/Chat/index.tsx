@@ -1,19 +1,14 @@
 import React from 'react';
 
-import type { ChatAnnouncement, ChatFile, ChatMessage } from 'typings/chat';
+import type { ChatAnnouncement, ChatMessage } from 'typings/chat';
 import Announcement from './Announcement';
-import TextChat from './TextChat';
-import FileChat from './FileChat';
+import Message from './Message';
 
-const Chat = (schema: ChatAnnouncement | ChatMessage | ChatFile) => {
-  switch (schema.type) {
-    case 'chat':
-      return <TextChat {...schema} />;
-    case 'file':
-      return <FileChat {...schema} />;
-    default:
-      return <Announcement {...schema} />;
+const Chat = (schema: ChatAnnouncement | ChatMessage) => {
+  if ('ownerId' in schema) {
+    return <Message {...schema} />;
   }
+  return <Announcement {...schema} />;
 };
 
 export default Chat;
