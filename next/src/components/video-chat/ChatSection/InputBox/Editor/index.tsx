@@ -1,4 +1,5 @@
 import React, { useCallback, useContext, useRef, useState } from 'react';
+import type { DragEvent } from 'react';
 import dynamic from 'next/dynamic';
 import { Editor as EditorType, EditorProps } from '@toast-ui/react-editor';
 import '@toast-ui/editor/dist/toastui-editor.css';
@@ -101,8 +102,12 @@ const TuiEditor = () => {
     setIsEditorImageAddHookChanged(true);
   }, [isEditorImageAddHookChanged]);
 
+  const handleDragEnter = (e: DragEvent<HTMLDivElement>) => {
+    e.stopPropagation(); // 에디터가 켜져있을땐 부모 ChatSection의 드롭존 UI 안생기도록 차단
+  };
+
   return (
-    <S.EditorBackground>
+    <S.EditorBackground onDragEnter={handleDragEnter}>
       <SVGButton
         SvgComponent={S.EditorCloseButton}
         buttonProps={{
