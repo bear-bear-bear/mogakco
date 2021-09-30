@@ -16,9 +16,11 @@ jobs:
     strategy:
       matrix:
         node-version: [14.x]
+        redis-version: [6]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
+    
       - uses: actions/checkout@v2
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v1
@@ -35,6 +37,11 @@ jobs:
           mysql root password: 'mogatest'
           mysql user: 'mogauser'
           mysql password: 'mogatest'
+
+      - name: Redis Server 실행
+        uses: supercharge/redis-github-action@1.2.0
+        with:
+          redis-version: ${{ matrix.redis-version }}
 
       - name: copy .env.example to nest directory
         run: cp .env.example .env

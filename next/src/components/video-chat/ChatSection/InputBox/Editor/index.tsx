@@ -1,20 +1,22 @@
-import React, { useCallback, useRef, useState } from 'react';
-import type { Dispatch, SetStateAction } from 'react';
+import React, { useCallback, useContext, useRef, useState } from 'react';
+import type { DragEvent } from 'react';
 import dynamic from 'next/dynamic';
 import { Editor as EditorType, EditorProps } from '@toast-ui/react-editor';
 import '@toast-ui/editor/dist/toastui-editor.css';
 
 import { uploadImage } from '@lib/apis';
 import { logAxiosError } from '@lib/apiClient';
+import SVGButton from '@components/common/SVGButton';
 import type { GeneralAxiosError } from 'typings/common';
 
-import SVGButton from './SVGButton';
-import type { TuiEditorWithForwardedProps } from './TuiEditorWrapper';
+import type { TuiEditorWithForwardedProps } from './EditorWrapper';
+import { ChatContext } from '../../ChatContext';
+import { EditorShowContext } from '../index';
 import * as S from './style';
 
 // 210927 - toast-ui editor 3.1.0 버전(lastest) 기준 SSR 미지원으로 next/dynamic 사용
 const Editor = dynamic<TuiEditorWithForwardedProps>(
-  () => import('./TuiEditorWrapper'),
+  () => import('./EditorWrapper'),
   { ssr: false },
 );
 
@@ -26,19 +28,9 @@ const EditorWithForwardedRef = React.forwardRef<
 ));
 EditorWithForwardedRef.displayName = 'EditerWithForwardedRef';
 
-interface TuiEditorProps {
-  currChat: string;
-  setChat: Dispatch<SetStateAction<string>>;
-  setIsShow: Dispatch<SetStateAction<boolean>>;
-  sendChat: (message: string) => void;
-}
-
-const TuiEditor = ({
-  currChat,
-  setChat,
-  setIsShow,
-  sendChat,
-}: TuiEditorProps) => {
+const TuiEditor = () => {
+  const chat = useContext(ChatContext);
+  const [, setIsShow] = useContext(EditorShowContext);
   const editorRef = useRef<EditorType>(null);
   const [isEditorImageAddHookChanged, setIsEditorImageAddHookChanged] =
     useState<boolean>(false);
@@ -51,7 +43,7 @@ const TuiEditor = ({
 
     return {
       isLimit: currentMarkdown.length > 255,
-      currChat: currentMarkdown,
+      currentMarkdown,
     };
   }, []);
 
@@ -65,12 +57,12 @@ const TuiEditor = ({
   const handleCloseButtonClick = () => {
     const currentMarkdown = getCurrentMarkdown();
 
-    setChat(currentMarkdown);
+    chat.set(currentMarkdown);
     setIsShow(false);
   };
 
   const handleSendButtonClick = () => {
-    const { isLimit, currChat: chat } = verifyChatLengthLimit();
+    const { isLimit, currentMarkdown } = verifyChatLengthLimit();
 
     if (isLimit) {
       // TODO: 모달로 바꾸기
@@ -78,7 +70,7 @@ const TuiEditor = ({
       return;
     }
 
-    sendChat(chat);
+    chat.send(currentMarkdown);
     setIsShow(false);
   };
 
@@ -110,8 +102,12 @@ const TuiEditor = ({
     setIsEditorImageAddHookChanged(true);
   }, [isEditorImageAddHookChanged]);
 
+  const handleDragEnter = (e: DragEvent<HTMLDivElement>) => {
+    e.stopPropagation(); // 에디터가 켜져있을땐 부모 ChatSection의 드롭존 UI 안생기도록 차단
+  };
+
   return (
-    <S.EditorBackground>
+    <S.EditorBackground onDragEnter={handleDragEnter}>
       <SVGButton
         SvgComponent={S.EditorCloseButton}
         buttonProps={{
@@ -121,7 +117,7 @@ const TuiEditor = ({
         onClick={handleCloseButtonClick}
       />
       <EditorWithForwardedRef
-        initialValue={currChat}
+        initialValue={chat.get()}
         height="600px"
         ref={editorRef}
         onChange={handleEditorChange}

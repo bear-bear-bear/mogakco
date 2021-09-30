@@ -1,6 +1,11 @@
-import { GetServerSideProps } from 'next';
 import { createContext, useEffect, useMemo, useState } from 'react';
+import type { Dispatch, SetStateAction } from 'react';
+import { GetServerSideProps } from 'next';
+import { useRouter } from 'next/router';
+import { io, Socket } from 'socket.io-client';
 
+import useUser from '@hooks/useUser';
+import useHandleChatErrorEvent from '@hooks/chat/useHandleChatErrorEvent';
 import CustomHead from '@components/common/CustomHead';
 import Container from '@components/video-chat/Container';
 import CamSection from '@components/video-chat/CamSection';
@@ -9,13 +14,9 @@ import Sidebar from '@components/video-chat/Sidebar';
 import apiClient, { logAxiosError } from '@lib/apiClient';
 import devModeLog from '@lib/devModeLog';
 import { refreshAccessTokenApiSSR } from '@lib/apis';
-import token from '@lib/token';
-import useUser from '@hooks/useUser';
-import type { GeneralAxiosError } from 'typings/common';
 import getChatSocket from '@lib/getChatSocket';
-import { useRouter } from 'next/router';
-import { io, Socket } from 'socket.io-client';
-import useHandleChatErrorEvent from '@hooks/chat/useHandleChatErrorEvent';
+import token from '@lib/token';
+import type { GeneralAxiosError } from 'typings/common';
 
 const pageProps = {
   title: '화상채팅 - Mogakco',
@@ -30,11 +31,15 @@ export const SocketContext = createContext<Socket>(
   }),
 );
 
+export const ChatShowContext = createContext<
+  [boolean, Dispatch<SetStateAction<boolean>>]
+>([false, () => undefined]);
+
 const ChatRoom = () => {
   // const { user } = useUser({ redirectTo: '/' });
   const { user } = useUser();
   const router = useRouter();
-  const [isShowChat, setIsShowChat] = useState<boolean>(true);
+  const chatShowState = useState<boolean>(true);
 
   const socketClient = useMemo(
     () => getChatSocket(user, router.query),
@@ -60,11 +65,13 @@ const ChatRoom = () => {
     <>
       <CustomHead {...pageProps} />
       <SocketContext.Provider value={socketClient}>
-        <Container>
-          <Sidebar setIsShowChat={setIsShowChat} />
-          <ChatSection isShowChat={isShowChat} setIsShowChat={setIsShowChat} />
-          <CamSection />
-        </Container>
+        <ChatShowContext.Provider value={chatShowState}>
+          <Container>
+            <Sidebar />
+            <ChatSection />
+            <CamSection />
+          </Container>
+        </ChatShowContext.Provider>
       </SocketContext.Provider>
     </>
   );

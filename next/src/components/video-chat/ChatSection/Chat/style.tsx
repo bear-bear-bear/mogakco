@@ -2,19 +2,8 @@ import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import type { ChatAnnouncement } from 'typings/chat';
 
-interface WriteProps {
-  isMyChat: boolean;
-}
+/* announcement */
 type AnnounceType = Pick<ChatAnnouncement, 'type'>;
-
-export const AnnouncemnetWrapper = styled.section`
-  margin: 1rem auto;
-
-  &:first-of-type,
-  & + & {
-    margin-top: 0;
-  }
-`;
 
 export const ChatWrapper = styled.section`
   display: flex;
@@ -34,10 +23,32 @@ const announcementColorStyles = ({ type }: AnnounceType) => {
 };
 
 export const Announcement = styled.p<AnnounceType>`
+  margin: 0.5rem auto;
+  padding: 0.5rem 0;
   font-size: 0.95rem;
+  text-align: center;
+  word-break: keep-all;
+  line-height: 1.4;
+  background-color: var(--color-gray-0);
+  border-radius: 10px;
+
+  &:first-of-type,
+  & + & {
+    margin-top: 0;
+  }
 
   ${announcementColorStyles}
 `;
+
+/* message */
+export const MessageWrapper = styled.section`
+  display: flex;
+  flex-direction: column;
+`;
+
+interface WriteProps {
+  isMyChat: boolean;
+}
 
 export const Writer = styled.p<WriteProps>`
   width: fit-content;
@@ -46,29 +57,5 @@ export const Writer = styled.p<WriteProps>`
 
   &::after {
     content: ':';
-  }
-`;
-
-export const TextContent = styled.p`
-  color: var(--color-gray-9);
-`;
-
-export const FileContent = styled.article`
-  padding: 1.33rem 1rem;
-  border-radius: 5px;
-  background: var(--color-blue-1);
-  cursor: pointer;
-
-  & > p {
-    // filename
-    &:first-of-type {
-      color: var(--color-gray-0);
-    }
-
-    // filesize
-    &:last-child {
-      margin-top: 0.5rem;
-      color: var(--color-gray-1);
-    }
   }
 `;
