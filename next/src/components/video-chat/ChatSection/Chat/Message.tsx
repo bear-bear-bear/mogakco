@@ -12,7 +12,7 @@ const Message = ({ username, message, ownerId }: ChatMessage) => {
   return (
     <S.MessageWrapper>
       <S.Writer isMyChat={ownerId === user?.id}>{username}</S.Writer>
-      <MdViewer initialValue={message} />
+      <MdViewer initialValue={message} extendedAutolinks />
     </S.MessageWrapper>
   );
 };
