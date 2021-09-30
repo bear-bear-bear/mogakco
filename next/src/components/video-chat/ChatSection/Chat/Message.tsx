@@ -2,7 +2,6 @@ import React, { useCallback, useContext } from 'react';
 import _ from 'lodash';
 import * as linkify from 'linkifyjs';
 import { LinkPreview } from '@dhaiwat10/react-link-preview';
-import type { LinkPreviewProps } from '@dhaiwat10/react-link-preview';
 
 import useUser from '@hooks/useUser';
 import type { ChatMessage } from 'typings/chat';
