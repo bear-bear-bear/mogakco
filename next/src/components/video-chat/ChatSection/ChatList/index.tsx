@@ -25,14 +25,14 @@ const ChatList = () => {
   const socketClient = useChatClient();
   const chatListRef = useRef<HTMLUListElement>(null);
 
-  const isScrollAtBottomEnd = () => {
+  const isScrollAtBottomEnd = useCallback(() => {
     if (!chatListRef.current) return false;
 
     const chatListEl = chatListRef.current;
     const { scrollHeight, clientHeight, scrollTop } = chatListEl;
 
     return scrollTop === scrollHeight - clientHeight;
-  };
+  }, []);
 
   const scrollToBottom = useCallback(() => {
     if (!chatListRef.current) return;
@@ -52,7 +52,7 @@ const ChatList = () => {
         scrollToBottom();
       }
     },
-    [scrollToBottom],
+    [isScrollAtBottomEnd, scrollToBottom],
   );
 
   useChatEvent(socketClient, handleAddMessage);
