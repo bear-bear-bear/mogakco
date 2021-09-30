@@ -25,27 +25,32 @@ const ChatList = () => {
   const socketClient = useChatClient();
   const chatListRef = useRef<HTMLUListElement>(null);
 
+  const isScrollAtBottomEnd = () => {
+    if (!chatListRef.current) return false;
+
+    const chatListEl = chatListRef.current;
+    const { scrollHeight, clientHeight, scrollTop } = chatListEl;
+
+    return scrollTop === scrollHeight - clientHeight;
+  };
+
   const scrollToBottom = useCallback(() => {
     if (!chatListRef.current) return;
 
     const chatListEl = chatListRef.current;
-    const { scrollHeight, clientHeight, scrollTop, lastElementChild } =
-      chatListEl;
+    const { scrollHeight, clientHeight } = chatListEl;
 
-    const flexGapPixelLike = S.GAP_REM * 16;
-    const lastElHeight = lastElementChild?.clientHeight || 0;
-    const scrollTopMaxPixel = scrollHeight - clientHeight;
-    const isScrollAtNearlyEnd =
-      scrollTop > scrollTopMaxPixel - lastElHeight - flexGapPixelLike;
-    if (!isScrollAtNearlyEnd) return;
-
-    chatListEl.scrollTop = scrollTopMaxPixel;
+    chatListEl.scrollTop = scrollHeight - clientHeight;
   }, []);
 
   const handleAddMessage = useCallback(
     (newMessage: Message) => {
+      const isScrollAtBottomBeforeAdd = isScrollAtBottomEnd();
       setChatList((prev) => [...prev, newMessage]);
-      scrollToBottom();
+
+      if (isScrollAtBottomBeforeAdd) {
+        scrollToBottom();
+      }
     },
     [scrollToBottom],
   );
