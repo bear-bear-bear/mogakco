@@ -2,10 +2,12 @@ import { useContext } from 'react';
 import Profile from '@components/common/Profile';
 import { ChatShowContext } from '@pages/video-chat/[id]';
 
+import SVGButton from '@components/common/SVGButton';
 import * as S from './style';
 
 const Sidebar = () => {
-  const [, setIsShowChat] = useContext(ChatShowContext);
+  const [isShowChat, setIsShowChat] = useContext(ChatShowContext);
+
   const handleChatIconClick = () => {
     setIsShowChat((prev) => !prev);
   };
@@ -22,9 +24,30 @@ const Sidebar = () => {
     <S.Sidebar>
       <Profile modalDirection="right" />
       <S.BottomSection>
-        <S.CalendarIcon onClick={handleCalendarIconClick} />
-        <S.ChatIcon onClick={handleChatIconClick} />
-        <S.UserIcon onClick={handleUserIconClick} />
+        <SVGButton
+          SvgComponent={S.CalendarIcon}
+          buttonProps={{
+            title: '일정 관리',
+            'aria-label': 'Open schedule management',
+          }}
+          onClick={handleCalendarIconClick}
+        />
+        <SVGButton
+          SvgComponent={S.ChatIcon}
+          buttonProps={{
+            title: isShowChat ? '채팅창 닫기' : '채팅창 열기',
+            'aria-label': 'Toggle chat section',
+          }}
+          onClick={handleChatIconClick}
+        />
+        <SVGButton
+          SvgComponent={S.UserIcon}
+          buttonProps={{
+            title: '유저 리스트',
+            'aria-label': 'Toggle user list',
+          }}
+          onClick={handleUserIconClick}
+        />
       </S.BottomSection>
     </S.Sidebar>
   );
