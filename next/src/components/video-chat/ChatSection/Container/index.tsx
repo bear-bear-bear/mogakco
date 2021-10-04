@@ -1,24 +1,25 @@
-import React, { ReactNode, useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { ChatEvent } from '@lib/enum';
 import useChatClient from '@hooks/chat/useChatClient';
-import { ChatShowContext } from '@components/video-chat/Container';
+import { SideSectionShowContext } from '@components/video-chat/Container';
 
 import useDropzone from './useDropzone';
 import * as S from './style';
 
-export interface Props {
-  children?: ReactNode;
-}
-
-const Container = ({ children }: Props) => {
+const Container: React.FC = ({ children }) => {
   const socketClient = useChatClient();
   const [memberCount, setMemberCount] = useState<number>(0);
-  const [isShowChat, setIsShowChat] = useContext(ChatShowContext);
+  const [sideSectionShowState, setSideSectionShowState] = useContext(
+    SideSectionShowContext,
+  );
   const [isShowDropzoneUI, setIsShowDropzoneUI] = useState<boolean>(false);
   const { getRootProps, getInputProps } = useDropzone({ setIsShowDropzoneUI });
 
   const handleChatCloseButtonClick = () => {
-    setIsShowChat(false);
+    setSideSectionShowState((prev) => ({
+      ...prev,
+      chat: false,
+    }));
   };
 
   useEffect(() => {
@@ -34,7 +35,10 @@ const Container = ({ children }: Props) => {
   return (
     <div {...getRootProps()}>
       <input {...getInputProps()} />
-      <S.Container isShow={isShowChat} isShowDropzoneUI={isShowDropzoneUI}>
+      <S.Container
+        isShow={sideSectionShowState.chat}
+        isShowDropzoneUI={isShowDropzoneUI}
+      >
         <S.Header>
           <S.ChatCloseButton onClick={handleChatCloseButtonClick} />
           <S.ChatTitle>채팅</S.ChatTitle>

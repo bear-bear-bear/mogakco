@@ -3,17 +3,31 @@ import type { Dispatch, SetStateAction } from 'react';
 
 import * as S from './style';
 
-export const ChatShowContext = createContext<
-  [boolean, Dispatch<SetStateAction<boolean>>]
->([false, () => undefined]);
+type SideSectionShowState = {
+  chat: boolean;
+  userList: boolean;
+};
+
+export const SideSectionShowContext = createContext<
+  [SideSectionShowState, Dispatch<SetStateAction<SideSectionShowState>>]
+>([
+  {
+    chat: false,
+    userList: false,
+  },
+  () => undefined,
+]);
 
 const Container: React.FC = ({ children }) => {
-  const chatShowState = useState<boolean>(true);
+  const sideSectionShowState = useState<SideSectionShowState>({
+    chat: true,
+    userList: false,
+  });
 
   return (
-    <ChatShowContext.Provider value={chatShowState}>
+    <SideSectionShowContext.Provider value={sideSectionShowState}>
       <S.Container>{children}</S.Container>
-    </ChatShowContext.Provider>
+    </SideSectionShowContext.Provider>
   );
 };
 

@@ -1,15 +1,21 @@
 import { useContext } from 'react';
+import _ from 'lodash';
 import Profile from '@components/common/Profile';
-import { ChatShowContext } from '@components/video-chat/Container';
+import { SideSectionShowContext } from '@components/video-chat/Container';
 
 import SVGButton from '@components/common/SVGButton';
 import * as S from './style';
 
 const Sidebar = () => {
-  const [isShowChat, setIsShowChat] = useContext(ChatShowContext);
+  const [sideSectionShowState, setSideSectionShowState] = useContext(
+    SideSectionShowContext,
+  );
 
   const handleChatIconClick = () => {
-    setIsShowChat((prev) => !prev);
+    setSideSectionShowState((prev) => ({
+      ..._.mapValues(prev, () => false), // Set prev keys to false
+      chat: !prev.chat,
+    }));
   };
 
   const handleCalendarIconClick = () => {
@@ -35,7 +41,7 @@ const Sidebar = () => {
         <SVGButton
           SvgComponent={S.ChatIcon}
           buttonProps={{
-            title: isShowChat ? '채팅창 닫기' : '채팅창 열기',
+            title: sideSectionShowState.chat ? '채팅창 닫기' : '채팅창 열기',
             'aria-label': 'Toggle chat section',
           }}
           onClick={handleChatIconClick}
