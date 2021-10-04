@@ -25,9 +25,11 @@ const Container: React.FC = ({ children }) => {
   });
 
   return (
-    <SideSectionShowContext.Provider value={sideSectionShowState}>
-      <S.Container>{children}</S.Container>
-    </SideSectionShowContext.Provider>
+    <S.Container>
+      <SideSectionShowContext.Provider value={sideSectionShowState}>
+        {children}
+      </SideSectionShowContext.Provider>
+    </S.Container>
   );
 };
 
