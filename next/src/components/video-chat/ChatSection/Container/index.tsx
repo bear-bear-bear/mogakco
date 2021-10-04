@@ -1,7 +1,7 @@
 import React, { ReactNode, useEffect, useState, useContext } from 'react';
 import { ChatEvent } from '@lib/enum';
 import useChatClient from '@hooks/chat/useChatClient';
-import { ChatShowContext } from '@pages/video-chat/[id]';
+import { ChatShowContext } from '@components/video-chat/Container';
 
 import useDropzone from './useDropzone';
 import * as S from './style';

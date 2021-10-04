@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 import Profile from '@components/common/Profile';
-import { ChatShowContext } from '@pages/video-chat/[id]';
+import { ChatShowContext } from '@components/video-chat/Container';
 
 import SVGButton from '@components/common/SVGButton';
 import * as S from './style';
