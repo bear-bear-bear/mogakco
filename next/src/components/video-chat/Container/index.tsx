@@ -1,6 +1,7 @@
-import React, { createContext, useState } from 'react';
-import type { Dispatch, SetStateAction } from 'react';
+import React, { createContext } from 'react';
 
+import useSideSectionToggle from './useSideSectionToggle';
+import type { ToggleSection } from './useSideSectionToggle';
 import * as S from './style';
 
 type SideSectionShowState = {
@@ -9,7 +10,7 @@ type SideSectionShowState = {
 };
 
 export const SideSectionShowContext = createContext<
-  [SideSectionShowState, Dispatch<SetStateAction<SideSectionShowState>>]
+  [SideSectionShowState, ToggleSection<SideSectionShowState>]
 >([
   {
     chat: false,
@@ -19,7 +20,7 @@ export const SideSectionShowContext = createContext<
 ]);
 
 const Container: React.FC = ({ children }) => {
-  const sideSectionShowState = useState<SideSectionShowState>({
+  const sideSectionShowState = useSideSectionToggle<SideSectionShowState>({
     chat: true,
     userList: false,
   });
