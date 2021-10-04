@@ -2,6 +2,7 @@ import styled from '@emotion/styled';
 import { css } from '@emotion/react';
 import CalendarSvg from '@public/svg/calendar.svg';
 import ChatSvg from '@public/svg/conversation.svg';
+import UserSvg from '@public/svg/user.svg';
 
 export const Sidebar = styled.aside`
   width: 4.5rem;
@@ -38,5 +39,8 @@ export const CalendarIcon = styled(CalendarSvg)`
   ${IconStyles}
 `;
 export const ChatIcon = styled(ChatSvg)`
+  ${IconStyles}
+`;
+export const UserIcon = styled(UserSvg)`
   ${IconStyles}
 `;
