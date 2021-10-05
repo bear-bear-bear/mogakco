@@ -35,8 +35,8 @@ export default class ChatGateway implements IChatGateway, OnGatewayConnection, O
   async handleConnection(@ConnectedSocket() client: Socket) {
     const authInfo = this.chatService.getInfoFromHeader(client.handshake.auth);
 
-    const isCreatedInfo = await this.simplifyService.simplifyConnectMethods(client, authInfo);
-    await this.simplifyService.simplifySocketConnectEvents(this.server, {
+    const isCreatedInfo = await this.simplifyService.connect(client, authInfo);
+    await this.simplifyService.emitConnectionEvent(this.server, {
       info: authInfo,
       ...isCreatedInfo,
     });
@@ -51,8 +51,8 @@ export default class ChatGateway implements IChatGateway, OnGatewayConnection, O
   async handleDisconnect(@ConnectedSocket() client: Socket) {
     const authInfo = this.chatService.getInfoFromHeader(client.handshake.auth);
 
-    const anonymousName = await this.simplifyService.simplifyLeaveMethods(client, authInfo);
-    await this.simplifyService.simplifySocketLeaveEvents(this.server, authInfo, anonymousName);
+    const anonymousName = await this.simplifyService.leave(client, authInfo);
+    await this.simplifyService.emitLeaveEvent(this.server, authInfo, anonymousName);
 
     this.chatDevService.logHandleDisconnection(client, anonymousName, authInfo.roomId);
   }

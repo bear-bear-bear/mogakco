@@ -77,17 +77,13 @@ export interface IChatService {
 }
 
 export interface IChatSimpleService {
-  simplifyLeaveMethods(client: Socket, info: InfoFromHeader): Promise<string>;
+  leave(client: Socket, info: InfoFromHeader): Promise<string>;
 
-  simplifySocketLeaveEvents(
-    server: Server,
-    info: InfoFromHeader,
-    anonymousUserName: string,
-  ): Promise<void>;
+  emitLeaveEvent(server: Server, info: InfoFromHeader, anonymousUserName: string): Promise<void>;
 
-  simplifyConnectMethods(client: Socket, info: InfoFromHeader): Promise<SimplifySocketConnect>;
+  connect(client: Socket, info: InfoFromHeader): Promise<SimplifySocketConnect>;
 
-  simplifySocketConnectEvents(server: Server, info: SimpleConnectEvent): Promise<void>;
+  emitConnectionEvent(server: Server, info: SimpleConnectEvent): Promise<void>;
 }
 
 export interface IChatAnonymousService {

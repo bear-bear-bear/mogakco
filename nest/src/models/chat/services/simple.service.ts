@@ -28,7 +28,7 @@ export default class ChatSimplifyService implements IChatSimpleService {
   /**
    * @desc 소켓 서버에서 유저 퇴장 시 발생하는 이벤트 로직 메서드
    */
-  async simplifySocketLeaveEvents(
+  async emitLeaveEvent(
     server: Server,
     info: InfoFromHeader,
     anonymousUserName: string,
@@ -41,7 +41,7 @@ export default class ChatSimplifyService implements IChatSimpleService {
   /**
    * @desc 서버 소켓과 데이터베이스에서 유저를 퇴장처리하는 로직이 간소화 된 메서드
    */
-  async simplifyLeaveMethods(client: Socket, info: InfoFromHeader): Promise<string> {
+  async leave(client: Socket, info: InfoFromHeader): Promise<string> {
     await this.roomService.leaveRoom(info);
     client.leave(String(info.roomId));
 
@@ -56,7 +56,7 @@ export default class ChatSimplifyService implements IChatSimpleService {
   /**
    * @desc 소켓 서버에서 유저 입장 시 발생하는 이벤트 로직 메서드
    */
-  async simplifySocketConnectEvents(
+  async emitConnectionEvent(
     server: Server,
     { info: authInfo, username, isCreated }: SimpleConnectEvent,
   ): Promise<void> {
@@ -67,10 +67,7 @@ export default class ChatSimplifyService implements IChatSimpleService {
   /**
    * @desc 서버 소켓과 데이터베이스에서 유저를 입장처리하는 로직이 간소화 된 메서드
    */
-  async simplifyConnectMethods(
-    client: Socket,
-    info: InfoFromHeader,
-  ): Promise<SimplifySocketConnect> {
+  async connect(client: Socket, info: InfoFromHeader): Promise<SimplifySocketConnect> {
     const { userId, roomId } = info;
     client.join(String(roomId));
     const {
