@@ -56,7 +56,7 @@ export interface FindOrCreateAnonymousInfo {
   isCreated: boolean;
 }
 
-export interface IChatService {
+export interface IRoomService {
   getRecommendRoom(id: number): Promise<RoomEntity | FindRoomAndJoin>;
 
   joinRoom(user: UserEntity, roomId: number): Promise<void>;
@@ -66,7 +66,9 @@ export interface IChatService {
   checkDeleteRoom(headers: IncomingHttpHeaders): Promise<void>;
 
   findUserAndRoom(userId: number, roomId: number): Promise<UserAndRoom>;
+}
 
+export interface IChatService {
   makeAndSaveChat(headers: IncomingHttpHeaders, message: string): Promise<Chat>;
 
   createChatResponse(chatId: number, ownerId: number, username: string, message: string): Chat;

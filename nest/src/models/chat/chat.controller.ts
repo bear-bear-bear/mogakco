@@ -52,6 +52,7 @@ import { GeneralResponse } from '@common/interface/global';
 import AnonymousPropDto from '@models/chat/dto/anonymous-prop.dto';
 import AdminGuard from '@common/guards/admin.guard';
 import ChatAnonymousService from './services/anonymous.service';
+import RoomService from '@models/chat/services/room.service';
 
 @Controller('chat')
 export default class ChatController implements IChatController {
@@ -59,6 +60,7 @@ export default class ChatController implements IChatController {
 
   constructor(
     private readonly chatService: ChatService,
+    private readonly roomService: RoomService,
     private readonly anonymousService: ChatAnonymousService,
     private readonly userService: UserService,
     private readonly roomRepository: RoomRepository,
@@ -76,7 +78,7 @@ export default class ChatController implements IChatController {
     @Res({ passthrough: true }) res: Response,
   ): Promise<ChatRoomJoin | Pick<ChatRoomJoin, 'message'>> {
     const userId = req.user.id;
-    const roomItem = await this.chatService.getRecommendRoom(userId);
+    const roomItem = await this.roomService.getRecommendRoom(userId);
 
     if ('isCreated' in roomItem) {
       res.status(HttpStatus.CREATED);

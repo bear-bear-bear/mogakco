@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import UserRepository from '@src/models/user/repositories/user.repository';
 import { getRepository } from 'typeorm';
 import AnonymousNameEntity from '../entities/anonymous_names.entity';
@@ -8,7 +8,7 @@ import {
   HandShakeAuth,
   IChatAnonymousService,
 } from '@models/chat/interface/service';
-import ChatService from '@models/chat/services/chat.service';
+import ChatService from './chat.service';
 import AnonymousRoomUserRepository from '@models/chat/repositories/anonymous-room-user.repository';
 
 /**
@@ -17,7 +17,7 @@ import AnonymousRoomUserRepository from '@models/chat/repositories/anonymous-roo
 @Injectable()
 export default class ChatAnonymousService implements IChatAnonymousService {
   constructor(
-    private readonly chatService: ChatService,
+    @Inject(forwardRef(() => ChatService)) private readonly chatService: ChatService,
     private readonly userRepository: UserRepository,
     private readonly anonymousRoomUserRepository: AnonymousRoomUserRepository,
   ) {}

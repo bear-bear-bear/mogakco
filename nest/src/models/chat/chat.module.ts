@@ -8,11 +8,13 @@ import ChatAnonymousService from './services/anonymous.service';
 import ChatSimplifyService from '@models/chat/services/simple.service';
 import ChatDevelopmentService from '@models/chat/services/dev.service';
 import ChatEventService from '@models/chat/services/event.service';
+import RoomService from '@models/chat/services/room.service';
 
 @Module({
   imports: [AuthModule, UserModule],
   controllers: [ChatController],
   providers: [
+    RoomService,
     ChatService,
     ChatGateway,
     ChatAnonymousService,

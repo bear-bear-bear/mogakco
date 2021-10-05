@@ -12,11 +12,13 @@ import AnonymousRoomUserRepository from '@models/chat/repositories/anonymous-roo
 import UserRepository from '@models/user/repositories/user.repository';
 import ChatEventService from '@models/chat/services/event.service';
 import ChatAnonymousService from '@models/chat/services/anonymous.service';
+import RoomService from '@models/chat/services/room.service';
 
 @Injectable()
 export default class ChatSimplifyService implements IChatSimpleService {
   constructor(
     private readonly chatService: ChatService,
+    private readonly roomService: RoomService,
     private readonly anonymousService: ChatAnonymousService,
     private readonly chatEventService: ChatEventService,
     private readonly anonymousRoomUserRepository: AnonymousRoomUserRepository,
@@ -40,14 +42,14 @@ export default class ChatSimplifyService implements IChatSimpleService {
    * @desc 서버 소켓과 데이터베이스에서 유저를 퇴장처리하는 로직이 간소화 된 메서드
    */
   async simplifyLeaveMethods(client: Socket, info: InfoFromHeader): Promise<string> {
-    await this.chatService.leaveRoom(info);
+    await this.roomService.leaveRoom(info);
     client.leave(String(info.roomId));
 
     const {
       anonymousUser: { username },
     } = await this.anonymousService.findOrCreateAnonymousName(info);
     await this.anonymousRoomUserRepository.deleteName(username);
-    await this.chatService.checkDeleteRoom(info);
+    await this.roomService.checkDeleteRoom(info);
     return username;
   }
 
@@ -77,7 +79,7 @@ export default class ChatSimplifyService implements IChatSimpleService {
     } = await this.anonymousService.findOrCreateAnonymousName(info);
     const user = await this.userRepository.findOne({ id: userId });
     if (!user) throw new UnauthorizedException();
-    if (isCreated) await this.chatService.joinRoom(user, roomId);
+    if (isCreated) await this.roomService.joinRoom(user, roomId);
 
     return {
       isCreated,
