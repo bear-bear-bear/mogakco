@@ -17,7 +17,7 @@ import {
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
-import ChatService from './chat.service';
+import ChatService from './services/chat.service';
 import {
   AddAnonymousNameSwagger,
   AddAnonymousPrefixSwagger,
@@ -51,6 +51,7 @@ import { AuthRequest } from '@models/user/interface/controller';
 import { GeneralResponse } from '@common/interface/global';
 import AnonymousPropDto from '@models/chat/dto/anonymous-prop.dto';
 import AdminGuard from '@common/guards/admin.guard';
+import ChatAnonymousService from './services/anonymous.service';
 
 @Controller('chat')
 export default class ChatController implements IChatController {
@@ -58,6 +59,7 @@ export default class ChatController implements IChatController {
 
   constructor(
     private readonly chatService: ChatService,
+    private readonly anonymousService: ChatAnonymousService,
     private readonly userService: UserService,
     private readonly roomRepository: RoomRepository,
     private readonly roomUserRepository: RoomUserRepository,
@@ -152,7 +154,7 @@ export default class ChatController implements IChatController {
     @Req() { user: { id: adminId } }: AuthRequest,
     @Body() { name }: AnonymousPropDto,
   ): Promise<GeneralResponse> {
-    await this.chatService.addAnonymousPrefixName(adminId, name);
+    await this.anonymousService.addAnonymousPrefixName(adminId, name);
     return {
       statusCode: HttpStatus.OK,
       message: '익명 사용자 접두어 추가를 성공하였습니다.',
@@ -169,7 +171,7 @@ export default class ChatController implements IChatController {
     @Param('id', new ParseIntPipe()) id: number,
     @Body() { name }: AnonymousPropDto,
   ): Promise<UpdateAnonymousProp> {
-    await this.chatService.modifyAnonymousPrefixName(id, name);
+    await this.anonymousService.modifyAnonymousPrefixName(id, name);
     return {
       statusCode: HttpStatus.OK,
       message: `${id} 번 데이터를 ${name} 으로 성공적으로 변경하였습니다.`,
@@ -187,7 +189,7 @@ export default class ChatController implements IChatController {
   async deleteAnonymousPrefixRuleByAdmin(
     @Param('id', new ParseIntPipe()) id: number,
   ): Promise<DeleteAnonymousProp> {
-    await this.chatService.deleteAnonymousPrefixName(id);
+    await this.anonymousService.deleteAnonymousPrefixName(id);
     return {
       statusCode: HttpStatus.OK,
       message: `${id} 번 데이터가 성공적으로 삭제되었습니다.`,
@@ -206,7 +208,7 @@ export default class ChatController implements IChatController {
     { user: { id: adminId } }: AuthRequest,
     @Body() { name }: AnonymousPropDto,
   ): Promise<GeneralResponse> {
-    await this.chatService.addAnonymousPrefixName(adminId, name);
+    await this.anonymousService.addAnonymousPrefixName(adminId, name);
     return {
       statusCode: HttpStatus.OK,
       message: '익명 사용자 이름 추가를 성공하였습니다.',
@@ -223,7 +225,7 @@ export default class ChatController implements IChatController {
     @Param('id', new ParseIntPipe()) id: number,
     @Body() { name }: AnonymousPropDto,
   ): Promise<UpdateAnonymousProp> {
-    await this.chatService.modifyAnonymousName(id, name);
+    await this.anonymousService.modifyAnonymousName(id, name);
     return {
       statusCode: HttpStatus.OK,
       message: `${id} 번 데이터를 ${name} 으로 성공적으로 변경하였습니다.`,
@@ -241,7 +243,7 @@ export default class ChatController implements IChatController {
   async deleteAnonymousNameRuleByAdmin(
     @Param('id', new ParseIntPipe()) id: number,
   ): Promise<DeleteAnonymousProp> {
-    await this.chatService.deleteAnonymousName(id);
+    await this.anonymousService.deleteAnonymousName(id);
     return {
       statusCode: HttpStatus.OK,
       message: `${id} 번 데이터가 성공적으로 삭제되었습니다.`,
@@ -257,7 +259,7 @@ export default class ChatController implements IChatController {
   @UseGuards(AdminGuard)
   @Get('/anonymous/prefix-name')
   async findAllAnonymousPrefixRuleByAdmin(): Promise<FindAllAnonymousProp> {
-    const list = await this.chatService.findAllAnonymousPrefix();
+    const list = await this.anonymousService.findAllAnonymousPrefix();
     return {
       statusCode: HttpStatus.OK,
       message: '익명 접두어 목록을 성공적으로 불러왔습니다.',
@@ -273,7 +275,7 @@ export default class ChatController implements IChatController {
   @UseGuards(AdminGuard)
   @Get('/anonymous/name')
   async findAllAnonymousNameRuleByAdmin(): Promise<FindAllAnonymousProp> {
-    const list = await this.chatService.findAllAnonymousName();
+    const list = await this.anonymousService.findAllAnonymousName();
     return {
       statusCode: HttpStatus.OK,
       message: '익명 이름 목록을 성공적으로 불러왔습니다.',
