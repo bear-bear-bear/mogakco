@@ -4,7 +4,7 @@ import {
   InternalServerErrorException,
   Logger,
 } from '@nestjs/common';
-import RoomRepository from './repositories/room.repository';
+import RoomRepository from '../repositories/room.repository';
 import UserEntity from '@models/user/entities/user.entity';
 import RoomUserRepository from '@models/chat/repositories/room-user.repository';
 import UserRepository from '@models/user/repositories/user.repository';
@@ -16,16 +16,14 @@ import {
   InfoFromHeader,
   LeaveRoom,
   UserAndRoom,
-} from '@models/chat/interface/service';
+} from '../interface/service';
 import ChatRepository from '@models/chat/repositories/chat.repository';
 import AnonymousRoomUserRepository from '@models/chat/repositories/anonymous-room-user.repository';
 import { Server } from 'socket.io';
 import { v1 as uuid } from 'uuid';
 import RoomEntity from '@models/chat/entities/room.entity';
-import { getRepository } from 'typeorm';
-import AnonymousPrefixEntity from '@models/chat/entities/anonymous_prefix.entity';
-import AnonymousNameEntity from '@models/chat/entities/anonymous_names.entity';
-import { ChatEvent } from '@common/helpers/enum.helper';
+import { ChatEvent } from '../interface/enum';
+import ChatAnonymousService from '@models/chat/services/anonymous.service';
 
 @Injectable()
 export default class ChatService implements IChatService {
@@ -37,6 +35,7 @@ export default class ChatService implements IChatService {
     private readonly userRepository: UserRepository,
     private readonly chatRepository: ChatRepository,
     private readonly anonymousRoomUserRepository: AnonymousRoomUserRepository,
+    private readonly anonymousService: ChatAnonymousService,
   ) {}
 
   /**
@@ -89,15 +88,6 @@ export default class ChatService implements IChatService {
   }
 
   /**
-   * @desc 익명 이름을 생성하여 반환합니다.
-   */
-  async findOrCreateAnonymousName(auth: HandShakeAuth) {
-    const { userId, roomId } = this.getInfoFromHeader(auth);
-    const anonymousName = await this.anonymousRoomUserRepository.findOrCreate(userId, roomId);
-    return anonymousName;
-  }
-
-  /**
    * @desc 해당 유저를 채팅방(Room) 에서 퇴장시킵니다.
    */
   async leaveRoom(auth: HandShakeAuth): Promise<LeaveRoom> {
@@ -116,7 +106,7 @@ export default class ChatService implements IChatService {
     if (!(user && room)) throw new InternalServerErrorException();
     const {
       anonymousUser: { username },
-    } = await this.findOrCreateAnonymousName(auth);
+    } = await this.anonymousService.findOrCreateAnonymousName(auth);
     const { id: chatId } = await this.chatRepository.createChat(user, room, message);
     return this.createChatResponse(chatId, user.id, username, message);
   }
@@ -171,86 +161,5 @@ export default class ChatService implements IChatService {
       message,
       type: 'chat',
     };
-  }
-
-  /**
-   * @desc 채팅방의 멤버수를 구해서 멤버수 카운트 이벤트를 emit 합니다.
-   */
-  async emitMemberCountEvent(server: Server, auth: HandShakeAuth): Promise<void> {
-    const { roomId } = this.getInfoFromHeader(auth);
-    const memberCount = await this.roomUserRepository.count({
-      where: { roomId },
-    });
-    server.emit(ChatEvent.SEND_MEMBER_COUNT, memberCount);
-  }
-
-  /**
-   * @desc 입장 또는 퇴장 이벤트를 emit 합니다.
-   */
-  emitEnterOrExitEvent(server: Server, username: string, type: 'enter' | 'exit'): void {
-    server.emit(type, {
-      id: uuid(),
-      type,
-      username,
-    });
-  }
-
-  /**
-   * @desc 익명 사용자 접두어를 추가합니다.
-   */
-  async addAnonymousPrefixName(adminId: number, name: string): Promise<void> {
-    const admin = await this.userRepository.findOne({ id: adminId });
-    await getRepository(AnonymousPrefixEntity)
-      .create({
-        name,
-        user: admin,
-      })
-      .save();
-  }
-
-  async modifyAnonymousPrefixName(id: number, name: string): Promise<void> {
-    await getRepository(AnonymousPrefixEntity).update(
-      { id },
-      {
-        name,
-      },
-    );
-  }
-
-  async deleteAnonymousPrefixName(id: number): Promise<void> {
-    await getRepository(AnonymousPrefixEntity).delete({ id });
-  }
-
-  /**
-   * @desc 익명 사용자 이름을 추가합니다.
-   */
-  async addAnonymousName(adminId: number, name: string): Promise<void> {
-    const admin = await this.userRepository.findOne({ id: adminId });
-    await getRepository(AnonymousNameEntity)
-      .create({
-        name,
-        user: admin,
-      })
-      .save();
-  }
-
-  async modifyAnonymousName(id: number, name: string): Promise<void> {
-    await getRepository(AnonymousNameEntity).update({ id }, { name });
-  }
-
-  async deleteAnonymousName(id: number): Promise<void> {
-    await getRepository(AnonymousNameEntity).delete({ id });
-  }
-
-  async findAllAnonymousName(): Promise<AnonymousNameEntity[] | null> {
-    const list = await getRepository(AnonymousNameEntity).find();
-    if (!list) return null;
-    return list;
-  }
-
-  async findAllAnonymousPrefix(): Promise<AnonymousPrefixEntity[] | null> {
-    const list = await getRepository(AnonymousPrefixEntity).find();
-    if (!list) return null;
-    return list;
   }
 }
