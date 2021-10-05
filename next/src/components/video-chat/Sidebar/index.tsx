@@ -18,6 +18,8 @@ const Sidebar = () => {
 
   const handleChatIconClick = () => {
     toggleSideSection('chat');
+
+    console.log(sideSectionShowState);
   };
 
   const handleCalendarIconClick = () => {
@@ -26,6 +28,7 @@ const Sidebar = () => {
 
   const handleUserIconClick = () => {
     toggleSideSection('userList');
+    console.log(sideSectionShowState);
   };
 
   useEffect(() => {

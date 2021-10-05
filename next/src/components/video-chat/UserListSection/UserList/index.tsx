@@ -12,8 +12,8 @@ const UserList = ({ users }: Props) => {
     <S.List>
       {users.map(({ id, numeral, nickname }) => (
         <S.Item key={id}>
-          <p>{numeral}</p>
-          <p>{nickname}</p>
+          <S.Numeral>{numeral}</S.Numeral>
+          <S.Nickname>{nickname}</S.Nickname>
         </S.Item>
       ))}
     </S.List>

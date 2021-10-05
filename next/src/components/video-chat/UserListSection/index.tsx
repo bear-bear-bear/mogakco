@@ -32,26 +32,26 @@ const UserListSection = () => {
     const tempUsers = [
       {
         id: 1,
-        nickname: '김김김을 김김한 김김김',
+        nickname: '김김김을 김김한 김김김 김김김 김김김',
       },
       {
         id: 26,
-        nickname: '곰곰곰을 곰곰한 곰곰곰',
+        nickname: '곰곰곰을 곰곰한 곰곰곰 곰곰곰 곰곰곰',
       },
       {
         id: 126,
-        nickname: '강강강을 강강한 강강강',
+        nickname: '강강강을 강강한 강강강 강강강 강강강',
       },
       {
         id: 12412,
-        nickname: '궁궁궁을 궁궁한 궁궁궁',
+        nickname: '궁궁궁을 궁궁한 궁궁궁 궁궁궁 궁궁궁',
       },
     ];
     setUsers(
       tempUsers.map((user, idx) => ({
         id: user.id,
         nickname: user.nickname,
-        numeral: idx,
+        numeral: idx + 1,
       })),
     );
   }, []);

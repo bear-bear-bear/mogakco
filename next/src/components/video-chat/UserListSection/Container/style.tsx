@@ -8,8 +8,7 @@ interface ContainerStyleProps {
 export const Container = styled.section<ContainerStyleProps>`
   width: 20rem;
   height: 100vh;
-  display: ${({ isShow }) => (isShow ? 'grid' : 'none')};
-  grid-template-rows: [Header] max-content [chatList] 1fr [InputBox] max-content;
+  display: ${({ isShow }) => (isShow ? 'block' : 'none')};
   background-color: var(--color-white);
 `;
 
