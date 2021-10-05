@@ -1,7 +1,7 @@
 import Container from './Container';
 
 const UserListSection = () => {
-  return <Container>사용자 목록 섹션</Container>;
+  return <Container>황야의 무법자 전설의 최은기</Container>;
 };
 
 export default UserListSection;

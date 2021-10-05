@@ -44,3 +44,21 @@ export const ChatIcon = styled(ChatSvg)`
 export const UserIcon = styled(UserSvg)`
   ${IconStyles}
 `;
+
+export const RelativeArea = styled.section`
+  position: relative;
+`;
+export const MemberCount = styled.p`
+  position: absolute;
+  right: -0.2rem;
+  bottom: 0;
+  height: 1.3rem;
+  width: 1.3rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5px;
+  color: var(--color-white);
+  background-color: var(--color-blue-2);
+  pointer-events: none;
+`;
