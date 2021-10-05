@@ -9,6 +9,7 @@ import CustomHead from '@components/common/CustomHead';
 import Container from '@components/video-chat/Container';
 import CamSection from '@components/video-chat/CamSection';
 import ChatSection from '@components/video-chat/ChatSection';
+import UserListSection from '@components/video-chat/UserListSection';
 import Sidebar from '@components/video-chat/Sidebar';
 import apiClient, { logAxiosError } from '@lib/apiClient';
 import devModeLog from '@lib/devModeLog';
@@ -62,6 +63,7 @@ const ChatRoom = () => {
         <Container>
           <Sidebar />
           <ChatSection />
+          <UserListSection />
           <CamSection />
         </Container>
       </SocketContext.Provider>

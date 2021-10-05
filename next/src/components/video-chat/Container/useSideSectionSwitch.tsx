@@ -16,7 +16,7 @@ export type ToggleSection<T> = (
 
 /**
  * @desc
- * 메인 섹션 (캠 섹션) 을 제외한 사이드 섹션(채팅 섹션, 유저 리스트 섹션 등) 들의 view toggle 을 담당합니다.
+ * 메인 섹션 (캠 섹션) 을 제외한 사이드 섹션(채팅 섹션, 사용자 목록 섹션 등) 들의 view toggle 을 담당합니다.
  * 지정한 섹션 이름 외 다른 섹션 이름의 value를 모두 false로 만들고,
  * 지정한 섹션 이름의 value를 toggle합니다.
  */

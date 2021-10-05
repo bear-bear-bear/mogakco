@@ -20,7 +20,7 @@ const Sidebar = () => {
   };
 
   const handleUserIconClick = () => {
-    alert('유저 리스트 미구현');
+    toggleSideSection('userList');
   };
 
   return (
@@ -38,7 +38,9 @@ const Sidebar = () => {
         <SVGButton
           SvgComponent={S.ChatIcon}
           buttonProps={{
-            title: sideSectionShowState.chat ? '채팅창 닫기' : '채팅창 열기',
+            title: sideSectionShowState.chat //
+              ? '채팅창 닫기'
+              : '채팅창 열기',
             'aria-label': 'Toggle chat section',
           }}
           onClick={handleChatIconClick}
@@ -46,7 +48,9 @@ const Sidebar = () => {
         <SVGButton
           SvgComponent={S.UserIcon}
           buttonProps={{
-            title: '유저 리스트',
+            title: sideSectionShowState.userList
+              ? '사용자 목록 닫기'
+              : '사용자 목록 열기',
             'aria-label': 'Toggle user list',
           }}
           onClick={handleUserIconClick}
