@@ -7,12 +7,12 @@ import SVGButton from '@components/common/SVGButton';
 import * as S from './style';
 
 const Sidebar = () => {
-  const [sideSectionShowState, toggleSideSectionShow] = useContext(
+  const [sideSectionShowState, toggleSideSection] = useContext(
     SideSectionShowContext,
   );
 
   const handleChatIconClick = () => {
-    toggleSideSectionShow('chat');
+    toggleSideSection('chat');
   };
 
   const handleCalendarIconClick = () => {

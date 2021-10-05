@@ -9,14 +9,14 @@ import * as S from './style';
 const Container: React.FC = ({ children }) => {
   const socketClient = useChatClient();
   const [memberCount, setMemberCount] = useState<number>(0);
-  const [sideSectionShowState, toggleSideSectionShow] = useContext(
+  const [sideSectionShowState, toggleSideSection] = useContext(
     SideSectionShowContext,
   );
   const [isShowDropzoneUI, setIsShowDropzoneUI] = useState<boolean>(false);
   const { getRootProps, getInputProps } = useDropzone({ setIsShowDropzoneUI });
 
   const handleChatCloseButtonClick = () => {
-    toggleSideSectionShow('chat', { justOff: true });
+    toggleSideSection('chat', { justOff: true });
   };
 
   useEffect(() => {
