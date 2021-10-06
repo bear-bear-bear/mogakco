@@ -2,6 +2,7 @@ import styled from '@emotion/styled';
 import { css } from '@emotion/react';
 import CalendarSvg from '@public/svg/calendar.svg';
 import ChatSvg from '@public/svg/conversation.svg';
+import UserSvg from '@public/svg/user.svg';
 
 export const Sidebar = styled.aside`
   width: 4.5rem;
@@ -39,4 +40,25 @@ export const CalendarIcon = styled(CalendarSvg)`
 `;
 export const ChatIcon = styled(ChatSvg)`
   ${IconStyles}
+`;
+export const UserIcon = styled(UserSvg)`
+  ${IconStyles}
+`;
+
+export const RelativeArea = styled.section`
+  position: relative;
+`;
+export const MemberCount = styled.p`
+  position: absolute;
+  right: -0.2rem;
+  bottom: 0;
+  height: 1.3rem;
+  width: 1.3rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5px;
+  color: var(--color-white);
+  background-color: var(--color-blue-2);
+  pointer-events: none;
 `;

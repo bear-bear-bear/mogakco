@@ -1,4 +1,4 @@
-type AnyObject = Record<string, any>;
+import { AnyObject } from 'typings/common';
 
 const isAllPropertyTruthy = <T extends AnyObject>(obj: T) => {
   if (Object.values(obj).length === 0) return false;
