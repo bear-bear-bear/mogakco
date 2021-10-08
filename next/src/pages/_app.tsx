@@ -2,7 +2,6 @@ import type { AppProps } from 'next/app';
 import { ChakraProvider } from '@chakra-ui/react';
 import { SWRConfig } from 'swr';
 import GlobalStyles, { customGlobalStyles } from '@globalStyles';
-import 'reactjs-popup/dist/index.css';
 
 /**
  * @url SWR Options Description https://swr.vercel.app/docs/options
