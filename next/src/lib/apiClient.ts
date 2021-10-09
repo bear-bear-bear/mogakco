@@ -1,15 +1,18 @@
 import axios, { AxiosRequestConfig } from 'axios';
 import log from 'loglevel';
+
 import devModeLog from '@lib/devModeLog';
 import { refreshAccessTokenApi } from '@lib/apis';
 import token, { REFRESH_TOKEN } from '@lib/token';
-import type { GeneralAxiosError } from 'typings/common';
 import { getServerUrl } from '@lib/enviroment';
+import type { GeneralAxiosError } from 'typings/common';
 
+// TODO:  모달 적용을 위해 hooks로 만들기
 export const logAxiosError = (axiosError: GeneralAxiosError) => {
   if (process.env.NODE_ENV === 'production') {
     log.setLevel('trace');
     log.trace('배포 모드에선 로그를 표시하지 않습니다.');
+    return;
   }
 
   log.setLevel('debug');
@@ -19,6 +22,7 @@ export const logAxiosError = (axiosError: GeneralAxiosError) => {
       'axios 에러가 아닙니다. logAxiosError 는 axios 에러만을 로깅합니다.',
     );
     log.error(axiosError);
+    return;
   }
 
   const { response, request, message, config } = axiosError;
@@ -64,7 +68,6 @@ const passUrlDict = {
 };
 type PassUrl = keyof typeof passUrlDict;
 
-// TODO: 응답에 user 추가하여 메모리에 세팅
 /**
  * @desc
  * accessToken을 새로 발급받아 new expiration은 로컬 스토리지에,

@@ -20,10 +20,12 @@ export const StyledPopup = styled(Popup)`
 
 export const Content = styled.p`
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: 0.5rem;
   text-align: center;
-  padding: 1.33rem;
+  padding: 1.1rem;
   line-height: 1.4;
 `;
 

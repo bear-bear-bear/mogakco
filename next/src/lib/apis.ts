@@ -40,19 +40,6 @@ export const refreshAccessTokenApiSSR = (headers: IncomingHttpHeaders) =>
     headers,
   });
 
-// 로그인 연장 테스트 Api
-export const authProlongTestApi = () =>
-  apiClient
-    .get<{ user: { id: number; username: string } }>('/api/auth/test')
-    .then(({ data }) => {
-      window.alert(
-        `테스트 성공(로그인 자동 연장): 로그인한 유저 - ${data.user.username}`,
-      );
-    })
-    .catch(() => {
-      window.alert('로그인 연장 실패, 로그를 확인해주세요.');
-    });
-
 // 유저 정보 수정
 export const editAccountApi = (data: IAccountEditProps) =>
   apiClient

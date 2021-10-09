@@ -2,7 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 
 import useUser from '@hooks/useUser';
-import { authProlongTestApi, signOutApi } from '@lib/apis';
+import { signOutApi } from '@lib/apis';
 import token from '@lib/token';
 import { logAxiosError } from '@lib/apiClient';
 import type { GeneralAxiosError } from 'typings/common';
@@ -17,10 +17,6 @@ export interface ProfileModalProps {
 
 const ProfileModal = ({ isShow, direction }: ProfileModalProps) => {
   const { user, mutateUser } = useUser();
-
-  const onClickTestButton = async () => {
-    await authProlongTestApi();
-  };
 
   const handleSignOut = async () => {
     try {
@@ -62,15 +58,6 @@ const ProfileModal = ({ isShow, direction }: ProfileModalProps) => {
               onClick={handleSignOut}
             >
               로그아웃
-            </button>
-          </li>
-          <li>
-            <button
-              type="button"
-              className="profile-section__list__item"
-              onClick={onClickTestButton}
-            >
-              로그인 연장 테스트
             </button>
           </li>
         </ul>

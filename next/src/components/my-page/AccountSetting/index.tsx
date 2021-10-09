@@ -7,6 +7,7 @@ import toSelectOptions from '@lib/toSelectOptions';
 import token from '@lib/token';
 import { logAxiosError } from '@lib/apiClient';
 import { deleteAccountApi, editAccountApi } from '@lib/apis';
+import useModal from '@hooks/useModal';
 import type { UserMutator } from '@hooks/useUser';
 import type { IOptionalPageProps as SelectsOptions } from '@pages/sign-up/optional';
 import type { IAccountEditProps, IUserInfo } from 'typings/auth';
@@ -90,7 +91,6 @@ const AccountSetting = ({
   ]);
 
   const handleAccountDeleteButtonClick = async () => {
-    // TODO: 모달 추가 후 '정말로 삭제하시겠습니까?' 추가
     try {
       await deleteAccountApi();
       mutateUser({ isLoggedIn: false });
@@ -99,11 +99,20 @@ const AccountSetting = ({
       logAxiosError(err as GeneralAxiosError);
     }
   };
+  const { Modal: DeleteConfirmModal, openModal: openDeleteConfirmModal } =
+    useModal({
+      content: '정말로 삭제하시겠습니까?',
+      callback: handleAccountDeleteButtonClick,
+    });
 
   const handleSaveButtonClick = () => {
     if (!isSubmittable()) return;
     hiddenSubmitButtonEl.current?.click();
   };
+
+  const { Modal: SubmittedModal, openModal: openSubmittedModal } = useModal({
+    content: '수정 되었습니다.',
+  });
   const handleFormSubmit = async (requiredFields: RequiredFields) => {
     const requestBody: IAccountEditProps = {
       id,
@@ -130,9 +139,7 @@ const AccountSetting = ({
           edittedSkills && edittedSkills.map((skill) => skill.id.toString()),
         job: edittedJob && edittedJob.id.toString(),
       });
-
-      // TODO: 모달 추가되면 모달로 변경
-      alert('수정되었습니다.');
+      openSubmittedModal();
     } catch (err) {
       logAxiosError(err as GeneralAxiosError);
     }
@@ -171,7 +178,7 @@ const AccountSetting = ({
           color="red"
           outline
           fullWidth
-          onClick={handleAccountDeleteButtonClick}
+          onClick={openDeleteConfirmModal}
         >
           계정 삭제
         </Button>
@@ -190,6 +197,8 @@ const AccountSetting = ({
           저장
         </Button>
       </S.Footer>
+      <DeleteConfirmModal />
+      <SubmittedModal />
     </S.Main>
   );
 };
