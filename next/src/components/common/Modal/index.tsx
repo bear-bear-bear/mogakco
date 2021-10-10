@@ -7,7 +7,7 @@ import * as S from './style';
 export type RequiredProps = NoUndefinedField<{
   open: PopupProps['open'];
   onClose: PopupProps['onClose'];
-  content: string;
+  content: string | string[];
 }>;
 
 type ConfirmCallback = () => void;
@@ -39,6 +39,7 @@ const Modal = ({ open, onClose, content, callback }: Props) => {
   const handleCloseClick = () => {
     onClose();
 
+    if (!callback) return;
     if (Array.isArray(callback)) {
       callback[1]();
     }
@@ -46,7 +47,17 @@ const Modal = ({ open, onClose, content, callback }: Props) => {
 
   return (
     <S.StyledPopup open={open} onClose={handleCloseClick} closeOnDocumentClick>
-      <S.Content>{content}</S.Content>
+      {Array.isArray(content) ? (
+        <S.Content>
+          {content.map((v) => (
+            <p key={`${v}`}>▪{v}</p>
+          ))}
+        </S.Content>
+      ) : (
+        <S.Content>
+          <p>{content}</p>
+        </S.Content>
+      )}
       <S.Buttons>
         {callback && (
           <S.ButtonWrapper>

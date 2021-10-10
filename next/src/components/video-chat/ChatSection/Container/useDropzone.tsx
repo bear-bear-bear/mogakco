@@ -1,6 +1,6 @@
-import { useCallback, useContext } from 'react';
+import { useCallback, useContext, useState } from 'react';
 import type { Dispatch, SetStateAction } from 'react';
-import { useDropzone } from 'react-dropzone';
+import { DropzoneState, useDropzone } from 'react-dropzone';
 import type { FileRejection } from 'react-dropzone';
 
 import { uploadImage } from '@lib/apis';
@@ -9,12 +9,25 @@ import type { GeneralAxiosError } from 'typings/common';
 
 import { ChatContext } from '../ChatContext';
 
+type ErrorMessages = string[];
+type DropzoneErrorState = {
+  curr: ErrorMessages;
+  set: Dispatch<SetStateAction<ErrorMessages>>;
+};
+
 interface Props {
   setIsShowDropzoneUI: Dispatch<SetStateAction<boolean>>;
 }
 
-const useCustomDropZone = ({ setIsShowDropzoneUI }: Props) => {
+const useCustomDropZone = ({
+  setIsShowDropzoneUI,
+}: Props): [DropzoneState, DropzoneErrorState] => {
   const chat = useContext(ChatContext);
+  const [errorMessages, setErrorMessages] = useState<ErrorMessages>([]);
+  const dropzoneError: DropzoneErrorState = {
+    curr: errorMessages,
+    set: setErrorMessages,
+  };
 
   const onDropAccepted = useCallback(
     async ([acceptedOneFile]: File[]) => {
@@ -38,13 +51,15 @@ const useCustomDropZone = ({ setIsShowDropzoneUI }: Props) => {
     (fileRejections: FileRejection[]) => {
       setIsShowDropzoneUI(false);
 
-      const errorMessages = fileRejections
+      const fileRejectionMessages = fileRejections
         .map(({ errors }) => errors.map((error) => error.message))
         .flat();
-      const deduplicatedErrorMessages = Array.from(new Set(errorMessages));
+      const deduplicatedFileRejectionMessages = Array.from(
+        new Set(fileRejectionMessages),
+      );
 
-      // TODO: Rejection 이유 한글로 매칭해서 모달로 띄워주기
-      alert(deduplicatedErrorMessages.join('\n'));
+      // TODO: Rejection 이유 한글로 매칭하기 (현재 영어)
+      setErrorMessages(deduplicatedFileRejectionMessages);
     },
     [setIsShowDropzoneUI],
   );
@@ -57,17 +72,20 @@ const useCustomDropZone = ({ setIsShowDropzoneUI }: Props) => {
     setIsShowDropzoneUI(false);
   };
 
-  return useDropzone({
-    accept: 'image/*',
-    maxSize: 5 * 10 ** 6, // 5MB - 임시
-    multiple: false,
-    noClick: true,
-    noKeyboard: true,
-    onDropAccepted,
-    onDropRejected,
-    onDragEnter,
-    onDragLeave,
-  });
+  return [
+    useDropzone({
+      accept: 'image/*',
+      maxSize: 5 * 10 ** 6, // 5MB - 임시
+      multiple: false,
+      noClick: true,
+      noKeyboard: true,
+      onDropAccepted,
+      onDropRejected,
+      onDragEnter,
+      onDragLeave,
+    }),
+    dropzoneError,
+  ];
 };
 
 export default useCustomDropZone;

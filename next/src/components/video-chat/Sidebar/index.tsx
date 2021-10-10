@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import _ from 'lodash';
 
 import useChatClient from '@hooks/chat/useChatClient';
+import useModal from '@hooks/useModal';
 import { ChatEvent } from '@lib/enum';
 import Profile from '@components/common/Profile';
 import { SideSectionShowContext } from '@components/video-chat/Container';
@@ -15,20 +16,20 @@ const Sidebar = () => {
     SideSectionShowContext,
   );
   const [memberCount, setMemberCount] = useState<number>(0);
+  const { Modal: TempModal, openModal: openTempModal } = useModal({
+    content: '달력 미구현',
+  });
 
   const handleChatIconClick = () => {
     toggleSideSection('chat');
-
-    console.log(sideSectionShowState);
   };
 
   const handleCalendarIconClick = () => {
-    alert('달력 미구현');
+    openTempModal('달력 미구현');
   };
 
   const handleUserIconClick = () => {
     toggleSideSection('userList');
-    console.log(sideSectionShowState);
   };
 
   useEffect(() => {
@@ -77,6 +78,7 @@ const Sidebar = () => {
           <S.MemberCount>{memberCount}</S.MemberCount>
         </S.RelativeArea>
       </S.BottomSection>
+      <TempModal />
     </S.Sidebar>
   );
 };

@@ -5,8 +5,6 @@ import Button from '@components/common/Button';
 
 import * as S from './style';
 
-// TODO: 로그인/로그아웃 컴포넌트 작은 모니터에서 버거로 변경
-
 const Header = () => (
   <S.HeaderContainer>
     <Box w="fit-content">

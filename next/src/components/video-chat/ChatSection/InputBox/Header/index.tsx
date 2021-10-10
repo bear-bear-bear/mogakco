@@ -6,9 +6,6 @@ import * as S from './style';
 
 const Header = () => {
   const [, setIsShowEditor] = useContext(EditorShowContext);
-  const handleFileUploadButtonClick = () => {
-    alert('파일 업로드 미구현');
-  };
 
   const handleEditorPopUpButtonClick = () => {
     setIsShowEditor(true);
@@ -23,14 +20,6 @@ const Header = () => {
           'aria-label': 'Open markdown editor',
         }}
         onClick={handleEditorPopUpButtonClick}
-      />
-      <SVGButton
-        SvgComponent={S.FileUploadSVG}
-        buttonProps={{
-          title: '파일 업로드',
-          'aria-label': 'Upload files',
-        }}
-        onClick={handleFileUploadButtonClick}
       />
     </S.Header>
   );

@@ -1,5 +1,7 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
+
 import { SideSectionShowContext } from '@components/video-chat/Container';
+import DropzoneErrorsModal from '@components/common/Modal';
 
 import useDropzone from './useDropzone';
 import * as S from './style';
@@ -9,11 +11,25 @@ const Container: React.FC = ({ children }) => {
     SideSectionShowContext,
   );
   const [isShowDropzoneUI, setIsShowDropzoneUI] = useState<boolean>(false);
-  const { getRootProps, getInputProps } = useDropzone({ setIsShowDropzoneUI });
+  const [{ getRootProps, getInputProps }, dropzoneErrorState] = useDropzone({
+    setIsShowDropzoneUI,
+  });
+  const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
+  const openModal = () => setIsOpenModal(true);
+  const closeModal = () => {
+    setIsOpenModal(false);
+    dropzoneErrorState.set([]);
+  };
 
   const handleChatCloseButtonClick = () => {
     toggleSideSection('chat', { justOff: true });
   };
+
+  useEffect(() => {
+    if (dropzoneErrorState.curr.length !== 0) {
+      openModal();
+    }
+  }, [dropzoneErrorState.curr.length]);
 
   return (
     <div {...getRootProps()}>
@@ -34,6 +50,11 @@ const Container: React.FC = ({ children }) => {
             <S.FileAddIcon />
           </S.Dropzone>
         )}
+        <DropzoneErrorsModal
+          open={isOpenModal}
+          onClose={closeModal}
+          content={dropzoneErrorState.curr}
+        />
       </S.Container>
     </div>
   );

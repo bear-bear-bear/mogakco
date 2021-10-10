@@ -4,6 +4,7 @@ import dynamic from 'next/dynamic';
 import { Editor as EditorType, EditorProps } from '@toast-ui/react-editor';
 import '@toast-ui/editor/dist/toastui-editor.css';
 
+import useModal from '@hooks/useModal';
 import { uploadImage } from '@lib/apis';
 import { logAxiosError } from '@lib/apiClient';
 import SVGButton from '@components/common/SVGButton';
@@ -34,6 +35,9 @@ const TuiEditor = () => {
   const editorRef = useRef<EditorType>(null);
   const [isEditorImageAddHookChanged, setIsEditorImageAddHookChanged] =
     useState<boolean>(false);
+  const { Modal: LimitModal, openModal: openLimitModal } = useModal({
+    content: '채팅길이 상한을 넘었습니다 (255)',
+  });
 
   const getCurrentMarkdown = (): string =>
     editorRef.current?.getInstance().getMarkdown() || '';
@@ -49,8 +53,7 @@ const TuiEditor = () => {
 
   const handleEditorChange = () => {
     if (verifyChatLengthLimit().isLimit) {
-      // TODO: 모달로 바꾸기
-      alert('채팅 길이 상한을 넘었습니다 (255)');
+      openLimitModal();
     }
   };
 
@@ -65,8 +68,7 @@ const TuiEditor = () => {
     const { isLimit, currentMarkdown } = verifyChatLengthLimit();
 
     if (isLimit) {
-      // TODO: 모달로 바꾸기
-      alert('채팅 길이 상한을 넘었습니다 (255)');
+      openLimitModal();
       return;
     }
 
@@ -132,6 +134,7 @@ const TuiEditor = () => {
       >
         Send
       </S.SendButton>
+      <LimitModal />
     </S.EditorBackground>
   );
 };
