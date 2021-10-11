@@ -10,7 +10,7 @@ import { pageProps } from './index';
 
 const SignUpRequired = () => {
   const { user } = useUser({
-    redirectTo: '/dashboard',
+    redirectTo: '/lobby',
     redirectIfFound: true,
   });
 

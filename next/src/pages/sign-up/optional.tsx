@@ -23,7 +23,7 @@ export interface IOptionalPageProps {
 
 const SignUpOptional = (props: IOptionalPageProps) => {
   const { user, mutateUser } = useUser({
-    redirectTo: '/dashboard',
+    redirectTo: '/lobby',
     redirectIfFound: true,
   });
 

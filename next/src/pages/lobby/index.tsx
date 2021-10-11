@@ -3,22 +3,22 @@ import { useRouter } from 'next/router';
 
 import useUser from '@hooks/useUser';
 import CustomHead from '@components/common/CustomHead';
-import Container from '@components/dashboard/Container';
+import Container from '@components/lobby/Container';
 import ServiceHeader from '@components/common/ServiceHeader';
-import Card from '@components/dashboard/Card';
+import Card from '@components/lobby/Card';
 import { logAxiosError } from '@lib/apiClient';
 import { getVideoChatRoomIdApi } from '@lib/apis';
 import type { GeneralAxiosError } from 'typings/common';
-import Loading from '@components/dashboard/Loading';
+import Loading from '@components/lobby/Loading';
 
 export const pageProps = {
-  title: '대시보드 - Mogakco',
+  title: '로비 - Mogakco',
   description: 'Free online video chat for developers',
   url: '', // TODO: 도메인 정해지면 url에 추가하기
   locale: 'ko_KR',
 };
 
-const Dashboard = () => {
+const Lobby = () => {
   const { user } = useUser({ redirectTo: '/' });
   const router = useRouter();
   const [isChatRoomLoading, setIsChatRoomLoading] = useState<boolean>(false);
@@ -62,4 +62,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default Lobby;

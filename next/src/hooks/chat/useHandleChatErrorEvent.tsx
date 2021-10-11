@@ -16,12 +16,12 @@ export default function useHandleChatErrorEvent(
   useEffect(() => {
     socketClient.on(ChatEvent.CHECK_MULTIPLE_USER, (id: number) => {
       if (user?.id === id) {
-        router.push('/dashboard');
+        router.push('/lobby');
       }
     });
     socketClient.on(ChatEvent.CONNECT_ERROR, (err) => {
       devModeLog(err.message);
-      router.push('/dashboard');
+      router.push('/lobby');
     });
     return () => {
       socketClient.off(ChatEvent.CHECK_MULTIPLE_USER);

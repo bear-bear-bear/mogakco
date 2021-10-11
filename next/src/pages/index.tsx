@@ -18,7 +18,7 @@ const pageProps = {
 
 const Landing = () => {
   const { user } = useUser({
-    redirectTo: '/dashboard',
+    redirectTo: '/lobby',
     redirectIfFound: true,
   });
 
