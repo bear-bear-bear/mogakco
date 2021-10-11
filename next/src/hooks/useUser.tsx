@@ -65,7 +65,7 @@ export default function useUser({
   );
 
   useEffect(() => {
-    // 리디렉트가 필요하지 않다면 return (예: 이미 /dashboard에 있음)
+    // 리디렉트가 필요하지 않다면 return (예: 이미 /lobby에 있음)
     if (!redirectTo) return;
     if (!user) return;
 

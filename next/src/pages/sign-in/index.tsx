@@ -15,7 +15,7 @@ export const pageProps = {
 
 const SignIn = () => {
   const { user, mutateUser } = useUser({
-    redirectTo: '/dashboard',
+    redirectTo: '/lobby',
     redirectIfFound: true,
   });
 

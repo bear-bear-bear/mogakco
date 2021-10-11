@@ -15,7 +15,7 @@ export const pageProps = {
 
 const SignUpStart = () => {
   const { user } = useUser({
-    redirectTo: '/dashboard',
+    redirectTo: '/lobby',
     redirectIfFound: true,
   });
 

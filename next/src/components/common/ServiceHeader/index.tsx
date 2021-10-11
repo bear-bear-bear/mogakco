@@ -10,7 +10,7 @@ import * as S from './style';
  */
 const ServiceHeader = () => (
   <S.ServiceHeader>
-    <Link href="/dashboard">
+    <Link href="/lobby">
       <a>
         <TextLogo />
       </a>
