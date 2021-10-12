@@ -1,20 +1,20 @@
 import styled from '@emotion/styled';
-import { ProfileModalProps } from './ProfileModal';
+import { ModalProps } from './Modal';
 
 const iconLength = 3;
-export const Profile = styled.article`
+export const Container = styled.article`
   width: ${iconLength}rem;
   height: ${iconLength}rem;
   position: relative;
 `;
 
-export const LogoWrapper = styled.section`
+export const Trigger = styled.section`
   width: 100%;
   height: 100%;
   cursor: pointer;
 `;
 
-export const ProfileModal = styled.section<ProfileModalProps>`
+export const Modal = styled.section<ModalProps>`
   width: 18rem;
   max-width: 100vw;
   position: absolute;
