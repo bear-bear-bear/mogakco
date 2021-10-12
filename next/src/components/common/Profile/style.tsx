@@ -64,6 +64,10 @@ export const Modal = styled.section<ModalProps>`
       }
 
       p {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+
         &:nth-of-type(1) {
           grid-area: username;
           padding-top: 0.33rem;
@@ -72,11 +76,13 @@ export const Modal = styled.section<ModalProps>`
           letter-spacing: 0.03rem;
           color: var(--color-black);
         }
+
         &:nth-of-type(2) {
           grid-area: email;
           padding-bottom: 0.33rem;
           letter-spacing: -0.03rem;
           color: var(--color-gray-4);
+          cursor: help;
         }
       }
     }

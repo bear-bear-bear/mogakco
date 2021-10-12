@@ -40,7 +40,7 @@ const Modal = ({ isShow, direction }: ModalProps) => {
             <a>{username.substring(0, 2)}</a>
           </Link>
           <p>{username}</p>
-          <p>{email}</p>
+          <p title={email}>{email}</p>
         </section>
       </section>
       <section className="profile-section">
