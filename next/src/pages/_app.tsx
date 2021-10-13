@@ -1,5 +1,4 @@
 import type { AppProps } from 'next/app';
-import { ChakraProvider } from '@chakra-ui/react';
 import { SWRConfig } from 'swr';
 import GlobalStyles, { customGlobalStyles } from '@globalStyles';
 
@@ -15,10 +14,8 @@ const App = ({ Component, pageProps }: AppProps) => {
         errorRetryInterval: 5000,
       }}
     >
-      <ChakraProvider resetCSS={false}>
-        <GlobalStyles styles={customGlobalStyles} />
-        <Component {...pageProps} />
-      </ChakraProvider>
+      <GlobalStyles styles={customGlobalStyles} />
+      <Component {...pageProps} />
     </SWRConfig>
   );
 };

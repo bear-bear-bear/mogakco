@@ -3,32 +3,34 @@ import styled from '@emotion/styled';
 import Button from '@components/common/Button';
 import media from '@globalStyles/media';
 
-export const MiddleBlockContainer = styled.article`
+export const Container = styled.article`
+  display: flex;
+  justify-content: center;
   padding-top: 12rem;
 `;
 
 export const ContentWrapper = styled.section`
   display: flex;
   flex-direction: column;
+  justify-content: center;
   align-items: center;
   max-width: 30rem;
-  /* justify-content: center; */
 
-  & > h3 {
+  h3 {
     font-weight: 700;
     font-size: 1.3rem;
     text-align: center;
     word-break: keep-all;
     color: var(--color-gray-4);
   }
-  & > h1 {
+  h1 {
     margin-top: 1rem;
     font-weight: 700;
     font-size: 2.1rem;
     word-break: keep-all;
     text-align: center;
   }
-  & > p {
+  p {
     margin-top: 1rem;
     font-weight: 400;
     font-size: 1.3rem;
