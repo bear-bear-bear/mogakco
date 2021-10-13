@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 
-export const FooterContainer = styled.footer`
+export const Container = styled.footer`
   display: flex;
   align-items: center;
   justify-content: center;
