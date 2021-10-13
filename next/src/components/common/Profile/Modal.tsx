@@ -10,12 +10,12 @@ import type { IUserInfo } from 'typings/auth';
 
 import * as S from './style';
 
-export interface ProfileModalProps {
+export interface ModalProps {
   isShow: boolean;
   direction: 'left' | 'right';
 }
 
-const ProfileModal = ({ isShow, direction }: ProfileModalProps) => {
+const Modal = ({ isShow, direction }: ModalProps) => {
   const { user, mutateUser } = useUser();
 
   const handleSignOut = async () => {
@@ -32,7 +32,7 @@ const ProfileModal = ({ isShow, direction }: ProfileModalProps) => {
   if (!user?.isLoggedIn) return null;
   const { username, email } = user as IUserInfo;
   return (
-    <S.ProfileModal isShow={isShow} direction={direction}>
+    <S.Modal isShow={isShow} direction={direction}>
       <section className="profile-section">
         <header>현재 로그인 계정</header>
         <section className="profile-section__account">
@@ -40,7 +40,7 @@ const ProfileModal = ({ isShow, direction }: ProfileModalProps) => {
             <a>{username.substring(0, 2)}</a>
           </Link>
           <p>{username}</p>
-          <p>{email}</p>
+          <p title={email}>{email}</p>
         </section>
       </section>
       <section className="profile-section">
@@ -62,8 +62,8 @@ const ProfileModal = ({ isShow, direction }: ProfileModalProps) => {
           </li>
         </ul>
       </section>
-    </S.ProfileModal>
+    </S.Modal>
   );
 };
 
-export default ProfileModal;
+export default Modal;

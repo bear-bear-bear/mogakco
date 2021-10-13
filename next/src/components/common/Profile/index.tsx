@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import ImageLogo from '@public/svg/logo2.svg';
-import ProfileModal from './ProfileModal';
+import ProfileModal from './Modal';
+import Trigger from './Trigger';
 
 import * as S from './style';
 
@@ -8,8 +8,8 @@ export interface ProfileProps {
   modalDirection: 'left' | 'right';
 }
 
-const PARENT_ID = 'togglableProfile';
-const PARENT_TAGNAME = 'article'; // S.Profile 과 element 동일해야함
+const CONTAINER_ID = 'togglableProfile';
+const CONTAINER_TAGNAME = 'article'; // S.Container 과 element 동일해야함
 
 const Profile = ({ modalDirection }: ProfileProps) => {
   const [isShowModal, setIsShowModal] = useState(false);
@@ -18,12 +18,13 @@ const Profile = ({ modalDirection }: ProfileProps) => {
     setIsShowModal((prev) => !prev);
   };
 
+  // Set display to 'none' when click anywhere except this component
   useEffect(() => {
     const closeModal = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
-      const parent = target.closest(PARENT_TAGNAME);
+      const parent = target.closest(CONTAINER_TAGNAME);
       if (!isShowModal) return;
-      if (parent?.id === PARENT_ID) return;
+      if (parent?.id === CONTAINER_ID) return;
 
       setIsShowModal(false);
     };
@@ -33,12 +34,10 @@ const Profile = ({ modalDirection }: ProfileProps) => {
   }, [isShowModal]);
 
   return (
-    <S.Profile id={PARENT_ID}>
-      <S.LogoWrapper>
-        <ImageLogo onClick={toggleModal} />
-      </S.LogoWrapper>
+    <S.Container id={CONTAINER_ID}>
+      <Trigger toggleModal={toggleModal} />
       <ProfileModal isShow={isShowModal} direction={modalDirection} />
-    </S.Profile>
+    </S.Container>
   );
 };
 

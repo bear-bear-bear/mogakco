@@ -1,20 +1,20 @@
 import styled from '@emotion/styled';
-import { ProfileModalProps } from './ProfileModal';
+import { ModalProps } from './Modal';
 
 const iconLength = 3;
-export const Profile = styled.article`
+export const Container = styled.article`
   width: ${iconLength}rem;
   height: ${iconLength}rem;
   position: relative;
 `;
 
-export const LogoWrapper = styled.section`
+export const Trigger = styled.section`
   width: 100%;
   height: 100%;
   cursor: pointer;
 `;
 
-export const ProfileModal = styled.section<ProfileModalProps>`
+export const Modal = styled.section<ModalProps>`
   width: 18rem;
   max-width: 100vw;
   position: absolute;
@@ -64,6 +64,10 @@ export const ProfileModal = styled.section<ProfileModalProps>`
       }
 
       p {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+
         &:nth-of-type(1) {
           grid-area: username;
           padding-top: 0.33rem;
@@ -72,11 +76,13 @@ export const ProfileModal = styled.section<ProfileModalProps>`
           letter-spacing: 0.03rem;
           color: var(--color-black);
         }
+
         &:nth-of-type(2) {
           grid-area: email;
           padding-bottom: 0.33rem;
           letter-spacing: -0.03rem;
           color: var(--color-gray-4);
+          cursor: help;
         }
       }
     }
