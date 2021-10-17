@@ -18,7 +18,7 @@ export const Item = styled.li`
   gap: 0.5rem;
   padding: 0.5rem;
   border-radius: 5px;
-  background-color: var(--color-gray-0);
+  background-color: ${({ theme }) => theme.color['gray-0']};
 `;
 
 export const Numeral = styled.p`
@@ -30,8 +30,8 @@ export const Numeral = styled.p`
   padding: 0.33rem;
   border-radius: 5px;
   font-size: 1.2rem;
-  background-color: var(--color-gray-6);
-  color: var(--color-white);
+  background-color: ${({ theme }) => theme.color['gray-6']};
+  color: ${({ theme }) => theme.color['white-1']};
 `;
 
 export const Nickname = styled.p`

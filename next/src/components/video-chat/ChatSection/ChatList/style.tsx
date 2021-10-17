@@ -14,7 +14,7 @@ export const ChatList = styled.ul`
     width: 0.5rem;
 
     &-thumb {
-      background: var(--color-gray-3);
+      background: ${({ theme }) => theme.color['gray-3']};
     }
   }
 `;

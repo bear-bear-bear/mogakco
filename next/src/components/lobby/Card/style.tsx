@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { css, keyframes } from '@emotion/react';
+import { css, keyframes, Theme } from '@emotion/react';
 
 import media from '@globalStyles/media';
 import type { CardProps, CardAnchorProps, CardButtonProps } from '.';
@@ -31,7 +31,7 @@ const fadeOutAnimation = keyframes`
   }
 `;
 
-const cardStyles = ({ isShow }: IsShow) => css`
+const cardStyles = ({ isShow, theme }: IsShow & { theme: Theme }) => css`
   flex: 1;
   position: relative;
   width: 100%;
@@ -39,7 +39,7 @@ const cardStyles = ({ isShow }: IsShow) => css`
   display: grid;
   grid-template-rows: 1fr max-content max-content;
   padding: 2rem;
-  border-top: 1px solid var(--color-gray-1);
+  border-top: 1px solid ${theme.color['gray-1']};
   cursor: pointer;
   transition: box-shadow 0.15s ease-in-out;
   animation: ${isShow ? fadeInAnimation : fadeOutAnimation} 0.5s ease-in-out
@@ -49,20 +49,21 @@ const cardStyles = ({ isShow }: IsShow) => css`
     font-size: 2rem;
     margin-bottom: 1rem;
     text-align: center;
-    color: var(--color-black);
+    color: ${theme.color['black-0']};
   }
 
   & > p {
     font-size: 1.2rem;
     text-align: center;
-    color: var(--color-gray-4);
+    color: ${theme.color['gray-4']};
   }
 
   &:hover,
   &:focus {
-    box-shadow: 0 0 1px var(--color-gray-0) inset,
-      0 0 4px var(--color-gray-0) inset, 0 0 10px var(--color-gray-0) inset,
-      0 0 30px var(--color-gray-0) inset;
+    box-shadow: 0 0 1px ${theme.color['gray-0']} inset,
+      0 0 4px ${theme.color['gray-0']} inset,
+      0 0 10px ${theme.color['gray-0']} inset,
+      0 0 30px ${theme.color['gray-0']} inset;
   }
 
   ${media.sm} {
@@ -70,12 +71,13 @@ const cardStyles = ({ isShow }: IsShow) => css`
     width: 22rem;
     max-width: 100%;
     height: 28rem;
-    border: 1px solid var(--color-gray-1);
+    border: 1px solid ${theme.color['gray-1']};
 
     &:hover,
     &:focus {
-      box-shadow: 0 0 1px var(--color-gray-0), 0 0 4px var(--color-gray-0),
-        0 0 10px var(--color-gray-0), 0 0 30px var(--color-gray-0);
+      box-shadow: 0 0 1px ${theme.color['gray-0']},
+        0 0 4px ${theme.color['gray-0']}, 0 0 10px ${theme.color['gray-0']},
+        0 0 30px ${theme.color['gray-0']};
     }
   }
 `;

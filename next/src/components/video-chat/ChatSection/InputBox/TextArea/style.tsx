@@ -9,14 +9,14 @@ export const TextArea = styled.textarea`
   font-family: inherit;
   resize: none;
   letter-spacing: -0.01rem;
-  color: var(--color-black);
+  color: ${({ theme }) => theme.color['black-1']};
   background-color: inherit;
   line-height: 1.1;
 
   &::placeholder {
     font-size: inherit;
     font-weight: inherit;
-    color: var(--color-gray-3);
+    color: ${({ theme }) => theme.color['gray-3']};
     vertical-align: middle;
   }
 

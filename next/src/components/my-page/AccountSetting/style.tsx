@@ -39,8 +39,8 @@ export const DevideTextLine = styled.p`
   margin-bottom: 1.33rem;
   padding-left: 0.33rem;
   padding-right: 0.33rem;
-  color: var(--color-gray-3);
-  background-color: var(--color-white);
+  color: ${({ theme }) => theme.color['gray-3']};
+  background-color: ${({ theme }) => theme.color['white-1']};
 
   &::before {
     content: '';
@@ -49,7 +49,7 @@ export const DevideTextLine = styled.p`
     left: 0;
     width: 100%;
     height: 1px;
-    background-color: var(--color-gray-3);
+    background-color: ${({ theme }) => theme.color['gray-3']};
   }
 `;
 
@@ -70,7 +70,7 @@ export const Footer = styled.footer`
   bottom: 0;
   padding-left: 1rem;
   padding-right: 1rem;
-  background-color: var(--color-gray-0);
+  background-color: ${({ theme }) => theme.color['gray-0']};
 
   button {
     position: absolute;

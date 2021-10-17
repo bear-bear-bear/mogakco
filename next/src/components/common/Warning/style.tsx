@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 
 export const Warning = styled.p`
   width: 100%;
-  color: var(--color-red-1);
+  color: ${({ theme }) => theme.color['red-1']};
   text-align: right;
 
   &::before {

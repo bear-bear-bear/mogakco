@@ -33,5 +33,5 @@ export const ScrollTop = styled.div`
 
 export const ChevronUp = styled(FaChevronUp)`
   font-size: 1.66rem;
-  color: var(--color-yellow-2);
+  color: ${({ theme }) => theme.color['yellow-2']};
 `;

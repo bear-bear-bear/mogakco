@@ -1,4 +1,4 @@
-import { css } from '@emotion/react';
+import { css, Theme } from '@emotion/react';
 import styled from '@emotion/styled';
 import { VscEye, VscEyeClosed, VscClose } from 'react-icons/vsc';
 
@@ -36,12 +36,12 @@ export const RelativeWrapper = styled.div`
   position: relative;
 `;
 
-const buttonStyles = css`
+const buttonStyles = ({ theme }: { theme: Theme }) => css`
   position: absolute;
   top: 50%;
   right: 1.2rem;
   transform: translate(50%, -50%);
-  color: var(--color-gray-5);
+  color: ${theme.color['gray-5']};
   cursor: pointer;
 `;
 

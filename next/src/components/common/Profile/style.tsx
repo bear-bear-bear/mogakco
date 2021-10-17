@@ -27,13 +27,14 @@ export const Modal = styled.section<ModalProps>`
   flex-direction: column;
   gap: 1.33rem;
   padding: 1.33rem 1rem;
-  box-shadow: 0 0 1px var(--color-gray-2), 0 0 2px var(--color-gray-2);
+  box-shadow: 0 0 1px ${({ theme }) => theme.color['gray-2']},
+    0 0 2px ${({ theme }) => theme.color['gray-2']};
   border-radius: 16px;
-  background-color: var(--color-white);
+  background-color: ${({ theme }) => theme.color['white-1']};
 
   .profile-section {
     header {
-      color: var(--color-gray-8);
+      color: ${({ theme }) => theme.color['gray-8']};
       font-weight: 300;
       font-size: 0.9rem;
       letter-spacing: -0.01rem;
@@ -57,8 +58,8 @@ export const Modal = styled.section<ModalProps>`
         display: flex;
         justify-content: center;
         align-items: center;
-        color: var(--color-white);
-        background-color: var(--color-blue-1);
+        color: ${({ theme }) => theme.color['white-1']};
+        background-color: ${({ theme }) => theme.color['blue-1']};
         border-radius: 50%;
         font-size: 1.33rem;
       }
@@ -74,14 +75,14 @@ export const Modal = styled.section<ModalProps>`
           font-size: 1.15rem;
           font-weight: 500;
           letter-spacing: 0.03rem;
-          color: var(--color-black);
+          color: ${({ theme }) => theme.color['black-0']};
         }
 
         &:nth-of-type(2) {
           grid-area: email;
           padding-bottom: 0.33rem;
           letter-spacing: -0.03rem;
-          color: var(--color-gray-4);
+          color: ${({ theme }) => theme.color['gray-4']};
           cursor: help;
         }
       }
@@ -105,13 +106,13 @@ export const Modal = styled.section<ModalProps>`
         font-size: 1.15rem;
         font-weight: 500;
         letter-spacing: 0.03rem;
-        color: var(--color-black);
+        color: ${({ theme }) => theme.color['black-0']};
         border-radius: 5px;
         padding: 0 0.33rem;
 
         &:hover,
         &:focus {
-          background-color: var(--color-gray-0);
+          background-color: ${({ theme }) => theme.color['gray-0']};
         }
       }
     }

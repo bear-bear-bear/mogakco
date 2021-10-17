@@ -1,4 +1,4 @@
-import { keyframes } from '@emotion/react';
+import { keyframes, Theme } from '@emotion/react';
 import styled from '@emotion/styled';
 
 import CloseSVG from '@public/svg/cross.svg';
@@ -17,7 +17,7 @@ export const EditorBackground = styled.div`
 
   & > div {
     // Editor root
-    background-color: var(--color-white);
+    background-color: ${({ theme }) => theme.color['white-1']};
   }
 `;
 
@@ -30,7 +30,7 @@ export const EditorCloseButton = styled(CloseSVG)`
 
   path {
     stroke-width: 3;
-    stroke: var(--color-white);
+    stroke: ${({ theme }: { theme: Theme }) => theme.color['white-1']};
   }
 
   &:hover,

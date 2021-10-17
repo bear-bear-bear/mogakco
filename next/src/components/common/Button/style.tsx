@@ -80,11 +80,11 @@ const colorStyles = ({
 
     ${disabled &&
     css`
-      color: var(--color-gray-4);
-      background: var(--color-gray-1);
+      color: theme.color['gray-4']};
+      background: theme.color['gray-1']};
       &:hover,
       &:focus {
-        background: var(--color-gray-1);
+        background: theme.color['gray-1']};
       }
     `}
   `;
@@ -170,7 +170,8 @@ const loadingAnimation = keyframes`
 export const Loading = styled(VscLoading)`
   margin-left: 0.33rem;
   font-size: 1.1rem;
-  color: ${({ color }) => (color === 'white' ? 'black' : 'white')};
+  color: ${({ color, theme }) =>
+    color === 'white' ? theme.color['black-0'] : theme.color['white-0']};
   animation: ${loadingAnimation} 1.8s cubic-bezier(0.645, 0.045, 0.355, 1)
     infinite;
 `;

@@ -21,7 +21,7 @@ export const ContentWrapper = styled.section`
     font-size: 1.3rem;
     text-align: center;
     word-break: keep-all;
-    color: var(--color-gray-4);
+    color: ${({ theme }) => theme.color['gray-4']};
   }
   h1 {
     margin-top: 1rem;

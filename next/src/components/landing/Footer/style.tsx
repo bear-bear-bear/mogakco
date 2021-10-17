@@ -6,12 +6,12 @@ export const Container = styled.footer`
   justify-content: center;
   height: 15rem;
   margin-top: 5rem;
-  background: var(--color-gray-0);
+  background: ${({ theme }) => theme.color['gray-0']};
 `;
 
 export const TempText = styled.h3`
   font-weight: 700;
   font-size: 2rem;
   letter-spacing: 0.1rem;
-  color: var(--color-gray-3);
+  color: ${({ theme }) => theme.color['gray-3']};
 `;

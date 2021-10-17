@@ -31,7 +31,7 @@ const descSizeStyles = ({ scale }: Scale) => {
 };
 
 export const Desc = styled.p`
-  color: var(--color-gray-4);
+  color: ${({ theme }) => theme.color['gray-4']};
 
   // scale style
   ${descSizeStyles}

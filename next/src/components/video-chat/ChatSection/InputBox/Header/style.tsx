@@ -9,8 +9,8 @@ export const Header = styled.header`
   justify-content: flex-end;
   gap: 0.66rem;
   padding: 0.1rem 0.33rem;
-  border-top: 1px solid var(--color-gray-1);
-  border-bottom: 1px solid var(--color-gray-1);
+  border-top: 1px solid ${({ theme }) => theme.color['gray-1']};
+  border-bottom: 1px solid ${({ theme }) => theme.color['gray-1']};
 `;
 
 const svgInHeaderButtonStyles = css`
