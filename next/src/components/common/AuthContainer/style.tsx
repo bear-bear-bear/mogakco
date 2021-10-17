@@ -20,7 +20,7 @@ export const OuterContainer = styled.main`
     left: 50%;
     transform: translate(-50%, -50%);
     padding: 2rem;
-    border: 1px solid var(--color-gray-1);
+    border: 1px solid ${({ theme }) => theme.color['gray-1']};
     border-radius: 5px;
   }
 `;

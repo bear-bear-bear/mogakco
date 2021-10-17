@@ -44,10 +44,7 @@ export const mediaBreakpoints: Record<Screen, number> = {
  *  }
  * `
  */
-const media: Record<
-  Screen,
-  `@media only screen and (${'max' | 'min'}-width: ${number}px)`
-> = {
+const media = {
   xs: `@media only screen and (max-width: ${mediaBreakpoints.xs}px)`,
   sm: `@media only screen and (min-width: ${mediaBreakpoints.sm}px)`,
   md: `@media only screen and (min-width: ${mediaBreakpoints.md}px)`,

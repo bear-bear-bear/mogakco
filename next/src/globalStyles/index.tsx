@@ -1,11 +1,10 @@
-import { Global, css, GlobalProps } from '@emotion/react';
+import { Global, css } from '@emotion/react';
 
 import Resets from './_Resets';
 import FontFace from './_FontFace';
-import Variables from './_Variables';
 import media from './media';
 
-export const customGlobalStyles = css`
+export const globalCSS = css`
   *,
   *::before,
   *::after {
@@ -54,12 +53,11 @@ export const customGlobalStyles = css`
   }
 `;
 
-const GlobalStyles = (props: JSX.IntrinsicAttributes & GlobalProps) => (
+const GlobalStyles = () => (
   <>
     <Global styles={Resets} />
-    <Global styles={Variables} />
     <Global styles={FontFace} />
-    <Global {...props} />
+    <Global styles={globalCSS} />
   </>
 );
 

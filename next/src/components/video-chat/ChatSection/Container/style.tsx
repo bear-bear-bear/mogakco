@@ -14,7 +14,7 @@ export const Container = styled.section<ContainerStyleProps>`
   position: ${({ isShowDropzoneUI }) =>
     isShowDropzoneUI ? 'relative' : 'static'};
   grid-template-rows: [Header] max-content [chatList] 1fr [InputBox] max-content;
-  background-color: var(--color-white);
+  background-color: ${({ theme }) => theme.color['white-1']};
 `;
 
 export const Dropzone = styled.section`

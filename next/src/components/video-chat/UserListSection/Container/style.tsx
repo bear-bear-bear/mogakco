@@ -9,7 +9,7 @@ export const Container = styled.section<ContainerStyleProps>`
   width: 20rem;
   height: 100vh;
   display: ${({ isShow }) => (isShow ? 'block' : 'none')};
-  background-color: var(--color-white);
+  background-color: ${({ theme }) => theme.color['white-1']};
 `;
 
 export const Header = styled.header`

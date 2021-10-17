@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { css } from '@emotion/react';
+import { css, Theme } from '@emotion/react';
 import CalendarSvg from '@public/svg/calendar.svg';
 import ChatSvg from '@public/svg/conversation.svg';
 import UserSvg from '@public/svg/user.svg';
@@ -12,8 +12,8 @@ export const Sidebar = styled.aside`
   align-items: center;
   padding-top: 0.8rem;
   padding-bottom: 0.8rem;
-  background-color: var(--color-gray-0);
-  border-right: 1px solid var(--color-gray-1);
+  background-color: ${({ theme }) => theme.color['gray-0']};
+  border-right: 1px solid ${({ theme }) => theme.color['gray-1']};
 `;
 
 export const BottomSection = styled.section`
@@ -23,7 +23,7 @@ export const BottomSection = styled.section`
   gap: 0.66rem;
 `;
 
-const IconStyles = css`
+const IconStyles = ({ theme }: { theme: Theme }) => css`
   width: 3rem;
   height: auto;
   cursor: pointer;
@@ -31,7 +31,7 @@ const IconStyles = css`
 
   &:hover,
   &:focus {
-    background-color: var(--color-gray-1);
+    background-color: ${theme.color['gray-1']};
   }
 `;
 
@@ -58,7 +58,7 @@ export const MemberCount = styled.p`
   justify-content: center;
   align-items: center;
   border-radius: 5px;
-  color: var(--color-white);
-  background-color: var(--color-blue-2);
+  color: ${({ theme }) => theme.color['white-1']};
+  background-color: ${({ theme }) => theme.color['blue-2']};
   pointer-events: none;
 `;

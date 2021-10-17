@@ -36,7 +36,7 @@ const labelSizeStyles = ({ scale }: Scale) => {
 
 export const Label = styled.label<IProps>`
   display: block;
-  color: var(--color-gray-4);
+  color: ${({ theme }) => theme.color['gray-4']};
 
   ${labelSizeStyles}
   ${labelMarginStyles}

@@ -1,24 +1,37 @@
 import styled from '@emotion/styled';
 import { css, keyframes } from '@emotion/react';
+import type { Theme } from '@emotion/react';
 import { darken, lighten } from 'polished';
 import { VscLoading } from 'react-icons/vsc';
+
 import type { IButtonProps } from './index';
 
+type Palette = Record<IButtonProps['color'], string>;
+
 const colorStyles = ({
-  theme,
   color,
   outline,
   underline,
   disabled,
-}: IButtonProps) => {
-  const mainColor = theme?.palette[color] as string;
-  const subColors = {
-    white: '#000',
-    black: '#fff',
-    yellow: '#000',
-    blue: '#fff',
-    red: '#fff',
+  theme,
+}: IButtonProps & { theme: Theme }) => {
+  const themeColor = theme.color;
+  const palette: Palette = {
+    white: themeColor['white-0'],
+    black: themeColor['black-0'],
+    yellow: themeColor['yellow-2'],
+    blue: themeColor['blue-1'],
+    red: themeColor['red-1'],
   };
+  const subColors: Palette = {
+    white: themeColor['black-0'],
+    black: themeColor['white-0'],
+    yellow: themeColor['black-0'],
+    blue: themeColor['white-0'],
+    red: themeColor['white-0'],
+  };
+
+  const mainColor = palette[color];
   const subColor = subColors[color];
 
   return css`
@@ -67,17 +80,17 @@ const colorStyles = ({
 
     ${disabled &&
     css`
-      color: var(--color-gray-4);
-      background: var(--color-gray-1);
+      color: theme.color['gray-4']};
+      background: theme.color['gray-1']};
       &:hover,
       &:focus {
-        background: var(--color-gray-1);
+        background: theme.color['gray-1']};
       }
     `}
   `;
 };
 
-const scaleStyles = ({ scale }: { scale: 'large' | 'medium' | 'small' }) => {
+const scaleStyles = ({ scale }: Pick<IButtonProps, 'scale'>) => {
   const scales = {
     large: {
       height: '2.25rem',
@@ -100,7 +113,7 @@ const scaleStyles = ({ scale }: { scale: 'large' | 'medium' | 'small' }) => {
   `;
 };
 
-const fullWidthStyle = ({ fullWidth }: { fullWidth: boolean }) =>
+const fullWidthStyle = ({ fullWidth }: Pick<IButtonProps, 'fullWidth'>) =>
   fullWidth &&
   css`
     width: 100%;
@@ -157,7 +170,8 @@ const loadingAnimation = keyframes`
 export const Loading = styled(VscLoading)`
   margin-left: 0.33rem;
   font-size: 1.1rem;
-  color: ${({ color }) => (color === 'white' ? 'black' : 'white')};
+  color: ${({ color, theme }) =>
+    color === 'white' ? theme.color['black-0'] : theme.color['white-0']};
   animation: ${loadingAnimation} 1.8s cubic-bezier(0.645, 0.045, 0.355, 1)
     infinite;
 `;

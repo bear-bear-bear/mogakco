@@ -42,5 +42,5 @@ export const Loading = styled<IconType>(VscLoading)`
       infinite,
     ${fadeInAnimation} 0.5s ease-in-out forwards;
   animation-delay: 1.5s;
-  color: var(--color-blue-2);
+  color: ${({ theme }) => theme.color['blue-2']};
 `;

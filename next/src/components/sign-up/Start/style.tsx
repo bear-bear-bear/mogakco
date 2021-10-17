@@ -1,4 +1,4 @@
-import { css } from '@emotion/react';
+import { css, Theme } from '@emotion/react';
 import styled from '@emotion/styled';
 import { FcGoogle } from 'react-icons/fc';
 import { VscGithubInverted } from 'react-icons/vsc';
@@ -16,35 +16,38 @@ export const SocialLoginWrapper = styled.div`
 interface ISocialAnchorColorStyles {
   service: 'google' | 'github';
 }
-const socialAnchorColorStyles = ({ service }: ISocialAnchorColorStyles) => {
+const socialAnchorColorStyles = ({
+  service,
+  theme,
+}: ISocialAnchorColorStyles & { theme: Theme }) => {
   const styles = {
     google: css`
-      color: var(--color-black);
-      background-color: var(--color-white-real);
+      color: ${theme.color['black-1']};
+      background-color: ${theme.color['white-0']};
       border: 1px solid black;
 
       &:hover,
       &:focus {
-        background-color: var(--color-gray-0);
-        color: var(--color-black);
+        background-color: ${theme.color['gray-0']};
+        color: ${theme.color['black-1']};
       }
 
       &:active {
-        background-color: var(--color-gray-1);
+        background-color: ${theme.color['gray-1']};
       }
     `,
     github: css`
-      color: var(--color-white);
-      background-color: var(--color-black);
+      color: ${theme.color['white-1']};
+      background-color: ${theme.color['black-1']};
 
       &:hover,
       &:focus {
-        background-color: var(--color-gray-7);
-        color: var(--color-white);
+        background-color: ${theme.color['gray-7']};
+        color: ${theme.color['white-1']};
       }
 
       &:active {
-        background-color: var(--color-gray-9);
+        background-color: ${theme.color['gray-9']};
       }
     `,
   };
@@ -85,7 +88,7 @@ export const DevideLine = styled.div`
   height: 1px;
   margin-top: 1rem;
   margin-bottom: 1rem;
-  background-color: var(--color-gray-1);
+  background-color: ${({ theme }) => theme.color['gray-1']};
 `;
 
 export const SubmitButton = styled(Button)`

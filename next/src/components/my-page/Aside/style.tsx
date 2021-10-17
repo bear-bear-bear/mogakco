@@ -16,7 +16,7 @@ export const Aside = styled.aside`
     border-radius: 8px;
 
     &:hover {
-      background-color: var(--color-gray-0);
+      background-color: ${({ theme }) => theme.color['gray-0']};
     }
   }
 
@@ -27,11 +27,11 @@ export const Aside = styled.aside`
     font-weight: 500;
     font-size: 1.2rem;
     letter-spacing: 0.05rem;
-    color: var(--color-black);
+    color: ${({ theme }) => theme.color['black-1']};
     box-sizing: content-box;
 
     &.active {
-      border-bottom: 2px solid var(--color-black);
+      border-bottom: 2px solid ${({ theme }) => theme.color['black-1']};
     }
   }
 `;

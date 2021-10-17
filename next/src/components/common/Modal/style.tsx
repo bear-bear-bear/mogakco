@@ -14,7 +14,7 @@ export const StyledPopup = styled(Popup)`
     width: 20rem;
     max-width: 100%;
     min-height: 8rem;
-    background-color: var(--color-white);
+    background-color: ${({ theme }) => theme.color['white-1']};
   }
 `;
 
@@ -32,7 +32,7 @@ export const Content = styled.p`
 export const Buttons = styled.section`
   display: flex;
   justify-content: center;
-  border-top: 1px solid var(--color-gray-1);
+  border-top: 1px solid ${({ theme }) => theme.color['gray-1']};
 `;
 
 export const ButtonWrapper = styled.section`
