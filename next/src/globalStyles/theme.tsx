@@ -1,6 +1,8 @@
 import { Theme, ThemeProvider as BaseThemeProvider } from '@emotion/react';
+import media from './media';
 
 export const theme: Theme = {
+  media,
   color: {
     'black-0': '#000000',
     'black-1': '#010409',

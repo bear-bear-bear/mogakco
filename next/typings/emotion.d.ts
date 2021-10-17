@@ -28,5 +28,13 @@ declare module '@emotion/react' {
       'blue-1': string;
       'blue-2': string;
     };
+    media: {
+      xs: string;
+      sm: string;
+      md: string;
+      lg: string;
+      xl: string;
+      xxl: string;
+    };
   }
 }
