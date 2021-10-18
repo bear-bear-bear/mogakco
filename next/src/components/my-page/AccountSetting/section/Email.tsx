@@ -1,21 +1,12 @@
-import type { UseFormRegister, FormState } from 'react-hook-form';
-
 import InputWrapper from '@components/common/InputWrapper';
 import Label from '@components/common/Label';
 import Warning from '@components/common/Warning';
 import { emailRule } from '@lib/regex';
 
+import type { RequiredFieldsSectionProps } from '..';
 import * as S from '../style';
 
-interface Email {
-  email: string;
-}
-interface Props {
-  register: UseFormRegister<Email>;
-  errors: FormState<Email>['errors'];
-}
-
-const EmailSection = ({ register, errors }: Props) => (
+const EmailSection = ({ register, errors }: RequiredFieldsSectionProps) => (
   <>
     <InputWrapper>
       <Label htmlFor="email" direction="bottom">

@@ -1,21 +1,12 @@
-import type { UseFormRegister, FormState } from 'react-hook-form';
-
 import InputWrapper from '@components/common/InputWrapper';
 import Label from '@components/common/Label';
 import Warning from '@components/common/Warning';
 import { usernameRule } from '@lib/regex';
 
+import type { RequiredFieldsSectionProps } from '..';
 import * as S from '../style';
 
-interface Username {
-  username: string;
-}
-interface Props {
-  register: UseFormRegister<Username>;
-  errors: FormState<Username>['errors'];
-}
-
-const UsernameSection = ({ register, errors }: Props) => (
+const UsernameSection = ({ register, errors }: RequiredFieldsSectionProps) => (
   <>
     <InputWrapper>
       <Label htmlFor="username" direction="bottom">
