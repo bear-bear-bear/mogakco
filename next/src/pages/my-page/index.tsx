@@ -3,9 +3,9 @@ import React from 'react';
 import useUser from '@hooks/useUser';
 import CustomHead from '@components/common/CustomHead';
 import ServiceHeader from '@components/common/ServiceHeader';
-import Container from '@components/my-page/Container';
-import Aside from '@components/my-page/Aside';
-import Main from '@components/my-page/Main';
+import Container from '@components/my-page/common/Container';
+import Aside from '@components/my-page/common/Aside';
+import TempMain from '@components/my-page/TempMain';
 
 export const pageProps = {
   title: '마이페이지 - Mogakco',
@@ -24,7 +24,7 @@ const MyPageDashboard = () => {
       <ServiceHeader />
       <Container>
         <Aside />
-        <Main />
+        <TempMain />
       </Container>
     </>
   );
