@@ -1,5 +1,6 @@
 import { useEffect, useCallback, useState, useRef } from 'react';
 import { useForm } from 'react-hook-form';
+import type { UseFormRegister, FormState } from 'react-hook-form';
 import _ from 'lodash';
 
 import Button from '@components/common/Button';
@@ -24,6 +25,11 @@ interface AccountSettingProps extends UserMutator, SelectsOptions {
 }
 
 type RequiredFields = Pick<IUserInfo, 'username' | 'email'>;
+export type RequiredFieldsSectionProps = {
+  register: UseFormRegister<RequiredFields>;
+  errors: FormState<RequiredFields>['errors'];
+};
+
 type OptionalFieldsValue = {
   skills: string[] | null;
   job: string | null;
