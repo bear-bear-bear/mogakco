@@ -3,8 +3,8 @@ import React from 'react';
 import useUser from '@hooks/useUser';
 import CustomHead from '@components/common/CustomHead';
 import ServiceHeader from '@components/common/ServiceHeader';
-import Container from '@components/my-page/Container';
-import Aside from '@components/my-page/Aside';
+import Container from '@components/my-page/common/Container';
+import Aside from '@components/my-page/common/Aside';
 import Main from '@components/my-page/Main';
 
 export const pageProps = {
