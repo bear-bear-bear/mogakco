@@ -1,9 +1,14 @@
 import React from 'react';
+import MyCalendar from './Calendar';
 
 import * as S from './style';
 
 const Calendar = () => {
-  return <S.Main>캘린더</S.Main>;
+  return (
+    <S.Main>
+      <MyCalendar />
+    </S.Main>
+  );
 };
 
 export default Calendar;
