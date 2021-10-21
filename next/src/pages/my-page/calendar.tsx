@@ -5,7 +5,7 @@ import CustomHead from '@components/common/CustomHead';
 import ServiceHeader from '@components/common/ServiceHeader';
 import Container from '@components/my-page/common/Container';
 import Aside from '@components/my-page/common/Aside';
-import TempMain from '@components/my-page/TempMain';
+import Calendar from '@components/my-page/Calendar';
 
 export const pageProps = {
   title: '마이페이지 - Mogakco',
@@ -24,7 +24,7 @@ const MyPageCalendar = () => {
       <ServiceHeader />
       <Container>
         <Aside />
-        <TempMain />
+        <Calendar />
       </Container>
     </>
   );
