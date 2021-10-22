@@ -8,13 +8,15 @@ import { Event, EventAgenda } from './parts';
 import events from './tempEvents';
 import type { CustomEvent } from './tempEvents';
 
-import * as S from './style';
+type Props = {
+  wrapperStyle?: React.CSSProperties;
+};
 
 const allViews = Object.values(Views);
 const localizer = momentLocalizer(moment);
 
-const Rendering = () => (
-  <S.CalendarWrapper>
+const MyCalendar = ({ wrapperStyle }: Props) => (
+  <div style={wrapperStyle}>
     <Calendar<CustomEvent>
       views={allViews}
       events={events}
@@ -28,7 +30,7 @@ const Rendering = () => (
         },
       }}
     />
-  </S.CalendarWrapper>
+  </div>
 );
 
-export default Rendering;
+export default MyCalendar;
