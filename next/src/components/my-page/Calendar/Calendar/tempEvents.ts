@@ -1,6 +1,13 @@
+import type { Event } from 'react-big-calendar';
+
+export interface CustomEvent extends Event {
+  id: number;
+  desc?: string;
+}
+
 const now = new Date();
 
-export default [
+const tempEvents: CustomEvent[] = [
   {
     id: 0,
     title: 'All Day Event very long title',
@@ -178,3 +185,5 @@ export default [
     end: new Date(2021, 10, 14, 20, 0, 0),
   },
 ];
+
+export default tempEvents;
