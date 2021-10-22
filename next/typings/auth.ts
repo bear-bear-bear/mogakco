@@ -1,3 +1,4 @@
+import type { Event } from 'react-big-calendar';
 import type { IGeneralServerResponse } from './common';
 
 /**
@@ -47,6 +48,14 @@ export interface IAuthSuccessResponse extends IGeneralServerResponse {
 }
 
 /**
+ * 캘린더에 반영되는 유저 일정
+ */
+export interface UserEvent extends Event {
+  id: number;
+  desc?: string;
+}
+
+/**
  * 유저가 가지고 있는 정보
  */
 export interface IUserInfo {
@@ -55,6 +64,7 @@ export interface IUserInfo {
   email: string;
   skills: IOptionalProps[] | null;
   job: IOptionalProps | null;
+  events: UserEvent[];
 }
 
 /**

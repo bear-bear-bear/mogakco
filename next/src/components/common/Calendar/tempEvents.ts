@@ -1,13 +1,8 @@
-import type { Event } from 'react-big-calendar';
-
-export interface CustomEvent extends Event {
-  id: number;
-  desc?: string;
-}
+import type { UserEvent } from 'typings/auth';
 
 const now = new Date();
 
-const tempEvents: CustomEvent[] = [
+const tempEvents: UserEvent[] = [
   {
     id: 0,
     title: 'All Day Event very long title',
