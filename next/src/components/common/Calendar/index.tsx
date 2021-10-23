@@ -4,9 +4,11 @@ import 'react-big-calendar/lib/css/react-big-calendar.css';
 import moment from 'moment';
 import 'moment/locale/ko';
 
-import { Event, EventAgenda } from './parts';
-import events from './tempEvents';
-import type { CustomEvent } from './tempEvents';
+import useUser from '@hooks/useUser';
+import type { UserEvent } from 'typings/auth';
+
+import * as parts from './parts';
+import tempEvents from './tempEvents';
 
 type Props = {
   wrapperStyle?: React.CSSProperties;
@@ -15,22 +17,27 @@ type Props = {
 const allViews = Object.values(Views);
 const localizer = momentLocalizer(moment);
 
-const MyCalendar = ({ wrapperStyle }: Props) => (
-  <div style={wrapperStyle}>
-    <Calendar<CustomEvent>
-      views={allViews}
-      events={events}
-      localizer={localizer}
-      defaultDate={new Date()}
-      defaultView={Views.AGENDA}
-      components={{
-        event: Event,
-        agenda: {
-          event: EventAgenda,
-        },
-      }}
-    />
-  </div>
-);
+const MyCalendar = ({ wrapperStyle }: Props) => {
+  const { user } = useUser();
+
+  return (
+    <section style={wrapperStyle}>
+      <Calendar<UserEvent>
+        views={allViews}
+        // events={user?.events || []}
+        events={tempEvents}
+        localizer={localizer}
+        defaultDate={new Date()}
+        defaultView={Views.AGENDA}
+        components={{
+          event: parts.Event,
+          agenda: {
+            event: parts.EventAgenda,
+          },
+        }}
+      />
+    </section>
+  );
+};
 
 export default MyCalendar;
