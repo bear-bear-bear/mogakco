@@ -32,8 +32,7 @@ export const SocketContext = createContext<Socket>(
 );
 
 const ChatRoom = () => {
-  // const { user } = useUser({ redirectTo: '/' });
-  const { user } = useUser();
+  const { user } = useUser({ redirectTo: '/' });
   const router = useRouter();
 
   const socketClient = useMemo(
