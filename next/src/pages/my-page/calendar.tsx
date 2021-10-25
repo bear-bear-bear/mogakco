@@ -15,7 +15,8 @@ export const pageProps = {
 };
 
 const MyPageCalendar = () => {
-  const { user } = useUser({ redirectTo: '/' });
+  // const { user } = useUser({ redirectTo: '/' });
+  const { user } = useUser();
 
   if (!user?.isLoggedIn) return null;
   return (

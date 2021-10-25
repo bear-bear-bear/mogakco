@@ -8,7 +8,6 @@ import useUser from '@hooks/useUser';
 import type { UserEvent } from 'typings/auth';
 
 import * as parts from './parts';
-import tempEvents from './tempEvents';
 
 type Props = {
   wrapperStyle?: React.CSSProperties;
@@ -24,8 +23,7 @@ const MyCalendar = ({ wrapperStyle }: Props) => {
     <section style={wrapperStyle}>
       <Calendar<UserEvent>
         views={allViews}
-        // events={user?.events || []}
-        events={tempEvents}
+        events={user?.events || []}
         localizer={localizer}
         defaultDate={new Date()}
         defaultView={Views.AGENDA}
