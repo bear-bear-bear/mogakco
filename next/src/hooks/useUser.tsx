@@ -5,10 +5,9 @@ import type { SWRConfiguration, KeyedMutator } from 'swr/dist/types';
 
 import token, { ACCESS_TOKEN } from '@lib/token';
 import fetcher from '@lib/fetcher';
-
 import type { IUserGetResponse } from 'typings/auth';
 
-interface UseUserProps {
+interface Props {
   redirectTo?: `/${string}`;
   redirectIfFound?: boolean;
 }
@@ -54,7 +53,7 @@ const getSWRKeyByRefreshTokenExist = () =>
 export default function useUser({
   redirectTo,
   redirectIfFound = false,
-}: UseUserProps = {}) {
+}: Props = {}) {
   const router = useRouter();
 
   const SWRKey = redirectIfFound ? SWR_CACHE_KEY : getSWRKeyByRefreshTokenExist;
