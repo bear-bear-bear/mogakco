@@ -5,7 +5,7 @@ import CustomHead from '@components/common/CustomHead';
 import ServiceHeader from '@components/common/ServiceHeader';
 import Container from '@components/my-page/common/Container';
 import Aside from '@components/my-page/common/Aside';
-import Calendar from '@components/my-page/Calendar';
+import TempMain from '@components/my-page/TempMain';
 
 export const pageProps = {
   title: '마이페이지 - Mogakco',
@@ -14,7 +14,7 @@ export const pageProps = {
   locale: 'ko_KR',
 };
 
-const MyPageCalendar = () => {
+const MyPageTodo = () => {
   // const { user } = useUser({ redirectTo: '/' });
   const { user } = useUser();
 
@@ -25,10 +25,10 @@ const MyPageCalendar = () => {
       <ServiceHeader />
       <Container>
         <Aside />
-        <Calendar />
+        <TempMain />
       </Container>
     </>
   );
 };
 
-export default MyPageCalendar;
+export default MyPageTodo;

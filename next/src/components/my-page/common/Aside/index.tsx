@@ -12,8 +12,8 @@ const Aside = () => (
         </ActiveLink>
       </li>
       <li>
-        <ActiveLink activeClassName="active" href="/my-page/calendar">
-          <a>캘린더</a>
+        <ActiveLink activeClassName="active" href="/my-page/todo">
+          <a>TODO</a>
         </ActiveLink>
       </li>
       <li>
