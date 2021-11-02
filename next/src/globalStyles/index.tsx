@@ -20,7 +20,6 @@ export const globalCSS = css`
   }
 
   html {
-    font-family: sans-serif;
     -ms-text-size-adjust: 100%;
     -webkit-text-size-adjust: 100%;
     -webkit-font-smoothing: antialiased;
