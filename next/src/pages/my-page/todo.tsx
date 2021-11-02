@@ -5,7 +5,7 @@ import CustomHead from '@components/common/CustomHead';
 import ServiceHeader from '@components/common/ServiceHeader';
 import Container from '@components/my-page/common/Container';
 import Aside from '@components/my-page/common/Aside';
-import TempMain from '@components/my-page/TempMain';
+import Todo from '@components/my-page/Todo';
 
 export const pageProps = {
   title: '마이페이지 - Mogakco',
@@ -25,7 +25,7 @@ const MyPageTodo = () => {
       <ServiceHeader />
       <Container>
         <Aside />
-        <TempMain />
+        <Todo />
       </Container>
     </>
   );
