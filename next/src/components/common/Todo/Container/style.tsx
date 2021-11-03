@@ -8,5 +8,5 @@ export const Container = styled.article`
   display: flex;
   flex-direction: column;
   border: 1px solid black;
-  box-sizing: content-box;
+  /* box-sizing: content-box; */
 `;
