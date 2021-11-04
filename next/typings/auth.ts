@@ -48,11 +48,18 @@ export interface IAuthSuccessResponse extends IGeneralServerResponse {
 }
 
 /**
- * 캘린더에 반영되는 유저 일정
+ * TODO 구성
  */
-export interface UserEvent extends Event {
+export interface TodoItem {
   id: number;
-  desc?: string;
+  createdAt: Date;
+  status: 'next up' | 'in progress' | 'completed';
+  title?: string;
+  description?: string;
+  priority?: 'low' | 'medium' | 'high';
+  iconUrl?: string;
+  coverUrl?: string;
+  dueDate?: Date;
 }
 
 /**
@@ -64,7 +71,7 @@ export interface IUserInfo {
   email: string;
   skills: IOptionalProps[] | null;
   job: IOptionalProps | null;
-  events: UserEvent[];
+  todo: TodoItem[];
 }
 
 /**
