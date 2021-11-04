@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import type { IUserGetResponse } from 'typings/auth';
-import tempEvents from './tempEvents';
+import tempTodo from './tempTodo';
 
 const fakeUserResponse: IUserGetResponse = {
   isLoggedIn: true,
@@ -33,7 +33,7 @@ const fakeUserResponse: IUserGetResponse = {
     id: 6,
     name: '보안 솔루션 개발자',
   },
-  events: tempEvents,
+  todo: tempTodo,
 };
 
 const handler = (req: NextApiRequest, res: NextApiResponse) => {
