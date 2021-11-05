@@ -51,7 +51,7 @@ const randomTodoPropsGetter = {
   },
   priority: () => {
     const randomPriorityIndex = Math.floor(
-      Math.random() * priorityList.length + 1, // '+ 1' is for include undefined
+      Math.random() * (priorityList.length + 1), // '+ 1' is for include undefined
     );
     return priorityList[randomPriorityIndex];
   },
