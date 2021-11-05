@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import { css, keyframes, Theme } from '@emotion/react';
 
 import media from '@globalStyles/media';
-import type { CardProps, CardAnchorProps, CardButtonProps } from '.';
+import type { CardProps } from '.';
 
 type IsShow = Pick<CardProps, 'isShow'>;
 
@@ -82,10 +82,10 @@ const cardStyles = ({ isShow, theme }: IsShow & { theme: Theme }) => css`
   }
 `;
 
-export const CardAnchor = styled.a<CardAnchorProps>`
+export const CardAnchor = styled.a<IsShow>`
   ${cardStyles}
 `;
-export const CardButton = styled.button<CardButtonProps>`
+export const CardButton = styled.button<IsShow>`
   // Init button style
   background-color: inherit;
   align-items: initial;
