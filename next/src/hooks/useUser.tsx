@@ -78,6 +78,7 @@ export default function useUser({
         !token.isRefreshTokenInCookie() &&
         token.get()[ACCESS_TOKEN])
     ) {
+      console.log('리다이렉팅');
       router.push(redirectTo);
     }
   }, [redirectIfFound, redirectTo, router, user]);
