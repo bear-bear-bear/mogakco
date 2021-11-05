@@ -11,7 +11,7 @@ const getRandomImageUrl = (num: number) =>
   `https://source.unsplash.com/random/${num}`;
 const getTrueOrFalse = () => !!Math.floor(Math.random() * 2);
 
-const random = {
+const randomTodoPropsGetter = {
   title: (id: TodoItem['id']) => {
     return getTrueOrFalse() ? `제목 ${id}` : undefined;
   },
@@ -42,12 +42,12 @@ const tempDueDate = new Date(2099, 12, 31);
 
 const tempTodo: TodoItem[] = ids.map((id) => ({
   id,
-  status: random.status(),
-  title: random.title(id),
-  description: random.description(id),
-  priority: random.priority(),
-  iconUrl: random.iconUrl(id),
-  coverUrl: random.coverUrl(id),
+  status: randomTodoPropsGetter.status(),
+  title: randomTodoPropsGetter.title(id),
+  description: randomTodoPropsGetter.description(id),
+  priority: randomTodoPropsGetter.priority(),
+  iconUrl: randomTodoPropsGetter.iconUrl(id),
+  coverUrl: randomTodoPropsGetter.coverUrl(id),
   createdAt: tempCreatedAt,
   dueDate: tempDueDate,
 }));
