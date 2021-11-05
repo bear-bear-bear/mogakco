@@ -25,7 +25,7 @@ const Sidebar = () => {
   };
 
   const handleCalendarIconClick = () => {
-    openTempModal('달력 미구현');
+    openTempModal();
   };
 
   const handleUserIconClick = () => {

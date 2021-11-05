@@ -8,7 +8,7 @@ import Aside from '@components/my-page/common/Aside';
 import AccountSetting from '@components/my-page/AccountSetting';
 import { getServerSideProps as _getServerSideProps } from '@pages/sign-up/optional';
 import type { IOptionalPageProps as SelectsOptions } from '@pages/sign-up/optional';
-import type { IUserInfo } from 'typings/auth';
+import type { IUserGetSuccessResponse } from 'typings/auth';
 
 export const pageProps = {
   title: '마이페이지 - Mogakco',
@@ -28,7 +28,7 @@ const MyPageAccountSetting = (props: SelectsOptions) => {
       <Container>
         <Aside />
         <AccountSetting
-          user={user as IUserInfo}
+          user={user as IUserGetSuccessResponse}
           mutateUser={mutateUser}
           {...props}
         />

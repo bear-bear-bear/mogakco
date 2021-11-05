@@ -6,7 +6,7 @@ import { signOutApi } from '@lib/apis';
 import token from '@lib/token';
 import { logAxiosError } from '@lib/apiClient';
 import type { GeneralAxiosError } from 'typings/common';
-import type { IUserInfo } from 'typings/auth';
+import type { IUserGetSuccessResponse } from 'typings/auth';
 
 import * as S from './style';
 
@@ -30,7 +30,7 @@ const Modal = ({ isShow, direction }: ModalProps) => {
   };
 
   if (!user?.isLoggedIn) return null;
-  const { username, email } = user as IUserInfo;
+  const { username, email } = user as IUserGetSuccessResponse;
   return (
     <S.Modal isShow={isShow} direction={direction}>
       <section className="profile-section">
