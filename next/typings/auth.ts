@@ -1,4 +1,3 @@
-import type { Event } from 'react-big-calendar';
 import type { IGeneralServerResponse } from './common';
 
 /**
@@ -50,17 +49,29 @@ export interface IAuthSuccessResponse extends IGeneralServerResponse {
 /**
  * TODO 구성
  */
-export interface TodoItem {
+export type TodoItem = {
   id: number;
   createdAt: Date;
   status: 'next up' | 'in progress' | 'completed';
+  priority?: 'low' | 'medium' | 'high';
   title?: string;
   description?: string;
-  priority?: 'low' | 'medium' | 'high';
   iconUrl?: string;
   coverUrl?: string;
   dueDate?: Date;
-}
+};
+
+type NoUndefinedPriority = Exclude<TodoItem['priority'], undefined>;
+export type TodoOrder = {
+  status: { [key in TodoItem['status']]: TodoItem['id'][] };
+  priority: { [key in NoUndefinedPriority]: TodoItem['id'][] };
+  all: TodoItem['id'][];
+};
+
+export type Todo = {
+  items: TodoItem[];
+  order: TodoOrder;
+};
 
 /**
  * 유저가 가지고 있는 정보
@@ -71,7 +82,7 @@ export interface IUserInfo {
   email: string;
   skills: IOptionalProps[] | null;
   job: IOptionalProps | null;
-  todo: TodoItem[];
+  todo: Todo;
 }
 
 /**

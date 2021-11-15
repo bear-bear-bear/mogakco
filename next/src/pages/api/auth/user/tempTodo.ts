@@ -1,15 +1,42 @@
-import type { TodoItem } from 'typings/auth';
+import type { TodoItem, TodoOrder } from 'typings/auth';
 
+// ---------------------------------------------------
+/* constant */
+// ---------------------------------------------------
+const TODO_COUNT = 30;
+
+// ---------------------------------------------------
+/* utils */
+// ---------------------------------------------------
+const getRandomImageUrl = (num: number) =>
+  `https://source.unsplash.com/random/${num}`;
+const getTrueOrFalse = () => !!Math.floor(Math.random() * 2);
+const shuffle = <T = any>(array: T[]) => {
+  let currentIndex = array.length;
+  let randomIndex;
+
+  while (currentIndex !== 0) {
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex -= 1;
+
+    [array[currentIndex], array[randomIndex]] = [
+      array[randomIndex],
+      array[currentIndex],
+    ];
+  }
+
+  return array;
+};
+
+// ---------------------------------------------------
+/* todo.items */
+// ---------------------------------------------------
 const statusList: TodoItem['status'][] = [
   'next up',
   'in progress',
   'completed',
 ];
 const priorityList: TodoItem['priority'][] = ['low', 'medium', 'high'];
-
-const getRandomImageUrl = (num: number) =>
-  `https://source.unsplash.com/random/${num}`;
-const getTrueOrFalse = () => !!Math.floor(Math.random() * 2);
 
 const randomTodoPropsGetter = {
   title: (id: TodoItem['id']) => {
@@ -24,7 +51,7 @@ const randomTodoPropsGetter = {
   },
   priority: () => {
     const randomPriorityIndex = Math.floor(
-      Math.random() * priorityList.length + 1, // '+ 1' is for include undefined
+      Math.random() * (priorityList.length + 1), // '+ 1' is for include undefined
     );
     return priorityList[randomPriorityIndex];
   },
@@ -36,11 +63,11 @@ const randomTodoPropsGetter = {
   },
 };
 
-const ids = [...Array(30)].map((_, i) => i + 1);
+const ids = [...Array(TODO_COUNT)].map((_, i) => i + 1);
 const tempCreatedAt = new Date(2020, 1, 1);
 const tempDueDate = new Date(2099, 12, 31);
 
-const tempTodo: TodoItem[] = ids.map((id) => ({
+const randomTodoItems: TodoItem[] = ids.map((id) => ({
   id,
   status: randomTodoPropsGetter.status(),
   title: randomTodoPropsGetter.title(id),
@@ -52,4 +79,44 @@ const tempTodo: TodoItem[] = ids.map((id) => ({
   dueDate: tempDueDate,
 }));
 
-export default tempTodo;
+// ---------------------------------------------------
+/* todo.order */
+// ---------------------------------------------------
+const getSuffledTodoItemIds = (
+  filterPredicate: (item: TodoItem) => boolean,
+): TodoItem['id'][] => {
+  return shuffle<number>(
+    randomTodoItems.filter(filterPredicate).map(({ id }) => id),
+  );
+};
+const statusPredicate = (value: TodoItem['status']) => {
+  return ({ status }: TodoItem) => status === value;
+};
+const priorityPredicate = (value: TodoItem['priority']) => {
+  return ({ priority }: TodoItem) => priority === value;
+};
+const allPredicate = () => true;
+
+const randomTodoOrder: TodoOrder = {
+  status: {
+    'next up': getSuffledTodoItemIds(statusPredicate('next up')),
+    'in progress': getSuffledTodoItemIds(statusPredicate('in progress')),
+    completed: getSuffledTodoItemIds(statusPredicate('completed')),
+  },
+  priority: {
+    low: getSuffledTodoItemIds(priorityPredicate('low')),
+    medium: getSuffledTodoItemIds(priorityPredicate('medium')),
+    high: getSuffledTodoItemIds(priorityPredicate('high')),
+  },
+  all: getSuffledTodoItemIds(allPredicate),
+};
+
+/*
+  todo
+*/
+const Todo = {
+  items: randomTodoItems,
+  order: randomTodoOrder,
+};
+
+export default Todo;
