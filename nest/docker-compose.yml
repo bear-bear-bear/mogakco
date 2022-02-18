@@ -1,0 +1,7 @@
+version: "1.29.0"
+
+services:
+  app:
+    image: redis:latest
+    ports:
+      - 6379:6379
